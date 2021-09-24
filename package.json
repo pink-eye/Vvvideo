@@ -27,7 +27,8 @@
 				{
 					"name": "@electron-forge/maker-squirrel",
 					"config": {
-						"name": "vvvideo"
+						"name": "vvvideo",
+						"iconUrl": "https://raw.githubusercontent.com/pink-eye/Vvvideo/main/src/res/assets/icons/icon.ico"
 					}
 				},
 				{
