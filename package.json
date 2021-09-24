@@ -1,0 +1,95 @@
+{
+	"name": "vvvideo",
+	"productName": "vvvideo",
+	"version": "1.0.0",
+	"description": "to watch videos yt",
+	"main": "bundle/index.js",
+	"scripts": {
+		"start": "electron-forge start",
+		"package": "electron-forge package",
+		"make": "electron-forge make",
+		"publish": "electron-forge publish",
+		"lint": "echo \"No linting configured\""
+	},
+	"keywords": [],
+	"author": {
+		"name": "pink-eye",
+		"email": "github@virginson.anonaddy.com"
+	},
+	"license": "GPL-3.0",
+	"config": {
+		"forge": {
+			"packagerConfig": {
+				"name": "Vvvideo",
+				"icon": "./bundle/assets/icons/icon"
+			},
+			"makers": [
+				{
+					"name": "@electron-forge/maker-squirrel",
+					"config": {
+						"name": "vvvideo"
+					}
+				},
+				{
+					"name": "@electron-forge/maker-zip",
+					"platforms": [
+						"darwin"
+					]
+				},
+				{
+					"name": "@electron-forge/maker-deb",
+					"config": {}
+				},
+				{
+					"name": "@electron-forge/maker-rpm",
+					"config": {}
+				}
+			]
+		}
+	},
+	"dependencies": {
+		"@freetube/yt-trending-scraper": "^2.0.1",
+		"electron-squirrel-startup": "^1.0.0",
+		"proxy-agent": "^5.0.0",
+		"sponsorblock-api": "^0.2.2",
+		"youtube-suggest": "^1.1.2",
+		"yt-channel-info": "^2.2.0",
+		"ytdl-core": "^4.9.1",
+		"ytpl": "^2.2.3",
+		"ytsr": "^3.5.3"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.15.5",
+		"@babel/preset-env": "^7.15.6",
+		"@electron-forge/cli": "^6.0.0-beta.61",
+		"@electron-forge/maker-deb": "^6.0.0-beta.61",
+		"@electron-forge/maker-rpm": "^6.0.0-beta.61",
+		"@electron-forge/maker-squirrel": "^6.0.0-beta.61",
+		"@electron-forge/maker-zip": "^6.0.0-beta.61",
+		"babel-loader": "^8.2.2",
+		"browser-sync": "^2.27.5",
+		"del": "^6.0.0",
+		"electron": "15.0.0",
+		"electron-forge": "^5.2.4",
+		"electron-prebuilt-compile": "8.2.0",
+		"gulp": "^4.0.2",
+		"gulp-autoprefixer": "^6.1.0",
+		"gulp-babel": "^8.0.0",
+		"gulp-clean-css": "^4.3.0",
+		"gulp-cli": "^2.3.0",
+		"gulp-concat": "^2.6.1",
+		"gulp-file-include": "^2.3.0",
+		"gulp-htmlmin": "^5.0.1",
+		"gulp-if": "^3.0.0",
+		"gulp-image": "^4.0.0",
+		"gulp-notify": "^3.2.0",
+		"gulp-rev": "^9.0.0",
+		"gulp-rev-delete-original": "^0.2.3",
+		"gulp-rev-rewrite": "^4.0.0",
+		"gulp-sass": "^5.0.0",
+		"gulp-sourcemaps": "^3.0.0",
+		"gulp-svg-sprite": "^1.5.0",
+		"gulp-uglify-es": "^2.0.0",
+		"node-sass": "^6.0.1"
+	}
+}

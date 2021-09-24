@@ -1,0 +1,118 @@
+html {
+    box-sizing: border-box
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit
+}
+
+.disable-scroll {
+    position: relative;
+    overflow: hidden;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, .7);
+    cursor: pointer;
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--trns), visibility var(--trns)
+}
+
+.modal::before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%
+}
+
+@media (min-width: 768px) {
+    .modal::-webkit-scrollbar {
+        width: 14px;
+    }
+
+    .modal::-webkit-scrollbar-thumb {
+        background-color: var(--color-accent-s);
+        border-radius: 10px;
+        border: 3px solid var(--color-bg-form);
+    }
+
+    .modal::-webkit-scrollbar-track {
+        background-color: var(--color-bg-form);
+    }
+
+}
+
+@media (max-width: 767px) {
+    .modal::-webkit-scrollbar {
+        width: 0;
+    }
+}
+
+.modal__container {
+    position: relative;
+    margin: 50px auto;
+    display: inline-block;
+    vertical-align: middle;
+	max-width: 315px;
+    background-color: var(--color-bg-form);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: default;
+    text-align: left;
+    display: none
+}
+
+@media (max-width:1024px) {
+    .modal__container {
+        width: 90%
+    }
+}
+
+.modal__close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border: none;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    cursor: pointer
+}
+
+.modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--trns), visibility var(--trns)
+}
+
+.modal__container.modal-open {
+    display: inline-block
+}
+
+.fade {
+    opacity: 0;
+    transition: opacity var(--trns)
+}
+
+.fade.animate-open {
+    opacity: 1;
+    transition: opacity var(--trns)
+}

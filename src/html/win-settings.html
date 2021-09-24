@@ -1,0 +1,209 @@
+<section class="settings outter-container win">
+	<h2 class="win__title title">Settings</h2>
+	<ul class="settings__list list-reset">
+		<li class="settings__item">
+			<section class="settings__section section-settings">
+				<h3 class="section-settings__title title">Appearance</h3>
+				<ul class="section-settings__list list-reset">
+					<li class="section-settings__item">
+						<div class="option">
+							<h4 class="option__title title">Theme</h4>
+							<div class="option__theme dropdown">
+								<button class="dropdown__head btn-reset">System default<span class="arrow"></span></button>
+								<ul class="dropdown__list dropdown__list_bottom list-reset">
+									<li class="dropdown__item">
+										<button data-choice="system" class="dropdown__btn btn-reset">System default</button>
+									</li>
+									<li class="dropdown__item">
+										<button data-choice="light" class="dropdown__btn btn-reset">Light</button>
+									</li>
+									<li class="dropdown__item">
+										<button data-choice="dark" class="dropdown__btn btn-reset">Dark</button>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="disableTransition" class="switch option__title title">
+								Disable transition
+								<input type="checkbox" role="switch" id="disableTransition">
+							</label>
+						</div>
+					</li>
+				</ul>
+			</section>
+		</li>
+		<li class="settings__item">
+			<section class="settings__section section-settings">
+				<h3 class="section-settings__title title">General</h3>
+				<ul class="section-settings__list list-reset">
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="disableSearchSuggestions" class="switch option__title">
+								Disable search suggestions
+								<input type="checkbox" role="switch" id="disableSearchSuggestions">
+							</label>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="notAdaptContent" class="switch option__title">
+								Don't adapt content after menu is opened
+								<input type="checkbox" role="switch" id="notAdaptContent">
+							</label>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="regionTrending" class="option__title mini-input">
+								Region for trending
+								<input type="text" id="regionTrending" length="2" placeholder="US">
+							</label>
+						</div>
+					</li>
+				</ul>
+			</section>
+		</li>
+		<li class="settings__item">
+			<section class="settings__section section-settings">
+				<h3 class="section-settings__title title">Video</h3>
+				<ul class="section-settings__list list-reset">
+					<li class="section-settings__item">
+						<div class="option">
+							<h4 class="option__title title">Default quality</h4>
+							<div class="option__quality dropdown">
+								<button class="dropdown__head btn-reset">1080p<span class="arrow"></span></button>
+								<ul class="dropdown__list dropdown__list_bottom list-reset">
+									<li class="dropdown__item">
+										<button data-choice="highest" class="dropdown__btn btn-reset">Highest</button>
+									</li>
+									<li class="dropdown__item">
+										<button data-choice="1080p" class="dropdown__btn btn-reset">1080p</button>
+									</li>
+									<li class="dropdown__item">
+										<button data-choice="720p" class="dropdown__btn btn-reset">720p</button>
+									</li>
+									<li class="dropdown__item">
+										<button data-choice="480p" class="dropdown__btn btn-reset">480p</button>
+									</li>
+									<li class="dropdown__item">
+										<button data-choice="360p" class="dropdown__btn btn-reset">360p</button>
+									</li>
+									<li class="dropdown__item">
+										<button data-choice="240p" class="dropdown__btn btn-reset">240p</button>
+									</li>
+									<li class="dropdown__item">
+										<button data-choice="144p" class="dropdown__btn btn-reset">144p</button>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="autoplay" class="switch option__title">
+								Autoplay
+								<input type="checkbox" role="switch" id="autoplay">
+							</label>
+						</div>
+					</li>
+				</ul>
+			</section>
+		</li>
+		<li class="settings__item">
+			<section class="settings__section section-settings">
+				<h3 class="section-settings__title title">Sponsorblock</h3>
+				<ul class="section-settings__list list-reset">
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="disableSponsorblock" class="switch option__title">
+								Disable sponsorblock
+								<input type="checkbox" role="switch" id="disableSponsorblock">
+							</label>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="notifySkipSegment" class="switch option__title">
+								Notify when segment is skipped
+								<input type="checkbox" role="switch" id="notifySkipSegment">
+							</label>
+						</div>
+					</li>
+				</ul>
+			</section>
+		</li>
+		<li class="settings__item">
+			<section class="settings__section section-settings">
+				<h3 class="section-settings__title title">Proxy</h3>
+				<ul class="section-settings__list list-reset">
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="enableProxy" class="switch option__title">
+								Enable proxy
+								<input type="checkbox" role="switch" id="enableProxy">
+							</label>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<h4 class="option__title">Protocol</h4>
+							<div class="option__protocol dropdown">
+								<button class="dropdown__head btn-reset">SOCKS5<span class="arrow"></span></button>
+								<ul class="dropdown__list dropdown__list_bottom list-reset">
+									<li class="dropdown__item">
+										<button class="dropdown__btn btn-reset">SOCKS5</button>
+									</li>
+									<li class="dropdown__item">
+										<button class="dropdown__btn btn-reset">SOCKS4</button>
+									</li>
+									<li class="dropdown__item">
+										<button class="dropdown__btn btn-reset">HTTPS</button>
+									</li>
+									<li class="dropdown__item">
+										<button class="dropdown__btn btn-reset">HTTP</button>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="host" class="option__title mini-input">
+								Host
+								<input type="text" id="host" length="15" placeholder="127.0.0.1">
+							</label>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="port" class="option__title mini-input">
+								Port
+								<input type="text" id="port" length="4" placeholder="9050">
+							</label>
+						</div>
+					</li>
+				</ul>
+			</section>
+		</li>
+		<li class="settings__item">
+			<section class="settings__section section-settings">
+				<h3 class="section-settings__title">Import & Export</h3>
+				<div class="section-settings__body">
+					<div class="imp-exp">
+						<div class="imp-exp__wrapper">
+							<p class="imp-exp__tip">Drag your files here or click in this area.</p>
+							<input type="file" accept=".json" class="imp-exp__field">
+						</div>
+						<div class="imp-exp__actions">
+							<a href="storage.json" download class="imp-exp__btn btn-primary onclick-effect">Export</a>
+							<button class="imp-exp__btn btn-accent onclick-effect btn-reset">Import</button>
+						</div>
+					</div>
+				</div>
+			</section>
+		</li>
+	</ul>
+</section>

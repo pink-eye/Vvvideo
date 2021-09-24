@@ -1,0 +1,82 @@
+.switch {
+	@media (min-width: 426px) {
+		--thumb-size: 1rem;
+		--track-padding: 4px;
+	}
+	@media (max-width: 425px) {
+		--thumb-size: 0.8rem;
+		--track-padding: 3px;
+	}
+    --track-size: calc(var(--thumb-size) * 2.5);
+
+    display: flex;
+    align-items: center;
+    gap: 2ch;
+    width: 100%;
+    justify-content: space-between;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &>input {
+        --thumb-position: 0%;
+
+        padding: var(--track-padding);
+        background: var(--color-track-inactive);
+        inline-size: var(--track-size);
+        block-size: var(--thumb-size);
+        border-radius: var(--track-size);
+
+        appearance: none;
+        pointer-events: none;
+        touch-action: pan-y;
+        outline-offset: 5px;
+        box-sizing: content-box;
+
+        flex-shrink: 0;
+        display: grid;
+        align-items: center;
+        grid: [track] 1fr / [track] 1fr;
+
+        transition: background-color var(--trns),
+			border-color var(--trns);
+
+        &::before {
+            --highlight-size: 0;
+
+            content: "";
+            cursor: pointer;
+            pointer-events: auto;
+            grid-area: track;
+            inline-size: var(--thumb-size);
+            block-size: var(--thumb-size);
+            background-color: var(--color-switch);
+            box-shadow: 0 0 0 var(--highlight-size) var(--color-switch-highlight);
+            border-radius: 50%;
+            transform: translateX(var(--thumb-position));
+
+            transition: transform var(--trns),
+                box-shadow var(--trns);
+        }
+
+        &:not(:disabled):hover::before {
+            --highlight-size: .5rem;
+        }
+
+        &:checked {
+            background: var(--color-track-active);
+            --thumb-position: calc((var(--track-size) - 100%));
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+            --thumb-color: transparent;
+
+            &::before {
+                cursor: not-allowed;
+                box-shadow: inset 0 0 0 2px hsl(0, 0%, 100% / 50%);
+            }
+        }
+    }
+}

@@ -1,0 +1,72 @@
+.indicator {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	padding-block: 5px;
+	height: 10px;
+	width: 100%;
+	display: grid;
+	place-items: center;
+	background-color: var(--color-bg-form);
+	z-index: 10;
+	box-shadow: var(--color-box-shadow-s) 0 -8px 24px;
+
+	opacity: 0;
+	visibility: hidden;
+
+	transition: opacity var(--trns),
+		visibility var(--trns);
+
+	&._visible {
+		opacity: 1;
+		visibility: visible;
+
+		&:after {
+			animation: indicator 2s linear infinite;
+		}
+	}
+
+	--progress: 0;
+
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 35%;
+
+		transform: translateX(-100%);
+
+		animation: unset;
+
+		background-color: var(--color-accent-s);
+	}
+
+	&:before {
+		// content: attr(data-progress);
+		position: relative;
+		height: 100%;
+		z-index: 2;
+		padding-inline: 5px;
+		border-radius: var(--brs-m);
+
+		background-color: #fff;
+		color: var(--color-accent-s);
+	}
+}
+
+@keyframes indicator {
+	0% {
+		left: 0%
+	}
+
+	5% {
+		left: 0%
+	}
+
+	100% {
+		left: 200%
+	}
+}
+

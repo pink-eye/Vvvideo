@@ -1,0 +1,141 @@
+<div class="video win">
+	<div class="video__wrapper">
+		<div class="skeleton video-skeleton"></div>
+		<video crossorigin="anonymous" referrerpolicy="no-referrer"></video>
+		<audio crossorigin="anonymous" referrerpolicy="no-referrer"></audio>
+		<div class="video__poster">
+			<img crossorigin="anonymous" referrerpolicy="no-referrer">
+		</div>
+		<div class="video__controls controls">
+			<div class="controls__play"></div>
+			<div class="controls__bar">
+				<div class="controls__progress progress">
+					<progress class="progress__bar bar" value="0" min="0"></progress>
+					<div class="progress__buffered"></div>
+					<input class="progress__seek seek" value="0" min="0" type="range" step="1">
+					<div class="progress__seek-tooltip seek-tooltip">00:00</div>
+					<ul class="progress__sponsorblock sponsorblock list-reset"></ul>
+				</div>
+				<div class="controls__wrapper">
+					<button class="controls__switch btn-reset">
+						<svg width="22px" height="22px">
+							<use xlink:href='img/svg/controls.svg#play'></use>
+						</svg>
+					</button>
+					<button class="controls__volume volume btn-reset">
+						<svg width="27px" height="27px">
+							<use xlink:href='img/svg/controls.svg#volume'></use>
+						</svg>
+						<div class="volume__range">
+							<progress class="volume__bar bar" value="0" min="0"></progress>
+							<input class="volume__seek seek" value="1" type="range" max="1" min="0" step="0.01">
+						</div>
+					</button>
+					<div class="controls__time time">
+						<time class="time__elapsed">00:00</time>
+						<span> / </span>
+						<time class="time__duration">00:00</time>
+					</div>
+					<div class="controls__right">
+						<button class="controls__sponsorblock btn-reset">
+							<img width="27px" height="27px" src="img/sponsorblock.png" alt="">
+						</button>
+						<div class="controls__speed speed dropdown btn-reset">
+							<button class="speed__current dropdown__head">x1</button>
+							<ul class="speed__list dropdown__list dropdown__list_top list-reset">
+								<li class="speed__item dropdown__item">
+									<button data-speed="0.5" class="speed__btn dropdown__btn btn-reset">x0.50</button>
+								</li>
+								<li class="speed__item dropdown__item">
+									<button data-speed="0.75" class="speed__btn dropdown__btn btn-reset">x0.75</button>
+								</li>
+								<li class="speed__item dropdown__item">
+									<button data-speed="1" class="speed__btn dropdown__btn btn-reset">x1</button>
+								</li>
+								<li class="speed__item dropdown__item">
+									<button data-speed="1.25" class="speed__btn dropdown__btn btn-reset">x1.25</button>
+								</li>
+								<li class="speed__item dropdown__item">
+									<button data-speed="1.5" class="speed__btn dropdown__btn btn-reset">x1.5</button>
+								</li>
+								<li class="speed__item dropdown__item">
+									<button data-speed="1.75" class="speed__btn dropdown__btn btn-reset">x1.75</button>
+								</li>
+								<li class="speed__item dropdown__item">
+									<button data-speed="2" class="speed__btn dropdown__btn btn-reset">x2</button>
+								</li>
+								<li class="speed__item dropdown__item">
+									<button data-speed="2.25" class="speed__btn dropdown__btn btn-reset">x2.25</button>
+								</li>
+							</ul>
+						</div>
+						<div class="controls__quality quality dropdown btn-reset">
+							<button class="quality__current dropdown__head"></button>
+							<ul class="quality__list dropdown__list dropdown__list_top list-reset"></ul>
+						</div>
+						<button class="controls__screen controls__screen_open btn-reset">
+							<svg width="25px" height="25px">
+								<use xlink:href='img/svg/controls.svg#fullscreen'></use>
+							</svg>
+						</button>
+						<button class="controls__screen controls__screen_close btn-reset" hidden>
+							<svg width="25px" height="25px">
+								<use xlink:href='img/svg/controls.svg#fullscreen'></use>
+							</svg>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<section class="video__info video-info">
+		<div class="video-info__body">
+			<div class="video-info__shell">
+				<h1 class="video-info__title title">
+					What's the name?
+				</h1>
+				<div class="video-info__details">
+					<div class="video-info__views">
+						<svg width="26px" height="20px">
+							<use xlink:href='img/svg/actions.svg#views'></use>
+						</svg>
+						<span>...</span>
+					</div>
+					<div class="video-info__date">
+						<svg width="20px" height="20px">
+							<use xlink:href='img/svg/actions.svg#date'></use>
+						</svg>
+						<span>...</span>
+					</div>
+					<div class="video-info__likes">
+						<svg stroke-width="0" width="20px" height="20px">
+							<use xlink:href='img/svg/actions.svg#like'></use>
+						</svg>
+						<span>...</span>
+					</div>
+					<div class="video-info__dislikes">
+						<svg stroke-width="0" width="20px" height="20px">
+							<use xlink:href='img/svg/actions.svg#dislike'></use>
+						</svg>
+						<span>...</span>
+					</div>
+				</div>
+				<div class="video-info__about">
+					@include('author-card.html')
+					<div class="video-info__wrapper">
+						@include('subscribe.html')
+					</div>
+				</div>
+			</div>
+			<div class="video-info__description desc-video-info spoiler">
+				<button class="desc-video-info__btn spoiler__head btn-reset"><span>Description</span><span
+						class="arrow"></span></button>
+				<div class="desc-video-info__shell spoiler__shell">
+					<p class="desc-video-info__text spoiler__content">
+						Description will be here...
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

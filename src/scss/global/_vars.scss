@@ -1,0 +1,51 @@
+:root {
+    --ff: "Commissioner", sans-serif;
+
+	--accent-hue: 330;
+	--accent-saturation: 70%;
+	--accent-lightness: 48%;
+
+	--accent-alpha-l: 0.1;
+	--accent-alpha-m: 0.55;
+	--accent-alpha-s: 1;
+
+    --color-accent-s: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), var(--accent-alpha-s));
+    --color-accent-m: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), var(--accent-alpha-m));
+    --color-accent-l: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), var(--accent-alpha-l));
+
+	--width-line: 3px;
+    --color-line: var(--color-accent-s);
+
+	--color-bg-duration: hsla(0, 0%, 0%, 0.6);
+    --color-bg-edge: var(--color-accent-s);
+
+    --caption-font-size: 16px;
+    --video-title: 36px;
+
+    --brs-s: 5px;
+    --brs-m: 10px;
+    --brs-l: 15px;
+    --brs-xl: 20px;
+
+	--trns-timing-func: ease;
+
+    @media screen and (prefers-reduced-motion: no-preference) {
+		--trns-time-default: .3s;
+		--trns-time-fast: .1s;
+		--trns-time-slow: 1s;
+
+		--trns: var(--trns-time-default) var(--trns-timing-func);
+		--trns-fast: var(--trns-time-fast) var(--trns-timing-func);
+		--trns-slow: var(--trns-time-slow) var(--trns-timing-func);
+    }
+
+    @media screen and (prefers-reduced-motion: reduce) {
+		--trns-time-default: .1s;
+		--trns-time-fast: 0s;
+		--trns-time-slow: .5s;
+
+        --trns: var(--trns-time-default) var(--trns-timing-func);
+		--trns-fast: var(--trns-time-fast) var(--trns-timing-func);
+		--trns-slow: var(--trns-time-slow) var(--trns-timing-func);
+    }
+}

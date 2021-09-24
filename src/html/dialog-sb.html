@@ -1,0 +1,48 @@
+<div class="dialog-sb">
+	<h3 class="dialog-sb__title title">
+		Confirm segment
+	</h3>
+	<section class="dialog-sb__section">
+		<div class="dialog-sb__time">
+			<label for="start">Start</label>
+			<input required id="start" type="text">
+		</div>
+		<div class="dialog-sb__time">
+			<label for="end">End</label>
+			<input required id="end" type="text">
+		</div>
+		<p class="dialog-sb__warning" hidden>Segment time is not correct</p>
+	</section>
+	<section class="dialog-sb__section">
+		<ul class="dialog-sb__list list-reset">
+			<li class="dialog-sb__item">
+				<div class="radio">
+					<input id="sponsor" name="category" type="radio" checked>
+					<label for="sponsor" class="radio__label">Sponsor</label>
+				</div>
+			</li>
+			<li class="dialog-sb__item">
+				<div class="radio">
+					<input id="intro" name="category" type="radio">
+					<label for="intro" class="radio__label">Introduction</label>
+				</div>
+			</li>
+			<li class="dialog-sb__item">
+				<div class="radio">
+					<input id="outro" name="category" type="radio">
+					<label for="outro" class="radio__label">Conclusion</label>
+				</div>
+			</li>
+			<li class="dialog-sb__item">
+				<div class="radio">
+					<input id="selfpromo" name="category" type="radio">
+					<label for="selfpromo" class="radio__label">Selfpromo</label>
+				</div>
+			</li>
+		</ul>
+	</section>
+	<div class="dialog-sb__actions">
+		<button class="dialog-sb__btn dialog-sb__btn_send btn-accent onclick-effect btn-reset">Send</button>
+		<button class="dialog-sb__btn dialog-sb__btn_cancel btn-primary onclick-effect btn-reset">Cancel</button>
+	</div>
+</div>

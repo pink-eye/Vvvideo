@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+	<link rel="stylesheet" href="css/preloader.css">
+	<script>
+		window.addEventListener('load', () => {
+			document.querySelector('.preloader').classList.add('_hidden');
+			setTimeout(() => {
+				document.querySelector('.preloader').remove();
+			}, 300)
+		});
+	</script>
+
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+
+	<link rel='stylesheet' href='css/vendor.css'>
+	<link rel='stylesheet' href='css/global.css'>
+	<link rel="stylesheet" href="css/index.css">
+
+	<title>Vvvideo</title>
+</head>
+
+<body>
+
+	@include('html/indicator.html')
+
+	<div class="preloader">
+		<div class="preloader__el"></div>
+	</div>
+
+	@include('html/header.html')
+
+	@include('html/sidebar.html')
+
+	<main class="main">
+		<div class="main__outter-container">
+			<div class="main__content">
+				<section class="latest outter-container _active win _anim-win">
+					<h2 class="win__title title">Latest</h2>
+					<div class="main__grid grid default">
+						@include('html/video-grid.html')
+					</div>
+				</section>
+
+				<section class="trending outter-container win">
+					<h2 class="win__title title">Trending</h2>
+					<div class="main__grid grid column">
+						@include('html/video-grid.html')
+					</div>
+				</section>
+
+				<section class="subscriptions outter-container win">
+					<h2 class="win__title title">Subs</h2>
+					<div class="main__grid grid column">
+						@include('html/author-card-grid.html')
+					</div>
+				</section>
+
+				<section class="search-results outter-container win">
+					<h2 class="win__title title">Search results</h2>
+					<div class="main__grid grid column">
+						@include('html/rich-grid.html')
+					</div>
+				</section>
+
+				@include('html/win-channel.html')
+
+				@include('html/win-video.html')
+
+				@include('html/win-playlist.html')
+
+				@include('html/win-settings.html')
+			</div>
+		</div>
+	</main>
+
+	@include('html/toast.html')
+
+	@include('html/graph-modal.html')
+
+	<script src="js/vendor.js"></script>
+	<script src='js/main.js'></script>
+</body>
+
+</html>

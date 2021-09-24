@@ -1,0 +1,27 @@
+const getTrending = async (geoLocation = 'US', page = 'default') => {
+	let videoAll = _io_q('.trending').querySelectorAll('.card');
+
+	let parameters = JSON.parse(`{
+		"geoLocation": "${geoLocation}",
+		"parseCreatorOnRise": false,
+		"page": "${page}"
+	}`)
+
+	try {
+		const data = await API.scrapeTrending(parameters)
+
+		data.length > videoAll.length
+			? initPages(_io_q('.trending'), data, videoAll, 'video')
+			: disablePages(_io_q('.trending'))
+
+		for (let index = 0, length = videoAll.length; index < length; index++) {
+			let video = videoAll[index];
+			fillVideoCard(video, index, data);
+		}
+	} catch (error) {
+		showToast('error', error.message)
+	} finally {
+		parameters = null
+		videoAll = null;
+	}
+}

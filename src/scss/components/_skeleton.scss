@@ -1,0 +1,52 @@
+.skeleton {
+    position: absolute;
+    overflow: hidden;
+    border-radius: var(--brs-s);
+    inset: 0;
+
+    background-color: var(--color-bg-skeleton);
+    z-index: 11;
+
+    &:after {
+        content: '';
+        position: absolute;
+
+        animation: shimmer 1.8s ease-in-out infinite;
+
+        top: 0;
+        left: 0;
+
+        width: 15px;
+        height: 100%;
+		box-shadow: 0 0 10px 10px var(--color-bg-skeleton-item);
+
+        background-color: var(--color-bg-skeleton-item);
+    }
+
+    &:not(._removing) {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    &._removing {
+        opacity: 0;
+        visibility: hidden;
+
+        transition: opacity var(--trns),
+            visibility var(--trns);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        left: calc(0% - 32px);
+    }
+
+    25% {
+        left: calc(0% - 32px);
+    }
+
+    100% {
+        left: calc(100% + 15px);
+    }
+}

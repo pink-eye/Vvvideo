@@ -1,0 +1,108 @@
+@import './components/header';
+@import './components/search';
+@import './components/grid';
+@import './components/card';
+@import './components/sidebar';
+@import './components/win-channel';
+@import './components/win-video';
+@import './components/indicator';
+@import './components/win-playlist';
+@import './components/author-card';
+@import './components/win-subscriptions';
+@import './components/toast';
+@import './components/radio';
+@import './components/dialog-sb';
+@import './components/dropdown';
+@import './components/win-settings';
+@import './components/burger';
+@import './components/switch';
+@import './components/skeleton';
+@import './components/subscribe';
+
+
+.main {
+    position: relative;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+    padding-bottom: 50px;
+
+	transition: background-color var(--trns);
+
+    @media (min-width: 1201px) {
+        padding-top: 114px;
+    }
+
+    @media (max-width: 1200px) and (min-width: 320px) {
+        padding-top: calc(74px + (104 - 74) * ((100vw - 320px) / (1200 - 320)));
+    }
+
+    // .main__outter-container
+
+    &__outter-container {
+        position: relative;
+
+        @media (min-width: 768px) {
+            padding-right: 0;
+        }
+    }
+
+    // .main__content
+
+    &__content {
+        transition: margin var(--trns);
+
+        --margin: 0;
+
+        @media (min-width: 768px) {
+            margin-left: var(--margin);
+        }
+
+        .outter-container {
+            @media (max-width: 449px) {
+                padding-inline: 0;
+            }
+        }
+    }
+}
+
+.win {
+
+	transition: transform var(--trns),
+	opacity var(--trns),
+	visibility var(--trns);
+
+	&:not(._active) {
+		display: none;
+	}
+
+    &._active {
+		display: block;
+    }
+
+	&:not(._anim-win) {
+		transform: translateY(-20px);
+		opacity: 0;
+		visibility: hidden;
+	}
+
+    &._anim-win {
+        transform: translateY(0px);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    &__header {
+        display: flex;
+		align-items: center;
+    }
+
+    &__title {
+        font-size: 35px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+
+        @media (max-width: 449px) {
+            padding-inline: 15px;
+        }
+    }
+}

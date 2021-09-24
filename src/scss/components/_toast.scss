@@ -1,0 +1,104 @@
+.toast__list {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    row-gap: 15px;
+    flex-direction: column;
+
+    @media (min-width: 768px) {
+        bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+        top: 60px;
+    }
+
+    z-index: 1000;
+
+    @media (max-width: 575px) {
+        width: 100%;
+    }
+}
+
+.toast__item {
+    position: relative;
+    background-color: var(--color-bg-form);
+
+    @media (min-width: 576px) {
+        font-size: 20px;
+    }
+
+    @media (max-width: 575px) {
+        font-size: 16px;
+    }
+
+    padding: 10px 20px;
+    box-shadow: var(--box-shadow-m);
+
+    @media (min-width: 576px) {
+        border-radius: var(--brs-s);
+    }
+
+    &:not(._visible) {
+        opacity: 0;
+        visibility: hidden;
+
+        @media (min-width: 768px) {
+            transform: scale(0.95);
+
+            transition: opacity 1.5s ease-out,
+                transform 1.5s ease-out,
+                visibility 1.5s ease-out;
+        }
+
+        transition: opacity 1.5s ease-out,
+        visibility 1.5s ease-out;
+    }
+
+    &._visible {
+        opacity: 1;
+        visibility: visible;
+
+        @media (min-width: 768px) {
+            transform: scale(1);
+
+            transition: opacity var(--trns-time-default) ease-in,
+                transform var(--trns-time-default) ease-in,
+                visibility var(--trns-time-default) ease-in;
+        }
+
+        transition: opacity var(--trns-time-default) ease-in,
+        visibility var(--trns-time-default) ease-in;
+    }
+
+    &._error {
+        color: var(--color-error);
+
+        &:after {
+            background-color: var(--color-error);
+        }
+    }
+
+    &._good {
+        color: var(--color-good);
+
+        &:after {
+            background-color: var(--color-good);
+        }
+    }
+
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 6px;
+
+        @media (min-width: 576px) {
+            border-top-left-radius: var(--brs-s);
+            border-bottom-left-radius: var(--brs-s);
+        }
+    }
+}

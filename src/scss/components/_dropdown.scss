@@ -1,0 +1,142 @@
+.dropdown {
+    position: relative;
+    z-index: 10;
+
+    &__head {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        border-radius: var(--brs-s);
+        display: flex;
+        justify-content: space-between;
+
+        transition: color var(--trns),
+            border-color var(--trns);
+
+        .arrow {
+            margin-left: 15px;
+        }
+    }
+
+    &:not(._active) {
+        .dropdown__list {
+            opacity: 0;
+            visibility: hidden;
+
+            &_top {
+                bottom: calc(100% + 15px);
+            }
+
+            &_bottom {
+                top: calc(100% + 15px);
+            }
+        }
+    }
+
+    &._active {
+        .dropdown__list {
+            opacity: 1;
+            visibility: visible;
+
+            &_top {
+                bottom: calc(100% + 5px);
+            }
+
+            &_bottom {
+                top: calc(100% + 5px);
+            }
+        }
+
+        .arrow {
+            &:before {
+                transform: rotate(-45deg);
+            }
+
+            &:after {
+                transform: rotate(45deg);
+            }
+        }
+
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            .arrow {
+
+                &:before,
+                &:after {
+                    transform: rotate(0deg);
+                }
+            }
+        }
+    }
+
+    &__list {
+        position: absolute;
+        right: 50%;
+		width: max-content;
+        max-height: 125px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        box-shadow: var(--box-shadow-m);
+        padding: 10px 5px;
+        text-align: right;
+
+        background-color: var(--color-bg-form);
+        border-radius: var(--brs-m);
+
+        transform: translateX(50%);
+
+        transition: opacity var(--trns),
+            visibility var(--trns),
+            background-color var(--trns),
+            box-shadow var(--trns),
+            bottom var(--trns),
+            top var(--trns);
+
+        &::-webkit-scrollbar {
+            width: 0;
+        }
+    }
+
+    &__item {
+        width: 100%;
+
+        &:not(:last-child) {
+            margin-bottom: 5px;
+        }
+    }
+
+    &__btn {
+        width: 100%;
+        padding: 7px 20px;
+        border-radius: var(--brs-s);
+
+        text-align: left;
+        transition: background-color var(--trns),
+            color var(--trns),
+            border-color var(--trns);
+
+        &:not(._current) {
+            color: var(--color-text);
+        }
+
+        &._current {
+            background-color: var(--color-accent-s);
+            color: #fff;
+
+            @media (hover: hover) and (pointer: fine) {
+                &:focus-visible {
+                    border: 3px solid var(--color-accent-m);
+                }
+            }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            &:not(._current):hover {
+                background-color: var(--color-bg);
+                color: var(--color-title);
+            }
+        }
+    }
+}

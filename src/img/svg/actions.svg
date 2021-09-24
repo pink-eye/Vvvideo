@@ -1,0 +1,45 @@
+<svg width="0" height="0" class="hidden">
+	<symbol fill="inherit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 13" id="dislike">
+		<path opacity="1" fill-rule="evenodd" clip-rule="evenodd"
+			d="M0 1.27C0 .57.6 0 1.33 0H9c2.08-.02 3.4.55 3.96 2 .15.37.99 3.58 1 3.62.24 1.06-.56 2-1.72 2h-2.4c-.19 0-.31.13-.28.3l.22 1.06c.15.78.23 1.4.22 1.81.01.66-.36 1.22-.95 1.65-.32.24-.8.46-.8.46-.5.24-1.11.03-1.35-.45 0 0-1.91-3.96-2.07-4.26-.16-.3-.58-.58-.95-.58H1.33A1.3 1.3 0 010 6.35V1.27zm9.02 0c1.48-.01 2.21.27 2.58.95h-.27a.65.65 0 00-.66.64c0 .35.3.63.66.63H12l.18.63h-.51a.65.65 0 00-.67.64c0 .35.3.63.67.63h.85l.13.49c.06.28-.1.46-.4.46H9.83c-1.03 0-1.78.87-1.58 1.83 0 .04.2.96.2 1.03.15.74.21 1.27.2 1.57v.05c.01.19-.11.39-.43.62l-.27.17-1.92-3.96A2.47 2.47 0 004 6.35V1.27h5.02zM2.67 6.34H1.33V1.27h1.34v5.07z"
+			fill="inherit"></path>
+	</symbol>
+	<symbol fill="inherit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 13" id="like">
+		<path opacity="1" fill-rule="evenodd" clip-rule="evenodd"
+			d="M0 11.73C0 12.43.6 13 1.33 13H9c2.08.02 3.4-.55 3.96-2a94 94 0 001-3.62c.24-1.06-.56-2-1.72-2h-2.4c-.19 0-.31-.13-.28-.3l.22-1.06c.15-.78.23-1.4.22-1.81.01-.66-.36-1.22-.95-1.65-.32-.24-.8-.46-.8-.46A1.01 1.01 0 006.9.55S5 4.51 4.83 4.81c-.16.3-.58.58-.95.58H1.33A1.3 1.3 0 000 6.65v5.08zm9.02 0c1.48.01 2.21-.27 2.58-.95h-.27a.65.65 0 01-.66-.64c0-.35.3-.63.66-.63H12l.18-.63h-.51a.65.65 0 01-.67-.64c0-.35.3-.63.67-.63h.85l.13-.49c.06-.28-.1-.46-.4-.46H9.83c-1.03 0-1.78-.87-1.58-1.83 0-.04.2-.96.2-1.03.15-.74.21-1.27.2-1.57v-.05c.01-.19-.11-.39-.43-.62a7.4 7.4 0 00-.27-.17L6.04 5.35A2.47 2.47 0 014 6.65v5.08h5.02zM2.67 6.66H1.33v5.07h1.34V6.66z"
+			fill="inherit"></path>
+	</symbol>
+	<symbol fill="inherit" version="1.1" xmlns="http://www.w3.org/2000/svg" id="playlist" x="0" y="0"
+		viewBox="0 0 612 612">
+		<path fill="inherit"
+			d="M63.3 73.9a63.3 63.3 0 100 126.6 63.3 63.3 0 000-126.6zm0 168.8a63.3 63.3 0 100 126.6 63.3 63.3 0 000-126.6zm0 168.8a63.3 63.3 0 100 126.6 63.3 63.3 0 000-126.6zm168.8-232.1h337.7a42.2 42.2 0 100-84.4H232a42.2 42.2 0 100 84.4zm337.7 84.4H232a42.2 42.2 0 100 84.4h337.7a42.2 42.2 0 100-84.4zm0 168.8H232a42.2 42.2 0 100 84.4h337.7a42.2 42.2 0 100-84.4z" />
+	</symbol>
+	<symbol fill="inherit" id="refresh" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
+		viewBox="0 0 489.5 489.5" xml:space="preserve">
+		<path fill="inherit"
+			d="M268.2 488.2A214.2 214.2 0 00246 61.4V3.8c0-3.2-4-5-6.7-3L120.8 88c-2 1.5-2 4.4 0 5.9l118.6 87c2.7 2 6.7.3 6.7-2.8v-57.5a155.2 155.2 0 01152.3 165.6 155.9 155.9 0 01-144.7 144.2 155.3 155.3 0 01-163.2-130 29.5 29.5 0 00-58.3 8.9 214.4 214.4 0 00236 178.9z" />
+	</symbol>
+	<symbol stroke="inherit" version="1.1" fill="none" id="search" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
+		viewBox="0 0 26 26" xml:space="preserve">
+		<g stroke="inherit" stroke-width="3">
+			<path d="M18.6 14.8a7.5 7.5 0 1 1-14.2-5 7.5 7.5 0 0 1 14.2 5Z" />
+			<path stroke-linecap="round" d="m17.4 18.1 4 3.6" />
+		</g>
+	</symbol>
+	<symbol stroke="inherit" version="1.1" fill="none" id="views" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
+		viewBox="0 0 30 24" xml:space="preserve">
+		<g stroke="inherit" stroke-width="2">
+			<path
+				d="m26.2 13 2 2-1.7 1.7c-2.7 3-5.5 6-11.3 6-5.8 0-8.9-3.3-11.5-6.2L2.3 15l1.4-1.4c2.6-2.9 5.7-6.2 11.5-6.2 5.7 0 8.2 2.6 11 5.6Z" />
+			<path stroke-linecap="round" d="M15.2 1.8v2M24.1 3.8 22.2 6M6.2 3.8 8 6" />
+			<circle cx="15.2" cy="15" r="4.9" />
+		</g>
+	</symbol>
+	<symbol stroke="inherit" version="1.1" fill="none" id="date" xmlns="http://www.w3.org/2000/svg" x="0" y="0"
+		viewBox="0 0 21 21" xml:space="preserve">
+		<g stroke="inherit" stroke-width="2">
+			<circle cx="10.4" cy="10.5" r="9" />
+			<path stroke-linecap="round" d="M10.4 5.4v6M10.5 11.7l3 2.1" />
+		</g>
+	</symbol>
+</svg>

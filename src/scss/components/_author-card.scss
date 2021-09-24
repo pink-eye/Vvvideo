@@ -1,0 +1,113 @@
+.author {
+    position: relative;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+	border-radius: var(--brs-m);
+	background-color: var(--color-bg-form);
+
+    transition: border-color var(--trns);
+
+    &:first-child {
+        position: relative;
+        display: flex;
+        padding: 10px;
+        text-align: left;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 0%;
+        border-radius: var(--brs-m);
+        opacity: 0.2;
+
+        background-color: var(--color-text);
+
+        transition: width var(--trns-time-default) ease-out;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            &:before {
+                width: 100%;
+            }
+
+            .author__name,
+            .author__subs {
+                margin-left: 10px;
+            }
+        }
+    }
+
+    &:last-child {
+        @media (min-width: 491px) {
+            justify-self: end;
+        }
+    }
+
+    &__avatar {
+        position: relative;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 20px;
+
+        @media (min-width: 1201px) {
+            max-width: 80px;
+            min-width: 80px;
+            height: 80px;
+        }
+
+        @media (max-width: 1200px) and (min-width: 768px) {
+			max-width: 65px;
+			min-width: 65px;
+            height: 65px;
+        }
+
+        @media (max-width: 767px) and (min-width: 320px) {
+			max-width: 50px;
+			min-width: 50px;
+            height: 50px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__name {
+        text-align: left;
+        position: relative;
+        font-style: unset;
+        z-index: 2;
+
+        @media (min-width: 1201px) {
+            font-size: 26px;
+        }
+
+        @media (max-width: 1200px) and (min-width: 320px) {
+            font-size: calc(18px + (26 - 18) * ((100vw - 320px) / (1200 - 320)));
+        }
+
+        transition: margin-left var(--trns);
+        margin: 0;
+
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+
+    &__subs {
+        color: var(--color-text);
+        margin-top: 10px;
+
+        transition: margin-left var(--trns);
+        margin-left: 0;
+    }
+}
