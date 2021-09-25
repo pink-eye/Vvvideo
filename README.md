@@ -1,10 +1,9 @@
-<h1 align="center">
-<sub><img src="src/res/assets/icons/png/256x256.png" width="70"></sub>
-Vvvideo
-</h1>
+<p align="center"><img src="src/res/assets/icons/png/256x256.png" width="150"></p>
+
+<h1 align="center">Vvvideo</h1>
 
 <p align="center">
-<b>Vvvideo is an open-source app to watch YT videos</b>
+<b>An open-source app to watch YT videos</b>
 </p>
 
 <p align="center">
