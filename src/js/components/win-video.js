@@ -67,14 +67,12 @@ const getVideo = async id => {
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
 
-				if (data.hasOwnProperty('formats')) {
-
+				if (data.formats.length > 0) {
 					if (data.videoDetails.isLive) {
 						videoFormatAll = filterHLS(data.formats)
 						resetAudio(audioInstance)
 						audioInstance.remove()
 					} else {
-
 						if (storage.settings.disableSeparatedStreams) {
 							videoFormatAll = API.YTDLFilterFormats(data.formats)
 							resetAudio(audioInstance)
@@ -155,13 +153,6 @@ const getVideo = async id => {
 				if (videoDate.textContent === 'Premiere') {
 					videoDate.textContent = data.player_response.playabilityStatus.reason
 					controls.hidden = true
-
-					videoSkeleton.classList.add('_removing');
-
-					setTimeout(_ => {
-						videoSkeleton.hidden = true
-						videoSkeleton = null
-					}, getDurationTimeout())
 				}
 
 				videoDesc.innerHTML = normalizeDesc(data.videoDetails.description);
