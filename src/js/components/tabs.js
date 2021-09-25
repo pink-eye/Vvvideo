@@ -68,7 +68,6 @@ const showRequiredTab = async (tab, tabContentClass) => {
 			let channelTabContentPlaylists = channel.querySelector('.playlists');
 
 			const dataChannelPlaylists = await API.scrapeChannelPlaylists(channel.dataset.id)
-			console.log(dataChannelPlaylists);
 			let playlistAll = channelTabContentPlaylists.querySelectorAll('.card');
 
 			dataChannelPlaylists.items.length > playlistAll.length

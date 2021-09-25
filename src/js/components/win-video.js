@@ -11,7 +11,16 @@ const getDefaultFormat = formats => API.YTDLChooseFormat(formats, 'highest')
 
 const filterFormats = (formats, fn) => Object.values(formats).filter(fn)
 
-const filterVideoWebm = formats => filterFormats(formats, format => format.container === 'webm' && format.hasVideo)
+const filterVideoWebm = formats => filterFormats(formats,
+	format =>
+		format.container === 'webm'
+		&& format.hasVideo)
+
+const filterVideoMP4NoAudio = formats => filterFormats(formats,
+	format =>
+		format.container === 'mp4'
+		&& format.hasVideo
+		&& !format.hasAudio)
 
 const filterHLS = formats => filterFormats(formats, format => format.isHLS)
 
@@ -20,6 +29,12 @@ const isInvalidFormats = formats => formats.find(el => el.type === 'FORMAT_STREA
 const getPreferedQuality = formats => storage.settings.defaultQuality === 'highest'
 	? getHighestVideo(formats)
 	: formats.find(el => el.qualityLabel.includes(storage.settings.defaultQuality))
+
+const resetAudio = audio => {
+	audio.pause()
+	audio.removeAttribute('src');
+	audio.load()
+}
 
 const getVideo = async id => {
 	let video = _io_q('.video');
@@ -52,19 +67,32 @@ const getVideo = async id => {
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
 
-				if (data.formats.length > 0) {
-					videoFormatAll = data.videoDetails.isLive
-						? filterHLS(data.formats)
-						: filterVideoWebm(data.formats)
+				if (data.hasOwnProperty('formats')) {
 
-					if (isInvalidFormats(videoFormatAll)) {
-						videoFormatAll = API.YTDLFilterFormats(data.formats)
+					if (data.videoDetails.isLive) {
+						videoFormatAll = filterHLS(data.formats)
+						resetAudio(audioInstance)
 						audioInstance.remove()
+					} else {
+
+						if (storage.settings.disableSeparatedStreams) {
+							videoFormatAll = API.YTDLFilterFormats(data.formats)
+							resetAudio(audioInstance)
+							audioInstance.remove()
+						} else {
+							switch (storage.settings.defaltVideoFormat) {
+								case 'mp4':
+									videoFormatAll = filterVideoMP4NoAudio(data.formats)
+									break;
+								case 'webm':
+									videoFormatAll = filterVideoWebm(data.formats)
+									break;
+							}
+						}
 					}
 
-					!data.videoDetails.isLive && audioInstance
-						? audioInstance.src = getHighestAudio(data.formats).url
-						: audioInstance.remove()
+					if (audioInstance)
+						audioInstance.src = getHighestAudio(data.formats).url
 
 					if (storage.settings.autoplay)
 						videoInstance.autoplay = true
@@ -80,7 +108,6 @@ const getVideo = async id => {
 						videoInstance.src = sparedQuality.url
 						qualityCurrent.textContent = sparedQuality.qualityLabel
 					}
-
 
 					if (videoFormatAll.length > 0) {
 						for (let index = 0, length = videoFormatAll.length; index < length; index++) {
@@ -221,12 +248,10 @@ const resetVideo = async _ => {
 	videoInstance.removeAttribute('src');
 	videoInstance.load()
 
-	if (audioInstance) {
-		audioInstance.pause()
-		audioInstance.removeAttribute('src');
-		audioInstance.load()
-	} else videoWrapper.insertAdjacentHTML('afterBegin',
-		'<audio crossorigin="anonymous" referrerpolicy="no-referrer"></audio>')
+	audioInstance
+		? resetAudio(audioInstance)
+		: videoWrapper.insertAdjacentHTML('afterBegin',
+			'<audio crossorigin="anonymous" referrerpolicy="no-referrer"></audio>')
 
 	videoPoster.removeAttribute('src')
 	videoPoster.closest('.video__poster').classList.remove('_hidden');

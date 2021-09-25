@@ -113,14 +113,10 @@ const initVideoPlayer = _ => {
 			if (playPromise !== undefined && !isPlaying(el)) {
 				playPromise
 					.then(_ => {
-						if (!videoPoster.classList.contains('_hidden'))
-							videoPoster.classList.add('_hidden');
-
-						if (isPlayingVideo() && isPlayingAudio()) syncMedia()
+						if (isPlayingVideo() && isPlayingAudio())
+							syncMedia()
 					})
-					.catch(error => {
-						showToast('error', error.message)
-					});
+					.catch(error => { showToast('error', error.message) });
 			}
 		}
 	}
@@ -130,13 +126,15 @@ const initVideoPlayer = _ => {
 	const playVideo = _ => playEl(video)
 
 	const togglePlay = _ => {
-		if (!isPlayingVideo() && !isPlayingAudio()) {
-			playVideo()
-			playAudio()
-		} else {
-			pauseVideo()
-			pauseAudio()
-		}
+		if (audio) {
+			if (!isPlayingVideo() && !isPlayingAudio()) {
+				playVideo()
+				playAudio()
+			} else {
+				pauseVideo()
+				pauseAudio()
+			}
+		} else !isPlayingVideo() ? playVideo() : pauseVideo()
 
 		toggleIconPlayPause()
 		isSync = false
@@ -154,6 +152,9 @@ const initVideoPlayer = _ => {
 
 		if (!doesSkipSegments)
 			doesSkipSegments = true
+
+		if (!videoPoster.classList.contains('_hidden'))
+			videoPoster.classList.add('_hidden');
 	}
 
 	const changeIcon = iconPath => { controlsSwitchIcon.setAttribute('xlink:href', iconPath) }
@@ -210,7 +211,8 @@ const initVideoPlayer = _ => {
 			progressBuffered.style.setProperty('--buffered',
 				`${convertToProc(minBuffered, video.duration)}%`)
 		} else {
-			progressBuffered.style.setProperty('--buffered', `${convertToProc(vbuffered.end(vbuffered.length - 1), video.duration)}%`)
+			progressBuffered.style.setProperty('--buffered',
+				`${convertToProc(vbuffered.end(vbuffered.length - 1), video.duration)}%`)
 		}
 	}
 
@@ -378,23 +380,22 @@ const initVideoPlayer = _ => {
 
 	video.addEventListener('loadedmetadata', initVideo);
 
+	video.addEventListener('play', _ => {
+		showIconPause()
+		playAudio()
+	})
+
+	video.addEventListener('playing', _ => {
+		showIconPause()
+		playAudio()
+	})
+
+	video.addEventListener('waiting', _ => {
+		if (!isPlayingVideo())
+			pauseAudio()
+	})
+
 	if (audio) {
-
-		video.addEventListener('play', _ => {
-			showIconPause()
-			playAudio()
-		})
-
-		video.addEventListener('playing', _ => {
-			showIconPause()
-			playAudio()
-		})
-
-		video.addEventListener('waiting', _ => {
-			if (!isPlayingVideo())
-				pauseAudio()
-		})
-
 		audio.addEventListener('play', _ => { playVideo() })
 
 		audio.addEventListener('playing', _ => { playVideo() })
@@ -406,14 +407,21 @@ const initVideoPlayer = _ => {
 	}
 
 	video.addEventListener('timeupdate', _ => {
-
 		if (!isSync && isPlayingAudio() && isPlayingVideo())
 			syncMedia()
 
-		if (isPlayingAudio() && isPlayingVideo()) {
-			updateBuffered()
-			updateTimeElapsed()
-			updateProgress()
+		if (audio) {
+			if (isPlayingAudio() && isPlayingVideo()) {
+				updateBuffered()
+				updateTimeElapsed()
+				updateProgress()
+			}
+		} else {
+			if (isPlayingVideo()) {
+				updateBuffered()
+				updateTimeElapsed()
+				updateProgress()
+			}
 		}
 
 		if (doesSkipSegments && !storage.settings.disableSponsorblock)

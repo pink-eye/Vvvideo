@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const themeDropdown = settings.querySelector('.option__theme');
 	const protocolDropdown = settings.querySelector('.option__protocol');
 	const qualityDropdown = settings.querySelector('.option__quality');
+	const formatDropdown = settings.querySelector('.option__format');
 
 	await API.readStorage(async data => {
 		Object.assign(storage, JSON.parse(data))
@@ -75,6 +76,11 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	initDropdown(protocolDropdown, params => {
 		storage.settings.proxy.protocol = params.btn.textContent.toLowerCase()
+		API.writeStorage(storage)
+	})
+
+	initDropdown(formatDropdown, params => {
+		storage.settings.defaltVideoFormat = params.btn.textContent
 		API.writeStorage(storage)
 	})
 
@@ -171,8 +177,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				author: btnWin.querySelector('.card__channel').textContent,
 				id: btnWin.querySelector('.card__channel').dataset.id
 			}
-
-			console.log(params);
 
 			fillSomeInfoPlaylist(params)
 
@@ -483,6 +487,10 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 				case 'autoplay':
 					storage.settings.autoplay = checkbox.checked
+					break;
+
+				case 'disableSeparatedStreams':
+					storage.settings.disableSeparatedStreams = checkbox.checked
 					break;
 
 				case 'notAdaptContent':

@@ -83,6 +83,12 @@ const fillWinSettings = async _ => {
 		checkboxA = null
 	}
 
+	if (storage.settings.disableSeparatedStreams) {
+		let checkboxDSS = settings.querySelector('input#disableSeparatedStreams')
+		checkboxDSS.checked = true
+		checkboxDSS = null
+	}
+
 	if (storage.settings.notAdaptContent) {
 		let checkboxNAC = settings.querySelector('input#notAdaptContent')
 		checkboxNAC.checked = true
@@ -111,6 +117,16 @@ const fillWinSettings = async _ => {
 
 		qualityDropdown = null
 		qualityDropdownHead = null
+	}
+
+	if (storage.settings.defaltVideoFormat !== 'mp4') {
+		let formatDropdown = settings.querySelector('.option__format');
+		let formatDropdownHead = formatDropdown.querySelector('.dropdown__head');
+
+		formatDropdownHead.childNodes[0].data = storage.settings.defaltVideoFormat
+
+		formatDropdown = null
+		formatDropdownHead = null
 	}
 
 	if (storage.settings.proxy.protocol !== 'socks5' &&

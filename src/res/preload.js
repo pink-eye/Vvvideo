@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge } = require('electron');
 const ytch = require('yt-channel-info');
 const ytpl = require('ytpl');
 const ytsr = require('ytsr');
@@ -52,11 +52,9 @@ contextBridge.exposeInMainWorld('API', {
 
 	scrapeVideo: videoId => ytdl.getInfo(`https://www.youtube.com/watch?v=${videoId}`),
 
-	scrapeVideoProxy: (videoId, obj) => {
-		let agent = makeAgent(obj)
-
-		return ytdl.getInfo(`https://www.youtube.com/watch?v=${videoId}`, { requestOptions: { agent } })
-	},
+	scrapeVideoProxy: (videoId, obj) => ytdl.getInfo(`https://www.youtube.com/watch?v=${videoId}`, {
+		requestOptions: { agent: makeAgent(obj) }
+	}),
 
 	scrapeChannelInfo: channelId => ytch.getChannelInfo(channelId, 1),
 
@@ -72,25 +70,11 @@ contextBridge.exposeInMainWorld('API', {
 
 	scrapePlaylistVideos: playlistId => ytpl(playlistId),
 
-	scrapePlaylistVideosProxy: (playlistId, obj) => {
-		let agent = makeAgent(obj)
-
-		return ytpl(playlistId, {
-			hl: 'ru', gl: 'RU',
-			requestOptions: { agent }
-		})
-	},
+	scrapePlaylistVideosProxy: (playlistId, obj) => ytpl(playlistId, { requestOptions: { agent: makeAgent(obj) } }),
 
 	scrapeSearchResults: (q, options) => ytsr(`${q}`, options),
 
-	scrapeSearchResultsProxy: (q, obj) => {
-		let agent = makeAgent(obj)
-
-		return ytsr(`${q}`, {
-			hl: 'ru', gl: 'RU',
-			requestOptions: { agent }
-		})
-	},
+	scrapeSearchResultsProxy: (q, obj) => ytsr(`${q}`, { requestOptions: { agent: makeAgent(obj) } }),
 
 	scrapeSearchResultsMore: continuation => ytsr.continueReq(continuation),
 

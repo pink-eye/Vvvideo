@@ -14,11 +14,11 @@
 
 <h3>Latest</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(6).png)
+![Screenshot-Latest](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(6).png)
 
 <h3>Video</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(7).png)
+![Screenshot-Video](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(7).png)
 
 <h3>Channel</h3>
 
@@ -26,19 +26,19 @@
 
 <h3>Trending</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(2).png)
+![Screenshot-Trending](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(2).png)
 
 <h3>Settings</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(3).png)
+![Screenshot-Settings](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(3).png)
 
 <h3>Search results</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(4).png)
+![Screenshot-Search](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(4).png)
 
 <h3>Video description</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(5).png)
+![Screenshot-Video-Descr](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(5).png)
 
 ## Features
 * Watch videos without ads
