@@ -7,18 +7,38 @@
 </p>
 
 ## Screenshots
-<img src="src/res/assets/screenshots/screenshot (1).png" width=300> <img src="src/res/assets/screenshots/screenshot (2).png" width=300> <img src="src/res/assets/screenshots/screenshot (3).png" width=300> <img src="src/res/assets/screenshots/screenshot (4).png" width=300> <img src="src/res/assets/screenshots/screenshot (5).png" width=300>
+
+<h3>Channel</h3>
+
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (1).png)
+
+<h3>Trending</h3>
+
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (2).png)
+
+<h3>Settings</h3>
+
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (3).png)
+
+<h3>Search results</h3>
+
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (4).png)
+
+<h3>Video description</h3>
+
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (5).png)
 
 ## Features
 * Watch videos without ads
 * Sponsorblock integration
-* Use Proxy
+* Proxy configuration
 * Use YouTube without Google trackers
-* Subscribe to channels without an account
+* Subscribe to channels and get their latest uploads
 * Display general info about videos, channels and playlists
 * Search videos, channels and playlists
-* Dark theme
+* Dark and light themes
 * Export & import subscriptions
+* Navigate the app using the keyboard
 
 ## License
 [![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
