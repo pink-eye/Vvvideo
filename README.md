@@ -1,4 +1,4 @@
-<h1 align="center"><img src="src/res/assets/icons/png/256x256.png" width="150"><b>Vvvideo</b></h2>
+<h1><img src="src/res/assets/icons/png/256x256.png" width="50"> <b>Vvvideo</b></h1>
 
 > Vvvideo is an open-source app to watch YT videos
 
