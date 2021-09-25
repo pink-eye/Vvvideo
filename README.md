@@ -12,6 +12,14 @@
 
 ## Screenshots
 
+<h3>Latest</h3>
+
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(6).png)
+
+<h3>Video</h3>
+
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(7).png)
+
 <h3>Channel</h3>
 
 ![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(1).png)
