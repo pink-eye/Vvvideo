@@ -10,23 +10,23 @@
 
 <h3>Channel</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (1).png)
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot(1).png)
 
 <h3>Trending</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (2).png)
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot(2).png)
 
 <h3>Settings</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (3).png)
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot(3).png)
 
 <h3>Search results</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (4).png)
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot(4).png)
 
 <h3>Video description</h3>
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot (5).png)
+![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/src/res/assets/screenshots/screenshot(5).png)
 
 ## Features
 * Watch videos without ads
