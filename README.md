@@ -1,5 +1,5 @@
 <h1 align="center">
-<sub><img src="src/res/assets/icons/png/256x256.png" width="50"></sub>
+<sub><img src="src/res/assets/icons/png/256x256.png" width="70"></sub>
 Vvvideo
 </h1>
 
