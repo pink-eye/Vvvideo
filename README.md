@@ -1,8 +1,8 @@
 <p align="center"><img src="src/res/assets/icons/png/256x256.png" width="150"></p>
-<h2 align="center"><b>Vvvideo</b></h2>
-<p align="center">An open-source project</p>
+<h1 align="center"><b>Vvvideo</b></h2>
+> Vvvideo is an open-source app to watch YT videos
 
-<p align="center">
+<p>
 <a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"></a>
 </p>
 
