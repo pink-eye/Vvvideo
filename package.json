@@ -1,6 +1,6 @@
 {
 	"name": "vvvideo",
-	"productName": "vvvideo",
+	"productName": "Vvvideo",
 	"version": "1.0.0",
 	"description": "to watch videos yt",
 	"main": "bundle/index.js",
@@ -21,13 +21,13 @@
 		"forge": {
 			"packagerConfig": {
 				"name": "Vvvideo",
-				"icon": "./bundle/assets/icons/icon"
+				"icon": "./bundle/assets/icons/icon.ico"
 			},
 			"makers": [
 				{
 					"name": "@electron-forge/maker-squirrel",
 					"config": {
-						"name": "vvvideo",
+						"name": "Vvvideo",
 						"iconUrl": "https://raw.githubusercontent.com/pink-eye/Vvvideo/main/src/res/assets/icons/icon.ico"
 					}
 				},
@@ -71,8 +71,6 @@
 		"browser-sync": "^2.27.5",
 		"del": "^6.0.0",
 		"electron": "15.0.0",
-		"electron-forge": "^5.2.4",
-		"electron-prebuilt-compile": "8.2.0",
 		"gulp": "^4.0.2",
 		"gulp-autoprefixer": "^6.1.0",
 		"gulp-babel": "^8.0.0",

@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	const fillSomeInfoVideo = params => {
 		videoTitle.textContent = params.title;
-		videoViews.textContent = params.views !== '...' ? params.views : '...';
+		videoViews.textContent = params.views !== '...' || !isEmpty(params.views) ? params.views : '...';
 		videoDate.textContent = params.date !== '...' || !isEmpty(params.date) ? params.date : '...';
 		videoChannel.textContent = params.author;
 		videoChannelBtn.dataset.id = params.authorId;
@@ -128,8 +128,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 			}
 
 			fillSomeInfoVideo(params);
-
-			// params = null
 		} else {
 			fillSomeInfoVideo({
 				title: 'Title',

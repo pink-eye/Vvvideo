@@ -162,6 +162,6 @@ const toProd = (done) => {
 
 exports.default = series(clean, htmlInclude, scripts, styles, resources, images, moveSprites, watchFiles);
 
-exports.build = series(toProd, clean, htmlInclude, scripts, styles, resources, images, htmlMinify);
+exports.build = series(toProd, clean, htmlInclude, scripts, styles, resources, images, moveSprites, htmlMinify);
 
 exports.cache = series(cache, rewrite);

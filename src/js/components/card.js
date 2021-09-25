@@ -14,7 +14,7 @@ const fillVideoCard = (video, index, data) => {
 	video.dataset.id = data[index].hasOwnProperty('videoId')
 		? data[index].videoId
 		: data[index].id
-		
+
 	data[index].bestThumbnail
 		? videoImage.setAttribute('src', data[index].bestThumbnail.url)
 		: videoImage.setAttribute('src', data[index].videoThumbnails.at(-1).url)
@@ -43,7 +43,9 @@ const fillVideoCard = (video, index, data) => {
 
 	videoViews.textContent = data[index].hasOwnProperty('viewCount')
 		? normalizeCount(data[index].viewCount)
-		: normalizeCount(data[index].views)
+		: data[index].hasOwnProperty('views')
+			? normalizeCount(data[index].views)
+			: '...'
 
 	if (data[index].liveNow || data[index].premiere)
 		video.classList.add('_live');

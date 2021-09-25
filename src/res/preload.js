@@ -1,4 +1,4 @@
-const { contextBridge } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 const ytch = require('yt-channel-info');
 const ytpl = require('ytpl');
 const ytsr = require('ytsr');

@@ -28,6 +28,7 @@ const createWindow = _ => {
 		fullscreen: true,
 		offscreen: false,
 		contextIsolation: true,
+		enableRemoteModule: false,
 		backgroundColor: '#d0257a',
 		minWidth: 320,
 		webPreferences: {
