@@ -14,9 +14,9 @@ const showSuggest = (parent, data) => {
 
 			suggest = null
 		}
+	}
 
-		suggestAll = null
-	} else suggestAll = null
+	suggestAll = null
 
 	if (!parent.classList.contains('_has-suggest'))
 		parent.classList.add('_has-suggest')
@@ -32,10 +32,10 @@ const hideSuggest = parent => {
 const resetSelected = parent => {
 	let selectedSuggest = parent.querySelector('.search__suggest._selected');
 
-	if (selectedSuggest) {
+	if (selectedSuggest)
 		selectedSuggest.classList.remove('_selected');
-		selectedSuggest = null;
-	} else selectedSuggest = null;
+
+	selectedSuggest = null;
 }
 
 
@@ -52,10 +52,9 @@ const resetSuggest = parent => {
 
 			suggest = null
 		}
-
-		suggestAll = null
 	}
-	else suggestAll = null;
+
+	suggestAll = null
 
 	resetSelected(parent)
 }
@@ -64,14 +63,14 @@ const resetSuggest = parent => {
 const insertSelectedSuggest = (parent, suggest) => {
 	let searchBar = parent.querySelector('.search__bar');
 
-	if (searchBar) {
-		searchBar.value = suggest
-		searchBar = null
-	} else searchBar = null
+	if (searchBar) searchBar.value = suggest
+
+	searchBar = null
 }
 
 const chooseSuggest = (parent, last, direction) => {
 	let visibleSuggestAll = parent.querySelectorAll('.search__suggest._visible');
+
 	if (visibleSuggestAll.length > 0) {
 		if (last !== null) {
 			if (direction === 40) {
@@ -98,13 +97,12 @@ const chooseSuggest = (parent, last, direction) => {
 
 		let selectedSuggest = parent.querySelector('.search__suggest._selected');
 
-		if (selectedSuggest) {
+		if (selectedSuggest)
 			insertSelectedSuggest(parent, selectedSuggest.textContent)
-			selectedSuggest = null
-		} else selectedSuggest = null
 
-		visibleSuggestAll = null
-	} else visibleSuggestAll = null
+		selectedSuggest = null
+	}
+	visibleSuggestAll = null
 }
 
 const initSuggests = parent => {
@@ -113,7 +111,9 @@ const initSuggests = parent => {
 
 	if (searchBar && !storage.settings.disableSearchSuggestions) {
 		searchBar.addEventListener('input', async _ => {
+			lastSelected = null
 			let query = searchBar.value;
+
 			if (!isEmpty(query)) {
 				try {
 					let data = storage.settings.enableProxy
@@ -124,6 +124,7 @@ const initSuggests = parent => {
 					showSuggest(parent, data)
 
 					let visibleSuggestAll = parent.querySelectorAll('.search__suggest._visible');
+
 					for (let index = 0, length = visibleSuggestAll.length; index < length; index++) {
 						const visibleSuggest = visibleSuggestAll[index];
 						visibleSuggest.addEventListener('click', _ => {
