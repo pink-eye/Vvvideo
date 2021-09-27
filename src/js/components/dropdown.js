@@ -65,9 +65,7 @@ const toggleDropdown = dropdown => {
 	else {
 		hideLastDropdown(dropdown)
 		dropdown.classList.add('_active')
-		setTimeout(_ => {
-			focusCurrentChoice(dropdown)
-		}, 100)
+		setTimeout(_ => { focusCurrentChoice(dropdown) }, 100)
 	}
 }
 
@@ -80,9 +78,7 @@ document.addEventListener('DOMContentLoaded', _ => {
 			const dropdownHead = dropdown.querySelector('.dropdown__head');
 
 			if (dropdownHead) {
-				dropdownHead.addEventListener('click', _ => {
-					toggleDropdown(dropdown)
-				});
+				dropdownHead.addEventListener('click', _ => { toggleDropdown(dropdown) });
 			}
 		}
 	}

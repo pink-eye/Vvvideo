@@ -11,10 +11,19 @@ const resetGridAuthorCard = async _ => {
 	authorAll = null
 }
 
+
 const resetGrid = async parent => {
 	const cardAll = parent.querySelectorAll('.card')
 
+
 	if (cardAll.length > 0) {
+		const typeAll = {
+			video: '_video',
+			playlist: '_playlist',
+			channel: '_channel',
+			live: '_live'
+		}
+
 		for (let index = 0, length = cardAll.length; index < length; index++) {
 			let card = cardAll[index];
 
@@ -23,14 +32,12 @@ const resetGrid = async parent => {
 			if (parent.classList.contains('search-results')) {
 				card.dataset.win = null;
 
-				if (card.classList.contains('_video'))
-					card.classList.remove('_video');
-				if (card.classList.contains('_playlist'))
-					card.classList.remove('_playlist');
-				if (card.classList.contains('_channel'))
-					card.classList.remove('_channel');
-				if (card.classList.contains('_live'))
-					card.classList.remove('_live');
+				for (let key in typeAll) {
+					if (card.classList.contains(typeAll[key])) {
+						card.classList.remove(typeAll[key]);
+						break;
+					}
+				}
 			}
 		}
 	}

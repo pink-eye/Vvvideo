@@ -33,7 +33,6 @@ const resetIndicator = async _ => {
 
 	if (indicator.classList.contains('_visible'))
 		indicator.classList.remove('_visible')
-
 }
 
 const getLatest = async _ => {
@@ -42,7 +41,6 @@ const getLatest = async _ => {
 	let videoAll = latest.querySelectorAll('.card');
 
 	if (!latestArray) {
-
 		let btnLatest = document.querySelector('button[data-win="latest"]');
 
 		for (let index = 0, length = storage.subscriptions.length; index < length; index++) {

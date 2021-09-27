@@ -192,9 +192,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	const showWin = win => {
 		win.classList.add('_active');
-		setTimeout(_ => {
-			win.classList.add('_anim-win');
-		}, 15)
+		setTimeout(_ => { win.classList.add('_anim-win'); }, 15)
 	}
 
 	const hideLastWin = async _ => {
@@ -392,9 +390,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	// REFRESH BTN
 
-	headerBtn.addEventListener('click', _ => {
-		location.reload()
-	});
+	headerBtn.addEventListener('click', _ => { location.reload() });
 
 	// IMPLEMENT IMPORT
 

@@ -266,8 +266,7 @@ const resetVideo = async _ => {
 		videoSkeleton.hidden = false
 	}
 
-	if (controls.hidden)
-		controls.hidden = false
+	controls.hidden &&= false
 
 	let iconPathPlay = 'img/svg/controls.svg#play'
 	if (controlsSwitchIcon.getAttribute('xlink:href') !== iconPathPlay)

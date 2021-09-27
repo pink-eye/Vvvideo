@@ -98,8 +98,8 @@ const removeSubscription = async obj => {
 
 const onClickSubscribe = (btn, btnText) => {
 
-	if (btn.dataset.channelId &&
-		btn.dataset.name) {
+	if (btn.dataset.channelId
+		&& btn.dataset.name) {
 
 		btn.disabled = true
 		btn.classList.add('_subscribed')
@@ -121,8 +121,8 @@ const onClickSubscribe = (btn, btnText) => {
 
 const onClickUnsubscribe = (btn, btnText) => {
 
-	if (btn.dataset.channelId &&
-		btn.dataset.name) {
+	if (btn.dataset.channelId
+		&& btn.dataset.name) {
 
 		btn.disabled = true
 		btn.classList.remove('_subscribed')

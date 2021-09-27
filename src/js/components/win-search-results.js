@@ -35,9 +35,8 @@ const getSearchResults = async _ => {
 					break;
 			}
 		}
-	} catch (error) {
-		showToast('error', error.message);
-	} finally {
+	} catch (error) { showToast('error', error.message); }
+	finally {
 		searchResults = null
 		searchBar = null
 		cardAll = null

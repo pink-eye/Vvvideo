@@ -14,34 +14,33 @@ const disablePages = parent => {
 
 const enablePages = parent => {
 	let btns = parent.querySelector('.btns');
+
 	if (btns && btns.hidden) {
 		btns.hidden = false;
 		btns = null;
 	}
 }
 
-const createPages = _ => {
-	return `<div class="grid__btns btns" hidden>
-				<button disabled class="btns__prev btn-secondary onclick-effect btn-reset">
-					<svg width="28px" height="28px">
-						<use xlink:href='img/svg/nav.svg#arrow'></use>
-					</svg>
-					previous page
-				</button>
-				<span class="grid__count">1</span>
-				<button class="btns__next btn-secondary onclick-effect btn-reset">
-					<svg width="28px" height="28px">
-						<use xlink:href='img/svg/nav.svg#arrow'></use>
-					</svg>
-					next page
-				</button>
-			</div>
-			`
-}
+const createPages = _ => `<div class="grid__btns btns" hidden>
+							<button disabled class="btns__prev btn-secondary onclick-effect btn-reset">
+								<svg width="28px" height="28px">
+									<use xlink:href='img/svg/nav.svg#arrow'></use>
+								</svg>
+								previous page
+							</button>
+							<span class="grid__count">1</span>
+							<button class="btns__next btn-secondary onclick-effect btn-reset">
+								<svg width="28px" height="28px">
+									<use xlink:href='img/svg/nav.svg#arrow'></use>
+								</svg>
+								next page
+							</button>
+						</div>`
 
 const resetPages = async parent => {
 	let grid = parent.querySelector('.grid');
 	let btns = grid.querySelector('.btns');
+
 	if (btns) {
 		btns.remove()
 		grid.insertAdjacentHTML('beforeEnd', createPages());
@@ -54,7 +53,6 @@ const resetPages = async parent => {
 }
 
 const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
-
 	typeCard !== 'author'
 		? resetGrid(parent)
 		: resetGridAuthorCard()
@@ -70,8 +68,7 @@ const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
 		page++
 		updateCount(page, parent)
 
-		if (btnPrevPage.disabled)
-			btnPrevPage.disabled = false
+		btnPrevPage.disabled &&= false
 	}
 
 	if (page * 20 > itemArray.length - 1)
@@ -95,8 +92,7 @@ const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
 		page--
 		updateCount(page, parent)
 
-		if (btnNextPage.disabled)
-			btnNextPage.disabled = false
+		btnNextPage.disabled &&= false
 	}
 }
 
@@ -122,10 +118,7 @@ const getDataMore = async typeCard => {
 					hasContinuation = dataSearchResultsMore.continuation;
 					break;
 			}
-		} catch (error) {
-			showToast('error', error.message)
-			return
-		}
+		} catch (error) { showToast('error', error.message) }
 	}
 }
 
@@ -134,8 +127,7 @@ const recycleDOM = async (increment, cardAll, typeCard) => {
 		let card = cardAll[index];
 
 		if (itemArray[index + increment]) {
-			if (card.hidden)
-				card.hidden = false
+			card.hidden &&= false
 
 			switch (typeCard) {
 				case "video":
@@ -186,17 +178,16 @@ const updateCount = (page, parent) => {
 
 const resetCount = parent => {
 	let gridCount = parent.querySelector('.grid__count');
-	if (gridCount && gridCount.textContent !== 1) {
+
+	if (gridCount && +gridCount.textContent !== 1) {
 		gridCount.textContent = 1;
 		gridCount = null;
 	}
 }
 
 const resetBtns = (btnNextPage, btnPrevPage) => {
-	if (btnNextPage.disabled)
-		btnNextPage.disabled = false
-	if (!btnPrevPage.disabled)
-		btnPrevPage.disabled = true
+	btnNextPage.disabled &&= false
+	btnPrevPage.disabled ||= true
 }
 
 const initPages = async (parent, data, cardAll, typeCard, continuation = null) => {

@@ -4,6 +4,7 @@ const SponsorblockItemHTML = _ => `<li class="sponsorblock__item"></li>`
 
 const getSegmentsSB = async videoId => {
 	segmentsSB.length = 0
+
 	let video = _io_q('.video');
 	let controlsProgess = video.querySelector('.controls__progress');
 	let progressSponsorblock = controlsProgess.querySelector('.sponsorblock');

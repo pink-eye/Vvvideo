@@ -12,9 +12,7 @@ const showToast = (type, text) => {
 		let toastItemAll = toastList.querySelectorAll('.toast__item');
 		let lastToastItem = toastItemAll[toastItemAll.length - 1];
 
-		setTimeout(_ => {
-			lastToastItem.classList.add('_visible')
-		}, 15);
+		setTimeout(_ => { lastToastItem.classList.add('_visible') }, 15);
 
 
 		setTimeout(_ => {

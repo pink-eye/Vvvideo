@@ -29,13 +29,11 @@ const fillVideoCard = (video, index, data) => {
 		videoImage = null
 	}
 
-	videoImage.onerror = _ => {
-		showToast('error', 'Could not load images :(')
-	}
+	videoImage.onerror = _ => { showToast('error', 'Could not load images :(') }
 
 	videoTitle.textContent = data[index].title;
-	titleSkeleton.classList.add('_removing');
 
+	titleSkeleton.classList.add('_removing');
 	setTimeout(_ => {
 		titleSkeleton.hidden = true
 		titleSkeleton = null
@@ -82,7 +80,6 @@ const fillVideoCard = (video, index, data) => {
 		bottomSkeleton = null
 	}, getDurationTimeout());
 
-
 	videoTitle = null
 	videoViews = null
 	videoDate = null
@@ -119,9 +116,7 @@ const fillPlaylistCard = (playlist, index, data) => {
 		playlistImage = null;
 	}
 
-	playlistImage.onerror = _ => {
-		showToast('error', 'Could not load images :(')
-	}
+	playlistImage.onerror = _ => { showToast('error', 'Could not load images :(') }
 
 	playlistTitle.textContent = data[index].title;
 	titleSkeleton.classList.add('_removing');
@@ -179,9 +174,7 @@ const fillChannelCard = (channel, index, data) => {
 		channelImage = null
 	}
 
-	channelImage.onerror = _ => {
-		showToast('error', 'Could not load images :(')
-	}
+	channelImage.onerror = _ => { showToast('error', 'Could not load images :(') }
 
 	channelTitle.textContent = data[index].name;
 
@@ -240,8 +233,7 @@ const resetAuthorCard = async author => {
 
 	author.disabled = true
 
-	if (author.hidden)
-		author.hidden = false
+	author.hidden &&= false
 
 	avatarSkeleton.classList.remove('_removing')
 	avatarSkeleton.hidden = false
@@ -271,8 +263,7 @@ const resetCard = async card => {
 	if (cardTitle.textContent !== 'Title')
 		cardTitle.textContent = 'Title'
 
-	if (card.hidden)
-		card.hidden = false;
+	card.hidden &&= false;
 
 	if (card.classList.contains('_live'))
 		card.classList.remove('_live');

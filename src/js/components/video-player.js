@@ -113,8 +113,10 @@ const initVideoPlayer = _ => {
 			if (playPromise !== undefined && !isPlaying(el)) {
 				playPromise
 					.then(_ => {
-						if (isPlayingVideo() && isPlayingAudio())
-							syncMedia()
+						if (audio) {
+							if (isPlayingVideo() && isPlayingAudio())
+								syncMedia()
+						}
 					})
 					.catch(error => { showToast('error', error.message) });
 			}
@@ -150,8 +152,7 @@ const initVideoPlayer = _ => {
 		timeDuration.setAttribute('datetime', time)
 		volumeBar.value = volumeSeek.value
 
-		if (!doesSkipSegments)
-			doesSkipSegments = true
+		doesSkipSegments ||= true
 
 		if (!videoPoster.classList.contains('_hidden'))
 			videoPoster.classList.add('_hidden');
@@ -163,11 +164,7 @@ const initVideoPlayer = _ => {
 
 	const showIconPause = _ => { changeIcon(iconPathPause) }
 
-	const toggleIconPlayPause = _ => {
-		video.paused
-			? showIconPlay()
-			: showIconPause()
-	}
+	const toggleIconPlayPause = _ => { video.paused ? showIconPlay() : showIconPause() }
 
 	const onEndVideo = _ => {
 		if (audio)
@@ -227,8 +224,7 @@ const initVideoPlayer = _ => {
 	}
 
 	const updateVolumeEl = el => {
-		if (el.muted)
-			el.muted = false;
+		el.muted &&= false;
 
 		el.volume = volumeSeek.value;
 		volumeBar.value = volumeSeek.value
@@ -300,8 +296,8 @@ const initVideoPlayer = _ => {
 		if (!video.paused) {
 			for (let index = 0, length = segmentsSB.length; index < length; index++) {
 				const segmentSB = segmentsSB[index];
-				if (video.currentTime >= segmentSB.startTime &&
-					video.currentTime <= segmentSB.endTime) {
+				if (video.currentTime >= segmentSB.startTime
+					&& video.currentTime <= segmentSB.endTime) {
 					video.currentTime = segmentSB.endTime;
 					isSync = false
 
@@ -396,9 +392,9 @@ const initVideoPlayer = _ => {
 	})
 
 	if (audio) {
-		audio.addEventListener('play', _ => { playVideo() })
+		audio.addEventListener('play', playVideo)
 
-		audio.addEventListener('playing', _ => { playVideo() })
+		audio.addEventListener('playing', playVideo)
 
 		audio.addEventListener('waiting', _ => {
 			if (!isPlayingAudio())
@@ -515,9 +511,9 @@ const initVideoPlayer = _ => {
 	// HOT KEYS
 
 	document.onkeyup = e => {
-		if (_io_q('.video').classList.contains('_active') &&
-			(document.activeElement === _io_q('body') ||
-				document.activeElement === null)) {
+		if (_io_q('.video').classList.contains('_active')
+			&& (document.activeElement === _io_q('body')
+				|| document.activeElement === null)) {
 
 			// ENTER
 			if (e.keyCode === 13)
@@ -556,9 +552,7 @@ const initVideoPlayer = _ => {
 
 			// F
 			if (e.keyCode === 70) {
-				if (document.fullscreenElement)
-					closeFullscreen()
-				else openFullscreen()
+				document.fullscreenElement ? closeFullscreen() : openFullscreen()
 			}
 		}
 	}

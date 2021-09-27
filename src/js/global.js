@@ -14,12 +14,11 @@ const _io_q = selector => {
 	return cache(selector);
 }
 
-const scrollToTop = _ => {
-	window.scrollTo(0, 0);
-}
+const scrollToTop = _ => { window.scrollTo(0, 0); }
 
 const scrollToElem = y => {
 	let header = _io_q('.header');
+
 	if (header) {
 		window.scrollTo(0, y - header.offsetHeight - 20);
 		header = null;
@@ -121,10 +120,7 @@ const isEmpty = el => el === null || el === undefined || el === ''
 
 const formatDuration = str => str.replace(new RegExp(/[^0-9:]/gmi), '')
 
-const formatDate = str => {
-	const [year, month, day] = str.split('-')
-	return `${day}.${month}.${year}`
-}
+const formatDate = str => str.split('-').reverse().join('.')
 
 const formatIP = str => str.replace(new RegExp(/[^0-9.]/gmi), '')
 
