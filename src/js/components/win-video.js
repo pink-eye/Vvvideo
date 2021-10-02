@@ -30,10 +30,10 @@ const getPreferedQuality = formats => storage.settings.defaultQuality === 'highe
 	? getHighestVideo(formats)
 	: formats.find(el => el.qualityLabel.includes(storage.settings.defaultQuality))
 
-const resetAudio = audio => {
-	audio.pause()
-	audio.removeAttribute('src');
-	audio.load()
+const resetMediaEl = el => {
+	el.pause()
+	el.removeAttribute('src');
+	el.load()
 }
 
 const getVideo = async id => {
@@ -70,12 +70,12 @@ const getVideo = async id => {
 				if (data.formats.length > 0) {
 					if (data.videoDetails.isLive) {
 						videoFormatAll = filterHLS(data.formats)
-						resetAudio(audioInstance)
+						resetMediaEl(audioInstance)
 						audioInstance.remove()
 					} else {
 						if (storage.settings.disableSeparatedStreams) {
 							videoFormatAll = API.YTDLFilterFormats(data.formats)
-							resetAudio(audioInstance)
+							resetMediaEl(audioInstance)
 							audioInstance.remove()
 						} else {
 							switch (storage.settings.defaltVideoFormat) {
@@ -235,14 +235,14 @@ const resetVideo = async _ => {
 
 	speedCurrent.textContent = 'x1'
 
-	videoInstance.pause()
-	videoInstance.removeAttribute('src');
-	videoInstance.load()
+	resetMediaEl(videoInstance)
 
-	audioInstance
-		? resetAudio(audioInstance)
-		: videoWrapper.insertAdjacentHTML('afterBegin',
-			'<audio crossorigin="anonymous" referrerpolicy="no-referrer"></audio>')
+	if (audioInstance) resetMediaEl(audioInstance)
+	else {
+		resetMediaEl(audioInstance)
+		videoWrapper.insertAdjacentHTML('afterBegin',
+			'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>')
+	}
 
 	videoPoster.removeAttribute('src')
 	videoPoster.closest('.video__poster').classList.remove('_hidden');

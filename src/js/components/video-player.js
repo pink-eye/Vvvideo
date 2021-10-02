@@ -515,8 +515,8 @@ const initVideoPlayer = _ => {
 			&& (document.activeElement === _io_q('body')
 				|| document.activeElement === null)) {
 
-			// ENTER
-			if (e.keyCode === 13)
+			// ENTER || SPACE
+			if (e.keyCode === 13 || e.keyCode === 32)
 				togglePlay()
 
 			// ARROW LEFT

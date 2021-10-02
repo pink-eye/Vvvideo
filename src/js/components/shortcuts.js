@@ -80,4 +80,13 @@ document.onkeydown = e => {
 		}
 		winActive = null
 	}
+
+	if (e.keyCode === 32) {
+		let winActive = _io_q('.main__content').querySelector('.win._active')
+
+		if (winActive.classList.contains('video'))
+			e.preventDefault()
+
+		winActive = null
+	}
 }

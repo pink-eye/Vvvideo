@@ -62,7 +62,6 @@
     @media (hover: hover) and (pointer: fine) {
         &:hover {
             .arrow {
-
                 &:before,
                 &:after {
                     transform: rotate(0deg);

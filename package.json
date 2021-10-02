@@ -2,7 +2,7 @@
 	"name": "vvvideo",
 	"productName": "Vvvideo",
 	"version": "1.0.0",
-	"description": "to watch videos yt",
+	"description": "to watch yt videos",
 	"main": "bundle/index.js",
 	"scripts": {
 		"start": "electron-forge start",
@@ -47,7 +47,7 @@
 				}
 			]
 		}
-	},
+	}, 
 	"dependencies": {
 		"@freetube/yt-trending-scraper": "^2.0.1",
 		"electron-squirrel-startup": "^1.0.0",
@@ -72,7 +72,7 @@
 		"del": "^6.0.0",
 		"electron": "15.0.0",
 		"gulp": "^4.0.2",
-		"gulp-autoprefixer": "^6.1.0",
+		"gulp-autoprefixer": "^8.0.0",
 		"gulp-babel": "^8.0.0",
 		"gulp-clean-css": "^4.3.0",
 		"gulp-cli": "^2.3.0",
@@ -80,15 +80,15 @@
 		"gulp-file-include": "^2.3.0",
 		"gulp-htmlmin": "^5.0.1",
 		"gulp-if": "^3.0.0",
-		"gulp-image": "^4.0.0",
-		"gulp-notify": "^3.2.0",
+		"gulp-image": "^6.2.1",
+		"gulp-notify": "^4.0.0",
 		"gulp-rev": "^9.0.0",
 		"gulp-rev-delete-original": "^0.2.3",
-		"gulp-rev-rewrite": "^4.0.0",
+		"gulp-rev-rewrite": "^5.0.0",
 		"gulp-sass": "^5.0.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-svg-sprite": "^1.5.0",
-		"gulp-uglify-es": "^2.0.0",
+		"gulp-uglify-es": "^3.0.0",
 		"node-sass": "^6.0.1"
 	}
 }

@@ -41,34 +41,6 @@ img {
     transition: filter var(--trns);
 }
 
-.arrow {
-    display: flex;
-
-    &:before,
-    &:after {
-        content: '';
-        display: block;
-        position: relative;
-        top: 9px;
-        width: 10px;
-        height: 1.5px;
-        background-color: var(--color-descr);
-
-        transition: transform var(--trns),
-            background-color var(--trns);
-    }
-
-    &:before {
-        left: 2px;
-        transform: rotate(45deg);
-    }
-
-    &:after {
-        right: 2px;
-        transform: rotate(-45deg);
-    }
-}
-
 .btn-accent,
 .btn-primary {
     display: inline-block;

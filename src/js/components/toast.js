@@ -14,7 +14,6 @@ const showToast = (type, text) => {
 
 		setTimeout(_ => { lastToastItem.classList.add('_visible') }, 15);
 
-
 		setTimeout(_ => {
 			lastToastItem.classList.remove('_visible')
 
