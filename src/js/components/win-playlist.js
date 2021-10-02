@@ -4,6 +4,7 @@ const getPlaylist = async id => {
 	let playlistAuthor = playlist.querySelector('.author__name');
 	let playlistViews = playlist.querySelector('.playlist__views span');
 	let playlistVideoCount = playlist.querySelector('.playlist__video-count');
+	let playlistLastUpdated = playlist.querySelector('.playlist__last-upd');
 	let playlistAvatar = playlist.querySelector('.author__avatar img');
 	let playlistDuration = playlist.querySelector('.playlist__duration span');
 	let avatarSkeleton = playlist.querySelector('.avatar-skeleton');
@@ -23,6 +24,8 @@ const getPlaylist = async id => {
 
 		playlistVideoCount.textContent = `${data.items.length} / ${data.estimatedItemCount} available videos`
 		playlistViews.textContent = normalizeCount(data.views)
+
+		playlistLastUpdated.textContent = data.lastUpdated
 
 		let duration = 0
 		for (let index = 0, length = data.items.length; index < length; index++) {
@@ -72,6 +75,7 @@ const resetPlaylist = async _ => {
 	let playlist = _io_q('.playlist');
 	let playlistViews = playlist.querySelector('.playlist__views span');
 	let playlistVideoCount = playlist.querySelector('.playlist__video-count');
+	let playlistLastUpdated = playlist.querySelector('.playlist__last-upd');
 	let playlistDuration = playlist.querySelector('.playlist__duration span');
 	let avatarSkeleton = playlist.querySelector('.avatar-skeleton');
 
@@ -81,6 +85,7 @@ const resetPlaylist = async _ => {
 	playlistViews.textContent = '...'
 	playlistVideoCount.textContent = '...'
 	playlistDuration.textContent = '...'
+	playlistLastUpdated.textContent = '...'
 
 	resetGrid(playlist)
 

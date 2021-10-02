@@ -1,5 +1,4 @@
 .playlist {
-
     &__heading {
         background-color: var(--color-bg-form);
         margin-bottom: 30px;
@@ -67,8 +66,10 @@
 		}
     }
 
-	.author {
-		margin-top: 20px;
+	@media (max-width: 1349px) {
+		.author {
+			margin-top: 20px;
+		}
 	}
 
 	.author__subs {
