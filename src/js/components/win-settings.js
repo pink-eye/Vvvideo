@@ -57,55 +57,22 @@ const fillWinSettings = async _ => {
 
 	setTheme(storage.settings.theme)
 
-	if (storage.settings.disableTransition) {
-		let checkboxDT = settings.querySelector('input#disableTransition')
-		checkboxDT.checked = true
+	for (let key in storage.settings) {
+		let checkbox = settings.querySelector(`input#${key}`);
+
+		if (checkbox)
+			checkbox.checked = storage.settings[`${key}`];
+
+		checkbox = null;
+	}
+
+	if (storage.settings.disableTransition)
 		toggleTransition(storage.settings.disableTransition)
-		checkboxDT = null
-	}
 
-	if (storage.settings.disableSponsorblock) {
-		let checkboxSB = settings.querySelector('input#disableSponsorblock')
-		checkboxSB.checked = true
+
+	if (storage.settings.disableSponsorblock)
 		toggleSponsorblock(storage.settings.disableSponsorblock)
-		checkboxSB = null
-	}
-
-	if (storage.settings.enableProxy) {
-		let checkboxEP = settings.querySelector('input#enableProxy')
-		checkboxEP.checked = true
-		checkboxEP = null
-	}
-
-	if (storage.settings.autoplay) {
-		let checkboxA = settings.querySelector('input#autoplay')
-		checkboxA.checked = true
-		checkboxA = null
-	}
-
-	if (storage.settings.disableSeparatedStreams) {
-		let checkboxDSS = settings.querySelector('input#disableSeparatedStreams')
-		checkboxDSS.checked = true
-		checkboxDSS = null
-	}
-
-	if (storage.settings.notAdaptContent) {
-		let checkboxNAC = settings.querySelector('input#notAdaptContent')
-		checkboxNAC.checked = true
-		checkboxNAC = null
-	}
-
-	if (storage.settings.notifySkipSegment) {
-		let checkboxNSS = settings.querySelector('input#notifySkipSegment')
-		checkboxNSS.checked = true
-		checkboxNSS = null
-	}
-
-	if (storage.settings.disableSearchSuggestions) {
-		let checkboxDSS = settings.querySelector('input#disableSearchSuggestions')
-		checkboxDSS.checked = true
-		checkboxDSS = null
-	}
+	
 
 	if (storage.settings.defaultQuality !== '1080p') {
 		let qualityDropdown = settings.querySelector('.option__quality');

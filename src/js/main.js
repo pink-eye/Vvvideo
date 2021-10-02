@@ -458,15 +458,18 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		const checkbox = checkboxAll[index];
 
 		checkbox.addEventListener('change', _ => {
-			switch (checkbox.id) {
+			const option = checkbox.id
+
+			checkbox.checked
+				? storage.settings[`${option}`] = true
+				: storage.settings[`${option}`] = false
+
+			switch (option) {
 				case 'disableTransition':
 					toggleTransition(checkbox.checked)
-					storage.settings.disableTransition = checkbox.checked
 					break;
 
 				case 'enableProxy':
-					storage.settings.enableProxy = checkbox.checked
-
 					checkbox.checked
 						? showToast('good', 'Restart app after the fields is filled in')
 						: showToast('good', 'Restart app')
@@ -474,30 +477,23 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 				case 'disableSponsorblock':
 					toggleSponsorblock(checkbox.checked)
-					storage.settings.disableSponsorblock = checkbox.checked
 					break;
 
 				case 'notifySkipSegment':
-					storage.settings.notifySkipSegment = checkbox.checked
 					break;
 
 				case 'autoplay':
-					storage.settings.autoplay = checkbox.checked
 					break;
 
 				case 'disableSeparatedStreams':
-					storage.settings.disableSeparatedStreams = checkbox.checked
 					break;
 
 				case 'notAdaptContent':
-					storage.settings.notAdaptContent = checkbox.checked
-
 					if (checkbox.checked)
 						_io_q('.main__content').style.setProperty('--margin', '0')
 					break;
 
 				case 'disableSearchSuggestions':
-					storage.settings.disableSearchSuggestions = checkbox.checked
 					showToast('good', 'Refresh app')
 					break;
 

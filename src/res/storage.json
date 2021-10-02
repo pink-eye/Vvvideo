@@ -2,7 +2,7 @@
 	"subscriptions": [],
 	"settings": {
 		"theme": "system",
-		"disbaleTransition": false,
+		"disableTransition": false,
 		"enableProxy": true,
 		"proxy": {
 			"protocol": "socks5",
