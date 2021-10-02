@@ -94,11 +94,11 @@ contextBridge.exposeInMainWorld('API', {
 
 	YTDLChooseFormat: (formats, quality) => ytdl.chooseFormat(formats, { quality }),
 
-	getSponsorblockInfo: (videoId, uuidv4) => new SponsorBlock(`${uuidv4}`)
-		.getSegmentsPrivately(videoId, ['sponsor', 'selfpromo', 'intro', 'outro']),
+	getSponsorblockInfo: (videoId, uuidv4) => new SponsorBlock(uuidv4)
+		.getSegmentsPrivately(videoId,
+			['sponsor', 'intro', 'outro', 'interaction', 'selfpromo', 'music_offtopic', 'preview']),
 
-	postSponsorblockInfo: (videoId, uuidv4, segment) => new SponsorBlock(`${uuidv4}`)
-		.postSegments(videoId, segment),
+	postSponsorblockInfo: (videoId, uuidv4, segment) => new SponsorBlock(uuidv4).postSegments(videoId, segment),
 
 	readStorage: async callback => {
 		return new Promise(resolve => {

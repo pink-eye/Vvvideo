@@ -351,14 +351,13 @@ const initVideoPlayer = _ => {
 		let dialogSbCategory = _io_q('.dialog-sb').querySelector('input[name="category"]:checked')
 
 		if (isValidFields()) {
+			let startTime = convertDurationToSeconds(dialogSbStart.value)
+			let endTime = convertDurationToSeconds(dialogSbEnd.value)
+			let category = dialogSbCategory.id
+			let segment = { startTime, endTime, category }
+
 			try {
-				await API.postSponsorblockInfo(`${videoId}`, uuidv4(), JSON.parse(`{
-					"segment": [
-						${convertDurationToSeconds(dialogSbStart.value)},
-						${convertDurationToSeconds(dialogSbEnd.value)}
-					],
-					"category": "${dialogSbCategory.id}"
-				}`))
+				await API.postSponsorblockInfo(videoId, uuidv4(), segment)
 				modal.close()
 				showToast('good', 'Segment was sent successfully!')
 			} catch (error) {
