@@ -362,23 +362,16 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	// SUBSCRIBE LISTENERS
 
 	videoSubscribeBtn.addEventListener('click', _ => {
-		if (videoSubscribeText.textContent === 'Subscribe' &&
-			!videoSubscribeBtn.classList.contains('_subscribed')) {
-			onClickSubscribe(videoSubscribeBtn, videoSubscribeText)
-		} else if (videoSubscribeText.textContent === 'Unsubscribe' &&
-			videoSubscribeBtn.classList.contains('_subscribed')) {
-			onClickUnsubscribe(videoSubscribeBtn, videoSubscribeText)
-		}
+		!videoSubscribeBtn.classList.contains('_subscribed')
+			? onClickSubscribe(videoSubscribeBtn, videoSubscribeText)
+			: onClickUnsubscribe(videoSubscribeBtn, videoSubscribeText)
+
 	});
 
 	channelSubscribeBtn.addEventListener('click', _ => {
-		if (channelSubscribeText.textContent === 'Subscribe' &&
-			!channelSubscribeBtn.classList.contains('_subscribed')) {
-			onClickSubscribe(channelSubscribeBtn, channelSubscribeText)
-		} else if (channelSubscribeText.textContent === 'Unsubscribe' &&
-			channelSubscribeBtn.classList.contains('_subscribed')) {
-			onClickUnsubscribe(channelSubscribeBtn, channelSubscribeText)
-		}
+		!channelSubscribeBtn.classList.contains('_subscribed')
+			? onClickSubscribe(channelSubscribeBtn, channelSubscribeText)
+			: onClickUnsubscribe(channelSubscribeBtn, channelSubscribeText)
 	});
 
 	window.addEventListener('click', async e => {
@@ -477,15 +470,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 				case 'disableSponsorblock':
 					toggleSponsorblock(checkbox.checked)
-					break;
-
-				case 'notifySkipSegment':
-					break;
-
-				case 'autoplay':
-					break;
-
-				case 'disableSeparatedStreams':
 					break;
 
 				case 'notAdaptContent':

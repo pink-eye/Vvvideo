@@ -68,26 +68,25 @@
 
     &__avatar {
         z-index: 11;
-        border-radius: 50%;
-        overflow: hidden;
 
         @media (min-width: 1101px) {
             position: absolute;
             top: -110px;
             left: 50%;
             transform: translateX(-50%);
-            border: 10px solid var(--color-bg-form);
             width: 170px;
 
-            @media (hover: hover) and (pointer: fine) {
-                &:hover {
-                    opacity: 0;
-                }
-            }
+			@media (hover: hover) and (pointer: fine) {
+				&:hover {
+					img {
+						transform: rotateX(90deg) perspective(100px);
+					}
+				}
+			}
         }
 
         @media (max-width: 1100px) {
-            position: relative;
+			position: relative;
         }
 
         @media (min-width: 551px) {
@@ -101,12 +100,15 @@
 			margin: auto;
         }
 
-        transition: opacity var(--trns);
-
         img {
-            width: 100%;
+			width: 100%;
             height: 100%;
+			border-radius: 50%;
+			border: 10px solid var(--color-bg-form);
             object-fit: cover;
+			transform: rotateX(0deg) perspective(100px);
+
+			transition: transform var(--trns);
         }
     }
 

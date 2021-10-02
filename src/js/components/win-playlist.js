@@ -13,6 +13,8 @@ const getPlaylist = async id => {
 			? await API.scrapePlaylistVideosProxy(id, getProxyOptions())
 			: await API.scrapePlaylistVideos(id)
 
+		console.log(data);
+
 		if (playlistName.textContent !== data.title)
 			playlistName.textContent = data.title
 
