@@ -1,7 +1,6 @@
 let isUpdated = false;
 
 const showSubscriptions = async _ => {
-
 	let promises = [];
 	let channelInfoArray = null;
 	let subscriptions = _io_q('.subscriptions');
@@ -92,14 +91,15 @@ const addSubscription = async obj => {
 }
 
 const removeSubscription = async obj => {
-	storage.subscriptions = storage.subscriptions.filter(item => item.channelId !== obj.channelId && item.name !== obj.name)
+	storage.subscriptions = storage.subscriptions.filter(item =>
+		item.channelId !== obj.channelId
+		&& item.name !== obj.name)
 	await API.writeStorage(storage);
 }
 
 const onClickSubscribe = (btn, btnText) => {
 
-	if (btn.dataset.channelId
-		&& btn.dataset.name) {
+	if (btn.dataset.channelId && btn.dataset.name) {
 
 		btn.disabled = true
 		btn.classList.add('_subscribed')
@@ -107,7 +107,7 @@ const onClickSubscribe = (btn, btnText) => {
 
 		setTimeout(_ => {
 			btnText.textContent = 'Unsubscribe'
-			btnText.style.opacity = '1'
+			btnText.removeAttribute('style')
 
 			btn.disabled = false
 		}, getDurationTimeout())
@@ -121,8 +121,7 @@ const onClickSubscribe = (btn, btnText) => {
 
 const onClickUnsubscribe = (btn, btnText) => {
 
-	if (btn.dataset.channelId
-		&& btn.dataset.name) {
+	if (btn.dataset.channelId && btn.dataset.name) {
 
 		btn.disabled = true
 		btn.classList.remove('_subscribed')
@@ -130,7 +129,7 @@ const onClickUnsubscribe = (btn, btnText) => {
 
 		setTimeout(_ => {
 			btnText.textContent = 'Subscribe'
-			btnText.style.opacity = '1'
+			btnText.removeAttribute('style')
 
 			btn.disabled = false
 		}, getDurationTimeout())

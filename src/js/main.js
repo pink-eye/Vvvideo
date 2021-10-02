@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		videoChannelBtn.dataset.id = params.authorId;
 
 		videoSubscribeBtn.dataset.channelId = params.authorId
-		videoSubscribeBtn.dataset.name = params.channel
+		videoSubscribeBtn.dataset.name = params.author
 
 		if (hasSubscription(params.authorId)) {
 			videoSubscribeBtn.classList.add('_subscribed')
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				? btnWin.querySelector('.card__title span')
 				: btnWin.querySelector('.author__name')
 
-			let channelId = btnWin.classList.contains('card')
+			let channelId = btnWin.classList.contains('card') && !btnWin.classList.contains('_channel')
 				? btnWin.querySelector('.card__channel').dataset.id
 				: btnWin.dataset.id
 
