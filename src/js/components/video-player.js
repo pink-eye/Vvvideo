@@ -430,8 +430,14 @@ const initVideoPlayer = _ => {
 	});
 
 	video.addEventListener('abort', _ => {
-		showToast('error', 'Video is aborted ;(')
-		pauseAudio()
+		let winActive = _io_q('.main__content').querySelector('.win._active')
+
+		if (winActive.classList.contains('video')) {
+			showToast('error', 'Video is aborted ;(')
+			pauseAudio()
+		}
+
+		winActive = null
 	});
 
 	video.addEventListener('error', _ => {
@@ -452,8 +458,14 @@ const initVideoPlayer = _ => {
 		});
 
 		audio.addEventListener('abort', _ => {
-			showToast('error', 'Audio is aborted ;(')
-			pauseVideo()
+			let winActive = _io_q('.main__content').querySelector('.win._active')
+
+			if (winActive.classList.contains('video')) {
+				showToast('error', 'Audio is aborted ;(')
+				pauseVideo()
+			}
+
+			winActive = null
 		});
 	}
 
