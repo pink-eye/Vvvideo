@@ -1,5 +1,15 @@
 .video {
 
+    &._live {
+
+        .controls__speed,
+        .time__duration,
+        .time__separator,
+        .progress__buffered {
+            display: none;
+        }
+    }
+
     // .video__wrapper
 
     &__wrapper {
@@ -62,7 +72,7 @@
         position: absolute;
         inset: 0;
         width: 100%;
-		margin-bottom: 0;
+        margin-bottom: 0;
         height: 100%;
         z-index: 1;
 

@@ -30,6 +30,8 @@ const getPreferedQuality = formats => storage.settings.defaultQuality === 'highe
 	? getHighestVideo(formats)
 	: formats.find(el => el.qualityLabel.includes(storage.settings.defaultQuality))
 
+let hls = null
+
 const getVideo = async id => {
 	let video = _io_q('.video');
 	let videoInstance = video.querySelector('video');
@@ -58,9 +60,13 @@ const getVideo = async id => {
 				? await API.scrapeVideoProxy(id, getProxyOptions())
 				: await API.scrapeVideo(id)
 
+			if (data.videoDetails.isLive)
+				video.classList.add('_live')
+
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
 
+				// FILL MEDIA
 				if (data.formats.length > 0) {
 					if (data.videoDetails.isLive) {
 						videoFormatAll = filterHLS(data.formats)
@@ -91,14 +97,48 @@ const getVideo = async id => {
 
 					let preferedQuality = getPreferedQuality(videoFormatAll)
 
-					if (preferedQuality) {
-						videoInstance.src = preferedQuality.url
-						qualityCurrent.textContent = preferedQuality.qualityLabel
-					} else {
-						let sparedQuality = getDefaultFormat(data.formats)
+					if (data.videoDetails.isLive) {
+						hls = new Hls();
 
-						videoInstance.src = sparedQuality.url
-						qualityCurrent.textContent = sparedQuality.qualityLabel
+						if (preferedQuality) {
+							hls.loadSource(preferedQuality.url);
+							qualityCurrent.textContent = preferedQuality.qualityLabel
+						} else {
+							let sparedQuality = getDefaultFormat(data.formats)
+							hls.loadSource(sparedQuality.url);
+							qualityCurrent.textContent = sparedQuality.qualityLabel
+						}
+						hls.attachMedia(videoInstance);
+
+						hls.on(Hls.Events.ERROR, (event, data) => {
+							if (data.fatal) {
+								switch (data.type) {
+									case Hls.ErrorTypes.NETWORK_ERROR:
+										showToast('error', 'Fatal network error encountered, try to recover...');
+										hls.startLoad();
+										break;
+									case Hls.ErrorTypes.MEDIA_ERROR:
+										showToast('error', 'Fatal media error encountered, try to recover...');
+										hls.recoverMediaError();
+										break;
+									default:
+										showToast('error', 'Fatal error was occured. Cannot recover :(');
+										hls.destroy();
+										break;
+								}
+							}
+						});
+
+					} else {
+						if (preferedQuality) {
+							videoInstance.src = preferedQuality.url
+							qualityCurrent.textContent = preferedQuality.qualityLabel
+						} else {
+							let sparedQuality = getDefaultFormat(data.formats)
+
+							videoInstance.src = sparedQuality.url
+							qualityCurrent.textContent = sparedQuality.qualityLabel
+						}
 					}
 
 					if (videoFormatAll.length > 0) {
@@ -128,6 +168,8 @@ const getVideo = async id => {
 						}, getDurationTimeout())
 					}
 				}
+
+				// FILL VIDEO INFO
 
 				if (data.videoDetails.title !== videoTitle.textContent)
 					videoTitle.textContent = data.videoDetails.title
@@ -215,6 +257,9 @@ const resetVideo = async _ => {
 	let speedCurrent = controls.querySelector('.speed__current');
 	let subscribeBtn = video.querySelector('.subscribe');
 
+	if (video.classList.contains('_live'))
+		video.classList.remove('_live')
+
 	subscribeBtn.removeAttribute('data-channel-id')
 	subscribeBtn.removeAttribute('data-name')
 
@@ -228,6 +273,11 @@ const resetVideo = async _ => {
 		qualityList.firstChild.remove()
 
 	speedCurrent.textContent = 'x1'
+
+	if (!isEmpty(hls)) {
+		hls.destroy()
+		hls = null
+	}
 
 	resetMediaEl(videoInstance)
 

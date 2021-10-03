@@ -56,35 +56,39 @@ const initVideoPlayer = _ => {
 
 	const modal = new GraphModal({ isClose: onCloseModal })
 
+	const changeVideoSrc = (url, currentTime) => {
+		if (isEmpty(hls)) {
+			video.removeAttribute('src');
+			video.load()
+			video.src = url;
+		} else hls.loadSource(url)
+
+		video.currentTime = currentTime
+	}
+
 	const chooseQuality = url => {
-		let currentTime = null
+		let currentTime = video.currentTime
 
 		if (!video.paused) {
-			currentTime = video.currentTime
 			pauseVideo()
 			pauseAudio()
-			video.removeAttribute('src');
-			video.load()
-			video.src = url;
-			video.currentTime = currentTime
+			changeVideoSrc(url, currentTime)
 			playVideo()
-		} else {
-			currentTime = video.currentTime
-			video.removeAttribute('src');
-			video.load()
-			video.src = url;
-			video.currentTime = currentTime
-		}
+		} else
+			changeVideoSrc(url, currentTime)
 
 		isSync = false
 	}
 
-	initDropdown(speed, params => {
-		audio.playbackRate = params.btn.dataset.speed
-		video.playbackRate = params.btn.dataset.speed
+	if (isEmpty(hls)) {
+		initDropdown(speed, params => {
+			if (audio) audio.playbackRate = params.btn.dataset.speed
 
-		isSync = false
-	})
+			video.playbackRate = params.btn.dataset.speed
+
+			isSync = false
+		})
+	}
 
 	initDropdown(quality, params => {
 		for (let index = 0, length = videoFormatAll.length; index < length; index++) {
@@ -100,7 +104,7 @@ const initVideoPlayer = _ => {
 		isSync = true
 	}
 
-	const isPlaying = el => el && el.currentTime > 0 && !el.paused && !el.ended && el.readyState > 2;
+	const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2;
 
 	const isPlayingVideo = _ => isPlaying(video)
 
@@ -134,15 +138,13 @@ const initVideoPlayer = _ => {
 	const playVideo = _ => playEl(video)
 
 	const togglePlay = _ => {
-		if (audio) {
-			if (!isPlayingVideo() && !isPlayingAudio()) {
-				playVideo()
-				playAudio()
-			} else {
-				pauseVideo()
-				pauseAudio()
-			}
-		} else !isPlayingVideo() ? playVideo() : pauseVideo()
+		if (!isPlayingVideo()) {
+			playVideo()
+			playAudio()
+		} else {
+			pauseVideo()
+			pauseAudio()
+		}
 
 		toggleIconPlayPause()
 		isSync = false
@@ -192,9 +194,9 @@ const initVideoPlayer = _ => {
 	}
 
 	const updateSeekTooltip = event => {
-		const skipTo = Math.round((event.offsetX / event.target.clientWidth) * +event.target.getAttribute('max'), 10);
+		const skipTo = Math.round((event.offsetX / event.target.clientWidth) * Math.floor(video.currentTime));
 
-		if (skipTo > 0 && skipTo < +event.target.getAttribute('max')) {
+		if (skipTo > 0 && skipTo < Math.floor(video.currentTime)) {
 			const t = normalizeDuration(skipTo);
 			progressSeek.setAttribute('data-seek', skipTo)
 			progressSeekTooltip.textContent = t;
@@ -205,17 +207,19 @@ const initVideoPlayer = _ => {
 	}
 
 	const updateBuffered = _ => {
-		let vbuffered = video.buffered
+		if (isEmpty(hls)) {
+			let vbuffered = video.buffered
 
-		if (audio) {
-			let abuffered = audio.buffered
-			let minBuffered = getMin(vbuffered.end(vbuffered.length - 1), abuffered.end(abuffered.length - 1))
+			if (audio) {
+				let abuffered = audio.buffered
+				let minBuffered = getMin(vbuffered.end(vbuffered.length - 1), abuffered.end(abuffered.length - 1))
 
-			progressBuffered.style.setProperty('--buffered',
-				`${convertToProc(minBuffered, video.duration)}%`)
-		} else {
-			progressBuffered.style.setProperty('--buffered',
-				`${convertToProc(vbuffered.end(vbuffered.length - 1), video.duration)}%`)
+				progressBuffered.style.setProperty('--buffered',
+					`${convertToProc(minBuffered, video.duration)}%`)
+			} else {
+				progressBuffered.style.setProperty('--buffered',
+					`${convertToProc(vbuffered.end(vbuffered.length - 1), video.duration)}%`)
+			}
 		}
 	}
 

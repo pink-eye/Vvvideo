@@ -17,7 +17,7 @@ const fillVideoCard = (video, index, data) => {
 
 	if (data[index].hasOwnProperty('bestThumbnail'))
 		videoImage.setAttribute('src', data[index].bestThumbnail.url)
-	else if (data[index].videoThumbnails.find(el => el.quality === 'maxresdefault')){
+	else if (data[index].videoThumbnails.find(el => el.quality === 'maxresdefault')) {
 		let maxResImage = data[index].videoThumbnails.find(el => el.quality === 'maxresdefault')
 		videoImage.setAttribute('src', maxResImage.url)
 	} else {
@@ -51,7 +51,7 @@ const fillVideoCard = (video, index, data) => {
 			? normalizeCount(data[index].views)
 			: '...'
 
-	if (data[index].liveNow || data[index].premiere)
+	if (data[index].liveNow || data[index].premiere || data[index].isLive)
 		video.classList.add('_live');
 
 	videoDate.textContent = data[index].viewCountText
@@ -62,9 +62,11 @@ const fillVideoCard = (video, index, data) => {
 				: data[index].publishedText
 		: data[index].hasOwnProperty('publishedText')
 			? data[index].publishedText
-			: data[index].hasOwnProperty('uploadedAt')
-				? data[index].uploadedAt
-				: '...'
+			: data[index].isLive
+				? 'Live'
+				: data[index].hasOwnProperty('uploadedAt')
+					? data[index].uploadedAt
+					: '...'
 
 	videoChannel.textContent = data[index].author.name
 		? data[index].author.name
