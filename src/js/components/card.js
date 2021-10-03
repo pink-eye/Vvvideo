@@ -15,9 +15,15 @@ const fillVideoCard = (video, index, data) => {
 		? data[index].videoId
 		: data[index].id
 
-	data[index].bestThumbnail
-		? videoImage.setAttribute('src', data[index].bestThumbnail.url)
-		: videoImage.setAttribute('src', data[index].videoThumbnails.at(-1).url)
+	if (data[index].hasOwnProperty('bestThumbnail'))
+		videoImage.setAttribute('src', data[index].bestThumbnail.url)
+	else if (data[index].videoThumbnails.find(el => el.quality === 'maxresdefault')){
+		let maxResImage = data[index].videoThumbnails.find(el => el.quality === 'maxresdefault')
+		videoImage.setAttribute('src', maxResImage.url)
+	} else {
+		data[index].videoThumbnails.sort((a, b) => b.width - a.width)
+		videoImage.setAttribute('src', data[index].videoThumbnails[0].url)
+	}
 
 	videoImage.onload = _ => {
 		imageSkeleton.classList.add('_removing');
