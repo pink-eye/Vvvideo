@@ -2,15 +2,15 @@
 
 <h1 align="center">Vvvideo</h1>
 
-<p align="center">
-<b>An open-source app to watch YT videos</b>
-</p>
+<p align="center">An open-source app to watch YT videos</p>
 
 <p align="center">
-<a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg"></a>
+<a href="https://www.gnu.org/licenses/gpl-3.0" alt="License: GPLv3">
+<img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg">
+</a>
 </p>
 
-## Screenshots
+## 📷 Screenshots
 
 <h3>Latest</h3>
 
@@ -40,19 +40,24 @@
 
 ![Screenshot-Video-Descr](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(5).png)
 
-## Features
+## 💥 Features
 * Watch videos without ads
-* Sponsorblock integration
-* Proxy configuration
-* Use YouTube without Google trackers
+* Navigate the app using the keyboard
+* Sponsorblock integration (you can record and skip segments)
 * Subscribe to channels and get their latest uploads
 * Display general info about videos, channels and playlists
 * Search videos, channels and playlists
-* Dark and light themes
-* Export & import subscriptions
-* Navigate the app using the keyboard
+* Responsive layout (it means the app looks good on the each device)
+* Support live streams
+* Proxy configuration
+* System, dark and light themes
+* Import and export subscriptions
+* Hot keys
 
-## License
+## 🙏 Issues
+Feel free to open an issue for suggestions or any unexpected behavior encountered.
+
+## 😜 License
 [![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 Vvvideo is Free Software: You can use, study share and improve it at your
