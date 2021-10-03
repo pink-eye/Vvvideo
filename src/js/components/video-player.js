@@ -1,7 +1,14 @@
 let videoFormatAll = null
+let hasListeners = false
+
+const resetMediaEl = el => {
+	el.pause()
+	el.removeAttribute('src');
+	el.load()
+}
 
 const initVideoPlayer = _ => {
-	const controls = _io_q('.controls'),
+	let controls = _io_q('.controls'),
 		controlsPlay = controls.querySelector('.controls__play'),
 		controlsSwitch = controls.querySelector('.controls__switch'),
 		controlsSwitchIcon = controls.querySelector('.controls__switch svg use'),
@@ -30,7 +37,6 @@ const initVideoPlayer = _ => {
 		dialogSbWarning = dialogSb.querySelector('.dialog-sb__warning'),
 		dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send'),
 		dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel');
-
 
 	let doesSkipSegments = true;
 
@@ -373,6 +379,8 @@ const initVideoPlayer = _ => {
 
 	let timeout;
 
+	// MEDIA LISTENERS
+
 	video.addEventListener('loadedmetadata', initVideo);
 
 	video.addEventListener('play', _ => {
@@ -470,31 +478,57 @@ const initVideoPlayer = _ => {
 
 	video.addEventListener('ended', onEndVideo)
 
-	volumeSeek.addEventListener('input', _ => {
-		audio ? updateVolumeAudio() : updateVolumeVideo()
-	});
+	// CONTROLS LISTENERS
 
-	progressSeek.addEventListener('mousemove', updateSeekTooltip);
+	if (!hasListeners) {
+		hasListeners = true
 
-	progressSeek.addEventListener('input', skipAhead);
+		volumeSeek.addEventListener('input', _ => {
+			audio ? updateVolumeAudio() : updateVolumeVideo()
+		});
 
-	controlsSwitch.addEventListener('click', togglePlay);
+		progressSeek.addEventListener('mousemove', updateSeekTooltip);
 
-	controlsScreenOpen.addEventListener('click', openFullscreen);
+		progressSeek.addEventListener('input', skipAhead);
 
-	controlsScreenClose.addEventListener('click', closeFullscreen);
+		controlsSwitch.addEventListener('click', _ => {
+			console.log('controlsSwitch');
+			togglePlay()
+		});
 
-	controlsPlay.addEventListener('click', togglePlay);
+		controlsScreenOpen.addEventListener('click', openFullscreen);
 
-	controls.addEventListener('mouseleave', hideControls);
+		controlsScreenClose.addEventListener('click', closeFullscreen);
 
-	controls.addEventListener('mousemove', _ => {
-		clearTimeout(timeout);
-		timeout = setTimeout(hideControls, 3000)
-		showControls()
-	});
+		controlsPlay.addEventListener('click', _ => {
+			console.log('controlsPlay');
+			togglePlay()
+		});
 
-	controlsSponsorblock.addEventListener('click', recordSegmentSB);
+		controls.addEventListener('mouseleave', hideControls);
+
+		controls.addEventListener('mousemove', _ => {
+			clearTimeout(timeout);
+			timeout = setTimeout(hideControls, 3000)
+			showControls()
+		});
+
+		controlsSponsorblock.addEventListener('click', recordSegmentSB);
+
+		dialogSbBtnSend.addEventListener('click', sendSegmentSB);
+
+		dialogSbBtnCancel.addEventListener('click', _ => { modal.close() });
+
+		dialogSbStart.addEventListener('input', _ => {
+			resetDialogSB()
+			dialogSbStart.value = formatDuration(dialogSbStart.value)
+		});
+
+		dialogSbEnd.addEventListener('input', _ => {
+			resetDialogSB()
+			dialogSbEnd.value = formatDuration(dialogSbEnd.value)
+		});
+	}
 
 	videoDesc.addEventListener('click', e => {
 		if (e.target.classList.contains('timecode')) {
@@ -504,20 +538,6 @@ const initVideoPlayer = _ => {
 			scrollToTop()
 		}
 	})
-
-	dialogSbBtnSend.addEventListener('click', sendSegmentSB);
-
-	dialogSbBtnCancel.addEventListener('click', _ => { modal.close() });
-
-	dialogSbStart.addEventListener('input', _ => {
-		resetDialogSB()
-		dialogSbStart.value = formatDuration(dialogSbStart.value)
-	});
-
-	dialogSbEnd.addEventListener('input', _ => {
-		resetDialogSB()
-		dialogSbEnd.value = formatDuration(dialogSbEnd.value)
-	});
 
 	// HOT KEYS
 
@@ -562,9 +582,8 @@ const initVideoPlayer = _ => {
 			}
 
 			// F
-			if (e.keyCode === 70) {
+			if (e.keyCode === 70)
 				document.fullscreenElement ? closeFullscreen() : openFullscreen()
-			}
 		}
 	}
 }

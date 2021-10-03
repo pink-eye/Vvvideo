@@ -30,12 +30,6 @@ const getPreferedQuality = formats => storage.settings.defaultQuality === 'highe
 	? getHighestVideo(formats)
 	: formats.find(el => el.qualityLabel.includes(storage.settings.defaultQuality))
 
-const resetMediaEl = el => {
-	el.pause()
-	el.removeAttribute('src');
-	el.load()
-}
-
 const getVideo = async id => {
 	let video = _io_q('.video');
 	let videoInstance = video.querySelector('video');
@@ -237,12 +231,11 @@ const resetVideo = async _ => {
 
 	resetMediaEl(videoInstance)
 
-	if (audioInstance) resetMediaEl(audioInstance)
-	else {
+	if (audioInstance)
 		resetMediaEl(audioInstance)
+	else
 		videoWrapper.insertAdjacentHTML('afterBegin',
 			'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>')
-	}
 
 	videoPoster.removeAttribute('src')
 	videoPoster.closest('.video__poster').classList.remove('_hidden');
