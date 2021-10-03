@@ -8,6 +8,7 @@
 
     &__banner {
         position: relative;
+		margin-bottom: 0;
         width: 100%;
 
         --bg-image: none;
@@ -68,6 +69,9 @@
 
     &__avatar {
         z-index: 11;
+		border-radius: 50%;
+		overflow: hidden;
+		margin-bottom: 0;
 
         @media (min-width: 1101px) {
             position: absolute;
