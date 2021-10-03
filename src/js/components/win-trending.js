@@ -1,5 +1,6 @@
 const getTrending = async (geoLocation = 'US', page = 'default') => {
-	let videoAll = _io_q('.trending').querySelectorAll('.card');
+	let trending = _io_q('.trending')
+	let videoAll = trending.querySelectorAll('.card');
 
 	let parameters = JSON.parse(`{
 		"geoLocation": "${geoLocation}",
@@ -11,8 +12,8 @@ const getTrending = async (geoLocation = 'US', page = 'default') => {
 		const data = await API.scrapeTrending(parameters)
 
 		data.length > videoAll.length
-			? initPages(_io_q('.trending'), data, videoAll, 'video')
-			: disablePages(_io_q('.trending'))
+			? initPages(trending, data, videoAll, 'video')
+			: disablePages(trending)
 
 		for (let index = 0, length = videoAll.length; index < length; index++) {
 			let video = videoAll[index];
@@ -23,5 +24,6 @@ const getTrending = async (geoLocation = 'US', page = 'default') => {
 	} finally {
 		parameters = null
 		videoAll = null;
+		trending = null
 	}
 }

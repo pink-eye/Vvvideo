@@ -26,7 +26,7 @@ const hideSuggest = parent => {
 	if (parent.classList.contains('_has-suggest'))
 		parent.classList.remove('_has-suggest')
 
-	setTimeout(_ => { resetSuggest(parent) }, 300)
+	setTimeout(_ => { resetSuggest(parent) }, getDurationTimeout())
 }
 
 const resetSelected = parent => {

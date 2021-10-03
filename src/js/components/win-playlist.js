@@ -14,8 +14,6 @@ const getPlaylist = async id => {
 			? await API.scrapePlaylistVideosProxy(id, getProxyOptions())
 			: await API.scrapePlaylistVideos(id)
 
-		console.log(data);
-
 		if (playlistName.textContent !== data.title)
 			playlistName.textContent = data.title
 
@@ -43,7 +41,7 @@ const getPlaylist = async id => {
 			avatarSkeleton = null
 		}
 
-		let videoAll = _io_q('.playlist').querySelectorAll('.card');
+		let videoAll = playlist.querySelectorAll('.card');
 
 		data.items.length > videoAll.length
 			? initPages(playlist, data.items, videoAll, 'video', data.continuation)
