@@ -22,7 +22,7 @@ const filterVideoMP4NoAudio = formats => filterFormats(formats,
 		&& format.hasVideo
 		&& !format.hasAudio)
 
-const filterHLS = formats => filterFormats(formats, format => format.isHLS)
+const filterHLS = formats => filterFormats(formats, format => format.isHLS && format.hasVideo && format.hasAudio)
 
 const isInvalidFormats = formats => formats.find(el => el.type === 'FORMAT_STREAM_TYPE_OTF')
 

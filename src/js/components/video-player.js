@@ -194,7 +194,8 @@ const initVideoPlayer = _ => {
 	}
 
 	const updateSeekTooltip = event => {
-		const skipTo = Math.round((event.offsetX / event.target.clientWidth) * Math.floor(video.currentTime));
+		let duration = isEmpty(hls) ? video.duration : video.currentTime
+		const skipTo = Math.round((event.offsetX / event.target.clientWidth) * Math.round(duration));
 
 		if (skipTo > 0 && skipTo < Math.floor(video.currentTime)) {
 			const t = normalizeDuration(skipTo);
@@ -457,7 +458,6 @@ const initVideoPlayer = _ => {
 	});
 
 	if (audio) {
-
 		audio.addEventListener('error', _ => {
 			showToast('error', audio.error.message)
 			pauseVideo()
@@ -495,19 +495,13 @@ const initVideoPlayer = _ => {
 
 		progressSeek.addEventListener('input', skipAhead);
 
-		controlsSwitch.addEventListener('click', _ => {
-			console.log('controlsSwitch');
-			togglePlay()
-		});
+		controlsSwitch.addEventListener('click', togglePlay);
 
 		controlsScreenOpen.addEventListener('click', openFullscreen);
 
 		controlsScreenClose.addEventListener('click', closeFullscreen);
 
-		controlsPlay.addEventListener('click', _ => {
-			console.log('controlsPlay');
-			togglePlay()
-		});
+		controlsPlay.addEventListener('click', togglePlay);
 
 		controls.addEventListener('mouseleave', hideControls);
 
