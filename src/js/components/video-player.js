@@ -194,9 +194,10 @@ const initVideoPlayer = _ => {
 	}
 
 	const updateSeekTooltip = event => {
-		const skipTo = Math.round((event.offsetX / event.target.clientWidth) * Math.floor(video.currentTime));
+		let duration = isEmpty(hls) ? +event.target.getAttribute('max') : Math.floor(video.currentTime)
+		const skipTo = Math.round((event.offsetX / event.target.clientWidth) * duration);
 
-		if (skipTo > 0 && skipTo < Math.floor(video.currentTime)) {
+		if (skipTo > 0 && skipTo < Math.floor(duration)) {
 			const t = normalizeDuration(skipTo);
 			progressSeek.setAttribute('data-seek', skipTo)
 			progressSeekTooltip.textContent = t;
