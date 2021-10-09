@@ -14,10 +14,10 @@ const initVideoPlayer = _ => {
 		controlsSwitchIcon = controls.querySelector('.controls__switch svg use'),
 		timeElapsed = controls.querySelector('.time__elapsed'),
 		timeDuration = controls.querySelector('.time__duration'),
-		progressSeek = controls.querySelector('.progress__seek'),
-		progressSeekTooltip = controls.querySelector('.progress__seek-tooltip'),
-		progressBar = controls.querySelector('.progress__bar'),
-		progressBuffered = controls.querySelector('.progress__buffered'),
+		progress = controls.querySelector('.progress'),
+		progressSeek = progress.querySelector('.progress__seek'),
+		progressSeekTooltip = progress.querySelector('.progress__seek-tooltip'),
+		progressSponsorblock = progress.querySelector('.progress__sponsorblock'),
 		volumeSeek = controls.querySelector('.volume__seek'),
 		volumeBar = controls.querySelector('.volume__bar'),
 		speed = controls.querySelector('.speed'),
@@ -49,6 +49,23 @@ const initVideoPlayer = _ => {
 	let endTime = null
 	let isRecording = false
 
+	const initSponsorblockSegments = data => {
+		let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item');
+
+		for (let index = 0, length = sponsorblockItemAll.length; index < length; index++) {
+			const sponsorblockItem = sponsorblockItemAll[index];
+			const { startTime, endTime, videoDuration } = data[index]
+			const segmentLength = endTime - startTime;
+			const vDuration = videoDuration !== 0 ? videoDuration : Math.round(video.duration)
+			const sponsorblockItemWidth = convertToProc(segmentLength, vDuration)
+			const sponsorblockItemLeft = convertToProc(startTime, vDuration)
+			sponsorblockItem.style.setProperty('--width', `${sponsorblockItemWidth}%`);
+			sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`);
+		}
+
+		sponsorblockItemAll = null
+	}
+
 	const onCloseModal = _ => {
 		togglePlay()
 		resetDialogSB()
@@ -67,7 +84,7 @@ const initVideoPlayer = _ => {
 	}
 
 	const chooseQuality = url => {
-		let currentTime = video.currentTime
+		const currentTime = video.currentTime
 
 		if (!video.paused) {
 			pauseVideo()
@@ -154,8 +171,8 @@ const initVideoPlayer = _ => {
 		const videoDuration = Math.round(video.duration),
 			time = normalizeDuration(videoDuration);
 
+		initSponsorblockSegments(segmentsSB)
 		progressSeek.setAttribute('max', videoDuration);
-		progressBar.setAttribute('max', videoDuration);
 		timeDuration.textContent = time;
 		timeDuration.setAttribute('datetime', time)
 		volumeBar.value = volumeSeek.value
@@ -190,11 +207,12 @@ const initVideoPlayer = _ => {
 
 	const updateProgress = _ => {
 		progressSeek.value = Math.floor(video.currentTime);
-		progressBar.value = Math.floor(video.currentTime);
+		progress.style.setProperty('--progress',
+			`${convertToProc(Math.floor(video.currentTime), Math.round(video.duration))}%`);
 	}
 
 	const updateSeekTooltip = event => {
-		let duration = isEmpty(hls) ? +event.target.getAttribute('max') : Math.floor(video.currentTime)
+		const duration = isEmpty(hls) ? +event.target.getAttribute('max') : Math.floor(video.currentTime)
 		const skipTo = Math.round((event.offsetX / event.target.clientWidth) * duration);
 
 		if (skipTo > 0 && skipTo < Math.floor(duration)) {
@@ -204,7 +222,12 @@ const initVideoPlayer = _ => {
 		}
 
 		const rect = video.getBoundingClientRect();
-		progressSeekTooltip.style.left = `${event.pageX - rect.left}px`;
+		const widthProgressBar = video.offsetWidth - 40
+		const posCursor = event.pageX - rect.left
+
+		if (posCursor > widthProgressBar * 0.1 &&
+			posCursor < widthProgressBar * 0.9)
+			progressSeekTooltip.style.left = `${posCursor}px`;
 	}
 
 	const updateBuffered = _ => {
@@ -215,11 +238,10 @@ const initVideoPlayer = _ => {
 				let abuffered = audio.buffered
 				let minBuffered = getMin(vbuffered.end(vbuffered.length - 1), abuffered.end(abuffered.length - 1))
 
-				progressBuffered.style.setProperty('--buffered',
-					`${convertToProc(minBuffered, video.duration)}%`)
+				progress.style.setProperty('--buffered', `${convertToProc(minBuffered, Math.round(video.duration))}%`)
 			} else {
-				progressBuffered.style.setProperty('--buffered',
-					`${convertToProc(vbuffered.end(vbuffered.length - 1), video.duration)}%`)
+				progress.style.setProperty('--buffered',
+					`${convertToProc(vbuffered.end(vbuffered.length - 1), Math.round(video.duration))}%`)
 			}
 		}
 	}
@@ -228,7 +250,7 @@ const initVideoPlayer = _ => {
 		const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value;
 
 		video.currentTime = skipTo;
-		progressBar.value = skipTo;
+		progress.style.setProperty('--progress', `${convertToProc(skipTo, Math.round(video.duration))}%`)
 		progressSeek.value = skipTo;
 
 		isSync = false
@@ -496,19 +518,13 @@ const initVideoPlayer = _ => {
 
 		progressSeek.addEventListener('input', skipAhead);
 
-		controlsSwitch.addEventListener('click', _ => {
-			console.log('controlsSwitch');
-			togglePlay()
-		});
+		controlsSwitch.addEventListener('click', togglePlay);
 
 		controlsScreenOpen.addEventListener('click', openFullscreen);
 
 		controlsScreenClose.addEventListener('click', closeFullscreen);
 
-		controlsPlay.addEventListener('click', _ => {
-			console.log('controlsPlay');
-			togglePlay()
-		});
+		controlsPlay.addEventListener('click', togglePlay);
 
 		controls.addEventListener('mouseleave', hideControls);
 

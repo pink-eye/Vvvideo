@@ -54,7 +54,6 @@ const getVideo = async id => {
 	let videoDislikes = videoInfo.querySelector('.video-info__dislikes span');
 	let videoSubs = videoInfo.querySelector('.author__subs');
 
-
 	if (API.YTDLvalidateURL(`https://www.youtube.com/watch?v=${id}`)) {
 		try {
 			let data = storage.settings.enableProxy
@@ -232,8 +231,7 @@ const resetVideo = async _ => {
 	let videoViews = video.querySelector('.video-info__views span');
 	let videoDate = video.querySelector('.video-info__date span');
 	let controls = video.querySelector('.controls');
-	let progressBar = controls.querySelector('.progress__bar');
-	let progressBufferd = controls.querySelector('.progress__buffered');
+	let progress = controls.querySelector('.progress');
 	let timeDuration = controls.querySelector('.time__duration');
 	let qualityList = controls.querySelector('.quality__list');
 	let timeElapsed = controls.querySelector('.time__elapsed');
@@ -285,8 +283,7 @@ const resetVideo = async _ => {
 	timeElapsed.textContent = '0:00';
 	timeDuration.removeAttribute('datetime')
 	timeElapsed.removeAttribute('datetime')
-	progressBar.removeAttribute('value')
-	progressBufferd.removeAttribute('style')
+	progress.removeAttribute('style')
 
 	if (avatarSkeleton.classList.contains('_removing')) {
 		resetSkeleton(avatarSkeleton)

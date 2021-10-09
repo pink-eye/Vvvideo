@@ -2,19 +2,18 @@
 	<div class="controls__play"></div>
 	<div class="controls__bar">
 		<div class="controls__progress progress">
-			<progress class="progress__bar bar" value="0" min="0"></progress>
-			<div class="progress__buffered"></div>
+			<div class="progress__bar"></div>
 			<input class="progress__seek seek" value="0" min="0" type="range" step="1">
 			<div class="progress__seek-tooltip seek-tooltip">00:00</div>
 			<ul class="progress__sponsorblock sponsorblock list-reset"></ul>
 		</div>
 		<div class="controls__wrapper">
-			<button class="controls__switch btn-reset">
+			<button class="controls__switch onclick-effect btn-reset">
 				<svg width="22px" height="22px">
 					<use xlink:href='img/svg/controls.svg#play'></use>
 				</svg>
 			</button>
-			<button class="controls__volume volume btn-reset">
+			<button class="controls__volume onclick-effect volume btn-reset">
 				<svg width="27px" height="27px">
 					<use xlink:href='img/svg/controls.svg#volume'></use>
 				</svg>
@@ -29,7 +28,7 @@
 				<time class="time__duration">00:00</time>
 			</div>
 			<div class="controls__right">
-				<button class="controls__sponsorblock btn-reset">
+				<button class="controls__sponsorblock onclick-effect btn-reset">
 					<img width="27px" height="27px" src="img/sponsorblock.png" alt="">
 				</button>
 				<div class="controls__speed speed dropdown btn-reset">
@@ -65,12 +64,12 @@
 					<button class="quality__current dropdown__head"></button>
 					<ul class="quality__list dropdown__list dropdown__list_top list-reset"></ul>
 				</div>
-				<button class="controls__screen controls__screen_open btn-reset">
+				<button class="controls__screen controls__screen_open onclick-effect btn-reset">
 					<svg width="25px" height="25px">
 						<use xlink:href='img/svg/controls.svg#fullscreen'></use>
 					</svg>
 				</button>
-				<button class="controls__screen controls__screen_close btn-reset" hidden>
+				<button class="controls__screen controls__screen_close onclick-effect btn-reset" hidden>
 					<svg width="25px" height="25px">
 						<use xlink:href='img/svg/controls.svg#fullscreen'></use>
 					</svg>

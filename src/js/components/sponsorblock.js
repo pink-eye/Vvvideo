@@ -18,19 +18,10 @@ const getSegmentsSB = async videoId => {
 		for (let index = 0, length = data.length; index < length; index++)
 			progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML)
 
-		let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item');
-		for (let index = 0, length = sponsorblockItemAll.length; index < length; index++) {
-			const sponsorblockItem = sponsorblockItemAll[index];
-			const segmentLength = data[index].endTime - data[index].startTime;
-			sponsorblockItem.style.setProperty('--width', `${convertToProc(segmentLength, data[index].videoDuration)}%`);
-			sponsorblockItem.style.setProperty('--left', `${convertToProc(data[index].startTime, data[index].videoDuration)}%`);
-		}
-
 		data = null
-		sponsorblockItemAll = null
+	} catch (error) {
 
-	} catch (error) { }
-
+	}
 	finally {
 		video = null
 		controlsProgess = null
