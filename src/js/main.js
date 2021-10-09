@@ -43,9 +43,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 		fillWinSettings()
 
-		getLatest().then(_ => {
-			showToast('good', 'Successfully')
-		})
+		getLatest()
 
 		initSuggests(headerSearch)
 	})

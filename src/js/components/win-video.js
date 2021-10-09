@@ -54,14 +54,15 @@ const getVideo = async id => {
 	let videoDislikes = videoInfo.querySelector('.video-info__dislikes span');
 	let videoSubs = videoInfo.querySelector('.author__subs');
 
+
 	if (API.YTDLvalidateURL(`https://www.youtube.com/watch?v=${id}`)) {
 		try {
 			let data = storage.settings.enableProxy
-				? await API.scrapeVideoProxy(id, getProxyOptions())
-				: await API.scrapeVideo(id)
+			? await API.scrapeVideoProxy(id, getProxyOptions())
+			: await API.scrapeVideo(id)
 
 			if (data.videoDetails.isLive)
-				video.classList.add('_live')
+			video.classList.add('_live')
 
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id

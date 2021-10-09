@@ -1,4 +1,4 @@
-const createToastItemHTML = (type, text) => `<li class="toast__item _${type}">${text}</li>`
+const createToastItemHTML = (type, text) => `<li class="toast__item _${type}"><div class="toast__icon"></div>${text}</li>`
 
 const isExistSimilarToast = text => _io_q('.toast__list').textContent.includes(text)
 
@@ -14,16 +14,16 @@ const showToast = (type, text) => {
 
 		setTimeout(_ => { lastToastItem.classList.add('_visible') }, 15);
 
-		setTimeout(_ => {
-			lastToastItem.classList.remove('_visible')
+		// setTimeout(_ => {
+		// 	lastToastItem.classList.remove('_visible')
 
-			setTimeout(_ => {
-				lastToastItem.remove()
+		// 	setTimeout(_ => {
+		// 		lastToastItem.remove()
 
-				toastItemAll = null
-				toastList = null
-			}, 4000)
+		// 		toastItemAll = null
+		// 		toastList = null
+		// 	}, 4000)
 
-		}, 5000)
+		// }, 5000)
 	}
 }
