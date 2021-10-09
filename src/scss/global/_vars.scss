@@ -28,6 +28,8 @@
     --brs-xl: 20px;
 
 	--trns-timing-func: ease;
+	--ease-out-back: cubic-bezier(0.175, 0.585, 0.320, 1.275);
+	--ease-in-back: cubic-bezier(0.600, -0.18, 0.735, 0.045);
 
     @media screen and (prefers-reduced-motion: no-preference) {
 		--trns-time-default: .3s;
