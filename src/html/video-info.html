@@ -1,0 +1,50 @@
+<section class="video__info video-info">
+	<div class="video-info__body">
+		<div class="video-info__shell">
+			<h1 class="video-info__title title">
+				What's the name?
+			</h1>
+			<div class="video-info__details">
+				<div class="video-info__views">
+					<svg width="26px" height="20px">
+						<use xlink:href='img/svg/actions.svg#views'></use>
+					</svg>
+					<span>...</span>
+				</div>
+				<div class="video-info__date">
+					<svg width="20px" height="20px">
+						<use xlink:href='img/svg/actions.svg#date'></use>
+					</svg>
+					<span>...</span>
+				</div>
+				<div class="video-info__likes">
+					<svg stroke-width="0" width="20px" height="20px">
+						<use xlink:href='img/svg/actions.svg#like'></use>
+					</svg>
+					<span>...</span>
+				</div>
+				<div class="video-info__dislikes">
+					<svg stroke-width="0" width="20px" height="20px">
+						<use xlink:href='img/svg/actions.svg#dislike'></use>
+					</svg>
+					<span>...</span>
+				</div>
+			</div>
+			<div class="video-info__about">
+				@include('author-card.html')
+				<div class="video-info__wrapper">
+					@include('subscribe.html')
+				</div>
+			</div>
+		</div>
+		<div class="video-info__description desc-video-info spoiler">
+			<button class="desc-video-info__btn spoiler__head btn-reset"><span>Description</span><span
+					class="arrow"></span></button>
+			<div class="desc-video-info__shell spoiler__shell">
+				<p class="desc-video-info__text spoiler__content">
+					Description will be here...
+				</p>
+			</div>
+		</div>
+	</div>
+</section>

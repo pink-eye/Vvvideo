@@ -1,0 +1,81 @@
+<div class="video__controls controls">
+	<div class="controls__play"></div>
+	<div class="controls__bar">
+		<div class="controls__progress progress">
+			<progress class="progress__bar bar" value="0" min="0"></progress>
+			<div class="progress__buffered"></div>
+			<input class="progress__seek seek" value="0" min="0" type="range" step="1">
+			<div class="progress__seek-tooltip seek-tooltip">00:00</div>
+			<ul class="progress__sponsorblock sponsorblock list-reset"></ul>
+		</div>
+		<div class="controls__wrapper">
+			<button class="controls__switch btn-reset">
+				<svg width="22px" height="22px">
+					<use xlink:href='img/svg/controls.svg#play'></use>
+				</svg>
+			</button>
+			<button class="controls__volume volume btn-reset">
+				<svg width="27px" height="27px">
+					<use xlink:href='img/svg/controls.svg#volume'></use>
+				</svg>
+				<div class="volume__range">
+					<progress class="volume__bar bar" value="0" min="0"></progress>
+					<input class="volume__seek seek" value="1" type="range" max="1" min="0" step="0.01">
+				</div>
+			</button>
+			<div class="controls__time time">
+				<time class="time__elapsed">00:00</time>
+				<span class="time__separator"> / </span>
+				<time class="time__duration">00:00</time>
+			</div>
+			<div class="controls__right">
+				<button class="controls__sponsorblock btn-reset">
+					<img width="27px" height="27px" src="img/sponsorblock.png" alt="">
+				</button>
+				<div class="controls__speed speed dropdown btn-reset">
+					<button class="speed__current dropdown__head">x1</button>
+					<ul class="speed__list dropdown__list dropdown__list_top list-reset">
+						<li class="speed__item dropdown__item">
+							<button data-speed="0.5" class="speed__btn dropdown__btn btn-reset">x0.50</button>
+						</li>
+						<li class="speed__item dropdown__item">
+							<button data-speed="0.75" class="speed__btn dropdown__btn btn-reset">x0.75</button>
+						</li>
+						<li class="speed__item dropdown__item">
+							<button data-speed="1" class="speed__btn dropdown__btn btn-reset">x1</button>
+						</li>
+						<li class="speed__item dropdown__item">
+							<button data-speed="1.25" class="speed__btn dropdown__btn btn-reset">x1.25</button>
+						</li>
+						<li class="speed__item dropdown__item">
+							<button data-speed="1.5" class="speed__btn dropdown__btn btn-reset">x1.5</button>
+						</li>
+						<li class="speed__item dropdown__item">
+							<button data-speed="1.75" class="speed__btn dropdown__btn btn-reset">x1.75</button>
+						</li>
+						<li class="speed__item dropdown__item">
+							<button data-speed="2" class="speed__btn dropdown__btn btn-reset">x2</button>
+						</li>
+						<li class="speed__item dropdown__item">
+							<button data-speed="2.25" class="speed__btn dropdown__btn btn-reset">x2.25</button>
+						</li>
+					</ul>
+				</div>
+				<div class="controls__quality quality dropdown btn-reset">
+					<button class="quality__current dropdown__head"></button>
+					<ul class="quality__list dropdown__list dropdown__list_top list-reset"></ul>
+				</div>
+				<button class="controls__screen controls__screen_open btn-reset">
+					<svg width="25px" height="25px">
+						<use xlink:href='img/svg/controls.svg#fullscreen'></use>
+					</svg>
+				</button>
+				<button class="controls__screen controls__screen_close btn-reset" hidden>
+					<svg width="25px" height="25px">
+						<use xlink:href='img/svg/controls.svg#fullscreen'></use>
+					</svg>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
