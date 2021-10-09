@@ -6,19 +6,19 @@ let hasContinuation = null;
 const disablePages = parent => {
 	let btns = parent.querySelector('.btns');
 
-	if (btns && !btns.hidden) {
+	if (btns && !btns.hidden)
 		btns.hidden = true;
-		btns = null;
-	}
+
+	btns = null;
 }
 
 const enablePages = parent => {
 	let btns = parent.querySelector('.btns');
 
-	if (btns && btns.hidden) {
+	if (btns && btns.hidden)
 		btns.hidden = false;
-		btns = null;
-	}
+
+	btns = null;
 }
 
 const createPages = _ => `<div class="grid__btns btns" hidden>
@@ -170,19 +170,19 @@ const recycleDOM = async (increment, cardAll, typeCard) => {
 const updateCount = (page, parent) => {
 	let gridCount = parent.querySelector('.grid__count');
 
-	if (gridCount) {
+	if (gridCount)
 		gridCount.textContent = page;
-		gridCount = null;
-	}
+
+	gridCount = null;
 }
 
 const resetCount = parent => {
 	let gridCount = parent.querySelector('.grid__count');
 
-	if (gridCount && +gridCount.textContent !== 1) {
+	if (gridCount && +gridCount.textContent !== 1)
 		gridCount.textContent = 1;
-		gridCount = null;
-	}
+
+	gridCount = null;
 }
 
 const resetBtns = (btnNextPage, btnPrevPage) => {

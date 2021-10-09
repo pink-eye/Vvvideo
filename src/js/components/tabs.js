@@ -16,14 +16,19 @@ const hideLastTab = async (tabContentClass, tabClass) => {
 			case 'Videos':
 				let channelTabContentVideos = channel.querySelector('.videos');
 				resetGrid(channelTabContentVideos)
+				channelTabContentVideos = null
 				break;
 
 			case 'Playlists':
 				let channelTabContentPlaylists = channel.querySelector('.playlists');
 				resetGrid(channelTabContentPlaylists)
+				channelTabContentPlaylists = null
 				break;
 		}
 	}
+
+	channel = null
+	tabActive = null
 };
 
 const showRequiredTab = async (tab, tabContentClass) => {
@@ -89,6 +94,7 @@ const showRequiredTab = async (tab, tabContentClass) => {
 			break;
 	}
 
+	channel = null
 };
 
 const switchTab = (tabClass, tabContentClass, primary) => {

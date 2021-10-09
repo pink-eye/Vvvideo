@@ -26,9 +26,9 @@ const filterHLS = formats => filterFormats(formats, format => format.isHLS && fo
 
 const isInvalidFormats = formats => formats.find(el => el.type === 'FORMAT_STREAM_TYPE_OTF')
 
-const getPreferedQuality = formats => storage.settings.defaultQuality === 'highest'
+const getPreferedQuality = formats => ss.defaultQuality === 'highest'
 	? getHighestVideo(formats)
-	: formats.find(el => el.qualityLabel.includes(storage.settings.defaultQuality))
+	: formats.find(el => el.qualityLabel.includes(ss.defaultQuality))
 
 let hls = null
 
@@ -53,10 +53,11 @@ const getVideo = async id => {
 	let videoLikes = videoInfo.querySelector('.video-info__likes span');
 	let videoDislikes = videoInfo.querySelector('.video-info__dislikes span');
 	let videoSubs = videoInfo.querySelector('.author__subs');
+	let ss = storage.settings
 
 	if (API.YTDLvalidateURL(`https://www.youtube.com/watch?v=${id}`)) {
 		try {
-			let data = storage.settings.enableProxy
+			let data = ss.enableProxy
 				? await API.scrapeVideoProxy(id, getProxyOptions())
 				: await API.scrapeVideo(id)
 
@@ -73,12 +74,12 @@ const getVideo = async id => {
 						resetMediaEl(audioInstance)
 						audioInstance.remove()
 					} else {
-						if (storage.settings.disableSeparatedStreams) {
+						if (ss.disableSeparatedStreams) {
 							videoFormatAll = API.YTDLFilterFormats(data.formats)
 							resetMediaEl(audioInstance)
 							audioInstance.remove()
 						} else {
-							switch (storage.settings.defaltVideoFormat) {
+							switch (ss.defaltVideoFormat) {
 								case 'mp4':
 									videoFormatAll = filterVideoMP4NoAudio(data.formats)
 									break;
@@ -92,7 +93,7 @@ const getVideo = async id => {
 					if (audioInstance)
 						audioInstance.src = getHighestAudio(data.formats).url
 
-					if (storage.settings.autoplay)
+					if (ss.autoplay)
 						videoInstance.autoplay = true
 
 					let preferedQuality = getPreferedQuality(videoFormatAll)
@@ -159,7 +160,6 @@ const getVideo = async id => {
 				}
 
 				// FILL VIDEO INFO
-
 				if (data.videoDetails.title !== videoTitle.textContent)
 					videoTitle.textContent = data.videoDetails.title
 
@@ -259,16 +259,16 @@ const resetVideo = async _ => {
 	speedCurrent.textContent = 'x1'
 
 	if (!isEmpty(hls)) {
+		hls.detachMedia()
 		hls.destroy()
 		hls = null
 	}
 
 	resetMediaEl(videoInstance)
 
-	if (audioInstance)
-		resetMediaEl(audioInstance)
-	else
-		videoWrapper.insertAdjacentHTML('afterBegin',
+	audioInstance
+		? resetMediaEl(audioInstance)
+		: videoWrapper.insertAdjacentHTML('afterBegin',
 			'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>')
 
 	videoPoster.removeAttribute('src')

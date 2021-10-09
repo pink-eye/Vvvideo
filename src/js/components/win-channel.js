@@ -1,8 +1,9 @@
 const getChannelInfoLocalScraper = channelId => new Promise(async resolve => {
 	try {
-		const data = await API.scrapeChannelInfo(channelId)
-		resolve(data)
-	} catch (error) { showToast('error', error.message) }
+		resolve(await API.scrapeChannelInfo(channelId))
+	} catch (error) {
+		showToast('error', error.message)
+	}
 })
 
 const getChannel = async id => {
@@ -77,8 +78,6 @@ const getChannel = async id => {
 		subscribeBtn = null
 		subscribeText = null
 	}
-
-
 }
 
 const resetChannel = async (channelTabContentVideos, channelTabContentPlaylists) => {

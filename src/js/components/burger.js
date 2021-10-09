@@ -5,12 +5,13 @@ const toggleMenu = _ => {
 	let sidebar = _io_q('.sidebar');
 	let sidebarBtn = sidebar.querySelector('.sidebar__btn')
 	let sidebarBtnActive = sidebar.querySelector('.sidebar__btn._active')
+	let ss = storage.settings
 
 	if (!burger.classList.contains('_active')) {
 		burger.classList.add('_active');
 		sidebar.classList.remove('_closed');
 
-		if (!isLargeScreen() && !storage.settings.notAdaptContent)
+		if (!isLargeScreen() && !ss.notAdaptContent)
 			_io_q('.main__content').style.setProperty('--margin', '227px');
 
 		setTimeout(_ => {
@@ -25,10 +26,11 @@ const toggleMenu = _ => {
 		burger.classList.remove('_active');
 		sidebar.classList.add('_closed');
 
-		if (!isLargeScreen() && !storage.settings.notAdaptContent)
+		if (!isLargeScreen() && !ss.notAdaptContent)
 			_io_q('.main__content').style.setProperty('--margin', '0');
 	}
 
 	burger = null
 	sidebar = null
+	ss = null
 };

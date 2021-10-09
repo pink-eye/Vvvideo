@@ -26,6 +26,7 @@ const getPlaylist = async id => {
 		playlistLastUpdated.textContent = data.lastUpdated
 
 		let duration = 0
+
 		for (let index = 0, length = data.items.length; index < length; index++) {
 			const video = data.items[index];
 			duration += video.durationSec

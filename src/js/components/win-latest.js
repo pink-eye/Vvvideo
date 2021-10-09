@@ -7,8 +7,7 @@ const getChannelVideosLocalScraper = (channelId, index) => new Promise(async (re
 	try {
 		const data = await API.scrapeChannelVideos(channelId);
 
-		if (!indicator.classList.contains('_visible'))
-			indicator.classList.add('_visible')
+		startIndicator()
 
 		for (let index = 0, length = data.items.length; index < length; index++) {
 			let video = data.items[index];
@@ -28,13 +27,6 @@ const getChannelVideosLocalScraper = (channelId, index) => new Promise(async (re
 	}
 })
 
-const resetIndicator = async _ => {
-	let indicator = _io_q('.indicator');
-
-	if (indicator.classList.contains('_visible'))
-		indicator.classList.remove('_visible')
-}
-
 const getLatest = async _ => {
 	let latest = _io_q('.latest');
 	let promises = []
@@ -46,6 +38,7 @@ const getLatest = async _ => {
 
 			for (let index = 0, length = storage.subscriptions.length; index < length; index++) {
 				const subscription = storage.subscriptions[index];
+
 				if (btnLatest.classList.contains('_active')) {
 					promises.push(getChannelVideosLocalScraper(subscription.channelId, index))
 				} else {
@@ -76,20 +69,20 @@ const getLatest = async _ => {
 			btnLatest = null;
 		} else {
 			latestArray.length > videoAll.length
-			? initPages(latest, latestArray, videoAll, 'video')
-			: disablePages(latest)
+				? initPages(latest, latestArray, videoAll, 'video')
+				: disablePages(latest)
 
 			for (let index = 0, length = videoAll.length; index < length; index++) {
 				let video = videoAll[index];
 
 				latestArray[index]
-				? fillVideoCard(video, index, latestArray)
-				: video.hidden = true;
+					? fillVideoCard(video, index, latestArray)
+					: video.hidden = true;
 			}
 		}
 	} else {
 		for (let index = 0, length = videoAll.length; index < length; index++)
-		videoAll[index].hidden = true;
+			videoAll[index].hidden = true;
 	}
 
 	videoAll = null;
