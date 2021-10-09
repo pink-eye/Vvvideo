@@ -148,7 +148,7 @@
 
             transition: border-color var(--trns),
                 background-color var(--trns),
-                background-size var(--trns-time-default) ease-out;
+                background-size var(--trns-time-default) var(--ease-out-sine);
         }
 
         @media (max-width: 767px) {

@@ -27,7 +27,7 @@
     background-color: var(--color-bg);
     padding-bottom: 50px;
 
-	transition: background-color var(--trns);
+    transition: background-color var(--trns);
 
     @media (min-width: 1201px) {
         padding-top: 114px;
@@ -68,33 +68,37 @@
 
 .win {
 
-	transition: transform var(--trns),
-	opacity var(--trns),
-	visibility var(--trns);
-
-	&:not(._active) {
-		display: none;
-	}
-
-    &._active {
-		display: block;
+    &:not(._active) {
+        display: none;
     }
 
-	&:not(._anim-win) {
-		transform: translateY(-20px);
-		opacity: 0;
-		visibility: hidden;
-	}
+    &._active {
+        display: block;
+    }
+
+    &:not(._anim-win) {
+        transform: scaleY(0.98);
+        opacity: 0;
+        visibility: hidden;
+
+        transition: transform var(--trns-time-default) var(--ease-in-sine),
+            opacity var(--trns-time-default) var(--ease-in-sine),
+            visibility var(--trns-time-default) var(--ease-in-sine);
+    }
 
     &._anim-win {
-        transform: translateY(0px);
+        transform: scaleY(1);
         opacity: 1;
         visibility: visible;
+
+        transition: transform var(--trns-time-default) var(--ease-out-sine),
+            opacity var(--trns-time-default) var(--ease-out-sine),
+            visibility var(--trns-time-default) var(--ease-out-sine);
     }
 
     &__header {
         display: flex;
-		align-items: center;
+        align-items: center;
     }
 
     &__title {
