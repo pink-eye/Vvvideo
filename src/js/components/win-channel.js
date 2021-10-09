@@ -37,33 +37,25 @@ const getChannel = async id => {
 		if (data.authorThumbnails) {
 			channelAvatar.src = data.authorThumbnails.at(-1).url
 			channelAvatar.onload = _ => {
-				avatarSkeleton.classList.add('_removing');
+				removeSkeleton(avatarSkeleton)
 
-				setTimeout(_ => {
-					avatarSkeleton.hidden = true
-					channelAvatar = null
-					avatarSkeleton = null
-				}, getDurationTimeout())
+				channelAvatar = null
 			}
 		}
 
 		if (data.authorBanners) {
 			channelBannerImg.src = data.authorBanners.at(-1).url
 			channelBannerImg.onload = _ => {
-				bannerSkeleton.classList.add('_removing');
+				removeSkeleton(bannerSkeleton)
 
-				setTimeout(_ => {
-					bannerSkeleton.hidden = true
-					channelBannerImg = null
-					bannerSkeleton = null
-				}, getDurationTimeout())
+				channelBannerImg = null
 			}
 		} else if (data.authorThumbnails) {
 			channelBanner.style.setProperty('--bg-image', `url(${data.authorThumbnails.at(-1).url})`)
-			bannerSkeleton.classList.add('_removing');
+			removeSkeleton(bannerSkeleton)
 		} else {
 			channelBanner.style.setProperty('--bg-image', '#fff')
-			bannerSkeleton.classList.add('_removing');
+			removeSkeleton(bannerSkeleton)
 		}
 
 		channelFollowers.textContent = `${normalizeCount(data.subscriberCount)} subscribers`
@@ -104,10 +96,8 @@ const resetChannel = async (channelTabContentVideos, channelTabContentPlaylists)
 	subscribeBtn.removeAttribute('data-name')
 
 	if (avatarSkeleton.classList.contains('_removing')) {
-		avatarSkeleton.classList.remove('_removing');
-		avatarSkeleton.hidden = false
-		bannerSkeleton.classList.remove('_removing');
-		bannerSkeleton.hidden = false
+		resetSkeleton(avatarSkeleton)
+		resetSkeleton(bannerSkeleton)
 	}
 
 	resetGrid(channelTabContentVideos)

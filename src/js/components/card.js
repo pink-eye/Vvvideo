@@ -26,11 +26,7 @@ const fillVideoCard = (video, index, data) => {
 	}
 
 	videoImage.onload = _ => {
-		imageSkeleton.classList.add('_removing');
-		setTimeout(_ => {
-			imageSkeleton.hidden = true
-			imageSkeleton = null
-		}, getDurationTimeout())
+		removeSkeleton(imageSkeleton)
 
 		videoImage = null
 	}
@@ -39,11 +35,7 @@ const fillVideoCard = (video, index, data) => {
 
 	videoTitle.textContent = data[index].title;
 
-	titleSkeleton.classList.add('_removing');
-	setTimeout(_ => {
-		titleSkeleton.hidden = true
-		titleSkeleton = null
-	}, getDurationTimeout());
+	removeSkeleton(titleSkeleton)
 
 	videoViews.textContent = data[index].hasOwnProperty('viewCount')
 		? normalizeCount(data[index].viewCount)
@@ -82,11 +74,7 @@ const fillVideoCard = (video, index, data) => {
 			: normalizeDuration(data[index].lengthSeconds)
 		: normalizeDuration(data[index].duration)
 
-	bottomSkeleton.classList.add('_removing');
-	setTimeout(_ => {
-		bottomSkeleton.hidden = true
-		bottomSkeleton = null
-	}, getDurationTimeout());
+	removeSkeleton(bottomSkeleton)
 
 	videoTitle = null
 	videoViews = null
@@ -114,12 +102,7 @@ const fillPlaylistCard = (playlist, index, data) => {
 		: playlistImage.setAttribute('src', data[index].playlistThumbnail)
 
 	playlistImage.onload = _ => {
-		imageSkeleton.classList.add('_removing');
-
-		setTimeout(_ => {
-			imageSkeleton.hidden = true
-			imageSkeleton = null
-		}, getDurationTimeout())
+		removeSkeleton(imageSkeleton)
 
 		playlistImage = null;
 	}
@@ -127,12 +110,7 @@ const fillPlaylistCard = (playlist, index, data) => {
 	playlistImage.onerror = _ => { showToast('error', 'Could not load images :(') }
 
 	playlistTitle.textContent = data[index].title;
-	titleSkeleton.classList.add('_removing');
-
-	setTimeout(_ => {
-		titleSkeleton.hidden = true
-		titleSkeleton = null
-	}, getDurationTimeout());
+	removeSkeleton(titleSkeleton)
 
 	playlistCount.textContent = data[index].hasOwnProperty('length')
 		? data[index].length
@@ -146,11 +124,7 @@ const fillPlaylistCard = (playlist, index, data) => {
 		? data[index].owner.channelID
 		: data[index].authorId
 
-	bottomSkeleton.classList.add('_removing');
-	setTimeout(_ => {
-		bottomSkeleton.hidden = true
-		bottomSkeleton = null
-	}, getDurationTimeout());
+	removeSkeleton(bottomSkeleton)
 
 
 	playlistTitle = null
@@ -173,11 +147,7 @@ const fillChannelCard = (channel, index, data) => {
 
 	channelImage.setAttribute('src', data[index].bestAvatar.url)
 	channelImage.onload = _ => {
-		imageSkeleton.classList.add('_removing');
-		setTimeout(_ => {
-			imageSkeleton.hidden = true
-			imageSkeleton = null
-		}, getDurationTimeout())
+		removeSkeleton(imageSkeleton)
 
 		channelImage = null
 	}
@@ -185,22 +155,13 @@ const fillChannelCard = (channel, index, data) => {
 	channelImage.onerror = _ => { showToast('error', 'Could not load images :(') }
 
 	channelTitle.textContent = data[index].name;
-
-	titleSkeleton.classList.add('_removing');
-	setTimeout(_ => {
-		titleSkeleton.hidden = true
-		titleSkeleton = null
-	}, getDurationTimeout());
+	removeSkeleton(titleSkeleton)
 
 	channelDescr.textContent = data[index].descriptionShort;
 	channelSubs.textContent = data[index].subscribers;
 	channelVideoCount.textContent = `${data[index].videos} video`;
 
-	bottomSkeleton.classList.add('_removing');
-	setTimeout(_ => {
-		bottomSkeleton.hidden = true
-		bottomSkeleton = null
-	}, getDurationTimeout());
+	removeSkeleton(bottomSkeleton)
 
 	channelTitle = null
 	channelDescr = null
@@ -218,11 +179,8 @@ const fillAuthorCard = (author, index, data) => {
 		authorAvatar.src = data[index].avatar
 
 		authorAvatar.onload = _ => {
-			avatarSkeleton.classList.add('_removing')
-			setTimeout(_ => {
-				avatarSkeleton.hidden = true
-				avatarSkeleton = null
-			}, getDurationTimeout())
+			removeSkeleton(avatarSkeleton)
+
 			authorAvatar = null
 		}
 
@@ -243,8 +201,7 @@ const resetAuthorCard = async author => {
 
 	author.hidden &&= false
 
-	avatarSkeleton.classList.remove('_removing')
-	avatarSkeleton.hidden = false
+	resetSkeleton(avatarSkeleton)
 	authorName.textContent = '...'
 
 	avatarSkeleton = null
@@ -260,12 +217,9 @@ const resetCard = async card => {
 	card.disabled = true
 
 	if (imageSkeleton.classList.contains('_removing')) {
-		imageSkeleton.classList.remove('_removing');
-		imageSkeleton.hidden = false;
-		titleSkeleton.classList.remove('_removing');
-		titleSkeleton.hidden = false;
-		bottomSkeleton.classList.remove('_removing');
-		bottomSkeleton.hidden = false;
+		resetSkeleton(imageSkeleton)
+		resetSkeleton(titleSkeleton)
+		resetSkeleton(bottomSkeleton)
 	}
 
 	if (cardTitle.textContent !== 'Title')

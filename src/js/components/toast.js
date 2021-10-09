@@ -14,16 +14,16 @@ const showToast = (type, text) => {
 
 		setTimeout(_ => { lastToastItem.classList.add('_visible') }, 15);
 
-		// setTimeout(_ => {
-		// 	lastToastItem.classList.remove('_visible')
+		setTimeout(_ => {
+			lastToastItem.classList.remove('_visible')
 
-		// 	setTimeout(_ => {
-		// 		lastToastItem.remove()
+			setTimeout(_ => {
+				lastToastItem.remove()
 
-		// 		toastItemAll = null
-		// 		toastList = null
-		// 	}, 4000)
+				toastItemAll = null
+				toastList = null
+			}, 4000)
 
-		// }, 5000)
+		}, 5000)
 	}
 }

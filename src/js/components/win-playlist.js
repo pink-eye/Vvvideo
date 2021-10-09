@@ -35,10 +35,9 @@ const getPlaylist = async id => {
 
 		playlistAvatar.src = data.author.bestAvatar.url
 		playlistAvatar.onload = _ => {
-			avatarSkeleton.classList.add('_removing');
+			removeSkeleton(avatarSkeleton)
 
 			playlistAvatar = null
-			avatarSkeleton = null
 		}
 
 		let videoAll = playlist.querySelectorAll('.card');

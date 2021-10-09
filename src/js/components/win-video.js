@@ -58,11 +58,11 @@ const getVideo = async id => {
 	if (API.YTDLvalidateURL(`https://www.youtube.com/watch?v=${id}`)) {
 		try {
 			let data = storage.settings.enableProxy
-			? await API.scrapeVideoProxy(id, getProxyOptions())
-			: await API.scrapeVideo(id)
+				? await API.scrapeVideoProxy(id, getProxyOptions())
+				: await API.scrapeVideo(id)
 
 			if (data.videoDetails.isLive)
-			video.classList.add('_live')
+				video.classList.add('_live')
 
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
@@ -150,24 +150,13 @@ const getVideo = async id => {
 					}
 
 					videoInstance.onloadeddata = _ => {
-						if (videoSkeleton) {
-							videoSkeleton.classList.add('_removing');
+						if (videoSkeleton)
+							removeSkeleton(videoSkeleton)
 
-							setTimeout(_ => {
-								videoSkeleton.hidden = true
-								videoSkeleton = null
-							}, getDurationTimeout())
-						}
 					}
 				} else {
-					if (videoSkeleton) {
-						videoSkeleton.classList.add('_removing');
-
-						setTimeout(_ => {
-							videoSkeleton.hidden = true
-							videoSkeleton = null
-						}, getDurationTimeout())
-					}
+					if (videoSkeleton)
+						removeSkeleton(videoSkeleton)
 				}
 
 				// FILL VIDEO INFO
@@ -201,13 +190,9 @@ const getVideo = async id => {
 					videoAvatar.src = data.videoDetails.author.thumbnails.at(-1).url
 
 					videoAvatar.onload = _ => {
-						avatarSkeleton.classList.add('_removing');
+						removeSkeleton(avatarSkeleton)
 
-						setTimeout(_ => {
-							avatarSkeleton.hidden = true
-							videoAvatar = null
-							avatarSkeleton = null
-						}, getDurationTimeout())
+						videoAvatar = null
 					}
 				}
 
@@ -304,10 +289,8 @@ const resetVideo = async _ => {
 	progressBufferd.removeAttribute('style')
 
 	if (avatarSkeleton.classList.contains('_removing')) {
-		avatarSkeleton.classList.remove('_removing')
-		avatarSkeleton.hidden = false
-		videoSkeleton.classList.remove('_removing')
-		videoSkeleton.hidden = false
+		resetSkeleton(avatarSkeleton)
+		resetSkeleton(videoSkeleton)
 	}
 
 	controls.hidden &&= false
