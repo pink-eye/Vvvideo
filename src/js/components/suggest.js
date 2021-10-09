@@ -3,6 +3,9 @@ let lastSelected = null;
 const showSuggest = (parent, data) => {
 	let suggestAll = parent.querySelectorAll('.search__suggest');
 
+	if (!parent.classList.contains('_has-suggest'))
+		parent.classList.add('_has-suggest')
+
 	if (suggestAll.length > 0) {
 		for (let index = 0, length = suggestAll.length; index < length; index++) {
 			let suggest = suggestAll[index];
@@ -17,9 +20,6 @@ const showSuggest = (parent, data) => {
 	}
 
 	suggestAll = null
-
-	if (!parent.classList.contains('_has-suggest'))
-		parent.classList.add('_has-suggest')
 }
 
 const hideSuggest = parent => {
@@ -27,6 +27,8 @@ const hideSuggest = parent => {
 		parent.classList.remove('_has-suggest')
 
 	setTimeout(_ => { resetSuggest(parent) }, getDurationTimeout())
+
+	hideOverlay()
 }
 
 const resetSelected = parent => {
@@ -112,9 +114,10 @@ const initSuggests = parent => {
 	if (searchBar && !storage.settings.disableSearchSuggestions) {
 		searchBar.addEventListener('input', async _ => {
 			lastSelected = null
-			let query = searchBar.value;
+			let query = searchBar.value.trim();
 
-			if (!isEmpty(query)) {
+			if (query.length !== 0) {
+				showOverlay()
 				try {
 					let data = storage.settings.enableProxy
 						? await API.scrapeSuggestsProxy(query, getProxyOptions())
