@@ -55,8 +55,14 @@ const clearHistory = async _ => {
 	if (storage.history.length > 0) {
 		storage.history.length = 0
 		await API.writeStorage(storage)
-		showToast('good', "History's been cleaned")
-	} else showToast('good', "History's empty")
+
+		if (storage.settings.disableHistory)
+			showToast('good', "History's been cleaned")
+	} else {
+		
+		if (storage.settings.disableHistory)
+			showToast('good', "History's empty")
+	}
 }
 
 const disableHistory = _ => {
