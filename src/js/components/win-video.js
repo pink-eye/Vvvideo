@@ -26,9 +26,9 @@ const filterHLS = formats => filterFormats(formats, format => format.isHLS && fo
 
 const isInvalidFormats = formats => formats.find(el => el.type === 'FORMAT_STREAM_TYPE_OTF')
 
-const getPreferedQuality = formats => ss.defaultQuality === 'highest'
+const getPreferedQuality = formats => storage.settings.defaultQuality === 'highest'
 	? getHighestVideo(formats)
-	: formats.find(el => el.qualityLabel.includes(ss.defaultQuality))
+	: formats.find(el => el.qualityLabel.includes(storage.settings.defaultQuality))
 
 let hls = null
 
