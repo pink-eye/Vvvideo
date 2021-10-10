@@ -6,6 +6,7 @@ const showOverlay = _ => {
 
 		if (!overlay.classList.contains('_active'))
 			overlay.classList.add('_active')
+		else break
 	}
 
 	overlayAll = null
@@ -19,6 +20,7 @@ const hideOverlay = _ => {
 
 		if (overlay.classList.contains('_active'))
 			overlay.classList.remove('_active')
+		else break
 	}
 
 	overlayAll = null
