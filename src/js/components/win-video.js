@@ -3,6 +3,19 @@ const createQualityItemHTML = quality => `
 		<button class="dropdown__btn btn-reset">${quality}</button>
 	</li>`
 
+const insertQualityList = videoFormatAll => {
+	let qualityList = _io_q('.controls').querySelector('.quality__list');
+
+	if (videoFormatAll.length > 0) {
+		for (let index = 0, length = videoFormatAll.length; index < length; index++) {
+			const videoFormat = videoFormatAll[index];
+			qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(videoFormat.qualityLabel))
+		}
+	}
+
+	qualityList = null
+}
+
 const getHighestVideo = formats => API.YTDLChooseFormat(formats, 'highestvideo')
 
 const getHighestAudio = formats => API.YTDLChooseFormat(formats, 'highestaudio')
@@ -39,8 +52,7 @@ const getVideo = async id => {
 	let videoPoster = video.querySelector('.video__poster img');
 	let videoInfo = video.querySelector('.video-info');
 	let videoSkeleton = video.querySelector('.video-skeleton');
-	let controls = video.querySelector('.controls');
-	let qualityList = controls.querySelector('.quality__list');
+	let controls = _io_q('.controls');
 	let qualityCurrent = controls.querySelector('.quality__current');
 	let videoTitle = videoInfo.querySelector('.video-info__title');
 	let videoAuthor = videoInfo.querySelector('.author__name');
@@ -67,50 +79,26 @@ const getVideo = async id => {
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
 
+				let videoFormatAll = null
+
 				// FILL MEDIA
 				if (data.formats.length > 0) {
 					if (data.videoDetails.isLive) {
 						videoFormatAll = filterHLS(data.formats)
 						resetMediaEl(audioInstance)
 						audioInstance.remove()
-					} else {
-						if (ss.disableSeparatedStreams) {
-							videoFormatAll = API.YTDLFilterFormats(data.formats)
-							resetMediaEl(audioInstance)
-							audioInstance.remove()
-						} else {
-							switch (ss.defaltVideoFormat) {
-								case 'mp4':
-									videoFormatAll = filterVideoMP4NoAudio(data.formats)
-									break;
-								case 'webm':
-									videoFormatAll = filterVideoWebm(data.formats)
-									break;
-							}
-						}
-					}
 
-					if (audioInstance)
-						audioInstance.src = getHighestAudio(data.formats).url
-
-					if (ss.autoplay)
-						videoInstance.autoplay = true
-
-					let preferedQuality = getPreferedQuality(videoFormatAll)
-
-					if (data.videoDetails.isLive) {
 						hls = new Hls();
 
-						if (preferedQuality) {
-							hls.loadSource(preferedQuality.url);
-							qualityCurrent.textContent = preferedQuality.qualityLabel
-						} else {
-							let sparedQuality = getDefaultFormat(data.formats)
-							hls.loadSource(sparedQuality.url);
-							qualityCurrent.textContent = sparedQuality.qualityLabel
-						}
-						hls.attachMedia(videoInstance);
+						let currentQuality = getPreferedQuality(videoFormatAll)
 
+						if (!currentQuality)
+							currentQuality = videoFormatAll[0]
+
+						hls.loadSource(currentQuality.url);
+						qualityCurrent.textContent = currentQuality.qualityLabel
+
+						hls.attachMedia(videoInstance);
 						hls.on(Hls.Events.ERROR, (event, data) => {
 							if (data.fatal) {
 								switch (data.type) {
@@ -131,33 +119,48 @@ const getVideo = async id => {
 						});
 
 					} else {
-						if (preferedQuality) {
-							videoInstance.src = preferedQuality.url
-							qualityCurrent.textContent = preferedQuality.qualityLabel
+						if (ss.disableSeparatedStreams) {
+							videoFormatAll = API.YTDLFilterFormats(data.formats)
+
+							resetMediaEl(audioInstance)
+							audioInstance.remove()
+
 						} else {
-							let sparedQuality = getDefaultFormat(data.formats)
+							switch (ss.defaltVideoFormat) {
+								case 'mp4':
+									videoFormatAll = filterVideoMP4NoAudio(data.formats)
+									break;
+								case 'webm':
+									videoFormatAll = filterVideoWebm(data.formats)
+									break;
+							}
+							audioInstance.src = getHighestAudio(data.formats).url
+						}
 
-							videoInstance.src = sparedQuality.url
-							qualityCurrent.textContent = sparedQuality.qualityLabel
+						let currentQuality = getPreferedQuality(videoFormatAll)
+
+						if (!currentQuality)
+							currentQuality = getDefaultFormat(data.formats)
+
+						videoInstance.src = currentQuality.url
+						qualityCurrent.textContent = currentQuality.qualityLabel
+
+						if (ss.autoplay)
+							videoInstance.autoplay = true
+
+						videoInstance.onloadeddata = _ => {
+							if (videoSkeleton)
+								removeSkeleton(videoSkeleton)
 						}
 					}
 
-					if (videoFormatAll.length > 0) {
-						for (let index = 0, length = videoFormatAll.length; index < length; index++) {
-							const videoFormat = videoFormatAll[index];
-							qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(videoFormat.qualityLabel))
-						}
-					}
 
-					videoInstance.onloadeddata = _ => {
-						if (videoSkeleton)
-							removeSkeleton(videoSkeleton)
-
-					}
 				} else {
 					if (videoSkeleton)
 						removeSkeleton(videoSkeleton)
 				}
+
+				insertQualityList(videoFormatAll)
 
 				// FILL VIDEO INFO
 				if (data.videoDetails.title !== videoTitle.textContent)
@@ -202,7 +205,6 @@ const getVideo = async id => {
 			showToast('error', error.message)
 		} finally {
 			videoInfo = null
-			qualityList = null
 			qualityCurrent = null
 			videoViews = null
 			videoDate = null
@@ -291,6 +293,7 @@ const resetVideo = async _ => {
 	}
 
 	controls.hidden &&= false
+	videoInstance.autoplay &&= false
 
 	let iconPathPlay = 'img/svg/controls.svg#play'
 	if (controlsSwitchIcon.getAttribute('xlink:href') !== iconPathPlay)
