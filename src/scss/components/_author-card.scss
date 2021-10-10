@@ -27,7 +27,7 @@
 
         background-color: var(--color-text);
 
-        transition: width var(--trns-time-default) var(--ease-out-sine);
+        transition: width var(--trns-time-default) var(--ease-in-sine);
     }
 
     @media (hover: hover) and (pointer: fine) {

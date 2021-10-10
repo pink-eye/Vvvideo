@@ -198,8 +198,8 @@
 
         clip-path: circle(40% at 110% 50%);
 
-        transition: clip-path var(--trns-time-default) var(--ease-out-sine),
-            width var(--trns-time-default) var(--ease-out-sine);
+        transition: clip-path var(--trns-time-default) var(--ease-in-sine),
+            width var(--trns-time-default) var(--ease-in-sine);
 
         background-color: var(--color-bg-edge);
 
