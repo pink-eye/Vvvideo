@@ -30,9 +30,12 @@
     transition: background-color var(--trns);
 
     @media (min-width: 576px) {
-        border-radius: var(--brs-m);
-        padding: 25px;
+		padding: 25px;
     }
+
+	@media (min-width: 450px) {
+		border-radius: var(--brs-m);
+	}
 
     @media (max-width: 575px) {
         padding: 25px 15px;
@@ -62,6 +65,10 @@
         @media (min-width: 768px) {
             padding: 15px;
         }
+
+		@media (max-width: 767px) {
+			padding-bottom: 15px;
+		}
     }
 
     &__item {
