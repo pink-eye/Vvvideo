@@ -74,6 +74,8 @@ const fillWinSettings = async _ => {
 	if (ss.disableSponsorblock)
 		toggleSponsorblock(ss.disableSponsorblock)
 
+	if(ss.disableHistory)
+		disableHistory()
 
 	if (ss.defaultQuality !== '1080p') {
 		let qualityDropdown = settings.querySelector('.option__quality');

@@ -1,5 +1,6 @@
 {
 	"subscriptions": [],
+	"history": [],
 	"settings": {
 		"theme": "system",
 		"disableTransition": false,
@@ -11,6 +12,8 @@
 		},
 		"disableSponsorblock": false,
 		"notifySkipSegment": true,
+		"disableHistory": true,
+		"maxHistoryLength": 30,
 		"defaultQuality": "1080p",
 		"autoplay": true,
 		"disableSeparatedStreams": false,

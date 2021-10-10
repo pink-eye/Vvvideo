@@ -231,6 +231,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				if (lastWin.classList.contains('channel'))
 					resetChannel(channelTabContentVideos, channelTabContentPlaylists)
 
+				if (lastWin.classList.contains('history'))
+					resetGrid(_io_q('.history'))
+
 				lastWin = null;
 			}, getDurationTimeout());
 
@@ -282,6 +285,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 							if (!isEmpty(btnWin.dataset.id)) {
 								setTimeout(scrollToTop, getDurationTimeout())
 								prepareVideoWin(btnWin, btnWin.dataset.id)
+
+								if (!storage.settings.disableHistory)
+									saveToHistoryVideo(btnWin)
 							} else return
 
 							break;
@@ -316,6 +322,11 @@ document.addEventListener('DOMContentLoaded', async _ => {
 								prepareChannelWin(null, getChannelIdOrUser(searchBar.value))
 							} else getSearchResults()
 
+							break;
+
+						case 'history':
+							setTimeout(scrollToTop, getDurationTimeout())
+							openHistoryWin()
 							break;
 
 					}
@@ -484,6 +495,10 @@ document.addEventListener('DOMContentLoaded', async _ => {
 					showToast('good', 'Refresh app')
 					break;
 
+				case 'disableHistory':
+					showToast('good', 'Refresh app')
+					break;
+
 			}
 
 			API.writeStorage(storage)
@@ -498,21 +513,44 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		const input = inputAll[index];
 
 		input.addEventListener('input', _ => {
-			switch (input.id) {
-				case 'host':
-					input.value = formatIP(input.value)
-					storage.settings.proxy.host = input.value
-					break;
+			if (!isEmpty(input.value))
+				switch (input.id) {
+					case 'host':
+						input.value = formatIP(input.value)
+						storage.settings.proxy.host = input.value
+						break;
 
-				case 'port':
-					input.value = formatPort(input.value)
-					storage.settings.proxy.port = +input.value
-					break;
+					case 'port':
+						input.value = formatPort(input.value)
+						storage.settings.proxy.port = +input.value
+						break;
 
-				case 'regionTrending':
-					storage.settings.regionTrending = input.value
-					break;
-			}
+					case 'regionTrending':
+						storage.settings.regionTrending = input.value
+						break;
+
+					case 'maxHistoryLength':
+						storage.settings.maxHistoryLength = input.value
+						break;
+				}
+			else
+				switch (input.id) {
+					case 'host':
+						storage.settings.proxy.host = '127.0.0.1'
+						break;
+
+					case 'port':
+						storage.settings.proxy.port = 9050
+						break;
+
+					case 'regionTrending':
+						storage.settings.regionTrending = 'US'
+						break;
+
+					case 'maxHistoryLength':
+						storage.settings.maxHistoryLength = 30
+						break;
+				}
 
 			API.writeStorage(storage)
 		});

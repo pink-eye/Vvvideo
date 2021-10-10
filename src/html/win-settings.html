@@ -9,10 +9,12 @@
 						<div class="option">
 							<h4 class="option__title title">Theme</h4>
 							<div class="option__theme dropdown">
-								<button class="dropdown__head btn-reset">System default<span class="arrow"></span></button>
+								<button class="dropdown__head btn-reset">System default<span
+										class="arrow"></span></button>
 								<ul class="dropdown__list dropdown__list_bottom list-reset">
 									<li class="dropdown__item">
-										<button data-choice="system" class="dropdown__btn btn-reset">System default</button>
+										<button data-choice="system" class="dropdown__btn btn-reset">System
+											default</button>
 									</li>
 									<li class="dropdown__item">
 										<button data-choice="light" class="dropdown__btn btn-reset">Light</button>
@@ -157,6 +159,30 @@
 						</div>
 					</li>
 				</ul>
+			</section>
+		</li>
+		<li class="settings__item">
+			<section class="settings__section section-settings">
+				<h3 class="section-settings__title title">History</h3>
+				<ul class="section-settings__list list-reset">
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="disableHistory" class="switch option__title">
+								Disable history
+								<input type="checkbox" role="switch" id="disableHistory">
+							</label>
+						</div>
+					</li>
+					<li class="section-settings__item">
+						<div class="option">
+							<label for="maxHistoryLength" class="option__title mini-input">
+								Max length of history
+								<input type="text" id="maxHistoryLength" placeholder="30">
+							</label>
+						</div>
+					</li>
+				</ul>
+				<button class="btn-accent onclick-effect btn-reset" onclick="clearHistory()">Clear History</button>
 			</section>
 		</li>
 		<li class="settings__item">
