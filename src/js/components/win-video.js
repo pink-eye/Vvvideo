@@ -1,7 +1,6 @@
-const createQualityItemHTML = quality => `
-	<li class="dropdown__item">
-		<button class="dropdown__btn btn-reset">${quality}</button>
-	</li>`
+const createQualityItemHTML = quality => `<li class="dropdown__item">
+											<button class="dropdown__btn btn-reset">${quality}</button>
+										</li>`
 
 const insertQualityList = videoFormatAll => {
 	let qualityList = _io_q('.controls').querySelector('.quality__list');
@@ -116,14 +115,12 @@ const getVideo = async id => {
 								}
 							}
 						});
-
 					} else {
 						if (ss.disableSeparatedStreams) {
 							videoFormatAll = API.YTDLFilterFormats(data.formats)
 
 							resetMediaEl(audioInstance)
 							audioInstance.remove()
-
 						} else {
 							switch (ss.defaltVideoFormat) {
 								case 'mp4':
@@ -301,6 +298,7 @@ const resetVideo = async _ => {
 
 	video = null
 	videoInstance = null
+	audioInstance = null
 	videoWrapper = null
 	videoPoster = null
 	avatarSkeleton = null
@@ -317,5 +315,8 @@ const resetVideo = async _ => {
 	controls = null
 	controlsSwitchIcon = null
 	sponsorblock = null
+	sponsorblockBtn = null
+	speedCurrent = null
+	subscribeBtn = null
 }
 
