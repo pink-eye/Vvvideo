@@ -79,7 +79,6 @@ const getVideo = async id => {
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
 
-				let videoFormatAll = null
 
 				// FILL MEDIA
 				if (data.formats.length > 0) {
@@ -144,23 +143,21 @@ const getVideo = async id => {
 
 						videoInstance.src = currentQuality.url
 						qualityCurrent.textContent = currentQuality.qualityLabel
-
-						if (ss.autoplay)
-							videoInstance.autoplay = true
-
-						videoInstance.onloadeddata = _ => {
-							if (videoSkeleton)
-								removeSkeleton(videoSkeleton)
-						}
 					}
 
+					videoInstance.onloadeddata = _ => {
+						if (videoSkeleton)
+							removeSkeleton(videoSkeleton)
+					}
 
+					if (ss.autoplay)
+						videoInstance.autoplay = true
+
+					insertQualityList(videoFormatAll)
 				} else {
 					if (videoSkeleton)
 						removeSkeleton(videoSkeleton)
 				}
-
-				insertQualityList(videoFormatAll)
 
 				// FILL VIDEO INFO
 				if (data.videoDetails.title !== videoTitle.textContent)
