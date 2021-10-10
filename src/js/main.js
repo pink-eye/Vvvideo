@@ -61,24 +61,24 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	// DROPDOWN
 
-	initDropdown(themeDropdown, params => {
-		setTheme(params.btn.dataset.choice)
-		storage.settings.theme = params.btn.dataset.choice
+	initDropdown(themeDropdown, btn => {
+		setTheme(btn.dataset.choice)
+		storage.settings.theme = btn.dataset.choice
 		API.writeStorage(storage)
 	})
 
-	initDropdown(qualityDropdown, params => {
-		storage.settings.defaultQuality = params.btn.dataset.choice
+	initDropdown(qualityDropdown, btn => {
+		storage.settings.defaultQuality = btn.dataset.choice
 		API.writeStorage(storage)
 	})
 
-	initDropdown(protocolDropdown, params => {
-		storage.settings.proxy.protocol = params.btn.textContent.toLowerCase()
+	initDropdown(protocolDropdown, btn => {
+		storage.settings.proxy.protocol = btn.textContent.toLowerCase()
 		API.writeStorage(storage)
 	})
 
-	initDropdown(formatDropdown, params => {
-		storage.settings.defaltVideoFormat = params.btn.textContent
+	initDropdown(formatDropdown, btn => {
+		storage.settings.defaltVideoFormat = btn.textContent
 		API.writeStorage(storage)
 	})
 

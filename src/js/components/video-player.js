@@ -98,20 +98,20 @@ const initVideoPlayer = _ => {
 	}
 
 	if (isEmpty(hls)) {
-		initDropdown(speed, params => {
-			if (audio) audio.playbackRate = params.btn.dataset.speed
+		initDropdown(speed, btn => {
+			if (audio) audio.playbackRate = btn.dataset.speed
 
-			video.playbackRate = params.btn.dataset.speed
+			video.playbackRate = btn.dataset.speed
 
 			isSync = false
 		})
 	}
 
-	initDropdown(quality, params => {
+	initDropdown(quality, btn => {
 		for (let index = 0, length = videoFormatAll.length; index < length; index++) {
 			const videoFormat = videoFormatAll[index];
 
-			if (videoFormat.qualityLabel === params.btn.textContent)
+			if (videoFormat.qualityLabel === btn.textContent)
 				chooseQuality(videoFormat.url)
 		}
 	})

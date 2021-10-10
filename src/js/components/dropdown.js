@@ -1,8 +1,8 @@
-const chooseDropdownItem = params => {
-	let dropdownHead = params.parent.querySelector('.dropdown__head');
+const chooseDropdownItem = (dropdown, dropdownBtn) => {
+	let dropdownHead = dropdown.querySelector('.dropdown__head');
 
 	if (dropdownHead)
-		dropdownHead.childNodes[0].data = params.btn.textContent
+		dropdownHead.childNodes[0].data = dropdownBtn.textContent
 
 	dropdownHead = null
 }
@@ -15,14 +15,9 @@ const initDropdown = (dropdown, callback) => {
 			const dropdownBtn = dropdownBtnAll[index];
 
 			dropdownBtn.addEventListener('click', e => {
-				const params = {
-					parent: dropdown,
-					btn: dropdownBtn
-				}
-
-				chooseDropdownItem(params)
+				chooseDropdownItem(dropdown, dropdownBtn)
 				focusCurrentChoice(dropdown)
-				callback(params)
+				callback(dropdownBtn)
 			});
 		}
 	}
