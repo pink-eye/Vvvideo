@@ -225,9 +225,16 @@ const initVideoPlayer = _ => {
 		const widthProgressBar = video.offsetWidth - 40
 		const posCursor = event.pageX - rect.left
 
+		if (posCursor < widthProgressBar * 0.1)
+			progressSeekTooltip.style.left = `${widthProgressBar * 0.1}px`;
+
 		if (posCursor > widthProgressBar * 0.1 &&
 			posCursor < widthProgressBar * 0.9)
 			progressSeekTooltip.style.left = `${posCursor}px`;
+
+		if (posCursor > widthProgressBar * 0.9)
+			progressSeekTooltip.style.left = `${widthProgressBar * 0.9}px`;
+
 	}
 
 	const updateBuffered = _ => {
