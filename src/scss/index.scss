@@ -82,8 +82,8 @@
         visibility: hidden;
 
         transition: transform 0s var(--ease-out-sine) var(--trns-time-default),
-            opacity var(--trns-time-default) var(--ease-out-sine),
-            visibility var(--trns-time-default) var(--ease-out-sine);
+            opacity var(--trns-time-fast) var(--ease-out-sine),
+            visibility var(--trns-time-fast) var(--ease-out-sine);
     }
 
     &._anim-win {

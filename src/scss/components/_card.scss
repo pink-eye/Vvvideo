@@ -153,10 +153,13 @@
             font-size: 14px;
         }
 
+		max-width: 65ch;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+		padding-left: 10px;
+		border-left: 3px solid var(--color-icon);
     }
 
     // .card__bottom
@@ -201,7 +204,7 @@
         transition: clip-path var(--trns-time-default) var(--ease-in-sine),
             width var(--trns-time-default) var(--ease-in-sine);
 
-        background-color: var(--color-bg-edge);
+        background-color: var(--color-bg-unsubscribe);
 
         &:before {
             content: 'VIEW ALL';
