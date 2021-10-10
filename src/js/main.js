@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const header = _io_q('.header');
 	const sidebar = _io_q('.sidebar');
 	const settings = _io_q('.settings');
+	const mainContent = _io_q('.main__content');
 
 	const videoInfo = video.querySelector('.video-info');
 	const videoTitle = videoInfo.querySelector('.video-info__title');
@@ -15,14 +16,14 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const videoDate = videoInfo.querySelector('.video-info__date span');
 	const videoChannel = videoInfo.querySelector('.author__name');
 	const videoChannelBtn = videoInfo.querySelector('[data-win="channel"]');
-	let videoSubscribeBtn = videoInfo.querySelector('.subscribe');
-	let videoSubscribeText = videoInfo.querySelector('.subscribe__text');
+	const videoSubscribeBtn = videoInfo.querySelector('.subscribe');
+	const videoSubscribeText = videoInfo.querySelector('.subscribe__text');
 
 	const channelTitle = channel.querySelector('.heading-channel__author');
 	const channelTabContentVideos = channel.querySelector('.videos');
 	const channelTabContentPlaylists = channel.querySelector('.playlists');
-	let channelSubscribeBtn = channel.querySelector('.subscribe');
-	let channelSubscribeText = channel.querySelector('.subscribe__text');
+	const channelSubscribeBtn = channel.querySelector('.subscribe');
+	const channelSubscribeText = channel.querySelector('.subscribe__text');
 
 	const playlistName = playlist.querySelector('.playlist__name');
 	const playlistChannel = playlist.querySelector('.author');
@@ -91,16 +92,18 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	// MANAGE WINDOWS
 
 	const fillSomeInfoVideo = params => {
-		videoTitle.textContent = params.title;
-		videoViews.textContent = params.views !== '...' || !isEmpty(params.views) ? params.views : '...';
-		videoDate.textContent = params.date !== '...' || !isEmpty(params.date) ? params.date : '...';
-		videoChannel.textContent = params.author;
-		videoChannelBtn.dataset.id = params.authorId;
+		const { title, views, date, author, authorId } = params
 
-		videoSubscribeBtn.dataset.channelId = params.authorId
-		videoSubscribeBtn.dataset.name = params.author
+		videoTitle.textContent = title;
+		videoViews.textContent = views !== '...' || !isEmpty(views) ? views : '...';
+		videoDate.textContent = date !== '...' || !isEmpty(date) ? date : '...';
+		videoChannel.textContent = author;
+		videoChannelBtn.dataset.id = authorId;
 
-		if (hasSubscription(params.authorId)) {
+		videoSubscribeBtn.dataset.channelId = authorId
+		videoSubscribeBtn.dataset.name = author
+
+		if (hasSubscription(authorId)) {
 			videoSubscribeBtn.classList.add('_subscribed')
 			videoSubscribeText.textContent = 'Unsubscribe'
 		} else {
@@ -194,7 +197,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	}
 
 	const hideLastWin = async _ => {
-		let lastWin = _io_q('.main__content').querySelector('.win._active._anim-win');
+		let lastWin = mainContent.querySelector('.win._active._anim-win');
 
 		if (lastWin) {
 			lastWin.classList.remove('_anim-win');
@@ -248,7 +251,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		if (e.target.dataset.win || e.target.closest('[data-win]')) {
 			let btnWin = e.target.dataset.win ? e.target : e.target.closest('[data-win]');
 			if (!btnWin.disabled) {
-				let reqWin = _io_q('.main__content').querySelector(`.${btnWin.dataset.win}`);
+				let reqWin = mainContent.querySelector(`.${btnWin.dataset.win}`);
 				if (!reqWin.classList.contains('_active') || reqWin.classList.contains('search-results')) {
 
 					if (btnWin.classList.contains('sidebar__btn')) {
@@ -355,7 +358,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		}
 	}
 
-	_io_q('.main__content').addEventListener('click', manageWin);
+	mainContent.addEventListener('click', manageWin);
 
 	// SUBSCRIBE LISTENERS
 
@@ -421,8 +424,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				buildStorage(data)
 				await API.writeStorage(storage);
 				validImport();
-
-				setTimeout(_ => { document.location.reload() }, 3000)
+				location.reload()
 			}
 		}
 	}
@@ -451,9 +453,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		checkbox.addEventListener('change', _ => {
 			const option = checkbox.id
 
-			checkbox.checked
-				? storage.settings[`${option}`] = true
-				: storage.settings[`${option}`] = false
+			storage.settings[`${option}`] = checkbox.checked
 
 			switch (option) {
 				case 'disableTransition':
@@ -472,7 +472,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 				case 'notAdaptContent':
 					if (checkbox.checked)
-						_io_q('.main__content').style.setProperty('--margin', '0')
+						mainContent.style.setProperty('--margin', '0')
 					break;
 
 				case 'disableSearchSuggestions':
@@ -517,5 +517,4 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	const btnExit = sidebar.querySelector('.btn-exit');
 	btnExit.addEventListener('click', _ => { window.close() });
-
 });
