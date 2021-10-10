@@ -23,7 +23,7 @@ const showToast = (type, text) => {
 				toastItemAll = null
 				toastList = null
 				firstToastItem = null
-			}, 4000)
+			}, 2000)
 
 		}, 5000)
 	}
