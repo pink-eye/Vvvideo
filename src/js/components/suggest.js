@@ -117,7 +117,6 @@ const initSuggests = parent => {
 			let query = searchBar.value.trim();
 
 			if (query.length !== 0) {
-				showOverlay()
 				try {
 					let data = storage.settings.enableProxy
 						? await API.scrapeSuggestsProxy(query, getProxyOptions())

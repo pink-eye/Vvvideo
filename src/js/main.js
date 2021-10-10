@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		getLatest()
 
 		initSuggests(headerSearch)
+
+		if (storage.settings.disableSearchSuggestions)
+			searchBar.addEventListener('blur', hideOverlay);
 	})
 
 	// HIDE ON SCROLL
@@ -334,6 +337,8 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		if (!isEmpty(searchBar.value))
 			manageWin(e)
 	});
+
+	searchBar.addEventListener('focus', showOverlay);
 
 	// HOT KEYS ON SEARCH
 
