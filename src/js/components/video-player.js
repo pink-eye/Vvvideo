@@ -563,6 +563,7 @@ const initVideoPlayer = _ => {
 		if (e.target.classList.contains('timecode')) {
 			let timecode = e.target
 			video.currentTime = convertDurationToSeconds(timecode.textContent)
+			isSync = false
 			document.activeElement.blur()
 			scrollToTop()
 		}
