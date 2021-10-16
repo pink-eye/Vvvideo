@@ -413,7 +413,10 @@ const initVideoPlayer = _ => {
 
 	// MEDIA LISTENERS
 
-	video.addEventListener('loadedmetadata', initVideo);
+	if (storage.settings.autoplay)
+		video.addEventListener('canplay', togglePlay, { once: true });
+
+	video.addEventListener('loadedmetadata', initVideo, { once: true });
 
 	video.addEventListener('play', _ => {
 		showIconPause()
@@ -553,71 +556,73 @@ const initVideoPlayer = _ => {
 			let dialogSbField = e.target
 			resetDialogSB()
 			dialogSbField.value = formatDuration(dialogSbField.value)
+
+			dialogSbField = null
 		}
 
 		dialogSbStart.addEventListener('input', handleInputDialogField);
 		dialogSbEnd.addEventListener('input', handleInputDialogField);
-	}
 
-	const handleClickTimecode = e => {
-		if (e.target.classList.contains('timecode')) {
-			let timecode = e.target
-			video.currentTime = convertDurationToSeconds(timecode.textContent)
-			isSync = false
-			document.activeElement.blur()
-			scrollToTop()
+		const handleClickTimecode = e => {
+			if (e.target.classList.contains('timecode')) {
+				let timecode = e.target
+				video.currentTime = convertDurationToSeconds(timecode.textContent)
+				isSync = false
+				document.activeElement.blur()
+				scrollToTop()
+			}
 		}
-	}
 
-	videoDesc.addEventListener('click', handleClickTimecode)
+		videoDesc.addEventListener('click', handleClickTimecode)
 
-	// HOT KEYS
+		// HOT KEYS
 
-	const handleKeyDownWithinVideo = e => {
-		if (_io_q('.video').classList.contains('_active')
-			&& (document.activeElement === _io_q('body')
-				|| document.activeElement === null)) {
+		const handleKeyDownWithinVideo = e => {
+			if (_io_q('.video').classList.contains('_active')
+				&& (document.activeElement === _io_q('body')
+					|| document.activeElement === null)) {
 
-			// ENTER || SPACE
-			if (e.keyCode === 13 || e.keyCode === 32)
-				togglePlay()
+				// ENTER || SPACE
+				if (e.keyCode === 13 || e.keyCode === 32)
+					togglePlay()
 
-			// ARROW LEFT
-			if (e.keyCode === 37) {
-				video.currentTime -= 10
-				isSync = false
-			}
-
-			// ARROW RIGHT
-			if (e.keyCode === 39) {
-				video.currentTime += 10
-				isSync = false
-			}
-
-			// M
-			if (e.keyCode === 77)
-				audio ? toggleMuteAudio() : toggleMuteVideo()
-
-			// S
-			if (e.keyCode === 83 && !storage.settings.disableSponsorblock)
-				recordSegmentSB()
-
-			// V
-			if (e.keyCode === 86 && !storage.settings.disableSponsorblock) {
-				if (doesSkipSegments) {
-					doesSkipSegments = false
-					showToast('good', 'Sponsorblock is disabled on this video')
-				} else {
-					doesSkipSegments = true
-					showToast('good', 'Sponsorblock is enabled again')
+				// ARROW LEFT
+				if (e.keyCode === 37) {
+					video.currentTime -= 10
+					isSync = false
 				}
+
+				// ARROW RIGHT
+				if (e.keyCode === 39) {
+					video.currentTime += 10
+					isSync = false
+				}
+
+				// M
+				if (e.keyCode === 77)
+					audio ? toggleMuteAudio() : toggleMuteVideo()
+
+				// S
+				if (e.keyCode === 83 && !storage.settings.disableSponsorblock)
+					recordSegmentSB()
+
+				// V
+				if (e.keyCode === 86 && !storage.settings.disableSponsorblock) {
+					if (doesSkipSegments) {
+						doesSkipSegments = false
+						showToast('good', 'Sponsorblock is disabled on this video')
+					} else {
+						doesSkipSegments = true
+						showToast('good', 'Sponsorblock is enabled again')
+					}
+				}
+
+				// F
+				if (e.keyCode === 70)
+					document.fullscreenElement ? closeFullscreen() : openFullscreen()
 			}
-
-			// F
-			if (e.keyCode === 70)
-				document.fullscreenElement ? closeFullscreen() : openFullscreen()
 		}
-	}
 
-	document.addEventListener('keydown', handleKeyDownWithinVideo);
+		document.addEventListener('keydown', handleKeyDownWithinVideo);
+	}
 }

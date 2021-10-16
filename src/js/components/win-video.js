@@ -166,9 +166,6 @@ const openWinVideo = async id => {
 
 					videoInstance.addEventListener('loadeddata', onLoadedData, { once: true });
 
-					if (ss.autoplay)
-						videoInstance.autoplay = true
-
 					insertQualityList(videoFormatAll)
 				} else onLoadedData()
 
