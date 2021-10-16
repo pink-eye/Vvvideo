@@ -80,6 +80,11 @@
 .btns {
 	button {
 		padding: 10px 35px;
+
+		&[disabled] {
+			opacity: 0;
+			visibility: hidden;
+		}
 	}
     &__prev {
         svg {
