@@ -73,12 +73,18 @@
         }
     }
 
+    &._history-video,
     &._playlist-video {
 
         .card__views,
         .card__separator,
-        .card__channel,
         .card__date {
+            display: none;
+        }
+    }
+
+    &._playlist-video {
+        .card__channel {
             display: none;
         }
     }

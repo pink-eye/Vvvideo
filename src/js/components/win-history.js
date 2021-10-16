@@ -10,7 +10,7 @@ const openHistoryWin = _ => {
 	for (let index = 0, length = videoAll.length; index < length; index++) {
 		let video = videoAll[index];
 
-		video.classList.add('_playlist-video');
+		video.classList.add('_history-video');
 
 		sh[index]
 			? fillVideoCard(video, index, sh)
