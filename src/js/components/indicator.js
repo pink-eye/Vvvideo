@@ -3,9 +3,9 @@ const resetIndicator = async _ => {
 
 	if (indicator.classList.contains('_visible')) {
 		indicator.classList.remove('_visible')
-
-		indicator = null
 	}
+
+	indicator = null
 }
 
 const startIndicator = async _ => {
@@ -13,7 +13,7 @@ const startIndicator = async _ => {
 
 	if (!indicator.classList.contains('_visible')) {
 		indicator.classList.add('_visible')
-
-		indicator = null
 	}
+
+	indicator = null
 }

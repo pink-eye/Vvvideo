@@ -196,7 +196,12 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	const showWin = win => {
 		win.classList.add('_active');
-		setTimeout(_ => { win.classList.add('_anim-win'); }, 15)
+
+		const afterActiveWin = _ => {
+			win.classList.add('_anim-win');
+		}
+
+		setTimeout(afterActiveWin, 15)
 	}
 
 	const hideLastWin = async _ => {
@@ -205,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		if (lastWin) {
 			lastWin.classList.remove('_anim-win');
 
-			setTimeout(_ => {
+			const onHideLastWin = _ => {
 				lastWin.classList.remove('_active');
 
 				if (lastWin.classList.contains('search-results'))
@@ -235,7 +240,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 					resetGrid(_io_q('.history'))
 
 				lastWin = null;
-			}, getDurationTimeout());
+			}
+
+			setTimeout(onHideLastWin, getDurationTimeout());
 
 		}
 	}
@@ -333,10 +340,12 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 					hideLastWin()
 
-					setTimeout(_ => {
+					const afterHideLastWin = _ => {
 						showWin(reqWin)
 						reqWin = null;
-					}, getDurationTimeout());
+					}
+
+					setTimeout(afterHideLastWin, getDurationTimeout());
 				}
 			}
 		}

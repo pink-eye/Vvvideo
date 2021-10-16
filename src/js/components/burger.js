@@ -1,5 +1,6 @@
 const isLargeScreen = _ => (innerWidth - 1600) / 2 > 226
 
+
 const toggleMenu = _ => {
 	let burger = _io_q('.header').querySelector('.burger')
 	let sidebar = _io_q('.sidebar');
@@ -14,14 +15,16 @@ const toggleMenu = _ => {
 		if (!isLargeScreen() && !ss.notAdaptContent)
 			_io_q('.main__content').style.setProperty('--margin', '227px');
 
-		setTimeout(_ => {
+		const onOpenMenu = _ => {
 			sidebarBtnActive
 				? sidebarBtnActive.focus()
 				: sidebarBtn.focus()
 
 			sidebarBtn = null
 			sidebarBtnActive = null
-		}, getDurationTimeout())
+		}
+
+		setTimeout(onOpenMenu, getDurationTimeout())
 	} else {
 		burger.classList.remove('_active');
 		sidebar.classList.add('_closed');

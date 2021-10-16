@@ -55,12 +55,17 @@ const focusCurrentChoice = dropdown => {
 }
 
 const toggleDropdown = dropdown => {
+
+	const onOpenDropdown = _ => {
+		focusCurrentChoice(dropdown)
+	}
+
 	if (dropdown.classList.contains('_active'))
 		dropdown.classList.remove('_active')
 	else {
 		hideLastDropdown(dropdown)
 		dropdown.classList.add('_active')
-		setTimeout(_ => { focusCurrentChoice(dropdown) }, 100)
+		setTimeout(onOpenDropdown, 100)
 	}
 }
 

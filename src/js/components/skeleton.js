@@ -2,10 +2,12 @@
 const removeSkeleton = skeleton => {
 	skeleton.classList.add('_removing');
 
-	setTimeout(_ => {
+	const onRemoveSkeleton = () => {
 		skeleton.hidden = true
 		skeleton = null
-	}, getDurationTimeout())
+	}
+
+	setTimeout(onRemoveSkeleton, getDurationTimeout())
 }
 
 const resetSkeleton = skeleton => {

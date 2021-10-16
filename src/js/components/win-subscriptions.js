@@ -105,12 +105,14 @@ const onClickSubscribe = (btn, btnText) => {
 		btn.classList.add('_subscribed')
 		btnText.style.opacity = '0'
 
-		setTimeout(_ => {
+		const onChangeState = _ => {
 			btnText.textContent = 'Unsubscribe'
 			btnText.removeAttribute('style')
 
 			btn.disabled = false
-		}, getDurationTimeout())
+		}
+
+		setTimeout(onChangeState, getDurationTimeout())
 
 		addSubscription(JSON.parse(`{
 			"channelId": "${btn.dataset.channelId}",
@@ -127,12 +129,14 @@ const onClickUnsubscribe = (btn, btnText) => {
 		btn.classList.remove('_subscribed')
 		btnText.style.opacity = '0'
 
-		setTimeout(_ => {
+		const onChangeState = _ => {
 			btnText.textContent = 'Subscribe'
 			btnText.removeAttribute('style')
 
 			btn.disabled = false
-		}, getDurationTimeout())
+		}
+
+		setTimeout(onChangeState, getDurationTimeout())
 
 		removeSubscription(JSON.parse(`{
 			"channelId": "${btn.dataset.channelId}",

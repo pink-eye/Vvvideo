@@ -12,19 +12,26 @@ const showToast = (type, text) => {
 		let toastItemAll = toastList.querySelectorAll('.toast__item');
 		let firstToastItem = toastItemAll[0];
 
-		setTimeout(_ => { firstToastItem.classList.add('_visible') }, 15);
+		const afterAddToast = _ => {
+			firstToastItem.classList.add('_visible')
+		}
 
-		setTimeout(_ => {
+		const beforeRemoveToast = _ => {
 			firstToastItem.classList.remove('_visible')
 
-			setTimeout(_ => {
-				firstToastItem.remove()
+			setTimeout(onRemoveToast, 2000)
+		}
 
-				toastItemAll = null
-				toastList = null
-				firstToastItem = null
-			}, 2000)
+		const onRemoveToast = _ => {
+			firstToastItem.remove()
 
-		}, 5000)
+			toastItemAll = null
+			toastList = null
+			firstToastItem = null
+		}
+
+		setTimeout(afterAddToast, 15);
+
+		setTimeout(beforeRemoveToast, 5000)
 	}
 }

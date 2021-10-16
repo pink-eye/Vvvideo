@@ -26,7 +26,11 @@ const hideSuggest = parent => {
 	if (parent.classList.contains('_has-suggest'))
 		parent.classList.remove('_has-suggest')
 
-	setTimeout(_ => { resetSuggest(parent) }, getDurationTimeout())
+	const onRemoveSuggest = _ => {
+		resetSuggest(parent)
+	}
+
+	setTimeout(onRemoveSuggest, getDurationTimeout())
 
 	hideOverlay()
 }
