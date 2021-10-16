@@ -1,4 +1,4 @@
-const openHistoryWin = _ => {
+const openWinHistory = _ => {
 	let history = _io_q('.history')
 	let videoAll = history.querySelectorAll('.card');
 	let sh = storage.history

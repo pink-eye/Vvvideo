@@ -1,4 +1,4 @@
-const getSearchResults = async _ => {
+const openWinSearchResults = async _ => {
 	let searchResults = _io_q('.search-results')
 	let searchBar = _io_q('.header').querySelector('.search__bar');
 	let cardAll = searchResults.querySelectorAll('.card');

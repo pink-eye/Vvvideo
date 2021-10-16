@@ -1,4 +1,4 @@
-const getPlaylist = async id => {
+const openWinPlaylist = async id => {
 	let playlist = _io_q('.playlist');
 	let playlistName = playlist.querySelector('.playlist__name');
 	let playlistAuthor = playlist.querySelector('.author__name');

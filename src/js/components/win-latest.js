@@ -27,7 +27,7 @@ const getChannelVideosLocalScraper = (channelId, index) => new Promise(async (re
 	}
 })
 
-const getLatest = async _ => {
+const openWinLatest = async _ => {
 	let latest = _io_q('.latest');
 	let promises = []
 	let videoAll = latest.querySelectorAll('.card');

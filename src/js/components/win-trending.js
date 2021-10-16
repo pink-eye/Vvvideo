@@ -1,4 +1,4 @@
-const getTrending = async (geoLocation = 'US', page = 'default') => {
+const openWinTrending = async (geoLocation = 'US', page = 'default') => {
 	let trending = _io_q('.trending')
 	let videoAll = trending.querySelectorAll('.card');
 

@@ -1,6 +1,6 @@
 let isUpdated = false;
 
-const showSubscriptions = async _ => {
+const openWinSubs = async _ => {
 	let promises = [];
 	let channelInfoArray = null;
 	let subscriptions = _io_q('.subscriptions');

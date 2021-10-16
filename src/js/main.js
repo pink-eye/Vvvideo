@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 		fillWinSettings()
 
-		getLatest()
+		openWinLatest()
 
 		initSuggests(headerSearch)
 
@@ -150,14 +150,14 @@ document.addEventListener('DOMContentLoaded', async _ => {
 			});
 		}
 
-		getVideo(id).then(initVideoPlayer)
+		openWinVideo(id).then(initVideoPlayer)
 
 		if (!storage.settings.disableSponsorblock)
 			getSegmentsSB(id)
 	}
 
 	const prepareChannelWin = (btnWin, id) => {
-		getChannel(id)
+		openWinChannel(id)
 
 		if (btnWin !== null) {
 			let channelTitle = btnWin.classList.contains('card')
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	}
 
 	const preparePlaylistWin = (btnWin, id) => {
-		getPlaylist(id)
+		openWinPlaylist(id)
 
 		if (btnWin !== null) {
 			let params = {
@@ -277,17 +277,17 @@ document.addEventListener('DOMContentLoaded', async _ => {
 					switch (btnWin.dataset.win) {
 						case 'trending':
 							setTimeout(scrollToTop, getDurationTimeout())
-							getTrending(storage.settings.regionTrending)
+							openWinTrending(storage.settings.regionTrending)
 							break;
 
 						case 'latest':
 							setTimeout(scrollToTop, getDurationTimeout())
-							getLatest()
+							openWinLatest()
 							break;
 
 						case 'subscriptions':
 							setTimeout(scrollToTop, getDurationTimeout())
-							showSubscriptions()
+							openWinSubs()
 							break;
 
 						case 'video':
@@ -329,13 +329,13 @@ document.addEventListener('DOMContentLoaded', async _ => {
 							} else if (isResourceIsChannel(searchBar.value)) {
 								reqWin = _io_q('.channel')
 								prepareChannelWin(null, getChannelIdOrUser(searchBar.value))
-							} else getSearchResults()
+							} else openWinSearchResults()
 
 							break;
 
 						case 'history':
 							setTimeout(scrollToTop, getDurationTimeout())
-							openHistoryWin()
+							openWinHistory()
 							break;
 
 					}

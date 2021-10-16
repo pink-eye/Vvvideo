@@ -6,7 +6,7 @@ const getChannelInfoLocalScraper = channelId => new Promise(async resolve => {
 	}
 })
 
-const getChannel = async id => {
+const openWinChannel = async id => {
 	let channel = _io_q('.channel');
 	let channelBannerImg = channel.querySelector('.channel__banner img');
 	let channelBanner = channel.querySelector('.channel__banner');

@@ -44,7 +44,7 @@ const getPreferedQuality = formats => storage.settings.defaultQuality === 'highe
 
 let hls = null
 
-const getVideo = async id => {
+const openWinVideo = async id => {
 	let video = _io_q('.video');
 	let videoInstance = video.querySelector('video');
 	let audioInstance = video.querySelector('audio');
