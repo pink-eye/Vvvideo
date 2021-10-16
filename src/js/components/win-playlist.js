@@ -35,11 +35,14 @@ const getPlaylist = async id => {
 		playlistDuration.textContent = normalizeDuration(duration)
 
 		playlistAvatar.src = data.author.bestAvatar.url
-		playlistAvatar.onload = _ => {
+
+		const onLoadAvatar = _ => {
 			removeSkeleton(avatarSkeleton)
 
 			playlistAvatar = null
 		}
+
+		playlistAvatar.addEventListener('load', onLoadAvatar, { once: true });
 
 		let videoAll = playlist.querySelectorAll('.card');
 

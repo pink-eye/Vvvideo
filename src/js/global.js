@@ -14,6 +14,11 @@ const _io_q = selector => {
 	return cache(selector);
 }
 
+
+const reloadApp = _ => { location.reload() }
+
+const closeApp = _ => { window.close() }
+
 const scrollToTop = _ => { window.scrollTo(0, 0); }
 
 const scrollToElem = y => {

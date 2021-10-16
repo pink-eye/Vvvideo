@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const qualityDropdown = settings.querySelector('.option__quality');
 	const formatDropdown = settings.querySelector('.option__format');
 
-	await API.readStorage(async data => {
+	const onReadStorage = async data => {
 		Object.assign(storage, JSON.parse(data))
 
 		fillWinSettings()
@@ -50,7 +50,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 		if (storage.settings.disableSearchSuggestions)
 			searchBar.addEventListener('blur', hideOverlay);
-	})
+	}
+
+	await API.readStorage(onReadStorage)
 
 	// HIDE ON SCROLL
 
@@ -243,7 +245,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 			}
 
 			setTimeout(onHideLastWin, getDurationTimeout());
-
 		}
 	}
 
@@ -263,6 +264,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const manageWin = async e => {
 		if (e.target.dataset.win || e.target.closest('[data-win]')) {
 			let btnWin = e.target.dataset.win ? e.target : e.target.closest('[data-win]');
+
 			if (!btnWin.disabled) {
 				let reqWin = mainContent.querySelector(`.${btnWin.dataset.win}`);
 				if (!reqWin.classList.contains('_active') || reqWin.classList.contains('search-results')) {
@@ -353,16 +355,18 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	sidebar.addEventListener('click', manageWin);
 
-	searchBtn.addEventListener('click', e => {
+	const handleClickSearch = e => {
 		if (!isEmpty(searchBar.value))
 			manageWin(e)
-	});
+	}
+
+	searchBtn.addEventListener('click', handleClickSearch);
 
 	searchBar.addEventListener('focus', showOverlay);
 
 	// HOT KEYS ON SEARCH
 
-	searchBar.onkeydown = e => {
+	const handleKeyDownSearch = e => {
 
 		// ARROWS
 		if (e.keyCode === 40 || e.keyCode === 38) {
@@ -383,33 +387,30 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		}
 	}
 
+	searchBar.addEventListener('keydown', handleKeyDownSearch);
+
 	mainContent.addEventListener('click', manageWin);
 
 	// SUBSCRIBE LISTENERS
 
-	videoSubscribeBtn.addEventListener('click', _ => {
-		!videoSubscribeBtn.classList.contains('_subscribed')
-			? onClickSubscribe(videoSubscribeBtn, videoSubscribeText)
-			: onClickUnsubscribe(videoSubscribeBtn, videoSubscribeText)
+	const handleClickVideoSubscribeBtn = _ => handleClickSubscribeBtn(videoSubscribeBtn, videoSubscribeText)
+	const handleClickChannelSubscribeBtn = _ => handleClickSubscribeBtn(channelSubscribeBtn, channelSubscribeText)
 
-	});
+	videoSubscribeBtn.addEventListener('click', handleClickVideoSubscribeBtn);
+	channelSubscribeBtn.addEventListener('click', handleClickChannelSubscribeBtn);
 
-	channelSubscribeBtn.addEventListener('click', _ => {
-		!channelSubscribeBtn.classList.contains('_subscribed')
-			? onClickSubscribe(channelSubscribeBtn, channelSubscribeText)
-			: onClickUnsubscribe(channelSubscribeBtn, channelSubscribeText)
-	});
-
-	window.addEventListener('click', async e => {
+	const handleClickWindow = e => {
 		if (!e.target.closest('.dropdown'))
 			hideLastDropdown()
 		if (!e.target.closest('.search'))
 			hideSuggest(headerSearch)
-	});
+	}
+
+	window.addEventListener('click', handleClickWindow);
 
 	// REFRESH BTN
 
-	headerBtn.addEventListener('click', _ => { location.reload() });
+	headerBtn.addEventListener('click', reloadApp);
 
 	// IMPLEMENT IMPORT
 
@@ -440,7 +441,8 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const readInputFile = async _ => {
 		let reader = new FileReader();
 		reader.readAsText(impExpField.files[0]);
-		reader.onload = async _ => {
+
+		const onLoadReader = async _ => {
 			let data = JSON.parse(reader.result)
 
 			if (!data.hasOwnProperty('subscriptions'))
@@ -449,22 +451,28 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				buildStorage(data)
 				await API.writeStorage(storage);
 				validImport();
-				location.reload()
+				reloadApp()
 			}
 		}
+
+		reader.addEventListener('load', onLoadReader);
 	}
 
-	impExpField.addEventListener('change', _ => {
+	const handleFile = _ => {
 		impExpBody.classList.remove('_valid')
 		impExpBody.classList.remove('_invalid')
 		impExpTip.textContent = `${proccessTip} '${impExpField.files[0].name}'. You can press 'Import' now`
-	});
+	}
 
-	impExpBtn.addEventListener('click', _ => {
+	impExpField.addEventListener('change', handleFile);
+
+	const handleClickImport = _ => {
 		impExpField.value === '' || (/\.(json)$/i).test(impExpField.files[0].name) === false
 			? invalidImport(invalidTip)
 			: readInputFile()
-	});
+	}
+
+	impExpBtn.addEventListener('click', handleClickImport);
 
 	// // WIN SETTINGS
 
@@ -475,43 +483,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	for (let index = 0, length = checkboxAll.length; index < length; index++) {
 		const checkbox = checkboxAll[index];
 
-		checkbox.addEventListener('change', _ => {
-			const option = checkbox.id
-
-			storage.settings[`${option}`] = checkbox.checked
-
-			switch (option) {
-				case 'disableTransition':
-					toggleTransition(checkbox.checked)
-					break;
-
-				case 'enableProxy':
-					checkbox.checked
-						? showToast('good', 'Restart app after the fields is filled in')
-						: showToast('good', 'Restart app')
-					break;
-
-				case 'disableSponsorblock':
-					toggleSponsorblock(checkbox.checked)
-					break;
-
-				case 'notAdaptContent':
-					if (checkbox.checked)
-						mainContent.style.setProperty('--margin', '0')
-					break;
-
-				case 'disableSearchSuggestions':
-					showToast('good', 'Refresh app')
-					break;
-
-				case 'disableHistory':
-					showToast('good', 'Refresh app')
-					break;
-
-			}
-
-			API.writeStorage(storage)
-		});
+		checkbox.addEventListener('change', handleChangeCheckbox);
 	}
 
 	// INPUTS
@@ -521,52 +493,11 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	for (let index = 0, length = inputAll.length; index < length; index++) {
 		const input = inputAll[index];
 
-		input.addEventListener('input', _ => {
-			if (!isEmpty(input.value))
-				switch (input.id) {
-					case 'host':
-						input.value = formatIP(input.value)
-						storage.settings.proxy.host = input.value
-						break;
-
-					case 'port':
-						input.value = formatPort(input.value)
-						storage.settings.proxy.port = +input.value
-						break;
-
-					case 'regionTrending':
-						storage.settings.regionTrending = input.value
-						break;
-
-					case 'maxHistoryLength':
-						storage.settings.maxHistoryLength = input.value
-						break;
-				}
-			else
-				switch (input.id) {
-					case 'host':
-						storage.settings.proxy.host = '127.0.0.1'
-						break;
-
-					case 'port':
-						storage.settings.proxy.port = 9050
-						break;
-
-					case 'regionTrending':
-						storage.settings.regionTrending = 'US'
-						break;
-
-					case 'maxHistoryLength':
-						storage.settings.maxHistoryLength = 30
-						break;
-				}
-
-			API.writeStorage(storage)
-		});
+		input.addEventListener('input', handleInputField);
 	}
 
 	// EXIT
 
 	const btnExit = sidebar.querySelector('.btn-exit');
-	btnExit.addEventListener('click', _ => { window.close() });
+	btnExit.addEventListener('click', closeApp);
 });

@@ -25,13 +25,19 @@ const fillVideoCard = (video, index, data) => {
 		videoImage.setAttribute('src', data[index].videoThumbnails[0].url)
 	}
 
-	videoImage.onload = _ => {
+
+	const onLoadImage = _ => {
 		removeSkeleton(imageSkeleton)
 
-		videoImage = null
+		videoImage = null;
 	}
 
-	videoImage.onerror = _ => { showToast('error', 'Could not load images :(') }
+	const onErrorImage = _ => {
+		showToast('error', 'Could not load images :(')
+	}
+
+	videoImage.addEventListener('load', onLoadImage, { once: true });
+	videoImage.addEventListener('error', onErrorImage, { once: true });
 
 	videoTitle.textContent = data[index].title;
 
@@ -101,13 +107,18 @@ const fillPlaylistCard = (playlist, index, data) => {
 		? playlistImage.setAttribute('src', data[index].firstVideo.bestThumbnail.url)
 		: playlistImage.setAttribute('src', data[index].playlistThumbnail)
 
-	playlistImage.onload = _ => {
+	const onLoadImage = _ => {
 		removeSkeleton(imageSkeleton)
 
 		playlistImage = null;
 	}
 
-	playlistImage.onerror = _ => { showToast('error', 'Could not load images :(') }
+	const onErrorImage = _ => {
+		showToast('error', 'Could not load images :(')
+	}
+
+	playlistImage.addEventListener('load', onLoadImage, { once: true });
+	playlistImage.addEventListener('error', onErrorImage, { once: true });
 
 	playlistTitle.textContent = data[index].title;
 	removeSkeleton(titleSkeleton)
@@ -125,7 +136,6 @@ const fillPlaylistCard = (playlist, index, data) => {
 		: data[index].authorId
 
 	removeSkeleton(bottomSkeleton)
-
 
 	playlistTitle = null
 	playlistChannel = null
@@ -146,13 +156,19 @@ const fillChannelCard = (channel, index, data) => {
 	channel.dataset.id = data[index].channelID
 
 	channelImage.setAttribute('src', data[index].bestAvatar.url)
-	channelImage.onload = _ => {
+
+	const onLoadImage = _ => {
 		removeSkeleton(imageSkeleton)
 
-		channelImage = null
+		channelImage = null;
 	}
 
-	channelImage.onerror = _ => { showToast('error', 'Could not load images :(') }
+	const onErrorImage = _ => {
+		showToast('error', 'Could not load images :(')
+	}
+
+	channelImage.addEventListener('load', onLoadImage, { once: true });
+	channelImage.addEventListener('error', onErrorImage, { once: true });
 
 	channelTitle.textContent = data[index].name;
 	removeSkeleton(titleSkeleton)
@@ -177,16 +193,19 @@ const fillAuthorCard = (author, index, data) => {
 
 	if (data[index].avatar) {
 		authorAvatar.src = data[index].avatar
-
-		authorAvatar.onload = _ => {
+		
+		const onLoadImage = _ => {
 			removeSkeleton(avatarSkeleton)
 
-			authorAvatar = null
+			authorAvatar = null;
 		}
 
-		authorAvatar.onerror = _ => {
-			showToast('error', 'Could not load avatar :(')
+		const onErrorImage = _ => {
+			showToast('error', 'Could not load images :(')
 		}
+
+		authorAvatar.addEventListener('load', onLoadImage, { once: true });
+		authorAvatar.addEventListener('error', onErrorImage, { once: true });
 	}
 	authorName.textContent = data[index].name
 	author.dataset.id = data[index].channelId

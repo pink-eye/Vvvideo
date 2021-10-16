@@ -15,7 +15,6 @@ const resetGridAuthorCard = async _ => {
 const resetGrid = async parent => {
 	const cardAll = parent.querySelectorAll('.card')
 
-
 	if (cardAll.length > 0) {
 		const typeAll = {
 			video: '_video',

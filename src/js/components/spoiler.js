@@ -16,5 +16,9 @@ const initSpoiler = spoiler => {
 
 	const spoilerHead = spoiler.querySelector('.spoiler__head')
 
-	spoilerHead.addEventListener("click", _ => { toggleSpoiler(spoiler) })
+	const handleClickHead = _ => {
+		toggleSpoiler(spoiler)
+	}
+
+	spoilerHead.addEventListener("click", handleClickHead)
 }

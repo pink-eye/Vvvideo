@@ -74,7 +74,7 @@ const fillWinSettings = async _ => {
 	if (ss.disableSponsorblock)
 		toggleSponsorblock(ss.disableSponsorblock)
 
-	if(ss.disableHistory)
+	if (ss.disableHistory)
 		disableHistory()
 
 	if (ss.defaultQuality !== '1080p') {
@@ -131,4 +131,85 @@ const fillWinSettings = async _ => {
 
 	themeDropdown = null
 	themeDropdownHead = null
+}
+
+const handleInputField = event => {
+	let input = event.target
+	let option = input.id
+
+	if (!isEmpty(input.value))
+		switch (option) {
+			case 'host':
+				input.value = formatIP(input.value)
+				storage.settings.proxy.host = input.value
+				break;
+
+			case 'port':
+				input.value = formatPort(input.value)
+				storage.settings.proxy.port = +input.value
+				break;
+
+			case 'regionTrending':
+				storage.settings.regionTrending = input.value
+				break;
+
+			case 'maxHistoryLength':
+				storage.settings.maxHistoryLength = input.value
+				break;
+		}
+	else
+		switch (option) {
+			case 'host':
+				storage.settings.proxy.host = '127.0.0.1'
+				break;
+
+			case 'port':
+				storage.settings.proxy.port = 9050
+				break;
+
+			case 'regionTrending':
+				storage.settings.regionTrending = 'US'
+				break;
+
+			case 'maxHistoryLength':
+				storage.settings.maxHistoryLength = 30
+				break;
+		}
+
+	API.writeStorage(storage)
+}
+
+const handleChangeCheckbox = event => {
+	let checkbox = event.target
+	let option = checkbox.id
+
+	storage.settings[`${option}`] = checkbox.checked
+
+	switch (option) {
+		case 'disableTransition':
+			toggleTransition(checkbox.checked)
+			break;
+
+		case 'enableProxy':
+			checkbox.checked
+				? showToast('good', 'Restart app after the fields is filled in')
+				: showToast('good', 'Restart app')
+			break;
+
+		case 'disableSponsorblock':
+			toggleSponsorblock(checkbox.checked)
+			break;
+
+		case 'notAdaptContent':
+			if (checkbox.checked)
+				mainContent.style.setProperty('--margin', '0')
+			break;
+
+		case 'disableSearchSuggestions':
+		case 'disableHistory':
+			showToast('good', 'Refresh app')
+			break;
+	}
+
+	API.writeStorage(storage)
 }

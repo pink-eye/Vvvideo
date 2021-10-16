@@ -1,4 +1,4 @@
-document.onkeydown = e => {
+const handleKeyDown = e => {
 
 	// CTRL + F
 	if (e.ctrlKey && e.keyCode === 70)
@@ -90,3 +90,5 @@ document.onkeydown = e => {
 		winActive = null
 	}
 }
+
+document.addEventListener('keydown', handleKeyDown);

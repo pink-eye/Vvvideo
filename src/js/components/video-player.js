@@ -411,8 +411,6 @@ const initVideoPlayer = _ => {
 		} else invalidInputData()
 	}
 
-	let timeout;
-
 	// MEDIA LISTENERS
 
 	video.addEventListener('loadedmetadata', initVideo);
@@ -517,9 +515,9 @@ const initVideoPlayer = _ => {
 	if (!hasListeners) {
 		hasListeners = true
 
-		volumeSeek.addEventListener('input', _ => {
-			audio ? updateVolumeAudio() : updateVolumeVideo()
-		});
+		const handleInputVolumeSeek = _ => { audio ? updateVolumeAudio() : updateVolumeVideo() }
+
+		volumeSeek.addEventListener('input', handleInputVolumeSeek);
 
 		progressSeek.addEventListener('mousemove', updateSeekTooltip);
 
@@ -535,11 +533,15 @@ const initVideoPlayer = _ => {
 
 		controls.addEventListener('mouseleave', hideControls);
 
-		controls.addEventListener('mousemove', _ => {
+		let timeout = null;
+
+		const handleMouseMove = _ => {
 			clearTimeout(timeout);
 			timeout = setTimeout(hideControls, 3000)
 			showControls()
-		});
+		}
+
+		controls.addEventListener('mousemove', handleMouseMove);
 
 		controlsSponsorblock.addEventListener('click', recordSegmentSB);
 
@@ -547,29 +549,30 @@ const initVideoPlayer = _ => {
 
 		dialogSbBtnCancel.addEventListener('click', _ => { modal.close() });
 
-		dialogSbStart.addEventListener('input', _ => {
+		const handleInputDialogField = e => {
+			let dialogSbField = e.target
 			resetDialogSB()
-			dialogSbStart.value = formatDuration(dialogSbStart.value)
-		});
+			dialogSbField.value = formatDuration(dialogSbField.value)
+		}
 
-		dialogSbEnd.addEventListener('input', _ => {
-			resetDialogSB()
-			dialogSbEnd.value = formatDuration(dialogSbEnd.value)
-		});
+		dialogSbStart.addEventListener('input', handleInputDialogField);
+		dialogSbEnd.addEventListener('input', handleInputDialogField);
 	}
 
-	videoDesc.addEventListener('click', e => {
+	const handleClickTimecode = e => {
 		if (e.target.classList.contains('timecode')) {
 			let timecode = e.target
 			video.currentTime = convertDurationToSeconds(timecode.textContent)
 			document.activeElement.blur()
 			scrollToTop()
 		}
-	})
+	}
+
+	videoDesc.addEventListener('click', handleClickTimecode)
 
 	// HOT KEYS
 
-	document.onkeyup = e => {
+	const handleKeyDownWithinVideo = e => {
 		if (_io_q('.video').classList.contains('_active')
 			&& (document.activeElement === _io_q('body')
 				|| document.activeElement === null)) {
@@ -614,4 +617,6 @@ const initVideoPlayer = _ => {
 				document.fullscreenElement ? closeFullscreen() : openFullscreen()
 		}
 	}
+
+	document.addEventListener('keydown', handleKeyDownWithinVideo);
 }

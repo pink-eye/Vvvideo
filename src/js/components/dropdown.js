@@ -14,11 +14,13 @@ const initDropdown = (dropdown, callback) => {
 		for (let index = 0, length = dropdownBtnAll.length; index < length; index++) {
 			const dropdownBtn = dropdownBtnAll[index];
 
-			dropdownBtn.addEventListener('click', e => {
+			const handleClickBtn = _ => {
 				chooseDropdownItem(dropdown, dropdownBtn)
 				focusCurrentChoice(dropdown)
 				callback(dropdownBtn)
-			});
+			}
+
+			dropdownBtn.addEventListener('click', handleClickBtn);
 		}
 	}
 }
@@ -78,7 +80,10 @@ document.addEventListener('DOMContentLoaded', _ => {
 			const dropdownHead = dropdown.querySelector('.dropdown__head');
 
 			if (dropdownHead) {
-				dropdownHead.addEventListener('click', _ => { toggleDropdown(dropdown) });
+
+				const handleClickHead = _ => { toggleDropdown(dropdown) }
+
+				dropdownHead.addEventListener('click', handleClickHead);
 			}
 		}
 	}

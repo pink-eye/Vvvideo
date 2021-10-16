@@ -201,12 +201,16 @@ const initPages = async (parent, data, cardAll, typeCard, continuation = null) =
 	let btnNextPage = parent.querySelector('.btns__next');
 	let btnPrevPage = parent.querySelector('.btns__prev');
 
-	btnNextPage.addEventListener('click', _ => {
+	const handleClickNextPage = _ => {
 		nextPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
-	});
-	btnPrevPage.addEventListener('click', _ => {
+	}
+
+	const handleClickPrevPage = _ => {
 		prevPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
-	});
+	}
+
+	btnNextPage.addEventListener('click', handleClickNextPage);
+	btnPrevPage.addEventListener('click', handleClickPrevPage);
 
 	enablePages(parent)
 	resetCount(parent)

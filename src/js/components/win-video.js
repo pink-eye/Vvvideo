@@ -78,6 +78,10 @@ const getVideo = async id => {
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
 
+				const onLoadedData = _ => {
+					if (videoSkeleton)
+						removeSkeleton(videoSkeleton)
+				}
 
 				// FILL MEDIA
 				if (data.formats.length > 0) {
@@ -142,19 +146,14 @@ const getVideo = async id => {
 						qualityCurrent.textContent = currentQuality.qualityLabel
 					}
 
-					videoInstance.onloadeddata = _ => {
-						if (videoSkeleton)
-							removeSkeleton(videoSkeleton)
-					}
+					videoInstance.addEventListener('loadeddata', onLoadedData, { once: true });
 
 					if (ss.autoplay)
 						videoInstance.autoplay = true
 
 					insertQualityList(videoFormatAll)
-				} else {
-					if (videoSkeleton)
-						removeSkeleton(videoSkeleton)
-				}
+				} else onLoadedData()
+
 
 				// FILL VIDEO INFO
 				if (data.videoDetails.title !== videoTitle.textContent)
@@ -185,11 +184,13 @@ const getVideo = async id => {
 				if (data.videoDetails.author.thumbnails) {
 					videoAvatar.src = data.videoDetails.author.thumbnails.at(-1).url
 
-					videoAvatar.onload = _ => {
+					const onLoadAvatar = _ => {
 						removeSkeleton(avatarSkeleton)
 
 						videoAvatar = null
 					}
+
+					videoAvatar.addEventListener('load', onLoadAvatar, { once: true });
 				}
 
 				videoChannelBtn.dataset.id = data.videoDetails.author.id

@@ -108,11 +108,13 @@ const switchTab = (tabClass, tabContentClass, primary) => {
 
 			showRequiredTab(tabPrimary, tabContentClass)
 
-			tab.addEventListener("click", async _ => {
+			const handleClickTab = async _ => {
 				if (!tab.classList.contains('_active')) {
 					hideLastTab(tabContentClass, tabClass);
 					await showRequiredTab(tab, tabContentClass)
 				}
-			})
+			}
+
+			tab.addEventListener("click", handleClickTab)
 		}
 };

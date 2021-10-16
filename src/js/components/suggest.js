@@ -116,7 +116,8 @@ const initSuggests = parent => {
 	let searchBar = parent.querySelector('.search__bar');
 
 	if (searchBar && !storage.settings.disableSearchSuggestions) {
-		searchBar.addEventListener('input', async _ => {
+
+		const handleInpt = async _ => {
 			lastSelected = null
 			let query = searchBar.value.trim();
 
@@ -145,9 +146,12 @@ const initSuggests = parent => {
 				}
 
 			} else hideSuggest(parent)
-		});
+		}
 
-		searchBar.onblur = _ => { hideSuggest(parent) }
+		const handleBlur = _ => { hideSuggest(parent) }
+
+		searchBar.addEventListener('input', handleInpt);
+		searchBar.addEventListener('blur', handleBlur)
 
 	} else searchBar = null
 }

@@ -97,6 +97,12 @@ const removeSubscription = async obj => {
 	await API.writeStorage(storage);
 }
 
+const handleClickSubscribeBtn = (btn, btnText) => {
+	!btn.classList.contains('_subscribed')
+		? onClickSubscribe(btn, btnText)
+		: onClickUnsubscribe(btn, btnText)
+}
+
 const onClickSubscribe = (btn, btnText) => {
 
 	if (btn.dataset.channelId && btn.dataset.name) {

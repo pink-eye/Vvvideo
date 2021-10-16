@@ -37,20 +37,27 @@ const getChannel = async id => {
 
 		if (data.authorThumbnails) {
 			channelAvatar.src = data.authorThumbnails.at(-1).url
-			channelAvatar.onload = _ => {
+
+			const onLoadAvatar = _ => {
 				removeSkeleton(avatarSkeleton)
 
 				channelAvatar = null
 			}
+
+			channelAvatar.addEventListener('load', onLoadAvatar, { once: true });
 		}
 
 		if (data.authorBanners) {
 			channelBannerImg.src = data.authorBanners.at(-1).url
-			channelBannerImg.onload = _ => {
+
+			const onLoadBanner = _ => {
 				removeSkeleton(bannerSkeleton)
 
 				channelBannerImg = null
 			}
+
+			channelBannerImg.addEventListener('load', onLoadBanner, { once: true });
+
 		} else if (data.authorThumbnails) {
 			channelBanner.style.setProperty('--bg-image', `url(${data.authorThumbnails.at(-1).url})`)
 			removeSkeleton(bannerSkeleton)
