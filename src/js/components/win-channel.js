@@ -19,15 +19,18 @@ const openWinChannel = async id => {
 	let subscribeBtn = channel.querySelector('.subscribe');
 	let subscribeText = channel.querySelector('.subscribe__text');
 
-	channel.dataset.id = id
+	// SUBSCRIBE BTN
 
-	if (hasSubscription(id)) {
-		subscribeBtn.classList.add('_subscribed')
-		subscribeText.textContent = 'Unsubscribe'
-	} else {
-		subscribeBtn.classList.remove('_subscribed')
-		subscribeText.textContent = 'Subscribe'
-	}
+	const channelSubscribeBtn = channel.querySelector('.subscribe');
+	const channelSubscribeText = channel.querySelector('.subscribe__text');
+
+	const handleClickChannelSubscribeBtn = _ => handleClickSubscribeBtn(channelSubscribeBtn, channelSubscribeText)
+
+	channelSubscribeBtn.addEventListener('click', handleClickChannelSubscribeBtn);
+
+	// FILL WIN
+
+	channel.dataset.id = id
 
 	try {
 		const data = await getChannelInfoLocalScraper(id)

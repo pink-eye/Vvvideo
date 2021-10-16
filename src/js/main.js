@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const playlist = _io_q('.playlist');
 	const header = _io_q('.header');
 	const sidebar = _io_q('.sidebar');
-	const settings = _io_q('.settings');
 	const mainContent = _io_q('.main__content');
 
 	const videoInfo = video.querySelector('.video-info');
@@ -34,11 +33,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const searchBar = headerSearch.querySelector('.search__bar');
 	const searchBtn = headerSearch.querySelector('.search__btn');
 
-	const themeDropdown = settings.querySelector('.option__theme');
-	const protocolDropdown = settings.querySelector('.option__protocol');
-	const qualityDropdown = settings.querySelector('.option__quality');
-	const formatDropdown = settings.querySelector('.option__format');
-
 	const onReadStorage = async data => {
 		Object.assign(storage, JSON.parse(data))
 
@@ -58,35 +52,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	hideOnScroll(header, 0)
 	hideOnScroll(sidebar, 767)
-
-	// SPOILER
-
-	const spoilerVideoDescr = videoInfo.querySelector('.spoiler');
-
-	initSpoiler(spoilerVideoDescr)
-
-	// DROPDOWN
-
-	initDropdown(themeDropdown, btn => {
-		setTheme(btn.dataset.choice)
-		storage.settings.theme = btn.dataset.choice
-		API.writeStorage(storage)
-	})
-
-	initDropdown(qualityDropdown, btn => {
-		storage.settings.defaultQuality = btn.dataset.choice
-		API.writeStorage(storage)
-	})
-
-	initDropdown(protocolDropdown, btn => {
-		storage.settings.proxy.protocol = btn.textContent.toLowerCase()
-		API.writeStorage(storage)
-	})
-
-	initDropdown(formatDropdown, btn => {
-		storage.settings.defaltVideoFormat = btn.textContent
-		API.writeStorage(storage)
-	})
 
 	// BURGER
 
@@ -121,6 +86,14 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		channelTitle.textContent = title
 		channelSubscribeBtn.dataset.channelId = authorId
 		channelSubscribeBtn.dataset.name = title
+
+		if (hasSubscription(authorId)) {
+			channelSubscribeBtn.classList.add('_subscribed')
+			channelSubscribeText.textContent = 'Unsubscribe'
+		} else {
+			channelSubscribeBtn.classList.remove('_subscribed')
+			channelSubscribeText.textContent = 'Subscribe'
+		}
 	}
 
 	const fillSomeInfoPlaylist = params => {
@@ -255,10 +228,10 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const deactivateLastSidebarBtn = _ => {
 		let lastActiveSidebarBtn = sidebar.querySelector('.sidebar__btn._active');
 
-		if (lastActiveSidebarBtn) {
+		if (lastActiveSidebarBtn)
 			lastActiveSidebarBtn.classList.remove('_active');
-			lastActiveSidebarBtn = null;
-		}
+
+		lastActiveSidebarBtn = null;
 	}
 
 	const manageWin = async e => {
@@ -338,6 +311,11 @@ document.addEventListener('DOMContentLoaded', async _ => {
 							openWinHistory()
 							break;
 
+						case 'settings':
+							setTimeout(scrollToTop, getDurationTimeout())
+							openWinSettings()
+							break;
+
 					}
 
 					hideLastWin()
@@ -391,14 +369,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	mainContent.addEventListener('click', manageWin);
 
-	// SUBSCRIBE LISTENERS
-
-	const handleClickVideoSubscribeBtn = _ => handleClickSubscribeBtn(videoSubscribeBtn, videoSubscribeText)
-	const handleClickChannelSubscribeBtn = _ => handleClickSubscribeBtn(channelSubscribeBtn, channelSubscribeText)
-
-	videoSubscribeBtn.addEventListener('click', handleClickVideoSubscribeBtn);
-	channelSubscribeBtn.addEventListener('click', handleClickChannelSubscribeBtn);
-
 	const handleClickWindow = e => {
 		if (!e.target.closest('.dropdown'))
 			hideLastDropdown()
@@ -411,90 +381,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	// REFRESH BTN
 
 	headerBtn.addEventListener('click', reloadApp);
-
-	// IMPLEMENT IMPORT
-
-	const impExpBody = settings.querySelector('.imp-exp'),
-		impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent'),
-		impExpField = settings.querySelector('.imp-exp__field'),
-		impExpTip = settings.querySelector('.imp-exp__tip');
-
-	let invalidTip = "I've not found a JSON file.\n Ensure you interacted this area",
-		validTip = "Succesfully! Wait for refresh...",
-		proccessTip = "I've got a",
-		failTip = "Fail... :(";
-
-	const validImport = _ => {
-		if (!impExpBody.classList.contains('_valid')) {
-			impExpBody.classList.add('_valid');
-			impExpTip.textContent = validTip
-		}
-	}
-
-	const invalidImport = tip => {
-		if (!impExpBody.classList.contains('_invalid')) {
-			impExpBody.classList.add('_invalid');
-			impExpTip.textContent = tip
-		}
-	}
-
-	const readInputFile = async _ => {
-		let reader = new FileReader();
-		reader.readAsText(impExpField.files[0]);
-
-		const onLoadReader = async _ => {
-			let data = JSON.parse(reader.result)
-
-			if (!data.hasOwnProperty('subscriptions'))
-				invalidImport(failTip);
-			else {
-				buildStorage(data)
-				await API.writeStorage(storage);
-				validImport();
-				reloadApp()
-			}
-		}
-
-		reader.addEventListener('load', onLoadReader);
-	}
-
-	const handleFile = _ => {
-		impExpBody.classList.remove('_valid')
-		impExpBody.classList.remove('_invalid')
-		impExpTip.textContent = `${proccessTip} '${impExpField.files[0].name}'. You can press 'Import' now`
-	}
-
-	impExpField.addEventListener('change', handleFile);
-
-	const handleClickImport = _ => {
-		impExpField.value === '' || (/\.(json)$/i).test(impExpField.files[0].name) === false
-			? invalidImport(invalidTip)
-			: readInputFile()
-	}
-
-	impExpBtn.addEventListener('click', handleClickImport);
-
-	// // WIN SETTINGS
-
-	// CHECKBOXES
-
-	const checkboxAll = settings.querySelectorAll('input[type="checkbox"]');
-
-	for (let index = 0, length = checkboxAll.length; index < length; index++) {
-		const checkbox = checkboxAll[index];
-
-		checkbox.addEventListener('change', handleChangeCheckbox);
-	}
-
-	// INPUTS
-
-	const inputAll = settings.querySelectorAll('input[type="text"]');
-
-	for (let index = 0, length = inputAll.length; index < length; index++) {
-		const input = inputAll[index];
-
-		input.addEventListener('input', handleInputField);
-	}
 
 	// EXIT
 

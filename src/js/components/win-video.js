@@ -66,6 +66,24 @@ const openWinVideo = async id => {
 	let videoSubs = videoInfo.querySelector('.author__subs');
 	let ss = storage.settings
 
+	// SUBSCRIBE BTN
+
+	const videoSubscribeBtn = videoInfo.querySelector('.subscribe');
+	const videoSubscribeText = videoInfo.querySelector('.subscribe__text');
+
+	const handleClickVideoSubscribeBtn = _ => handleClickSubscribeBtn(videoSubscribeBtn, videoSubscribeText)
+
+	videoSubscribeBtn.addEventListener('click', handleClickVideoSubscribeBtn);
+
+
+	// SPOILER
+
+	const spoilerVideoDescr = videoInfo.querySelector('.spoiler');
+
+	initSpoiler(spoilerVideoDescr)
+
+	// FILL WIN
+
 	if (API.YTDLvalidateURL(`https://www.youtube.com/watch?v=${id}`)) {
 		try {
 			let data = ss.enableProxy
