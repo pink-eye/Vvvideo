@@ -196,8 +196,10 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				if (lastWin.classList.contains('subscriptions'))
 					resetGridAuthorCard()
 
-				if (lastWin.classList.contains('video'))
+				if (lastWin.classList.contains('video')) {
+					resetVideoPlayer()
 					resetVideo()
+				}
 
 				if (lastWin.classList.contains('playlist'))
 					resetPlaylist()
