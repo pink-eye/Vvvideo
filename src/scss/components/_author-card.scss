@@ -9,9 +9,6 @@
     transition: border-color var(--trns);
 
     &:first-child {
-        position: relative;
-        display: flex;
-        padding: 10px;
         text-align: left;
     }
 
@@ -95,7 +92,7 @@
             font-size: calc(18px + (26 - 18) * ((100vw - 320px) / (1200 - 320)));
         }
 
-        transition: margin-left var(--trns);
+        transition: margin-left var(--trns-time-default) var(--ease-in-sine);
         margin: 0;
 
 		display: -webkit-box;
@@ -108,7 +105,7 @@
         color: var(--color-text);
         margin-top: 10px;
 
-        transition: margin-left var(--trns);
+        transition: margin-left var(--trns-time-default) var(--ease-in-sine);
         margin-left: 0;
     }
 }

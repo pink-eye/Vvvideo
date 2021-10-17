@@ -120,7 +120,8 @@ const openWinVideo = async id => {
 						qualityCurrent.textContent = currentQuality.qualityLabel
 
 						hls.attachMedia(videoInstance);
-						hls.on(Hls.Events.ERROR, (event, data) => {
+
+						const handleError = (event, data) => {
 							if (data.fatal) {
 								switch (data.type) {
 									case Hls.ErrorTypes.NETWORK_ERROR:
@@ -137,7 +138,9 @@ const openWinVideo = async id => {
 										break;
 								}
 							}
-						});
+						}
+
+						hls.on(Hls.Events.ERROR, handleError);
 					} else {
 						if (ss.disableSeparatedStreams) {
 							videoFormatAll = API.YTDLFilterFormats(data.formats)

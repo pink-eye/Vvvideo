@@ -301,5 +301,8 @@
         color: var(--color-text);
         max-width: 85ch;
         width: 100%;
+
+		border-left: 3px solid;
+		padding-left: 15px;
     }
 }

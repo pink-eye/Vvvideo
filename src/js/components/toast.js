@@ -30,7 +30,7 @@ const showToast = (type, text) => {
 			firstToastItem = null
 		}
 
-		setTimeout(afterAddToast, 15);
+		setTimeout(afterAddToast, 5);
 
 		setTimeout(beforeRemoveToast, 5000)
 	}

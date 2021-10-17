@@ -3,63 +3,10 @@ const openWinSettings = _ => {
 
 	// IMPLEMENT IMPORT
 
-	const impExpBody = settings.querySelector('.imp-exp')
 	const impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
 	const impExpField = settings.querySelector('.imp-exp__field')
-	const impExpTip = settings.querySelector('.imp-exp__tip')
-
-	const invalidTip = "I've not found a JSON file.\n Ensure you interacted this area"
-	const validTip = "Succesfully! Wait for refresh..."
-	const proccessTip = "I've got a"
-	const failTip = "Fail... :("
-
-	const validImport = _ => {
-		if (!impExpBody.classList.contains('_valid')) {
-			impExpBody.classList.add('_valid');
-			impExpTip.textContent = validTip
-		}
-	}
-
-	const invalidImport = tip => {
-		if (!impExpBody.classList.contains('_invalid')) {
-			impExpBody.classList.add('_invalid');
-			impExpTip.textContent = tip
-		}
-	}
-
-	const readInputFile = async _ => {
-		let reader = new FileReader();
-		reader.readAsText(impExpField.files[0]);
-
-		const onLoadReader = async _ => {
-			let data = JSON.parse(reader.result)
-
-			if (!data.hasOwnProperty('subscriptions'))
-				invalidImport(failTip);
-			else {
-				buildStorage(data)
-				await API.writeStorage(storage);
-				validImport();
-				reloadApp()
-			}
-		}
-
-		reader.addEventListener('load', onLoadReader, { once: true });
-	}
-
-	const handleFile = _ => {
-		impExpBody.classList.remove('_valid')
-		impExpBody.classList.remove('_invalid')
-		impExpTip.textContent = `${proccessTip} '${impExpField.files[0].name}'. You can press 'Import' now`
-	}
 
 	impExpField.addEventListener('change', handleFile);
-
-	const handleClickImport = _ => {
-		impExpField.value === '' || (/\.(json)$/i).test(impExpField.files[0].name) === false
-			? invalidImport(invalidTip)
-			: readInputFile()
-	}
 
 	impExpBtn.addEventListener('click', handleClickImport);
 
@@ -87,6 +34,14 @@ const openWinSettings = _ => {
 const resetWinSettings = _ => {
 	let settings = _io_q('.settings');
 
+	// RESET IMPORT
+
+	let impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
+	let impExpField = settings.querySelector('.imp-exp__field')
+
+	impExpField.removeEventListener('change', handleFile);
+	impExpBtn.removeEventListener('click', handleClickImport);
+
 	// RESET CHECKBOXES
 
 	let checkboxAll = settings.querySelectorAll('input[type="checkbox"]');
@@ -110,8 +65,74 @@ const resetWinSettings = _ => {
 	settings = null
 	checkboxAll = null
 	inputAll = null
+	impExpBtn = null
+	impExpField = null
 }
 
+const makeResultImport = (classResult, tip) => {
+	let settings = _io_q('.settings');
+	let impExpBody = settings.querySelector('.imp-exp')
+	let impExpTip = settings.querySelector('.imp-exp__tip')
+
+	if (!impExpBody.classList.contains(classResult)) {
+		impExpBody.classList.add(classResult);
+		impExpTip.textContent = tip
+	}
+
+	settings = null
+	impExpBody = null
+	impExpTip = null
+}
+
+const readInputFile = async _ => {
+	const validTip = "Succesfully! Wait for refresh..."
+	const failTip = "Fail... :("
+
+	let reader = new FileReader();
+	reader.readAsText(impExpField.files[0]);
+
+	const onLoadReader = async _ => {
+		let data = JSON.parse(reader.result)
+
+		if (!data.hasOwnProperty('subscriptions'))
+			makeResultImport('_invalid', failTip);
+		else {
+			buildStorage(data)
+			await API.writeStorage(storage);
+			makeResultImport('_valid', validTip);
+			reloadApp()
+		}
+	}
+
+	reader.addEventListener('load', onLoadReader, { once: true });
+}
+
+const handleClickImport = _ => {
+	const invalidTip = "I've not found a JSON file.\n Ensure you interacted this area"
+	let settings = _io_q('.settings');
+	let impExpField = settings.querySelector('.imp-exp__field')
+
+	impExpField.value === '' || (/\.(json)$/i).test(impExpField.files[0].name) === false
+		? makeResultImport('_invalid', invalidTip)
+		: readInputFile()
+
+	settings = null
+	impExpField = null
+}
+
+const handleFile = _ => {
+	let settings = _io_q('.settings');
+	let impExpBody = settings.querySelector('.imp-exp')
+	let impExpTip = settings.querySelector('.imp-exp__tip')
+
+	impExpBody.classList.remove('_valid')
+	impExpBody.classList.remove('_invalid')
+	impExpTip.textContent = `I've got a '${impExpField.files[0].name}'. You can press 'Import' now`
+
+	settings = null
+	impExpBody = null
+	impExpTip = null
+}
 
 const setTheme = themeOption => {
 	if (themeOption === 'light') theme.setMode('light');

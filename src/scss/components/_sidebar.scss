@@ -106,6 +106,10 @@
             &:not(:first-child) {
                 margin-top: 10px;
             }
+
+			&:nth-last-child(-n+2) {
+				margin-bottom: 10px;
+			}
         }
 
         @media (max-width: 767px) {

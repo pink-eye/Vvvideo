@@ -96,8 +96,10 @@ const initVideoPlayer = _ => {
 	}
 
 	const syncMedia = _ => {
-		audio.currentTime = video.currentTime
-		isSync = true
+		if (!isSync) {
+			audio.currentTime = video.currentTime
+			isSync = true
+		}
 	}
 
 	const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2;

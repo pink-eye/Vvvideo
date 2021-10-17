@@ -36,7 +36,7 @@ const hideOnScroll = (selector, mq) => {
 	const sidebar = _io_q('.sidebar');
 	let lastScrollValue = 0;
 
-	window.addEventListener('scroll', _ => {
+	const handleScroll = _ => {
 
 		if (innerWidth <= mq || mq === 0) {
 
@@ -52,7 +52,9 @@ const hideOnScroll = (selector, mq) => {
 
 			lastScrollValue = scrollDistance
 		}
-	})
+	}
+
+	window.addEventListener('scroll', handleScroll)
 }
 
 const normalizeCount = count => typeof count === 'string'
