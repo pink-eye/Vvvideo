@@ -99,6 +99,15 @@ const resetChannel = async (channelTabContentVideos, channelTabContentPlaylists)
 	let channelDescription = channel.querySelector('.about__description');
 	let subscribeBtn = channel.querySelector('.subscribe');
 
+	// SUBSCRIBE BTN
+
+	let channelSubscribeBtn = channel.querySelector('.subscribe');
+	let channelSubscribeText = channel.querySelector('.subscribe__text');
+
+	const handleClickChannelSubscribeBtn = _ => handleClickSubscribeBtn(channelSubscribeBtn, channelSubscribeText)
+
+	channelSubscribeBtn.removeEventListener('click', handleClickChannelSubscribeBtn);
+
 	channelBanner.style.setProperty('--bg-image', 'none center')
 	channelBannerImg.removeAttribute('src')
 	subscribeBtn.removeAttribute('data-channel-id')
@@ -115,6 +124,8 @@ const resetChannel = async (channelTabContentVideos, channelTabContentPlaylists)
 	channelDescription.textContent = null
 
 	channel = null;
+	channelSubscribeBtn = null
+	channelSubscribeText = null
 	channelBannerImg = null;
 	channelBanner = null;
 	bannerSkeleton = null;
