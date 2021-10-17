@@ -83,10 +83,12 @@ const openWinChannel = async id => {
 	}
 }
 
-const resetChannel = async (channelTabContentVideos, channelTabContentPlaylists) => {
+const resetChannel = _ => {
 	let channel = _io_q('.channel');
 	let channelBanner = channel.querySelector('.channel__banner');
 	let channelBannerImg = channel.querySelector('.channel__banner img');
+	let channelTabContentVideos = channel.querySelector('.videos');
+	let channelTabContentPlaylists = channel.querySelector('.playlists');
 	let bannerSkeleton = channel.querySelector('.banner-skeleton');
 	let avatarSkeleton = channel.querySelector('.avatar-skeleton');
 	let channelDescription = channel.querySelector('.about__description');
@@ -117,7 +119,52 @@ const resetChannel = async (channelTabContentVideos, channelTabContentPlaylists)
 	channelSubscribeBtn = null
 	channelBannerImg = null;
 	channelBanner = null;
+	channelTabContentVideos = null
+	channelTabContentPlaylists = null
 	bannerSkeleton = null;
 	avatarSkeleton = null;
 	subscribeBtn = null;
 }
+
+const fillSomeInfoChannel = (title, authorId) => {
+	let channel = _io_q('.channel');
+	let channelTitle = channel.querySelector('.heading-channel__author');
+	let channelSubscribeBtn = channel.querySelector('.subscribe');
+	let channelSubscribeText = channel.querySelector('.subscribe__text');
+
+	channelTitle.textContent = title
+	channelSubscribeBtn.dataset.channelId = authorId
+	channelSubscribeBtn.dataset.name = title
+
+	if (hasSubscription(authorId)) {
+		channelSubscribeBtn.classList.add('_subscribed')
+		channelSubscribeText.textContent = 'Unsubscribe'
+	} else {
+		channelSubscribeBtn.classList.remove('_subscribed')
+		channelSubscribeText.textContent = 'Subscribe'
+	}
+
+	channel = null
+	channelTitle = null
+	channelSubscribeBtn = null
+	channelSubscribeText = null
+}
+
+const prepareChannelWin = (btnWin, id) => {
+	openWinChannel(id)
+
+	if (btnWin !== null) {
+		let channelTitle = btnWin.classList.contains('card')
+			? btnWin.querySelector('.card__title span')
+			: btnWin.querySelector('.author__name')
+
+		let channelId = btnWin.classList.contains('card') && !btnWin.classList.contains('_channel')
+			? btnWin.querySelector('.card__channel').dataset.id
+			: btnWin.dataset.id
+
+		fillSomeInfoChannel(channelTitle.textContent, channelId)
+
+		channelTitle = null
+	} else fillSomeInfoChannel('Author', '')
+}
+

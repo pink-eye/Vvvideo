@@ -289,3 +289,70 @@ const resetVideo = async _ => {
 	subscribeBtn = null
 }
 
+const fillSomeInfoVideo = params => {
+	const { title, views, date, author, authorId } = params
+
+	let video = _io_q('.video');
+	let videoInfo = video.querySelector('.video-info');
+	let videoTitle = videoInfo.querySelector('.video-info__title');
+	let videoViews = videoInfo.querySelector('.video-info__views span');
+	let videoDate = videoInfo.querySelector('.video-info__date span');
+	let videoChannel = videoInfo.querySelector('.author__name');
+	let videoChannelBtn = videoInfo.querySelector('[data-win="channel"]');
+	let videoSubscribeBtn = videoInfo.querySelector('.subscribe');
+	let videoSubscribeText = videoInfo.querySelector('.subscribe__text');
+
+	videoTitle.textContent = title;
+	videoViews.textContent = views !== '...' || !isEmpty(views) ? views : '...';
+	videoDate.textContent = date !== '...' || !isEmpty(date) ? date : '...';
+	videoChannel.textContent = author;
+	videoChannelBtn.dataset.id = authorId;
+
+	videoSubscribeBtn.dataset.channelId = authorId
+	videoSubscribeBtn.dataset.name = author
+
+	if (hasSubscription(authorId)) {
+		videoSubscribeBtn.classList.add('_subscribed')
+		videoSubscribeText.textContent = 'Unsubscribe'
+	} else {
+		videoSubscribeBtn.classList.remove('_subscribed')
+		videoSubscribeText.textContent = 'Subscribe'
+	}
+
+	video = null
+	videoInfo = null
+	videoTitle = null
+	videoViews = null
+	videoDate = null
+	videoChannel = null
+	videoChannelBtn = null
+	videoSubscribeBtn = null
+	videoSubscribeText = null
+}
+
+const prepareVideoWin = (btnWin, id) => {
+	if (btnWin !== null) {
+		let params = {
+			title: btnWin.querySelector('.card__title span').textContent,
+			views: btnWin.querySelector('.card__views').textContent,
+			date: btnWin.querySelector('.card__date').textContent,
+			author: btnWin.querySelector('.card__channel').textContent,
+			authorId: btnWin.querySelector('.card__channel').dataset.id
+		}
+
+		fillSomeInfoVideo(params);
+	} else {
+		fillSomeInfoVideo({
+			title: 'Title',
+			views: '...',
+			date: '...',
+			author: 'Author',
+			authorId: ''
+		});
+	}
+
+	openWinVideo(id).then(initVideoPlayer)
+
+	if (!storage.settings.disableSponsorblock)
+		getSegmentsSB(id)
+}

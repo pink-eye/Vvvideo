@@ -2,34 +2,11 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	// MAIN SELECTORS
 
-	const video = _io_q('.video');
-	const channel = _io_q('.channel');
-	const playlist = _io_q('.playlist');
 	const header = _io_q('.header');
 	const sidebar = _io_q('.sidebar');
 	const mainContent = _io_q('.main__content');
 
-	const videoInfo = video.querySelector('.video-info');
-	const videoTitle = videoInfo.querySelector('.video-info__title');
-	const videoViews = videoInfo.querySelector('.video-info__views span');
-	const videoDate = videoInfo.querySelector('.video-info__date span');
-	const videoChannel = videoInfo.querySelector('.author__name');
-	const videoChannelBtn = videoInfo.querySelector('[data-win="channel"]');
-	const videoSubscribeBtn = videoInfo.querySelector('.subscribe');
-	const videoSubscribeText = videoInfo.querySelector('.subscribe__text');
-
-	const channelTitle = channel.querySelector('.heading-channel__author');
-	const channelTabContentVideos = channel.querySelector('.videos');
-	const channelTabContentPlaylists = channel.querySelector('.playlists');
-	const channelSubscribeBtn = channel.querySelector('.subscribe');
-	const channelSubscribeText = channel.querySelector('.subscribe__text');
-
-	const playlistName = playlist.querySelector('.playlist__name');
-	const playlistChannel = playlist.querySelector('.author');
-	const playlistAuthor = playlist.querySelector('.author__name');
-
 	const headerSearch = header.querySelector('.search');
-	const headerBtn = header.querySelector('.header__btn');
 	const searchBar = headerSearch.querySelector('.search__bar');
 	const searchBtn = headerSearch.querySelector('.search__btn');
 
@@ -54,114 +31,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	hideOnScroll(sidebar, 767)
 
 	// MANAGE WINDOWS
-
-	const fillSomeInfoVideo = params => {
-		const { title, views, date, author, authorId } = params
-
-		videoTitle.textContent = title;
-		videoViews.textContent = views !== '...' || !isEmpty(views) ? views : '...';
-		videoDate.textContent = date !== '...' || !isEmpty(date) ? date : '...';
-		videoChannel.textContent = author;
-		videoChannelBtn.dataset.id = authorId;
-
-		videoSubscribeBtn.dataset.channelId = authorId
-		videoSubscribeBtn.dataset.name = author
-
-		if (hasSubscription(authorId)) {
-			videoSubscribeBtn.classList.add('_subscribed')
-			videoSubscribeText.textContent = 'Unsubscribe'
-		} else {
-			videoSubscribeBtn.classList.remove('_subscribed')
-			videoSubscribeText.textContent = 'Subscribe'
-		}
-	}
-
-	const fillSomeInfoChannel = (title, authorId) => {
-		channelTitle.textContent = title
-		channelSubscribeBtn.dataset.channelId = authorId
-		channelSubscribeBtn.dataset.name = title
-
-		if (hasSubscription(authorId)) {
-			channelSubscribeBtn.classList.add('_subscribed')
-			channelSubscribeText.textContent = 'Unsubscribe'
-		} else {
-			channelSubscribeBtn.classList.remove('_subscribed')
-			channelSubscribeText.textContent = 'Subscribe'
-		}
-	}
-
-	const fillSomeInfoPlaylist = params => {
-		playlistName.textContent = params.title
-		playlistAuthor.textContent = params.author
-		playlistChannel.dataset.id = params.id
-	}
-
-	const prepareVideoWin = (btnWin, id) => {
-		if (btnWin !== null) {
-			let params = {
-				title: btnWin.querySelector('.card__title span').textContent,
-				views: btnWin.querySelector('.card__views').textContent,
-				date: btnWin.querySelector('.card__date').textContent,
-				author: btnWin.querySelector('.card__channel').textContent,
-				authorId: btnWin.querySelector('.card__channel').dataset.id
-			}
-
-			fillSomeInfoVideo(params);
-		} else {
-			fillSomeInfoVideo({
-				title: 'Title',
-				views: '...',
-				date: '...',
-				author: 'Author',
-				authorId: ''
-			});
-		}
-
-		openWinVideo(id).then(initVideoPlayer)
-
-		if (!storage.settings.disableSponsorblock)
-			getSegmentsSB(id)
-	}
-
-	const prepareChannelWin = (btnWin, id) => {
-		openWinChannel(id)
-
-		if (btnWin !== null) {
-			let channelTitle = btnWin.classList.contains('card')
-				? btnWin.querySelector('.card__title span')
-				: btnWin.querySelector('.author__name')
-
-			let channelId = btnWin.classList.contains('card') && !btnWin.classList.contains('_channel')
-				? btnWin.querySelector('.card__channel').dataset.id
-				: btnWin.dataset.id
-
-			fillSomeInfoChannel(channelTitle.textContent, channelId)
-
-			channelTitle = null
-		} else fillSomeInfoChannel('Author', '')
-	}
-
-	const preparePlaylistWin = (btnWin, id) => {
-		openWinPlaylist(id)
-
-		if (btnWin !== null) {
-			let params = {
-				title: btnWin.querySelector('.card__title span').textContent,
-				author: btnWin.querySelector('.card__channel').textContent,
-				id: btnWin.querySelector('.card__channel').dataset.id
-			}
-
-			fillSomeInfoPlaylist(params)
-
-			params = null
-		} else {
-			fillSomeInfoPlaylist({
-				title: 'Title',
-				author: 'Author',
-				id: ''
-			})
-		}
-	}
 
 	const showWin = win => {
 		win.classList.add('_active');
@@ -205,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 					resetPlaylist()
 
 				if (lastWin.classList.contains('channel'))
-					resetChannel(channelTabContentVideos, channelTabContentPlaylists)
+					resetChannel()
 
 				if (lastWin.classList.contains('history'))
 					resetGrid(_io_q('.history'))
@@ -379,7 +248,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 
 	// DROPDOWN
-	
+
 	const settings = _io_q('.settings');
 	const themeDropdown = settings.querySelector('.option__theme');
 	const protocolDropdown = settings.querySelector('.option__protocol');

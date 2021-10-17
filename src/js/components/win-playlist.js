@@ -71,7 +71,6 @@ const openWinPlaylist = async id => {
 	}
 }
 
-
 const resetPlaylist = async _ => {
 	let playlist = _io_q('.playlist');
 	let playlistViews = playlist.querySelector('.playlist__views span');
@@ -94,4 +93,43 @@ const resetPlaylist = async _ => {
 	playlistViews = null;
 	playlistDuration = null;
 	avatarSkeleton = null;
+}
+
+const fillSomeInfoPlaylist = params => {
+	let playlist = _io_q('.playlist');
+	let playlistName = playlist.querySelector('.playlist__name');
+	let playlistChannel = playlist.querySelector('.author');
+	let playlistAuthor = playlist.querySelector('.author__name');
+
+	playlistName.textContent = params.title
+	playlistAuthor.textContent = params.author
+	playlistChannel.dataset.id = params.id
+
+	playlist = null
+	playlistName = null
+	playlistChannel = null
+	playlistAuthor = null
+}
+
+
+const preparePlaylistWin = (btnWin, id) => {
+	openWinPlaylist(id)
+
+	if (btnWin !== null) {
+		let params = {
+			title: btnWin.querySelector('.card__title span').textContent,
+			author: btnWin.querySelector('.card__channel').textContent,
+			id: btnWin.querySelector('.card__channel').dataset.id
+		}
+
+		fillSomeInfoPlaylist(params)
+
+		params = null
+	} else {
+		fillSomeInfoPlaylist({
+			title: 'Title',
+			author: 'Author',
+			id: ''
+		})
+	}
 }
