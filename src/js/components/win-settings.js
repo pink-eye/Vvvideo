@@ -44,7 +44,7 @@ const openWinSettings = _ => {
 			}
 		}
 
-		reader.addEventListener('load', onLoadReader);
+		reader.addEventListener('load', onLoadReader, { once: true });
 	}
 
 	const handleFile = _ => {
@@ -82,6 +82,34 @@ const openWinSettings = _ => {
 
 		input.addEventListener('input', handleInputField);
 	}
+}
+
+const resetWinSettings = _ => {
+	let settings = _io_q('.settings');
+
+	// RESET CHECKBOXES
+
+	let checkboxAll = settings.querySelectorAll('input[type="checkbox"]');
+
+	for (let index = 0, length = checkboxAll.length; index < length; index++) {
+		const checkbox = checkboxAll[index];
+
+		checkbox.removeEventListener('change', handleChangeCheckbox);
+	}
+
+	// RESET INPUTS
+
+	let inputAll = settings.querySelectorAll('input[type="text"]');
+
+	for (let index = 0, length = inputAll.length; index < length; index++) {
+		const input = inputAll[index];
+
+		input.removeEventListener('input', handleInputField);
+	}
+
+	settings = null
+	checkboxAll = null
+	inputAll = null
 }
 
 

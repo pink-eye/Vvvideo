@@ -208,6 +208,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				if (lastWin.classList.contains('history'))
 					resetGrid(_io_q('.history'))
 
+				if (lastWin.classList.contains('settings'))
+					resetWinSettings()
+
 				lastWin = null;
 			}
 
