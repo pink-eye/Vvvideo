@@ -75,12 +75,11 @@ const openWinVideo = async id => {
 
 	videoSubscribeBtn.addEventListener('click', handleClickVideoSubscribeBtn);
 
-
 	// SPOILER
 
-	const spoilerVideoDescr = videoInfo.querySelector('.spoiler');
+	const spoiler = videoInfo.querySelector('.spoiler');
 
-	initSpoiler(spoilerVideoDescr)
+	initSpoiler(spoiler)
 
 	// FILL WIN
 
@@ -230,9 +229,6 @@ const openWinVideo = async id => {
 
 const resetVideo = async _ => {
 	let video = _io_q('.video')
-	let videoInstance = video.querySelector('video');
-	let audioInstance = video.querySelector('audio');
-	let videoWrapper = video.querySelector('.video__wrapper');
 	let videoPoster = video.querySelector('.video__poster img');
 	let avatarSkeleton = video.querySelector('.avatar-skeleton');
 	let videoSkeleton = video.querySelector('.video-skeleton');
@@ -242,46 +238,21 @@ const resetVideo = async _ => {
 	let videoSubs = video.querySelector('.author__subs');
 	let videoViews = video.querySelector('.video-info__views span');
 	let videoDate = video.querySelector('.video-info__date span');
-	let controls = video.querySelector('.controls');
-	let progress = controls.querySelector('.progress');
-	let timeDuration = controls.querySelector('.time__duration');
-	let qualityList = controls.querySelector('.quality__list');
-	let timeElapsed = controls.querySelector('.time__elapsed');
-	let controlsSwitchIcon = controls.querySelector('.controls__switch svg use');
-	let sponsorblock = controls.querySelector('.sponsorblock');
-	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock');
-	let speedCurrent = controls.querySelector('.speed__current');
 	let subscribeBtn = video.querySelector('.subscribe');
+	let videoInfo = video.querySelector('.video-info');
+
+	let videoSubscribeBtn = videoInfo.querySelector('.subscribe');
+	let videoSubscribeText = videoInfo.querySelector('.subscribe__text');
+
+	const handleClickVideoSubscribeBtn = _ => handleClickSubscribeBtn(videoSubscribeBtn, videoSubscribeText)
+
+	videoSubscribeBtn.removeEventListener('click', handleClickVideoSubscribeBtn);
 
 	if (video.classList.contains('_live'))
 		video.classList.remove('_live')
 
 	subscribeBtn.removeAttribute('data-channel-id')
 	subscribeBtn.removeAttribute('data-name')
-
-	while (sponsorblock.firstChild)
-		sponsorblock.firstChild.remove()
-
-	if (sponsorblockBtn.classList.contains('_record'))
-		sponsorblockBtn.classList.remove('_record')
-
-	while (qualityList.firstChild)
-		qualityList.firstChild.remove()
-
-	speedCurrent.textContent = 'x1'
-
-	if (!isEmpty(hls)) {
-		hls.detachMedia()
-		hls.destroy()
-		hls = null
-	}
-
-	resetMediaEl(videoInstance)
-
-	audioInstance
-		? resetMediaEl(audioInstance)
-		: videoWrapper.insertAdjacentHTML('afterBegin',
-			'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>')
 
 	videoPoster.removeAttribute('src')
 	videoPoster.closest('.video__poster').classList.remove('_hidden');
@@ -291,48 +262,31 @@ const resetVideo = async _ => {
 	videoViews.textContent = '...';
 	videoDate.textContent = '...';
 	videoDesc.textContent = '...';
-	timeDuration.textContent = '0:00';
-	timeElapsed.textContent = '0:00';
-	timeDuration.removeAttribute('datetime')
-	timeElapsed.removeAttribute('datetime')
-	progress.removeAttribute('style')
 
 	if (avatarSkeleton.classList.contains('_removing')) {
 		resetSkeleton(avatarSkeleton)
 		resetSkeleton(videoSkeleton)
 	}
 
-	controls.hidden &&= false
-	videoInstance.autoplay &&= false
-
-	let iconPathPlay = 'img/svg/controls.svg#play'
-	if (controlsSwitchIcon.getAttribute('xlink:href') !== iconPathPlay)
-		controlsSwitchIcon.setAttribute('xlink:href', iconPathPlay);
-
 	if (videoFormatAll)
 		videoFormatAll.length = 0
 
+	let spoiler = videoInfo.querySelector('.spoiler');
+
+	destroySpoiler(spoiler)
+
 	video = null
-	videoInstance = null
-	audioInstance = null
-	videoWrapper = null
 	videoPoster = null
 	avatarSkeleton = null
 	videoSkeleton = null
-	qualityList = null
 	videoLikes = null
 	videoDislikes = null
+	videoSubscribeBtn = null
+	videoSubscribeText = null
 	videoDesc = null
 	videoSubs = null
 	videoViews = null
 	videoDate = null
-	timeDuration = null
-	timeElapsed = null
-	controls = null
-	controlsSwitchIcon = null
-	sponsorblock = null
-	sponsorblockBtn = null
-	speedCurrent = null
 	subscribeBtn = null
 }
 

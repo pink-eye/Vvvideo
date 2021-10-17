@@ -97,25 +97,6 @@ const initVideoPlayer = _ => {
 		isSync = false
 	}
 
-	if (isEmpty(hls)) {
-		initDropdown(speed, btn => {
-			if (audio) audio.playbackRate = btn.dataset.speed
-
-			video.playbackRate = btn.dataset.speed
-
-			isSync = false
-		})
-	}
-
-	initDropdown(quality, btn => {
-		for (let index = 0, length = videoFormatAll.length; index < length; index++) {
-			const videoFormat = videoFormatAll[index];
-
-			if (videoFormat.qualityLabel === btn.textContent)
-				chooseQuality(videoFormat.url)
-		}
-	})
-
 	const syncMedia = _ => {
 		audio.currentTime = video.currentTime
 		isSync = true
@@ -518,6 +499,25 @@ const initVideoPlayer = _ => {
 	if (!hasListeners) {
 		hasListeners = true
 
+		if (isEmpty(hls)) {
+			initDropdown(speed, btn => {
+				if (audio) audio.playbackRate = btn.dataset.speed
+
+				video.playbackRate = btn.dataset.speed
+
+				isSync = false
+			})
+		}
+
+		initDropdown(quality, btn => {
+			for (let index = 0, length = videoFormatAll.length; index < length; index++) {
+				const videoFormat = videoFormatAll[index];
+
+				if (videoFormat.qualityLabel === btn.textContent)
+					chooseQuality(videoFormat.url)
+			}
+		})
+
 		const handleInputVolumeSeek = _ => { audio ? updateVolumeAudio() : updateVolumeVideo() }
 
 		volumeSeek.addEventListener('input', handleInputVolumeSeek);
@@ -625,4 +625,74 @@ const initVideoPlayer = _ => {
 
 		document.addEventListener('keydown', handleKeyDownWithinVideo);
 	}
+}
+
+const resetVideoPlayer = _ => {
+	let video = _io_q('.video')
+	let videoWrapper = video.querySelector('.video__wrapper');
+	let videoInstance = video.querySelector('video');
+	let audioInstance = video.querySelector('audio');
+	let controls = video.querySelector('.controls');
+	let controlsSwitchIcon = controls.querySelector('.controls__switch svg use');
+	let sponsorblock = controls.querySelector('.sponsorblock');
+	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock');
+	let progress = controls.querySelector('.progress');
+	let timeDuration = controls.querySelector('.time__duration');
+	let quality = controls.querySelector('.quality');
+	let qualityList = quality.querySelector('.quality__list');
+	let timeElapsed = controls.querySelector('.time__elapsed');
+	let speed = controls.querySelector('.speed');
+	let speedCurrent = speed.querySelector('.dropdown__head');
+
+	while (sponsorblock.firstChild)
+		sponsorblock.firstChild.remove()
+
+	if (sponsorblockBtn.classList.contains('_record'))
+		sponsorblockBtn.classList.remove('_record')
+
+	while (qualityList.firstChild)
+		qualityList.firstChild.remove()
+
+	speedCurrent.textContent = 'x1'
+
+	if (!isEmpty(hls)) {
+		hls.detachMedia()
+		hls.destroy()
+		hls = null
+	}
+
+	timeDuration.textContent = '0:00';
+	timeElapsed.textContent = '0:00';
+	timeDuration.removeAttribute('datetime')
+	timeElapsed.removeAttribute('datetime')
+	progress.removeAttribute('style')
+
+	resetMediaEl(videoInstance)
+
+	audioInstance
+		? resetMediaEl(audioInstance)
+		: videoWrapper.insertAdjacentHTML('afterBegin',
+			'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>')
+
+	let iconPathPlay = 'img/svg/controls.svg#play'
+
+	if (controlsSwitchIcon.getAttribute('xlink:href') !== iconPathPlay)
+		controlsSwitchIcon.setAttribute('xlink:href', iconPathPlay);
+
+	controls.hidden &&= false
+
+	video = null
+	audioInstance = null
+	videoWrapper = null
+	progress = null
+	sponsorblock = null
+	sponsorblockBtn = null
+	quality = null
+	qualityList = null
+	timeDuration = null
+	timeElapsed = null
+	controls = null
+	controlsSwitchIcon = null
+	speed = null
+	speedCurrent = null
 }
