@@ -69,11 +69,8 @@ const openWinVideo = async id => {
 	// SUBSCRIBE BTN
 
 	const videoSubscribeBtn = videoInfo.querySelector('.subscribe');
-	const videoSubscribeText = videoInfo.querySelector('.subscribe__text');
 
-	const handleClickVideoSubscribeBtn = _ => handleClickSubscribeBtn(videoSubscribeBtn, videoSubscribeText)
-
-	videoSubscribeBtn.addEventListener('click', handleClickVideoSubscribeBtn);
+	videoSubscribeBtn.addEventListener('click', handleClickSubscribeBtn);
 
 	// SPOILER
 
@@ -242,11 +239,7 @@ const resetVideo = async _ => {
 	let videoInfo = video.querySelector('.video-info');
 
 	let videoSubscribeBtn = videoInfo.querySelector('.subscribe');
-	let videoSubscribeText = videoInfo.querySelector('.subscribe__text');
-
-	const handleClickVideoSubscribeBtn = _ => handleClickSubscribeBtn(videoSubscribeBtn, videoSubscribeText)
-
-	videoSubscribeBtn.removeEventListener('click', handleClickVideoSubscribeBtn);
+	videoSubscribeBtn.removeEventListener('click', handleClickSubscribeBtn);
 
 	if (video.classList.contains('_live'))
 		video.classList.remove('_live')
@@ -282,7 +275,6 @@ const resetVideo = async _ => {
 	videoLikes = null
 	videoDislikes = null
 	videoSubscribeBtn = null
-	videoSubscribeText = null
 	videoDesc = null
 	videoSubs = null
 	videoViews = null

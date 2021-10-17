@@ -97,10 +97,16 @@ const removeSubscription = async obj => {
 	await API.writeStorage(storage);
 }
 
-const handleClickSubscribeBtn = (btn, btnText) => {
+const handleClickSubscribeBtn = (event) => {
+	let btn = event.target
+	let btnText = btn.querySelector('.subscribe__text')
+
 	!btn.classList.contains('_subscribed')
 		? onClickSubscribe(btn, btnText)
 		: onClickUnsubscribe(btn, btnText)
+
+	btn = null
+	btnText = null
 }
 
 const onClickSubscribe = (btn, btnText) => {

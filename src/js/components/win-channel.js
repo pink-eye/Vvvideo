@@ -16,17 +16,12 @@ const openWinChannel = async id => {
 	let channelDescription = channel.querySelector('.about__description');
 	let bannerSkeleton = channel.querySelector('.banner-skeleton');
 	let avatarSkeleton = channel.querySelector('.avatar-skeleton');
-	let subscribeBtn = channel.querySelector('.subscribe');
-	let subscribeText = channel.querySelector('.subscribe__text');
 
 	// SUBSCRIBE BTN
 
 	const channelSubscribeBtn = channel.querySelector('.subscribe');
-	const channelSubscribeText = channel.querySelector('.subscribe__text');
 
-	const handleClickChannelSubscribeBtn = _ => handleClickSubscribeBtn(channelSubscribeBtn, channelSubscribeText)
-
-	channelSubscribeBtn.addEventListener('click', handleClickChannelSubscribeBtn);
+	channelSubscribeBtn.addEventListener('click', handleClickSubscribeBtn);
 
 	// FILL WIN
 
@@ -85,8 +80,6 @@ const openWinChannel = async id => {
 		channelBanner = null
 		channelFollowers = null
 		channelDescription = null
-		subscribeBtn = null
-		subscribeText = null
 	}
 }
 
@@ -102,11 +95,8 @@ const resetChannel = async (channelTabContentVideos, channelTabContentPlaylists)
 	// SUBSCRIBE BTN
 
 	let channelSubscribeBtn = channel.querySelector('.subscribe');
-	let channelSubscribeText = channel.querySelector('.subscribe__text');
 
-	const handleClickChannelSubscribeBtn = _ => handleClickSubscribeBtn(channelSubscribeBtn, channelSubscribeText)
-
-	channelSubscribeBtn.removeEventListener('click', handleClickChannelSubscribeBtn);
+	channelSubscribeBtn.removeEventListener('click', handleClickSubscribeBtn);
 
 	channelBanner.style.setProperty('--bg-image', 'none center')
 	channelBannerImg.removeAttribute('src')
@@ -125,7 +115,6 @@ const resetChannel = async (channelTabContentVideos, channelTabContentPlaylists)
 
 	channel = null;
 	channelSubscribeBtn = null
-	channelSubscribeText = null
 	channelBannerImg = null;
 	channelBanner = null;
 	bannerSkeleton = null;
