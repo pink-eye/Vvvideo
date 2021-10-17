@@ -371,4 +371,34 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	}
 
 	window.addEventListener('click', handleClickWindow);
+
+
+	// DROPDOWN
+	
+	const settings = _io_q('.settings');
+	const themeDropdown = settings.querySelector('.option__theme');
+	const protocolDropdown = settings.querySelector('.option__protocol');
+	const qualityDropdown = settings.querySelector('.option__quality');
+	const formatDropdown = settings.querySelector('.option__format');
+
+	initDropdown(themeDropdown, btn => {
+		setTheme(btn.dataset.choice)
+		storage.settings.theme = btn.dataset.choice
+		API.writeStorage(storage)
+	})
+
+	initDropdown(qualityDropdown, btn => {
+		storage.settings.defaultQuality = btn.dataset.choice
+		API.writeStorage(storage)
+	})
+
+	initDropdown(protocolDropdown, btn => {
+		storage.settings.proxy.protocol = btn.textContent.toLowerCase()
+		API.writeStorage(storage)
+	})
+
+	initDropdown(formatDropdown, btn => {
+		storage.settings.defaltVideoFormat = btn.textContent
+		API.writeStorage(storage)
+	})
 });
