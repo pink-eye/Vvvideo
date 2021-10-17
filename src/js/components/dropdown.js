@@ -39,12 +39,13 @@ const hideLastDropdown = (currentDropdown = null) => {
 const focusCurrentChoice = dropdown => {
 	let dropdownHead = dropdown.querySelector('.dropdown__head');
 	let dropdownBtnAll = dropdown.querySelectorAll('.dropdown__btn');
+	let dropdownBtnCurrent = dropdown.querySelector('._current')
+
+	if (dropdownBtnCurrent)
+		dropdownBtnCurrent.classList.remove('_current')
 
 	for (let index = 0, length = dropdownBtnAll.length; index < length; index++) {
 		const dropdownBtn = dropdownBtnAll[index];
-
-		if (dropdownBtn.classList.contains('_current'))
-			dropdownBtn.classList.remove('_current')
 
 		if (dropdownHead.textContent === dropdownBtn.textContent) {
 			dropdownBtn.focus();
@@ -54,6 +55,7 @@ const focusCurrentChoice = dropdown => {
 
 	dropdownHead = null
 	dropdownBtnAll = null
+	dropdownBtnCurrent = null
 }
 
 const toggleDropdown = dropdown => {
