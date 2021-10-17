@@ -20,8 +20,6 @@ const initVideoPlayer = _ => {
 		progressSponsorblock = progress.querySelector('.progress__sponsorblock'),
 		volumeSeek = controls.querySelector('.volume__seek'),
 		volumeBar = controls.querySelector('.volume__bar'),
-		speed = controls.querySelector('.speed'),
-		quality = controls.querySelector('.quality'),
 		controlsScreenOpen = controls.querySelector('.controls__screen_open'),
 		controlsScreenClose = controls.querySelector('.controls__screen_close'),
 		controlsBar = controls.querySelector('.controls__bar'),
@@ -496,11 +494,24 @@ const initVideoPlayer = _ => {
 
 	// CONTROLS LISTENERS
 
+	const controlsQuality = controls.querySelector('.controls__quality')
+
+	initDropdown(controlsQuality, btn => {
+		for (let index = 0, length = videoFormatAll.length; index < length; index++) {
+			const videoFormat = videoFormatAll[index];
+
+			if (videoFormat.qualityLabel === btn.textContent)
+				chooseQuality(videoFormat.url)
+		}
+	})
+
 	if (!hasListeners) {
 		hasListeners = true
 
 		if (isEmpty(hls)) {
-			initDropdown(speed, btn => {
+			const controlsSpeed = controls.querySelector('.controls__speed')
+
+			initDropdown(controlsSpeed, btn => {
 				if (audio) audio.playbackRate = btn.dataset.speed
 
 				video.playbackRate = btn.dataset.speed
@@ -508,15 +519,6 @@ const initVideoPlayer = _ => {
 				isSync = false
 			})
 		}
-
-		initDropdown(quality, btn => {
-			for (let index = 0, length = videoFormatAll.length; index < length; index++) {
-				const videoFormat = videoFormatAll[index];
-
-				if (videoFormat.qualityLabel === btn.textContent)
-					chooseQuality(videoFormat.url)
-			}
-		})
 
 		const handleInputVolumeSeek = _ => { audio ? updateVolumeAudio() : updateVolumeVideo() }
 
@@ -638,10 +640,10 @@ const resetVideoPlayer = _ => {
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock');
 	let progress = controls.querySelector('.progress');
 	let timeDuration = controls.querySelector('.time__duration');
-	let quality = controls.querySelector('.quality');
-	let qualityList = quality.querySelector('.quality__list');
+	let quality = controls.querySelector('.controls__quality');
+	let qualityList = quality.querySelector('.dropdown__list');
 	let timeElapsed = controls.querySelector('.time__elapsed');
-	let speed = controls.querySelector('.speed');
+	let speed = controls.querySelector('.controls__speed');
 	let speedCurrent = speed.querySelector('.dropdown__head');
 
 	while (sponsorblock.firstChild)

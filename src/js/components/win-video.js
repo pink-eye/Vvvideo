@@ -3,7 +3,9 @@ const createQualityItemHTML = quality => `<li class="dropdown__item">
 										</li>`
 
 const insertQualityList = videoFormatAll => {
-	let qualityList = _io_q('.controls').querySelector('.quality__list');
+	let controls = _io_q('.controls');
+	let quality = controls.querySelector('.controls__quality');
+	let qualityList = quality.querySelector('.dropdown__list');
 
 	if (videoFormatAll.length > 0) {
 		for (let index = 0, length = videoFormatAll.length; index < length; index++) {
@@ -12,6 +14,8 @@ const insertQualityList = videoFormatAll => {
 		}
 	}
 
+	controls = null
+	quality = null
 	qualityList = null
 }
 
@@ -49,10 +53,11 @@ const openWinVideo = async id => {
 	let videoInstance = video.querySelector('video');
 	let audioInstance = video.querySelector('audio');
 	let videoPoster = video.querySelector('.video__poster img');
-	let videoInfo = video.querySelector('.video-info');
 	let videoSkeleton = video.querySelector('.video-skeleton');
 	let controls = _io_q('.controls');
-	let qualityCurrent = controls.querySelector('.quality__current');
+	let quality = controls.querySelector('.controls__quality');
+	let qualityCurrent = quality.querySelector('.dropdown__head');
+	let videoInfo = video.querySelector('.video-info');
 	let videoTitle = videoInfo.querySelector('.video-info__title');
 	let videoAuthor = videoInfo.querySelector('.author__name');
 	let videoViews = videoInfo.querySelector('.video-info__views span');
@@ -209,8 +214,10 @@ const openWinVideo = async id => {
 			}
 		} catch (error) {
 			showToast('error', error.message)
+			console.log(error);
 		} finally {
 			videoInfo = null
+			quality = null
 			qualityCurrent = null
 			videoViews = null
 			videoDate = null
