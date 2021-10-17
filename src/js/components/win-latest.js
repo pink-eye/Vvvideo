@@ -2,8 +2,6 @@ let storage = {}
 let latestArray = null;
 
 const getChannelVideosLocalScraper = (channelId, index) => new Promise(async (resolve) => {
-	let indicator = _io_q('.indicator');
-
 	try {
 		const data = await API.scrapeChannelVideos(channelId);
 
@@ -19,7 +17,6 @@ const getChannelVideosLocalScraper = (channelId, index) => new Promise(async (re
 			video = null
 		}
 
-		indicator = null
 		resolve(data.items)
 	} catch (error) {
 		showToast('error', error.message)
