@@ -53,12 +53,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	hideOnScroll(header, 0)
 	hideOnScroll(sidebar, 767)
 
-	// BURGER
-
-	const burger = header.querySelector('.burger')
-
-	burger.addEventListener('click', toggleMenu);
-
 	// MANAGE WINDOWS
 
 	const fillSomeInfoVideo = params => {
@@ -377,13 +371,4 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	}
 
 	window.addEventListener('click', handleClickWindow);
-
-	// REFRESH BTN
-
-	headerBtn.addEventListener('click', reloadApp);
-
-	// EXIT
-
-	const btnExit = sidebar.querySelector('.btn-exit');
-	btnExit.addEventListener('click', closeApp);
 });
