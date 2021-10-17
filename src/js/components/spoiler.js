@@ -1,24 +1,35 @@
-const initSpoiler = spoiler => {
+const toggleSpoiler = event => {
+	let spoiler = event.target.closest('.spoiler')
 
-	const toggleSpoiler = spoiler => {
-		if (spoiler.classList.contains("_opened"))
-			spoiler.removeAttribute('style')
-		else {
-			let heightContent = spoiler.querySelector('.spoiler__content').offsetHeight;
+	if (spoiler.classList.contains("_opened")) {
+		spoiler.removeAttribute('style')
+		spoiler.classList.remove("_opened")
+	}
+	else {
+		let heightContent = spoiler.querySelector('.spoiler__content').offsetHeight;
 
-			spoiler.style.setProperty("--height-content", `${heightContent}px`);
+		spoiler.style.setProperty("--height-content", `${heightContent}px`);
+		spoiler.classList.add("_opened")
 
-			heightContent = null
-		}
-
-		spoiler.classList.toggle("_opened")
-	};
-
-	const spoilerHead = spoiler.querySelector('.spoiler__head')
-
-	const handleClickHead = _ => {
-		toggleSpoiler(spoiler)
+		heightContent = null
 	}
 
-	spoilerHead.addEventListener("click", handleClickHead)
+	spoiler = null
+};
+
+const initSpoiler = spoiler => {
+	const spoilerHead = spoiler.querySelector('.spoiler__head')
+
+	spoilerHead.addEventListener("click", toggleSpoiler)
+}
+
+const destroySpoiler = spoiler => {
+	let spoilerHead = spoiler.querySelector('.spoiler__head')
+
+	spoiler.removeAttribute('style')
+	spoiler.classList.remove("_opened")
+
+	spoilerHead.removeEventListener("click", toggleSpoiler)
+
+	spoilerHead = null
 }
