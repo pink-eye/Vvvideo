@@ -1,13 +1,13 @@
-const hideLastTab = async (tabContentClass, tabClass) => {
+const hideLastTab = _ => {
 	let channel = _io_q('.channel');
-	let tabContentActive = channel.querySelector(`${tabContentClass}._active`);
+	let tabContentActive = channel.querySelector(`.tab-content._active`);
 
 	if (tabContentActive && tabContentActive.classList.contains('_active')) {
 		tabContentActive.classList.remove('_active');
 		tabContentActive = null
 	}
 
-	let tabActive = channel.querySelector(`${tabClass}._active`);
+	let tabActive = channel.querySelector(`.body-channel__tab._active`);
 
 	if (tabActive && tabActive.classList.contains('_active')) {
 		tabActive.classList.remove('_active');
@@ -31,12 +31,12 @@ const hideLastTab = async (tabContentClass, tabClass) => {
 	tabActive = null
 };
 
-const showRequiredTab = async (tab, tabContentClass) => {
+const showRequiredTab = async (tab) => {
 	let channel = _io_q('.channel');
 	if (tab && !tab.classList.contains('_active'))
 		tab.classList.add('_active');
 
-	let reqTabContent = channel.querySelector(`${tabContentClass}[data-tab=${tab.dataset.tab}]`);
+	let reqTabContent = channel.querySelector(`.tab-content[data-tab=${tab.dataset.tab}]`);
 
 	if (reqTabContent && !reqTabContent.classList.contains('_active')) {
 		reqTabContent.classList.add('_active');
@@ -97,24 +97,40 @@ const showRequiredTab = async (tab, tabContentClass) => {
 	channel = null
 };
 
-const switchTab = (tabClass, tabContentClass, primary) => {
+const handleClickTab = async event => {
+	let tab = event.target
 
-	const tabAll = _io_q('.channel').querySelectorAll(tabClass);
+	if (!tab.classList.contains('_active')) {
+		hideLastTab();
+		await showRequiredTab(tab)
+	}
+
+	tab = null
+}
+
+const initTabs = primary => {
+	const tabAll = _io_q('.channel').querySelectorAll('.body-channel__tab');
 
 	if (tabAll.length > 0)
 		for (let index = 0, length = tabAll.length; index < length; index++) {
 			const tab = tabAll[index],
 				tabPrimary = tabAll[primary];
 
-			showRequiredTab(tabPrimary, tabContentClass)
-
-			const handleClickTab = async _ => {
-				if (!tab.classList.contains('_active')) {
-					hideLastTab(tabContentClass, tabClass);
-					await showRequiredTab(tab, tabContentClass)
-				}
-			}
+			showRequiredTab(tabPrimary)
 
 			tab.addEventListener("click", handleClickTab)
 		}
-};
+}
+
+const destroyTabs = _ => {
+	let tabAll = _io_q('.channel').querySelectorAll('.body-channel__tab');
+
+	if (tabAll.length > 0)
+		for (let index = 0, length = tabAll.length; index < length; index++) {
+			const tab = tabAll[index]
+
+			tab.removeEventListener("click", handleClickTab)
+		}
+
+	tabAll = null
+}

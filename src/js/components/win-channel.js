@@ -69,8 +69,8 @@ const openWinChannel = async id => {
 		if (data.description)
 			channelDescription.innerHTML = `${normalizeDesc(data.description)}`
 
-		hideLastTab('.body-channel__tab', '.tab-content');
-		switchTab('.body-channel__tab', '.tab-content', 0);
+		hideLastTab();
+		initTabs(0);
 
 	} catch (error) {
 		showToast('error', error.message)
@@ -112,6 +112,8 @@ const resetChannel = _ => {
 
 	resetGrid(channelTabContentVideos)
 	resetGrid(channelTabContentPlaylists)
+
+	destroyTabs()
 
 	channelDescription.textContent = null
 
