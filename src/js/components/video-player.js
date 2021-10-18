@@ -68,6 +68,9 @@ const initVideoPlayer = _ => {
 	const onCloseModal = _ => {
 		togglePlay()
 		resetDialogSB()
+
+		dialogSbStart.removeEventListener('input', handleInputDialogField);
+		dialogSbEnd.removeEventListener('input', handleInputDialogField);
 	}
 
 	const modal = new GraphModal({ isClose: onCloseModal })
@@ -348,6 +351,14 @@ const initVideoPlayer = _ => {
 		}
 	}
 
+	const handleInputDialogField = e => {
+		let dialogSbField = e.target
+		resetDialogSB()
+		dialogSbField.value = formatDuration(dialogSbField.value)
+
+		dialogSbField = null
+	}
+
 	const recordSegmentSB = _ => {
 		if (isPlayingVideo()) {
 			if (!isRecording) {
@@ -368,6 +379,9 @@ const initVideoPlayer = _ => {
 				dialogSbStart.value = startTime
 				dialogSbEnd.value = endTime
 				modal.open('dialog-sb')
+
+				dialogSbStart.addEventListener('input', handleInputDialogField);
+				dialogSbEnd.addEventListener('input', handleInputDialogField);
 			}
 		} else showToast('error', 'You must play video!')
 	}
@@ -574,17 +588,6 @@ const initVideoPlayer = _ => {
 		dialogSbBtnSend.addEventListener('click', sendSegmentSB);
 
 		dialogSbBtnCancel.addEventListener('click', _ => { modal.close() });
-
-		const handleInputDialogField = e => {
-			let dialogSbField = e.target
-			resetDialogSB()
-			dialogSbField.value = formatDuration(dialogSbField.value)
-
-			dialogSbField = null
-		}
-
-		dialogSbStart.addEventListener('input', handleInputDialogField);
-		dialogSbEnd.addEventListener('input', handleInputDialogField);
 
 		const handleClickTimecode = e => {
 			if (e.target.classList.contains('timecode')) {

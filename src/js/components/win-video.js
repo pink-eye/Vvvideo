@@ -93,6 +93,8 @@ const openWinVideo = async id => {
 				? await API.scrapeVideoProxy(id, getProxyOptions())
 				: await API.scrapeVideo(id)
 
+			console.log(data);
+
 			if (data.videoDetails.isLive)
 				video.classList.add('_live')
 
@@ -227,7 +229,6 @@ const openWinVideo = async id => {
 			}
 		} catch (error) {
 			showToast('error', error.message)
-			console.log(error);
 		} finally {
 			videoInfo = null
 			quality = null

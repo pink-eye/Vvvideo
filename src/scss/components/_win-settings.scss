@@ -44,6 +44,7 @@
     &__title {
         color: var(--color-title);
         transition: color var(--trns);
+		font-weight: 500;
 
         @media (min-width: 768px) {
             font-size: 30px;
