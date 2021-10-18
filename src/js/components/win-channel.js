@@ -92,7 +92,6 @@ const resetChannel = _ => {
 	let bannerSkeleton = channel.querySelector('.banner-skeleton');
 	let avatarSkeleton = channel.querySelector('.avatar-skeleton');
 	let channelDescription = channel.querySelector('.about__description');
-	let subscribeBtn = channel.querySelector('.subscribe');
 
 	// SUBSCRIBE BTN
 
@@ -102,8 +101,8 @@ const resetChannel = _ => {
 
 	channelBanner.style.setProperty('--bg-image', 'none center')
 	channelBannerImg.removeAttribute('src')
-	subscribeBtn.removeAttribute('data-channel-id')
-	subscribeBtn.removeAttribute('data-name')
+	channelSubscribeBtn.removeAttribute('data-channel-id')
+	channelSubscribeBtn.removeAttribute('data-name')
 
 	if (avatarSkeleton.classList.contains('_removing')) {
 		resetSkeleton(avatarSkeleton)
@@ -125,7 +124,6 @@ const resetChannel = _ => {
 	channelTabContentPlaylists = null
 	bannerSkeleton = null;
 	avatarSkeleton = null;
-	subscribeBtn = null;
 }
 
 const fillSomeInfoChannel = (title, authorId) => {
