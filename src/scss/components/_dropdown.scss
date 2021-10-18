@@ -72,8 +72,9 @@
 
     &__list {
         position: absolute;
-        right: 50%;
-		width: max-content;
+        right: 0;
+		width: auto;
+		white-space: nowrap;
         max-height: 125px;
         overflow-y: auto;
         overscroll-behavior: contain;
@@ -83,8 +84,6 @@
 
         background-color: var(--color-bg-form);
         border-radius: var(--brs-m);
-
-        transform: translateX(50%);
 
         transition: opacity var(--trns),
             visibility var(--trns),
