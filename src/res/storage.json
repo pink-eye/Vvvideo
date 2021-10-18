@@ -17,6 +17,7 @@
 		"defaultQuality": "1080p",
 		"autoplay": true,
 		"disableSeparatedStreams": false,
+		"disableStoryboard": false,
 		"defaltVideoFormat": "mp4",
 		"disableSearchSuggestions": false,
 		"regionTrending": "US",

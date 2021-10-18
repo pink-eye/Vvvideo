@@ -1,6 +1,7 @@
 const createQualityItemHTML = quality => `<li class="dropdown__item">
 											<button class="dropdown__btn btn-reset">${quality}</button>
 										</li>`
+const createStoryboardHTML = _ => `<div class="progress__storyboard"></div>`
 
 const insertQualityList = videoFormatAll => {
 	let controls = _io_q('.controls');
@@ -57,6 +58,7 @@ const openWinVideo = async id => {
 	let controls = _io_q('.controls');
 	let quality = controls.querySelector('.controls__quality');
 	let qualityCurrent = quality.querySelector('.dropdown__head');
+	let progressStoryboard = controls.querySelector('.progress__storyboard');
 	let videoInfo = video.querySelector('.video-info');
 	let videoTitle = videoInfo.querySelector('.video-info__title');
 	let videoAuthor = videoInfo.querySelector('.author__name');
@@ -175,6 +177,14 @@ const openWinVideo = async id => {
 
 
 				// FILL VIDEO INFO
+
+				if (!ss.disableStoryboard) {
+					if (data.videoDetails.storyboards.length > 0)
+						progressStoryboard.style.setProperty('--url', `url(${data.videoDetails.storyboards.at(0).templateUrl})`)
+					else progressStoryboard.remove()
+				} else if (progressStoryboard)
+					progressStoryboard.remove()
+
 				if (data.videoDetails.title !== videoTitle.textContent)
 					videoTitle.textContent = data.videoDetails.title
 
@@ -229,6 +239,7 @@ const openWinVideo = async id => {
 			videoLikes = null
 			videoDislikes = null
 			videoSubs = null
+			progressStoryboard = null
 		}
 
 	}

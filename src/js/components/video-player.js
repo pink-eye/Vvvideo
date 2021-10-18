@@ -17,6 +17,7 @@ const initVideoPlayer = _ => {
 		progress = controls.querySelector('.progress'),
 		progressSeek = progress.querySelector('.progress__seek'),
 		progressSeekTooltip = progress.querySelector('.progress__seek-tooltip'),
+		progressStoryboard = progress.querySelector('.progress__storyboard'),
 		progressSponsorblock = progress.querySelector('.progress__sponsorblock'),
 		volumeSeek = controls.querySelector('.volume__seek'),
 		volumeBar = controls.querySelector('.volume__bar'),
@@ -204,17 +205,35 @@ const initVideoPlayer = _ => {
 
 		const rect = video.getBoundingClientRect();
 		const widthProgressBar = video.offsetWidth - 40
-		const posCursor = event.pageX - rect.left
+		const posCursor = event.pageX - rect.left - 20
 
-		if (posCursor < widthProgressBar * 0.1)
+		const { posX, posY } = getPosStroryboard(video.duration, skipTo, 100)
+
+		if (progressStoryboard) {
+			progressStoryboard.style.setProperty('--posX', `-${posX}px`)
+			progressStoryboard.style.setProperty('--posY', `-${posY}px`)
+		}
+
+		if (posCursor < widthProgressBar * 0.1) {
 			progressSeekTooltip.style.left = `${widthProgressBar * 0.1}px`;
 
+			if (progressStoryboard)
+				progressStoryboard.style.left = `${widthProgressBar * 0.1}px`;
+		}
 		if (posCursor > widthProgressBar * 0.1 &&
-			posCursor < widthProgressBar * 0.9)
+			posCursor < widthProgressBar * 0.9) {
 			progressSeekTooltip.style.left = `${posCursor}px`;
 
-		if (posCursor > widthProgressBar * 0.9)
+			if (progressStoryboard)
+				progressStoryboard.style.left = `${posCursor}px`;
+		}
+
+		if (posCursor > widthProgressBar * 0.9) {
 			progressSeekTooltip.style.left = `${widthProgressBar * 0.9}px`;
+
+			if (progressStoryboard)
+				progressStoryboard.style.left = `${widthProgressBar * 0.9}px`;
+		}
 
 	}
 
@@ -641,6 +660,7 @@ const resetVideoPlayer = _ => {
 	let sponsorblock = controls.querySelector('.sponsorblock');
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock');
 	let progress = controls.querySelector('.progress');
+	let progressStoryboard = controls.querySelector('.progress__storyboard');
 	let timeDuration = controls.querySelector('.time__duration');
 	let quality = controls.querySelector('.controls__quality');
 	let qualityList = quality.querySelector('.dropdown__list');
@@ -670,6 +690,9 @@ const resetVideoPlayer = _ => {
 	timeDuration.removeAttribute('datetime')
 	timeElapsed.removeAttribute('datetime')
 	progress.removeAttribute('style')
+
+	if (!storage.settings.disableStoryboard && !progressStoryboard)
+		progress.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
 
 	resetMediaEl(videoInstance)
 

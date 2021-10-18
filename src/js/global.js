@@ -188,3 +188,30 @@ const getProxyOptions = _ => storage.settings.proxy
 const getDurationTimeout = _ => storage.settings.disableTransition ? 0 : 300
 
 const getMin = (a, b) => a > b ? b : a
+
+const round = (n, d) => Number(Math.round(n + "e" + d) + "e-" + d);
+
+const getPosStroryboard = (videoDuration, currentTime, count) => {
+	const interval = round(videoDuration / count, 2)
+	const currentFrame = Math.floor(currentTime / interval)
+
+	let column = currentFrame
+	let row = 0
+
+	if (currentFrame > 9 && currentFrame < 90) {
+
+		while (column > 9) {
+			column -= 9
+			row++
+		}
+
+	} else if (currentFrame >= 90 && currentFrame <= 99) {
+		column = 9
+		row = 9
+	}
+
+	const posX = 160 * column
+	const posY = 90 * row
+
+	return { posX, posY }
+}
