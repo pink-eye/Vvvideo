@@ -93,13 +93,14 @@ const openWinVideo = async id => {
 				? await API.scrapeVideoProxy(id, getProxyOptions())
 				: await API.scrapeVideo(id)
 
-			console.log(data);
-
 			if (data.videoDetails.isLive)
 				video.classList.add('_live')
 
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
+				
+				videoSubscribeBtn.dataset.channelId = data.videoDetails.author.id
+				videoSubscribeBtn.dataset.name = data.videoDetails.author.name
 
 				const onLoadedData = _ => {
 					if (videoSkeleton)
