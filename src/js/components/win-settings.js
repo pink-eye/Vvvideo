@@ -88,6 +88,9 @@ const readInputFile = async _ => {
 	const validTip = "Succesfully! Wait for refresh..."
 	const failTip = "Fail... :("
 
+	let settings = _io_q('.settings');
+	let impExpField = settings.querySelector('.imp-exp__field')
+
 	let reader = new FileReader();
 	reader.readAsText(impExpField.files[0]);
 
@@ -105,6 +108,9 @@ const readInputFile = async _ => {
 	}
 
 	reader.addEventListener('load', onLoadReader, { once: true });
+
+	settings = null
+	impExpField = null
 }
 
 const handleClickImport = _ => {
@@ -124,6 +130,7 @@ const handleFile = _ => {
 	let settings = _io_q('.settings');
 	let impExpBody = settings.querySelector('.imp-exp')
 	let impExpTip = settings.querySelector('.imp-exp__tip')
+	let impExpField = settings.querySelector('.imp-exp__field')
 
 	impExpBody.classList.remove('_valid')
 	impExpBody.classList.remove('_invalid')
@@ -132,6 +139,7 @@ const handleFile = _ => {
 	settings = null
 	impExpBody = null
 	impExpTip = null
+	impExpField = null
 }
 
 const setTheme = themeOption => {
