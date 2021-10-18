@@ -185,7 +185,7 @@ const getChannelIdOrUser = url => {
 
 const getProxyOptions = _ => storage.settings.proxy
 
-const getDurationTimeout = _ => storage.settings.disableTransition ? 0 : 300
+const getDurationTimeout = (timeout = 300) => storage.settings.disableTransition ? 0 : timeout
 
 const getMin = (a, b) => a > b ? b : a
 

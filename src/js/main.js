@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				lastWin = null;
 			}
 
-			setTimeout(onHideLastWin, getDurationTimeout());
+			setTimeout(onHideLastWin, getDurationTimeout(200));
 		}
 	}
 

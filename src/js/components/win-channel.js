@@ -33,6 +33,9 @@ const openWinChannel = async id => {
 		if (data.author !== channelAuthor.textContent)
 			channelAuthor.textContent = data.author
 
+		channelSubscribeBtn.dataset.name = data.author
+		channelSubscribeBtn.dataset.channelId = id
+
 		if (data.authorThumbnails) {
 			channelAvatar.src = data.authorThumbnails.at(-1).url
 
@@ -88,6 +91,7 @@ const resetChannel = _ => {
 	let channelBanner = channel.querySelector('.channel__banner');
 	let channelBannerImg = channel.querySelector('.channel__banner img');
 	let channelTabContentVideos = channel.querySelector('.videos');
+	let channelFollowers = channel.querySelector('.heading-channel__followers');
 	let channelTabContentPlaylists = channel.querySelector('.playlists');
 	let bannerSkeleton = channel.querySelector('.banner-skeleton');
 	let avatarSkeleton = channel.querySelector('.avatar-skeleton');
@@ -103,6 +107,7 @@ const resetChannel = _ => {
 	channelBannerImg.removeAttribute('src')
 	channelSubscribeBtn.removeAttribute('data-channel-id')
 	channelSubscribeBtn.removeAttribute('data-name')
+	channelFollowers.textContent = '... subscribers'
 
 	if (avatarSkeleton.classList.contains('_removing')) {
 		resetSkeleton(avatarSkeleton)
@@ -119,6 +124,7 @@ const resetChannel = _ => {
 	channel = null;
 	channelSubscribeBtn = null
 	channelBannerImg = null;
+	channelFollowers = null
 	channelBanner = null;
 	channelTabContentVideos = null
 	channelTabContentPlaylists = null
@@ -151,8 +157,6 @@ const fillSomeInfoChannel = (title, authorId) => {
 }
 
 const prepareChannelWin = (btnWin, id) => {
-	openWinChannel(id)
-
 	if (btnWin !== null) {
 		let channelTitle = btnWin.classList.contains('card')
 			? btnWin.querySelector('.card__title span')
@@ -165,6 +169,8 @@ const prepareChannelWin = (btnWin, id) => {
 		fillSomeInfoChannel(channelTitle.textContent, channelId)
 
 		channelTitle = null
-	} else fillSomeInfoChannel('Author', '')
+	} else fillSomeInfoChannel('Channel name', '')
+
+	openWinChannel(id)
 }
 

@@ -361,7 +361,7 @@ const prepareVideoWin = (btnWin, id) => {
 			title: 'Title',
 			views: '...',
 			date: '...',
-			author: 'Author',
+			author: 'Channel name',
 			authorId: ''
 		});
 	}
