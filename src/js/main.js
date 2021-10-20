@@ -104,10 +104,12 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	const manageWin = async e => {
 		if (e.target.dataset.win || e.target.closest('[data-win]')) {
-			let btnWin = e.target.dataset.win ? e.target : e.target.closest('[data-win]');
+			const btnWin = e.target.dataset.win ? e.target : e.target.closest('[data-win]');
+			const reqWinString = btnWin.dataset.win
+			const reqID = btnWin.dataset.id
 
 			if (!btnWin.disabled) {
-				let reqWin = mainContent.querySelector(`.${btnWin.dataset.win}`);
+				let reqWin = mainContent.querySelector(`.${reqWinString}`);
 
 				if (!reqWin.classList.contains('_active') || reqWin.classList.contains('search-results')) {
 
@@ -181,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 						reqWin = null;
 					}
 
-					setTimeout(afterHideLastWin, getDurationTimeout());
+					setTimeout(afterHideLastWin, getDurationTimeout(200));
 				}
 			}
 		}
