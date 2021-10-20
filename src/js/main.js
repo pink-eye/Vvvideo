@@ -108,87 +108,88 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 			if (!btnWin.disabled) {
 				let reqWin = mainContent.querySelector(`.${btnWin.dataset.win}`);
+
 				if (!reqWin.classList.contains('_active') || reqWin.classList.contains('search-results')) {
+
+					hideLastWin()
 
 					if (btnWin.classList.contains('sidebar__btn')) {
 						deactivateLastSidebarBtn();
 						activateSidebarBtn(btnWin);
 					} else deactivateLastSidebarBtn()
 
-					switch (btnWin.dataset.win) {
-						case 'trending':
-							setTimeout(scrollToTop, getDurationTimeout())
-							openWinTrending(storage.settings.regionTrending)
-							break;
-
-						case 'latest':
-							setTimeout(scrollToTop, getDurationTimeout())
-							openWinLatest()
-							break;
-
-						case 'subscriptions':
-							setTimeout(scrollToTop, getDurationTimeout())
-							openWinSubs()
-							break;
-
-						case 'video':
-							if (!isEmpty(btnWin.dataset.id)) {
-								setTimeout(scrollToTop, getDurationTimeout())
-								prepareVideoWin(btnWin, btnWin.dataset.id)
-
-								if (!storage.settings.disableHistory)
-									saveToHistoryVideo(btnWin)
-							} else return
-
-							break;
-
-						case 'channel':
-							if (!isEmpty(btnWin.dataset.id)) {
-								setTimeout(scrollToTop, getDurationTimeout())
-								prepareChannelWin(btnWin, btnWin.dataset.id)
-							} else return
-
-							break;
-
-						case 'playlist':
-							if (!isEmpty(btnWin.dataset.id)) {
-								setTimeout(scrollToTop, getDurationTimeout())
-								preparePlaylistWin(btnWin, btnWin.dataset.id)
-							} else return
-
-							break;
-
-						case 'search-results':
-							setTimeout(scrollToTop, getDurationTimeout())
-
-							if (API.YTDLvalidateURL(searchBar.value)) {
-								reqWin = _io_q('.video')
-								prepareVideoWin(null, API.YTDLgetVideoID(searchBar.value))
-							} else if (isResourceIsPlaylist(searchBar.value)) {
-								reqWin = _io_q('.playlist')
-								preparePlaylistWin(null, await API.YTPLgetPlaylistID(searchBar.value))
-							} else if (isResourceIsChannel(searchBar.value)) {
-								reqWin = _io_q('.channel')
-								prepareChannelWin(null, getChannelIdOrUser(searchBar.value))
-							} else openWinSearchResults()
-
-							break;
-
-						case 'history':
-							setTimeout(scrollToTop, getDurationTimeout())
-							openWinHistory()
-							break;
-
-						case 'settings':
-							setTimeout(scrollToTop, getDurationTimeout())
-							openWinSettings()
-							break;
-
-					}
-
-					hideLastWin()
-
 					const afterHideLastWin = _ => {
+
+						switch (btnWin.dataset.win) {
+							case 'trending':
+								setTimeout(scrollToTop, getDurationTimeout())
+								openWinTrending(storage.settings.regionTrending)
+								break;
+
+							case 'latest':
+								setTimeout(scrollToTop, getDurationTimeout())
+								openWinLatest()
+								break;
+
+							case 'subscriptions':
+								setTimeout(scrollToTop, getDurationTimeout())
+								openWinSubs()
+								break;
+
+							case 'video':
+								if (!isEmpty(btnWin.dataset.id)) {
+									setTimeout(scrollToTop, getDurationTimeout())
+									prepareVideoWin(btnWin, btnWin.dataset.id)
+
+									if (!storage.settings.disableHistory)
+										saveToHistoryVideo(btnWin)
+								} else return
+
+								break;
+
+							case 'channel':
+								if (!isEmpty(btnWin.dataset.id)) {
+									setTimeout(scrollToTop, getDurationTimeout())
+									prepareChannelWin(btnWin, btnWin.dataset.id)
+								} else return
+
+								break;
+
+							case 'playlist':
+								if (!isEmpty(btnWin.dataset.id)) {
+									setTimeout(scrollToTop, getDurationTimeout())
+									preparePlaylistWin(btnWin, btnWin.dataset.id)
+								} else return
+
+								break;
+
+							case 'search-results':
+								setTimeout(scrollToTop, getDurationTimeout())
+
+								if (API.YTDLvalidateURL(searchBar.value)) {
+									reqWin = _io_q('.video')
+									prepareVideoWin(null, API.YTDLgetVideoID(searchBar.value))
+								} else if (isResourceIsPlaylist(searchBar.value)) {
+									reqWin = _io_q('.playlist')
+									preparePlaylistWin(null, getPlaylistId(searchBar.value))
+								} else if (isResourceIsChannel(searchBar.value)) {
+									reqWin = _io_q('.channel')
+									prepareChannelWin(null, getChannelIdOrUser(searchBar.value))
+								} else openWinSearchResults()
+
+								break;
+
+							case 'history':
+								setTimeout(scrollToTop, getDurationTimeout())
+								openWinHistory()
+								break;
+
+							case 'settings':
+								setTimeout(scrollToTop, getDurationTimeout())
+								openWinSettings()
+								break;
+						}
+
 						showWin(reqWin)
 						reqWin = null;
 					}
