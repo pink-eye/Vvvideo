@@ -124,7 +124,7 @@ const onClickSubscribe = (btn, btnText) => {
 			btn.disabled = false
 		}
 
-		setTimeout(onChangeState, getDurationTimeout())
+		setTimeout(onChangeState, getDurationTimeout(200))
 
 		addSubscription(JSON.parse(`{
 			"channelId": "${btn.dataset.channelId}",
@@ -148,7 +148,7 @@ const onClickUnsubscribe = (btn, btnText) => {
 			btn.disabled = false
 		}
 
-		setTimeout(onChangeState, getDurationTimeout())
+		setTimeout(onChangeState, getDurationTimeout(200))
 
 		removeSubscription(JSON.parse(`{
 			"channelId": "${btn.dataset.channelId}",
