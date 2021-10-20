@@ -159,7 +159,7 @@ const fillSomeInfoChannel = (title, authorId) => {
 }
 
 const prepareChannelWin = (btnWin, id) => {
-	if (btnWin !== null) {
+	if (btnWin) {
 		let channelTitle = btnWin.classList.contains('card')
 			? btnWin.querySelector('.card__title span')
 			: btnWin.querySelector('.author__name')

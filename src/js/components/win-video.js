@@ -349,7 +349,7 @@ const fillSomeInfoVideo = params => {
 }
 
 const prepareVideoWin = (btnWin, id) => {
-	if (btnWin !== null) {
+	if (btnWin) {
 		let params = {
 			title: btnWin.querySelector('.card__title span').textContent,
 			views: btnWin.querySelector('.card__views').textContent,

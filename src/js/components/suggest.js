@@ -12,6 +12,7 @@ const addSuggest = (parent, data) => {
 
 			if (!isEmpty(data[index]) && query.length > 0)
 				searchDropdown.insertAdjacentHTML('afterBegin', createSuggestHTML(data[index]))
+			else break
 		}
 	}
 
@@ -49,7 +50,7 @@ const chooseSuggest = (parent, last, direction) => {
 	let suggestAll = parent.querySelectorAll('.search__suggest');
 
 	if (suggestAll.length > 0) {
-		if (last !== null) {
+		if (last) {
 			if (direction === 40) {
 				if (suggestAll[last + 1]) {
 					suggestAll[last + 1].classList.add('_selected');

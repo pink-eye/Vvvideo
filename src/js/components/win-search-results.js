@@ -40,6 +40,5 @@ const openWinSearchResults = async _ => {
 		searchResults = null
 		searchBar = null
 		cardAll = null
-		options = null
 	}
 }

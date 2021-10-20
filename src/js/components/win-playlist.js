@@ -115,7 +115,7 @@ const fillSomeInfoPlaylist = params => {
 const preparePlaylistWin = (btnWin, id) => {
 	openWinPlaylist(id)
 
-	if (btnWin !== null) {
+	if (btnWin) {
 		let params = {
 			title: btnWin.querySelector('.card__title span').textContent,
 			author: btnWin.querySelector('.card__channel').textContent,
