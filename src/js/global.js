@@ -169,18 +169,32 @@ const calculatePublishedDate = publishedText => {
 	return date.getTime() - timeSpan
 }
 
-const isResourceIsChannel = url => url.includes('/user/') || url.includes('/channel/')
+const isValidURLYT = url => {
+	const regExp = /^(?:https?:\/\/)?(?:www\.)?youtube\.com(?:\S+)?$/;
+	return url.match(regExp) && url.match(regExp).length > 0;
+}
 
-const isResourceIsPlaylist = url => url.includes('playlist?list=')
+const isResourceIsChannel = url => (url.includes('/user/') || url.includes('/channel/')) && isValidURLYT(url)
+
+const isResourceIsPlaylist = url => url.includes('playlist?list=') && isValidURLYT(url)
 
 const getChannelIdOrUser = url => {
-
 	const regExpUser = /(channel|user)\/([a-zA-Z0-9\-_]*.)/.exec(url)
 
 	if (regExpUser)
 		return regExpUser[2].endsWith('/') ? regExpUser[2].substring(0, regExpUser[2].length - 1) : regExpUser[2]
 
 	return null
+}
+
+const getPlaylistId = url => {
+	const regExp = new RegExp("[&?]list=([a-z0-9_]+)", "i");
+	const match = regExp.exec(url);
+
+	if (match && match[1].length > 0 && isValidURLYT(url))
+		return match[1];
+
+	return null;
 }
 
 const getProxyOptions = _ => storage.settings.proxy
