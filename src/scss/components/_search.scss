@@ -2,7 +2,7 @@
     position: relative;
     width: 100%;
     display: flex;
-	z-index: 50;
+    z-index: 50;
     justify-content: flex-end;
     align-items: center;
 
@@ -12,26 +12,14 @@
         max-width: 830px;
     }
 
-    &._has-suggest {
-        .search__bar {
-            border-radius: var(--brs-m) var(--brs-m) 0 0;
-        }
-
-        .search__dropdown {
-            opacity: 1;
-            visibility: visible;
-        }
-    }
-
-
     // .search__btn
 
     &__btn {
-		position: absolute;
+        position: absolute;
         top: 50%;
         right: 7.5px;
         display: grid;
-		place-items: center;
+        place-items: center;
         padding: 2px;
         z-index: 10;
 
@@ -40,30 +28,39 @@
 
     &__dropdown {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 5px);
         left: 0;
         display: flex;
         flex-direction: column;
         width: 100%;
 
-        opacity: 0;
-        visibility: hidden;
-
         box-shadow: var(--box-shadow-m);
 
-        transition: opacity var(--trns),
-            visibility var(--trns);
+        border-radius: var(--brs-m);
 
-		border-bottom-left-radius: var(--brs-m);
-		border-bottom-right-radius: var(--brs-m);
-
-		padding-block: 20px;
+        padding-block: 20px;
         padding-inline: 11px;
         background-color: var(--color-bg-field);
+
+        &:empty {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.9);
+        }
+
+        &:not(:empty) {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+
+            transition: opacity .15s var(--ease-out-back),
+                visibility .15s var(--ease-out-back),
+                transform .15s var(--ease-out-back);
+        }
     }
 
     &__suggest {
-		background-color: var(--color-bg-field);
+        background-color: var(--color-bg-field);
         color: var(--color-text-field);
         font-size: var(--caption-font-size);
         font-weight: 400;
@@ -74,14 +71,6 @@
         text-align: left;
 
         transition: background-color var(--trns);
-
-		&:not(._visible) {
-			display: none;
-		}
-
-        &._visible {
-            display: unset;
-        }
 
         border-radius: var(--brs-s);
 
