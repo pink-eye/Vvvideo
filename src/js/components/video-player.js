@@ -140,6 +140,9 @@ const initVideoPlayer = _ => {
 	const playVideo = _ => playEl(video)
 
 	const togglePlay = _ => {
+		if (!videoPoster.classList.contains('_hidden'))
+			videoPoster.classList.add('_hidden');
+
 		if (!isPlayingVideo()) {
 			playVideo()
 			playAudio()
@@ -163,9 +166,6 @@ const initVideoPlayer = _ => {
 		volumeBar.value = volumeSeek.value
 
 		doesSkipSegments ||= true
-
-		if (!videoPoster.classList.contains('_hidden'))
-			videoPoster.classList.add('_hidden');
 	}
 
 	const changeIcon = iconPath => { controlsSwitchIcon.setAttribute('xlink:href', iconPath) }
@@ -488,7 +488,7 @@ const initVideoPlayer = _ => {
 	video.addEventListener('abort', _ => {
 		let winActive = _io_q('.main__content').querySelector('.win._active')
 
-		if (winActive.classList.contains('video')) {
+		if (winActive && winActive.classList.contains('video')) {
 			showToast('error', 'Video is aborted ;(')
 			pauseAudio()
 		}
@@ -516,7 +516,7 @@ const initVideoPlayer = _ => {
 		audio.addEventListener('abort', _ => {
 			let winActive = _io_q('.main__content').querySelector('.win._active')
 
-			if (winActive.classList.contains('video')) {
+			if (winActive && winActive.classList.contains('video')) {
 				showToast('error', 'Audio is aborted ;(')
 				pauseVideo()
 			}
