@@ -88,8 +88,6 @@ contextBridge.exposeInMainWorld('API', {
 
 	YTDLgetVideoID: str => ytdl.getVideoID(str),
 
-	YTPLgetPlaylistID: str => ytpl.getPlaylistID(str),
-
 	YTDLFilterFormats: formats => ytdl.filterFormats(formats, 'videoandaudio'),
 
 	YTDLChooseFormat: (formats, quality) => ytdl.chooseFormat(formats, { quality }),
