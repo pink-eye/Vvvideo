@@ -203,7 +203,7 @@ const getDurationTimeout = (timeout = 300) => storage.settings.disableTransition
 
 const getMin = (a, b) => a > b ? b : a
 
-const round = (n, d) => Number(Math.round(n + "e" + d) + "e-" + d);
+const round = (n, d) => Number(~~(n + "e" + d) + "e-" + d);
 
 const getPosStroryboard = (videoDuration, currentTime, count) => {
 	const interval = round(videoDuration / count, 2)

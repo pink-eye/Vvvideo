@@ -55,7 +55,7 @@ const initVideoPlayer = _ => {
 			const sponsorblockItem = sponsorblockItemAll[index];
 			const { startTime, endTime, videoDuration } = data[index]
 			const segmentLength = endTime - startTime;
-			const vDuration = videoDuration !== 0 ? videoDuration : Math.round(video.duration)
+			const vDuration = videoDuration !== 0 ? videoDuration : ~~(video.duration)
 			const sponsorblockItemWidth = convertToProc(segmentLength, vDuration)
 			const sponsorblockItemLeft = convertToProc(startTime, vDuration)
 			sponsorblockItem.style.setProperty('--width', `${sponsorblockItemWidth}%`);
@@ -156,7 +156,7 @@ const initVideoPlayer = _ => {
 	}
 
 	const initVideo = _ => {
-		const videoDuration = Math.round(video.duration),
+		const videoDuration = ~~(video.duration),
 			time = normalizeDuration(videoDuration);
 
 		initSponsorblockSegments(segmentsSB)
@@ -184,7 +184,7 @@ const initVideoPlayer = _ => {
 	}
 
 	const updateTimeElapsed = _ => {
-		const time = normalizeDuration(Math.round(video.currentTime));
+		const time = normalizeDuration(~~(video.currentTime));
 
 		timeElapsed.textContent = time;
 		timeElapsed.setAttribute('datetime', time)
@@ -193,12 +193,12 @@ const initVideoPlayer = _ => {
 	const updateProgress = _ => {
 		progressSeek.value = Math.floor(video.currentTime);
 		progress.style.setProperty('--progress',
-			`${convertToProc(Math.floor(video.currentTime), Math.round(video.duration))}%`);
+			`${convertToProc(Math.floor(video.currentTime), ~~(video.duration))}%`);
 	}
 
 	const updateSeekTooltip = event => {
 		const duration = isEmpty(hls) ? +event.target.getAttribute('max') : Math.floor(video.currentTime)
-		const skipTo = Math.round((event.offsetX / event.target.clientWidth) * duration);
+		const skipTo = ~~((event.offsetX / event.target.clientWidth) * duration);
 
 		if (skipTo > 0 && skipTo < Math.floor(duration)) {
 			const t = normalizeDuration(skipTo);
@@ -248,10 +248,10 @@ const initVideoPlayer = _ => {
 				let abuffered = audio.buffered
 				let minBuffered = getMin(vbuffered.end(vbuffered.length - 1), abuffered.end(abuffered.length - 1))
 
-				progress.style.setProperty('--buffered', `${convertToProc(minBuffered, Math.round(video.duration))}%`)
+				progress.style.setProperty('--buffered', `${convertToProc(minBuffered, ~~(video.duration))}%`)
 			} else {
 				progress.style.setProperty('--buffered',
-					`${convertToProc(vbuffered.end(vbuffered.length - 1), Math.round(video.duration))}%`)
+					`${convertToProc(vbuffered.end(vbuffered.length - 1), ~~(video.duration))}%`)
 			}
 		}
 	}
@@ -260,7 +260,7 @@ const initVideoPlayer = _ => {
 		const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value;
 
 		video.currentTime = skipTo;
-		progress.style.setProperty('--progress', `${convertToProc(skipTo, Math.round(video.duration))}%`)
+		progress.style.setProperty('--progress', `${convertToProc(skipTo, ~~(video.duration))}%`)
 		progressSeek.value = skipTo;
 
 		isSync = false
