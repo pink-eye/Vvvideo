@@ -193,7 +193,7 @@ const fillAuthorCard = (author, index, data) => {
 
 	if (data[index].avatar) {
 		authorAvatar.src = data[index].avatar
-		
+
 		const onLoadImage = _ => {
 			removeSkeleton(avatarSkeleton)
 
@@ -240,9 +240,6 @@ const resetCard = async card => {
 		resetSkeleton(titleSkeleton)
 		resetSkeleton(bottomSkeleton)
 	}
-
-	if (cardTitle.textContent !== 'Title')
-		cardTitle.textContent = 'Title'
 
 	card.hidden &&= false;
 

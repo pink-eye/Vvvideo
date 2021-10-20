@@ -99,13 +99,10 @@ contextBridge.exposeInMainWorld('API', {
 	postSponsorblockInfo: (videoId, uuidv4, segment) => new SponsorBlock(uuidv4).postSegments(videoId, segment),
 
 	readStorage: async callback => {
-		return new Promise(resolve => {
-			let readerStream = fs.createReadStream(STORAGE_PATH);
+		let readerStream = fs.createReadStream(STORAGE_PATH);
 
-			readerStream.setEncoding('UTF8');
-			readerStream.on('data', callback);
-			resolve()
-		})
+		readerStream.setEncoding('UTF8');
+		readerStream.on('data', callback);
 	},
 
 	writeStorage: async data => {

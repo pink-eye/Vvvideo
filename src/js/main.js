@@ -120,51 +120,40 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 					const afterHideLastWin = _ => {
 
-						switch (btnWin.dataset.win) {
+						setTimeout(scrollToTop, getDurationTimeout())
+
+						switch (reqWinString) {
 							case 'trending':
-								setTimeout(scrollToTop, getDurationTimeout())
 								openWinTrending(storage.settings.regionTrending)
 								break;
 
 							case 'latest':
-								setTimeout(scrollToTop, getDurationTimeout())
 								openWinLatest()
 								break;
 
 							case 'subscriptions':
-								setTimeout(scrollToTop, getDurationTimeout())
 								openWinSubs()
 								break;
 
 							case 'video':
-								if (!isEmpty(btnWin.dataset.id)) {
-									setTimeout(scrollToTop, getDurationTimeout())
-									prepareVideoWin(btnWin, btnWin.dataset.id)
+								prepareVideoWin(btnWin, reqID)
 
-									if (!storage.settings.disableHistory)
-										saveToHistoryVideo(btnWin)
-								} else return
+								if (!storage.settings.disableHistory)
+									saveToHistoryVideo(btnWin)
 
 								break;
 
 							case 'channel':
-								if (!isEmpty(btnWin.dataset.id)) {
-									setTimeout(scrollToTop, getDurationTimeout())
-									prepareChannelWin(btnWin, btnWin.dataset.id)
-								} else return
+								prepareChannelWin(btnWin, reqID)
 
 								break;
 
 							case 'playlist':
-								if (!isEmpty(btnWin.dataset.id)) {
-									setTimeout(scrollToTop, getDurationTimeout())
-									preparePlaylistWin(btnWin, btnWin.dataset.id)
-								} else return
+								preparePlaylistWin(btnWin, reqID)
 
 								break;
 
 							case 'search-results':
-								setTimeout(scrollToTop, getDurationTimeout())
 
 								if (API.YTDLvalidateURL(searchBar.value)) {
 									reqWin = _io_q('.video')
@@ -180,12 +169,10 @@ document.addEventListener('DOMContentLoaded', async _ => {
 								break;
 
 							case 'history':
-								setTimeout(scrollToTop, getDurationTimeout())
 								openWinHistory()
 								break;
 
 							case 'settings':
-								setTimeout(scrollToTop, getDurationTimeout())
 								openWinSettings()
 								break;
 						}
@@ -247,7 +234,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	}
 
 	window.addEventListener('click', handleClickWindow);
-
 
 	// DROPDOWN
 

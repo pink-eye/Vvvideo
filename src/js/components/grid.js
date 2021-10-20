@@ -12,7 +12,7 @@ const resetGridAuthorCard = async _ => {
 }
 
 
-const resetGrid = async parent => {
+const resetGrid = parent => {
 	const cardAll = parent.querySelectorAll('.card')
 
 	if (cardAll.length > 0) {
