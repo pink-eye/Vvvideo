@@ -229,6 +229,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		// ENTER
 		if (e.keyCode === 13 && !isEmpty(searchBar.value)) {
 			hideSuggest(headerSearch)
+			searchBar.blur()
 			manageWin(e)
 		}
 	}
