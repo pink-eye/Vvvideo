@@ -97,6 +97,8 @@ const resetChannel = _ => {
 	let avatarSkeleton = channel.querySelector('.avatar-skeleton');
 	let channelDescription = channel.querySelector('.about__description');
 
+	channel.dataset.id = ''
+
 	// SUBSCRIBE BTN
 
 	let channelSubscribeBtn = channel.querySelector('.subscribe');
@@ -169,7 +171,7 @@ const prepareChannelWin = (btnWin, id) => {
 		fillSomeInfoChannel(channelTitle.textContent, channelId)
 
 		channelTitle = null
-	} else fillSomeInfoChannel('Channel name', '')
+	} else fillSomeInfoChannel('-', '')
 
 	openWinChannel(id)
 }

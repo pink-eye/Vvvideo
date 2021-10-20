@@ -98,7 +98,7 @@ const openWinVideo = async id => {
 
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
-				
+
 				videoSubscribeBtn.dataset.channelId = data.videoDetails.author.id
 				videoSubscribeBtn.dataset.name = data.videoDetails.author.name
 
@@ -260,6 +260,8 @@ const resetVideo = async _ => {
 	let videoDate = video.querySelector('.video-info__date span');
 	let subscribeBtn = video.querySelector('.subscribe');
 	let videoInfo = video.querySelector('.video-info');
+
+	video.dataset.id = ''
 
 	let videoSubscribeBtn = videoInfo.querySelector('.subscribe');
 	videoSubscribeBtn.removeEventListener('click', handleClickSubscribeBtn);
