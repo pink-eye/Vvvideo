@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 					const afterHideLastWin = _ => {
 
-						setTimeout(scrollToTop, getDurationTimeout())
+						scrollToTop()
 
 						switch (reqWinString) {
 							case 'trending':
