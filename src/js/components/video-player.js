@@ -8,39 +8,36 @@ const resetMediaEl = el => {
 }
 
 const initVideoPlayer = _ => {
-	let controls = _io_q('.controls'),
-		controlsPlay = controls.querySelector('.controls__play'),
-		controlsSwitch = controls.querySelector('.controls__switch'),
-		controlsSwitchIcon = controls.querySelector('.controls__switch svg use'),
-		timeElapsed = controls.querySelector('.time__elapsed'),
-		timeDuration = controls.querySelector('.time__duration'),
-		progress = controls.querySelector('.progress'),
-		progressSeek = progress.querySelector('.progress__seek'),
-		progressSeekTooltip = progress.querySelector('.progress__seek-tooltip'),
-		progressStoryboard = progress.querySelector('.progress__storyboard'),
-		progressSponsorblock = progress.querySelector('.progress__sponsorblock'),
-		volumeSeek = controls.querySelector('.volume__seek'),
-		volumeBar = controls.querySelector('.volume__bar'),
-		controlsScreenOpen = controls.querySelector('.controls__screen_open'),
-		controlsScreenClose = controls.querySelector('.controls__screen_close'),
-		controlsBar = controls.querySelector('.controls__bar'),
-		controlsSponsorblock = controls.querySelector('.controls__sponsorblock'),
-		videoWrapper = _io_q('.video').querySelector('.video__wrapper'),
-		videoDesc = _io_q('.video').querySelector('.desc-video-info__text'),
-		videoPoster = videoWrapper.querySelector('.video__poster'),
-		video = videoWrapper.querySelector('video'),
-		audio = videoWrapper.querySelector('audio'),
-		dialogSb = _io_q('.dialog-sb'),
-		dialogSbStart = dialogSb.querySelector('input#start'),
-		dialogSbEnd = dialogSb.querySelector('input#end'),
-		dialogSbWarning = dialogSb.querySelector('.dialog-sb__warning'),
-		dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send'),
-		dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel');
+	const controls = _io_q('.controls')
+	const controlsPlay = controls.querySelector('.controls__play')
+	const controlsSwitch = controls.querySelector('.controls__switch')
+	const controlsSwitchIcon = controls.querySelector('.controls__switch svg use')
+	const timeElapsed = controls.querySelector('.time__elapsed')
+	const timeDuration = controls.querySelector('.time__duration')
+	const progress = controls.querySelector('.progress')
+	const progressSeek = progress.querySelector('.progress__seek')
+	const progressSeekTooltip = progress.querySelector('.progress__seek-tooltip')
+	const progressStoryboard = progress.querySelector('.progress__storyboard')
+	const volumeSeek = controls.querySelector('.volume__seek')
+	const volumeBar = controls.querySelector('.volume__bar')
+	const controlsScreenOpen = controls.querySelector('.controls__screen_open')
+	const controlsScreenClose = controls.querySelector('.controls__screen_close')
+	const controlsSponsorblock = controls.querySelector('.controls__sponsorblock')
+	const videoWrapper = _io_q('.video').querySelector('.video__wrapper')
+	const videoDesc = _io_q('.video').querySelector('.desc-video-info__text')
+	const video = videoWrapper.querySelector('video')
+	const audio = videoWrapper.querySelector('audio')
+	const dialogSb = _io_q('.dialog-sb')
+	const dialogSbStart = dialogSb.querySelector('input#start')
+	const dialogSbEnd = dialogSb.querySelector('input#end')
+	const dialogSbWarning = dialogSb.querySelector('.dialog-sb__warning')
+	const dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send')
+	const dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel')
 
 	let doesSkipSegments = true;
 
-	let iconPathPlay = 'img/svg/controls.svg#play',
-		iconPathPause = 'img/svg/controls.svg#pause';
+	let iconPathPlay = 'img/svg/controls.svg#play'
+	let iconPathPause = 'img/svg/controls.svg#pause'
 
 	let isSync = false
 
@@ -49,6 +46,7 @@ const initVideoPlayer = _ => {
 	let isRecording = false
 
 	const initSponsorblockSegments = data => {
+		let progressSponsorblock = progress.querySelector('.progress__sponsorblock')
 		let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item');
 
 		for (let index = 0, length = sponsorblockItemAll.length; index < length; index++) {
@@ -62,6 +60,7 @@ const initVideoPlayer = _ => {
 			sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`);
 		}
 
+		progressSponsorblock = null
 		sponsorblockItemAll = null
 	}
 
@@ -205,9 +204,7 @@ const initVideoPlayer = _ => {
 	const toggleIconPlayPause = _ => { video.paused ? showIconPlay() : showIconPause() }
 
 	const onEndVideo = _ => {
-		if (audio)
-			audio.currentTime = 0
-
+		audio.currentTime &&= 0
 		video.currentTime = 0
 	}
 
@@ -270,16 +267,15 @@ const initVideoPlayer = _ => {
 
 	const updateBuffered = _ => {
 		if (isEmpty(hls)) {
-			let vbuffered = video.buffered
-
-			if (audio) {
-				let abuffered = audio.buffered
-				let minBuffered = getMin(vbuffered.end(vbuffered.length - 1), abuffered.end(abuffered.length - 1))
-
+			if (video.buffered.length > 0) {
+				let videoLastBuffered = video.buffered.end(video.buffered.length - 1)
+				let audioLastBuffered = audio && audio.buffered.length > 0
+					? audio.buffered.end(audio.buffered.length - 1)
+					: null
+				let minBuffered = audioLastBuffered
+					? getMin(videoLastBuffered, audioLastBuffered)
+					: videoLastBuffered
 				progress.style.setProperty('--buffered', `${convertToProc(minBuffered, ~~(video.duration))}%`)
-			} else {
-				progress.style.setProperty('--buffered',
-					`${convertToProc(vbuffered.end(vbuffered.length - 1), ~~(video.duration))}%`)
 			}
 		}
 	}
@@ -319,33 +315,32 @@ const initVideoPlayer = _ => {
 
 	const toggleMuteVideo = _ => toggleMuteEl(video)
 
-	const openFullscreen = _ => {
-		if (videoWrapper.requestFullscreen) {
-			controlsScreenOpen.hidden = true;
-			controlsScreenClose.hidden = false;
-			videoWrapper.requestFullscreen();
-		}
-	}
+	const toggleFullscreen = _ => {
+		controlsScreenOpen.hidden = !controlsScreenOpen.hidden;
+		controlsScreenClose.hidden = !controlsScreenClose.hidden;
 
-	const closeFullscreen = _ => {
-		if (document.exitFullscreen) {
-			controlsScreenOpen.hidden = false;
-			controlsScreenClose.hidden = true;
-			document.exitFullscreen();
-		}
+		document.fullscreenElement
+			? document.exitFullscreen()
+			: videoWrapper.requestFullscreen()
 	}
 
 	const hideControls = _ => {
 		let dropdownActive = controls.querySelector('.dropdown._active');
+		let controlsBar = controls.querySelector('.controls__bar')
 
-		if (dropdownActive)
-			return
+		if (!dropdownActive)
+			controlsBar.classList.remove('_opened');
 
-		controlsBar.classList.remove('_opened');
+		dropdownActive = null
+		controlsBar = null
 	}
 
 	const showControls = _ => {
+		let controlsBar = controls.querySelector('.controls__bar')
+
 		controlsBar.classList.add('_opened');
+
+		controlsBar = null
 	}
 
 	const resetDialogSB = _ => {
@@ -400,7 +395,7 @@ const initVideoPlayer = _ => {
 				controlsSponsorblock.classList.remove('_record')
 
 				if (document.fullscreenElement)
-					closeFullscreen()
+					toggleFullscreen()
 
 				togglePlay()
 				resetDialogSB()
@@ -430,7 +425,7 @@ const initVideoPlayer = _ => {
 
 	const sendSegmentSB = async _ => {
 		let videoId = _io_q('.video').dataset.id
-		let dialogSbCategory = _io_q('.dialog-sb').querySelector('input[name="category"]:checked')
+		let dialogSbCategory = dialogSb.querySelector('input[name="category"]:checked')
 
 		if (isValidFields()) {
 			let startTime = convertDurationToSeconds(dialogSbStart.value)
@@ -460,57 +455,59 @@ const initVideoPlayer = _ => {
 
 	video.addEventListener('loadedmetadata', initVideo, { once: true });
 
-	video.addEventListener('play', _ => {
+	const handlePlayVideo = _ => {
 		showIconPause()
 		playAudio()
-	})
+	}
 
-	video.addEventListener('playing', _ => {
-		showIconPause()
-		playAudio()
-	})
+	video.addEventListener('play', handlePlayVideo)
 
-	video.addEventListener('waiting', _ => {
+	video.addEventListener('playing', handlePlayVideo)
+
+	const handleLoadingVideo = _ => {
+		showToast('good', 'Loading video...')
+
 		if (!isPlayingVideo())
 			pauseAudio()
-	})
+	}
+
+	video.addEventListener('waiting', handleLoadingVideo)
+
+	video.addEventListener('stalled', handleLoadingVideo);
 
 	if (audio) {
-		audio.addEventListener('play', playVideo)
+		const handlePlayAudio = _ => {
+			showIconPause()
+			playVideo()
+		}
 
-		audio.addEventListener('playing', playVideo)
+		audio.addEventListener('play', handlePlayAudio)
 
-		audio.addEventListener('waiting', _ => {
+		audio.addEventListener('playing', handlePlayAudio)
+
+		const handleLoadingAudio = _ => {
+			showToast('good', 'Loading audio...')
+
 			if (!isPlayingAudio())
 				pauseVideo()
-		})
+		}
+
+		audio.addEventListener('waiting', handleLoadingAudio)
+
+		audio.addEventListener('stalled', handleLoadingAudio);
 	}
+
+	video.addEventListener('progress', updateBuffered);
 
 	video.addEventListener('timeupdate', _ => {
 		if (!isSync && isPlayingAudio() && isPlayingVideo())
 			syncMedia()
 
-		if (audio) {
-			if (isPlayingAudio() && isPlayingVideo()) {
-				updateBuffered()
-				updateTimeElapsed()
-				updateProgress()
-			}
-		} else {
-			if (isPlayingVideo()) {
-				updateBuffered()
-				updateTimeElapsed()
-				updateProgress()
-			}
-		}
+		updateTimeElapsed()
+		updateProgress()
 
 		if (doesSkipSegments && !storage.settings.disableSponsorblock)
 			skipSegmentSB()
-	});
-
-	video.addEventListener('stalled', _ => {
-		showToast('good', 'Loading video...')
-		pauseAudio()
 	});
 
 	video.addEventListener('abort', _ => {
@@ -524,6 +521,7 @@ const initVideoPlayer = _ => {
 		winActive = null
 	});
 
+
 	video.addEventListener('error', _ => {
 		showToast('error', video.error.message)
 		pauseAudio()
@@ -533,11 +531,6 @@ const initVideoPlayer = _ => {
 
 		audio.addEventListener('error', _ => {
 			showToast('error', audio.error.message)
-			pauseVideo()
-		});
-
-		audio.addEventListener('stalled', _ => {
-			showToast('good', 'Loading audio...')
 			pauseVideo()
 		});
 
@@ -575,7 +568,7 @@ const initVideoPlayer = _ => {
 			const controlsSpeed = controls.querySelector('.controls__speed')
 
 			initDropdown(controlsSpeed, btn => {
-				if (audio) audio.playbackRate = btn.dataset.speed
+				audio.playbackRate &&= btn.dataset.speed
 
 				video.playbackRate = btn.dataset.speed
 
@@ -593,9 +586,9 @@ const initVideoPlayer = _ => {
 
 		controlsSwitch.addEventListener('click', togglePlay);
 
-		controlsScreenOpen.addEventListener('click', openFullscreen);
+		controlsScreenOpen.addEventListener('click', toggleFullscreen);
 
-		controlsScreenClose.addEventListener('click', closeFullscreen);
+		controlsScreenClose.addEventListener('click', toggleFullscreen);
 
 		controlsPlay.addEventListener('click', togglePlay);
 
@@ -662,18 +655,18 @@ const initVideoPlayer = _ => {
 
 				// V
 				if (e.keyCode === 86 && !storage.settings.disableSponsorblock) {
-					if (doesSkipSegments) {
-						doesSkipSegments = false
-						showToast('good', 'Sponsorblock is disabled on this video')
-					} else {
-						doesSkipSegments = true
-						showToast('good', 'Sponsorblock is enabled again')
-					}
+					doesSkipSegments = !doesSkipSegments
+					showToast(
+						'good',
+						doesSkipSegments
+							? 'Sponsorblock is disabled on this video'
+							: 'Sponsorblock is enabled again'
+					)
 				}
 
 				// F
 				if (e.keyCode === 70)
-					document.fullscreenElement ? closeFullscreen() : openFullscreen()
+					toggleFullscreen()
 			}
 		}
 
@@ -684,8 +677,8 @@ const initVideoPlayer = _ => {
 const resetVideoPlayer = _ => {
 	let video = _io_q('.video')
 	let videoWrapper = video.querySelector('.video__wrapper');
-	let videoInstance = video.querySelector('video');
-	let audioInstance = video.querySelector('audio');
+	let videoInstance = videoWrapper.querySelector('video');
+	let audioInstance = videoWrapper.querySelector('audio');
 	let controls = video.querySelector('.controls');
 	let controlsSwitchIcon = controls.querySelector('.controls__switch svg use');
 	let sponsorblock = controls.querySelector('.sponsorblock');
