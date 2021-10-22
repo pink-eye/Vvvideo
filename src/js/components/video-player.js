@@ -20,8 +20,7 @@ const initVideoPlayer = _ => {
 	const progressStoryboard = progress.querySelector('.progress__storyboard')
 	const volumeSeek = controls.querySelector('.volume__seek')
 	const volumeBar = controls.querySelector('.volume__bar')
-	const controlsScreenOpen = controls.querySelector('.controls__screen_open')
-	const controlsScreenClose = controls.querySelector('.controls__screen_close')
+	const controlsScreen = controls.querySelector('.controls__screen')
 	const controlsSponsorblock = controls.querySelector('.controls__sponsorblock')
 	const videoWrapper = _io_q('.video').querySelector('.video__wrapper')
 	const videoDesc = _io_q('.video').querySelector('.desc-video-info__text')
@@ -316,9 +315,6 @@ const initVideoPlayer = _ => {
 	const toggleMuteVideo = _ => toggleMuteEl(video)
 
 	const toggleFullscreen = _ => {
-		controlsScreenOpen.hidden = !controlsScreenOpen.hidden;
-		controlsScreenClose.hidden = !controlsScreenClose.hidden;
-
 		document.fullscreenElement
 			? document.exitFullscreen()
 			: videoWrapper.requestFullscreen()
@@ -586,9 +582,7 @@ const initVideoPlayer = _ => {
 
 		controlsSwitch.addEventListener('click', togglePlay);
 
-		controlsScreenOpen.addEventListener('click', toggleFullscreen);
-
-		controlsScreenClose.addEventListener('click', toggleFullscreen);
+		controlsScreen.addEventListener('click', toggleFullscreen);
 
 		controlsPlay.addEventListener('click', togglePlay);
 
