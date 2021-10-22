@@ -9,7 +9,7 @@ const resetMediaEl = el => {
 
 const initVideoPlayer = _ => {
 	const controls = _io_q('.controls')
-	const controlsPlay = controls.querySelector('.controls__play')
+	const controlDecorations = controls.querySelector('.controls__decorations')
 	const controlsSwitch = controls.querySelector('.controls__switch')
 	const controlsSwitchIcon = controls.querySelector('.controls__switch svg use')
 	const timeElapsed = controls.querySelector('.time__elapsed')
@@ -110,7 +110,13 @@ const initVideoPlayer = _ => {
 
 	const isPlayingAudio = _ => isPlaying(audio)
 
-	const pauseEl = el => { if (isPlaying(el)) el.pause() }
+	const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime > 0;
+
+	const isPlayingLightVideo = _ => isPlayingLight(video)
+
+	const isPlayingLightAudio = _ => isPlayingLight(audio)
+
+	const pauseEl = el => { if (isPlayingLight(el)) el.pause() }
 
 	const pauseVideo = _ => pauseEl(video)
 
@@ -138,10 +144,10 @@ const initVideoPlayer = _ => {
 	const playVideo = _ => playEl(video)
 
 	const showDecoration = action => {
-		let icon = controlsPlay.querySelector(`#${action}`);
+		let icon = controlDecorations.querySelector(`#${action}`);
 		icon.hidden = false
 
-		const activeDecoration = _ => { controlsPlay.classList.add('_active') }
+		const activeDecoration = _ => { controlDecorations.classList.add('_active') }
 
 		setTimeout(activeDecoration, 15);
 
@@ -151,7 +157,7 @@ const initVideoPlayer = _ => {
 		}
 
 		const hideDecoration = _ => {
-			controlsPlay.classList.remove('_active')
+			controlDecorations.classList.remove('_active')
 
 			setTimeout(afterHideDecoration, 300);
 		}
@@ -161,7 +167,7 @@ const initVideoPlayer = _ => {
 
 	const togglePlay = _ => {
 
-		if (!isPlayingVideo()) {
+		if (!isPlayingLightVideo()) {
 			playVideo()
 			!isPlayingAudio() && playAudio()
 
@@ -588,7 +594,7 @@ const initVideoPlayer = _ => {
 
 		controlsScreen.addEventListener('click', toggleFullscreen);
 
-		controlsPlay.addEventListener('click', togglePlay);
+		controlDecorations.addEventListener('click', togglePlay);
 
 		controls.addEventListener('mouseleave', hideControls);
 

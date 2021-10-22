@@ -8,13 +8,11 @@
 		"start": "electron-forge start",
 		"package": "electron-forge package",
 		"make": "electron-forge make",
-		"publish": "electron-forge publish",
-		"lint": "echo \"No linting configured\""
+		"publish": "electron-forge publish"
 	},
 	"keywords": [],
 	"author": {
-		"name": "pink-eye",
-		"email": "github@virginson.anonaddy.com"
+		"name": "pink-eye"
 	},
 	"license": "GPL-3.0",
 	"config": {
@@ -47,7 +45,7 @@
 				}
 			]
 		}
-	}, 
+	},
 	"dependencies": {
 		"@freetube/yt-trending-scraper": "^2.0.1",
 		"electron-squirrel-startup": "^1.0.0",
