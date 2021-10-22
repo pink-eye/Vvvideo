@@ -138,13 +138,17 @@ const initVideoPlayer = _ => {
 	const playVideo = _ => playEl(video)
 
 	const showDecoration = action => {
-		controlsPlay.classList.add(`_${action}`)
+		let icon = controlsPlay.querySelector(`#${action}`);
+		icon.hidden = false
 
 		const activeDecoration = _ => { controlsPlay.classList.add('_active') }
 
 		setTimeout(activeDecoration, 15);
 
-		const afterHideDecoration = _ => { controlsPlay.classList.remove(`_${action}`) }
+		const afterHideDecoration = _ => {
+			icon.hidden = true
+			icon = null
+		}
 
 		const hideDecoration = _ => {
 			controlsPlay.classList.remove('_active')
