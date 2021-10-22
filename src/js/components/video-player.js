@@ -139,25 +139,53 @@ const initVideoPlayer = _ => {
 
 	const playVideo = _ => playEl(video)
 
+	const showDecoration = action => {
+		controlsPlay.classList.add(`_${action}`)
+
+		const activeDecoration = _ => { controlsPlay.classList.add('_active') }
+
+		setTimeout(activeDecoration, 15);
+
+		const afterHideDecoration = _ => { controlsPlay.classList.remove(`_${action}`) }
+
+		const hideDecoration = _ => {
+			controlsPlay.classList.remove('_active')
+
+			setTimeout(afterHideDecoration, 300);
+		}
+
+		setTimeout(hideDecoration, 300)
+	}
+
 	const togglePlay = _ => {
-		if (!videoPoster.classList.contains('_hidden'))
-			videoPoster.classList.add('_hidden');
 
 		if (!isPlayingVideo()) {
 			playVideo()
-			playAudio()
+			!isPlayingAudio() && playAudio()
+
+			showDecoration('play')
+
 		} else {
 			pauseVideo()
 			pauseAudio()
+
+			showDecoration('pause')
 		}
+
+		let videoPoster = videoWrapper.querySelector('.video__poster')
+
+		if (!videoPoster.classList.contains('_hidden'))
+			videoPoster.classList.add('_hidden');
 
 		toggleIconPlayPause()
 		isSync = false
+
+		videoPoster = null
 	}
 
 	const initVideo = _ => {
-		const videoDuration = ~~(video.duration),
-			time = normalizeDuration(videoDuration);
+		const videoDuration = ~~(video.duration)
+		const time = normalizeDuration(videoDuration)
 
 		initSponsorblockSegments(segmentsSB)
 		progressSeek.setAttribute('max', videoDuration);
