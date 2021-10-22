@@ -128,13 +128,7 @@ const initSuggests = parent => {
 			}
 		}
 
-		const handleBlur = _ => {
-			hideSuggest(parent)
-			hideOverlay()
-		}
-
 		searchBar.addEventListener('input', handleInpt);
-		searchBar.addEventListener('blur', handleBlur)
 
 	} else searchBar = null
 }

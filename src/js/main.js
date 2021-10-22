@@ -213,12 +213,14 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		// ESC
 		if (e.keyCode === 27) {
 			hideSuggest(headerSearch)
+			hideOverlay()
 			searchBar.blur()
 		}
 
 		// ENTER
 		if (e.keyCode === 13 && !isEmpty(searchBar.value)) {
 			hideSuggest(headerSearch)
+			hideOverlay()
 			searchBar.blur()
 			manageWin(e)
 		}
@@ -231,8 +233,10 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const handleClickWindow = e => {
 		if (!e.target.closest('.dropdown'))
 			hideLastDropdown()
-		if (!e.target.closest('.search'))
+		if (!e.target.closest('.search')) {
 			hideSuggest(headerSearch)
+			hideOverlay()
+		}
 	}
 
 	window.addEventListener('click', handleClickWindow);
