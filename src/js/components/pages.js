@@ -143,22 +143,18 @@ const recycleDOM = async (increment, cardAll, typeCard) => {
 					break;
 
 				case "rich":
+					card.dataset.win = `${itemArray[index + increment].type}`
+					card.classList.add(`_${itemArray[index + increment].type}`);
 					switch (itemArray[index + increment].type) {
 						case 'video':
-							card.dataset.win = 'video'
-							card.classList.add('_video');
 							fillVideoCard(card, index + increment, itemArray);
 							break;
 
 						case 'channel':
-							card.dataset.win = 'channel'
-							card.classList.add('_channel');
 							fillChannelCard(card, index + increment, itemArray);
 							break;
 
 						case 'playlist':
-							card.dataset.win = 'playlist'
-							card.classList.add('_playlist');
 							fillPlaylistCard(card, index + increment, itemArray);
 							break;
 					}
@@ -190,7 +186,7 @@ const resetBtns = (btnNextPage, btnPrevPage) => {
 	btnPrevPage.disabled ||= true
 }
 
-const initPages = async (parent, data, cardAll, typeCard, continuation = null) => {
+const initPages = (parent, data, cardAll, typeCard, continuation = null) => {
 	resetPages(parent)
 
 	increment = 0;
@@ -215,7 +211,7 @@ const initPages = async (parent, data, cardAll, typeCard, continuation = null) =
 	enablePages(parent)
 	resetCount(parent)
 	resetBtns(btnNextPage, btnPrevPage)
-	await getDataMore(typeCard)
+	getDataMore(typeCard)
 }
 
 const scrapeInfoToSwitchPage = winActive => {

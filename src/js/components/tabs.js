@@ -4,96 +4,71 @@ const hideLastTab = _ => {
 
 	if (tabContentActive && tabContentActive.classList.contains('_active')) {
 		tabContentActive.classList.remove('_active');
-		tabContentActive = null
+		resetGrid(tabContentActive)
 	}
 
 	let tabActive = channel.querySelector(`.body-channel__tab._active`);
 
 	if (tabActive && tabActive.classList.contains('_active')) {
 		tabActive.classList.remove('_active');
-
-		switch (tabActive.dataset.tab) {
-			case 'Videos':
-				let channelTabContentVideos = channel.querySelector('.videos');
-				resetGrid(channelTabContentVideos)
-				channelTabContentVideos = null
-				break;
-
-			case 'Playlists':
-				let channelTabContentPlaylists = channel.querySelector('.playlists');
-				resetGrid(channelTabContentPlaylists)
-				channelTabContentPlaylists = null
-				break;
-		}
 	}
 
+	tabContentActive = null
 	channel = null
 	tabActive = null
 };
 
 const showRequiredTab = async (tab) => {
+	const channelTab = tab.dataset.tab
 	let channel = _io_q('.channel');
+
 	if (tab && !tab.classList.contains('_active'))
 		tab.classList.add('_active');
 
-	let reqTabContent = channel.querySelector(`.tab-content[data-tab=${tab.dataset.tab}]`);
+	let reqTabContent = channel.querySelector(`.tab-content[data-tab=${channelTab}]`);
 
-	if (reqTabContent && !reqTabContent.classList.contains('_active')) {
+	if (reqTabContent && !reqTabContent.classList.contains('_active'))
 		reqTabContent.classList.add('_active');
-		reqTabContent = null
+
+	let data = null
+	const channelId = channel.dataset.id
+	try {
+		switch (channelTab) {
+			case 'Videos':
+				data = await API.scrapeChannelVideos(channelId)
+				break;
+
+			case 'Playlists':
+				data = await API.scrapeChannelPlaylists(channelId)
+				break;
+		}
+	} catch (error) {
+		showToast('error', error.message)
 	}
 
-	switch (tab.dataset.tab) {
-		case 'Videos':
-			let channelTabContentVideos = channel.querySelector('.videos');
+	if (channelTab === 'Videos' ||
+		channelTab === 'Playlists') {
 
-			const dataChannelVideos = await API.scrapeChannelVideos(channel.dataset.id)
-			let videoAll = channelTabContentVideos.querySelectorAll('.card');
+		const { items, continuation } = data
+		let cardAll = reqTabContent.querySelectorAll('.card');
+		let typeCard = channelTab === 'Videos' ? 'video' : 'playlist'
 
-			dataChannelVideos.items.length > videoAll.length
-				? initPages(channelTabContentVideos, dataChannelVideos.items, videoAll, 'video', dataChannelVideos.continuation)
-				: disablePages(channelTabContentVideos)
+		items.length > cardAll.length
+			? initPages(reqTabContent, items, cardAll, typeCard, continuation)
+			: disablePages(reqTabContent)
 
-			for (let index = 0, length = videoAll.length; index < length; index++) {
-				let video = videoAll[index];
+		for (let index = 0, length = cardAll.length; index < length; index++) {
+			let card = cardAll[index];
 
-				dataChannelVideos.items[index]
-					? fillVideoCard(video, index, dataChannelVideos.items)
-					: video.hidden = true;
+			items[index]
+				? typeCard === 'video' ? fillVideoCard(card, index, items) : fillPlaylistCard(card, index, items)
+				: card.hidden = true;
+		}
 
-				video = null;
-			}
-
-			channelTabContentVideos = null
-			videoAll = null
-
-			break;
-
-		case 'Playlists':
-			let channelTabContentPlaylists = channel.querySelector('.playlists');
-
-			const dataChannelPlaylists = await API.scrapeChannelPlaylists(channel.dataset.id)
-			let playlistAll = channelTabContentPlaylists.querySelectorAll('.card');
-
-			dataChannelPlaylists.items.length > playlistAll.length
-				? initPages(channelTabContentPlaylists, dataChannelPlaylists.items, playlistAll, 'playlist', dataChannelPlaylists.continuation)
-				: disablePages(channelTabContentPlaylists)
-
-			for (let index = 0, length = playlistAll.length; index < length; index++) {
-				let playlist = playlistAll[index];
-
-				dataChannelPlaylists.items[index]
-					? fillPlaylistCard(playlist, index, dataChannelPlaylists.items)
-					: playlist.hidden = true;
-
-				playlist = null;
-			}
-
-			channelTabContentPlaylists = null
-			playlistAll = null
-			break;
+		cardAll = null
 	}
 
+	reqTabContent = null
 	channel = null
 };
 
@@ -110,16 +85,18 @@ const handleClickTab = async event => {
 
 const initTabs = primary => {
 	const tabAll = _io_q('.channel').querySelectorAll('.body-channel__tab');
+	let primaryTab = tabAll[primary]
+
+	showRequiredTab(primaryTab)
 
 	if (tabAll.length > 0)
 		for (let index = 0, length = tabAll.length; index < length; index++) {
-			const tab = tabAll[index],
-				tabPrimary = tabAll[primary];
-
-			showRequiredTab(tabPrimary)
+			const tab = tabAll[index]
 
 			tab.addEventListener("click", handleClickTab)
 		}
+
+	primaryTab = null
 }
 
 const destroyTabs = _ => {

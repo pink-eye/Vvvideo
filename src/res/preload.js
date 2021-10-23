@@ -58,8 +58,6 @@ contextBridge.exposeInMainWorld('API', {
 
 	scrapeChannelInfo: channelId => ytch.getChannelInfo(channelId, 1),
 
-	scrapeChannelInfoProxy: channelId => ytch.getChannelInfo(channelId, 1,),
-
 	scrapeChannelVideos: channelId => ytch.getChannelVideos(channelId, 'latest', 1),
 
 	scrapeChannelPlaylists: channelId => ytch.getChannelPlaylistInfo(channelId),

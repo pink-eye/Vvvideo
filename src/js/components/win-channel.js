@@ -1,11 +1,3 @@
-const getChannelInfoLocalScraper = channelId => new Promise(async resolve => {
-	try {
-		resolve(await API.scrapeChannelInfo(channelId))
-	} catch (error) {
-		showToast('error', error.message)
-	}
-})
-
 const openWinChannel = async id => {
 	let channel = _io_q('.channel');
 	let channelBannerImg = channel.querySelector('.channel__banner img');
@@ -28,7 +20,7 @@ const openWinChannel = async id => {
 	channel.dataset.id = id
 
 	try {
-		const data = await getChannelInfoLocalScraper(id)
+		const data = await API.scrapeChannelInfo(id)
 
 		if (data.author !== channelAuthor.textContent)
 			channelAuthor.textContent = data.author
