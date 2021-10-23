@@ -1,4 +1,4 @@
-const resetIndicator = async _ => {
+const resetIndicator = _ => {
 	let indicator = _io_q('.indicator');
 
 	if (indicator.classList.contains('_visible')) {
@@ -8,7 +8,7 @@ const resetIndicator = async _ => {
 	indicator = null
 }
 
-const startIndicator = async _ => {
+const startIndicator = _ => {
 	let indicator = _io_q('.indicator');
 
 	if (!indicator.classList.contains('_visible')) {

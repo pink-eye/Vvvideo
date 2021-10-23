@@ -29,13 +29,9 @@ const resetGrid = parent => {
 			resetCard(card)
 
 			if (parent.classList.contains('search-results')) {
-				card.dataset.win = null;
-
 				for (let key in typeAll) {
-					if (card.classList.contains(typeAll[key])) {
+					if (card.classList.contains(typeAll[key]))
 						card.classList.remove(typeAll[key]);
-						break;
-					}
 				}
 			}
 		}

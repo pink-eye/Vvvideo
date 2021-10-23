@@ -14,9 +14,7 @@ const handleKeyDown = e => {
 			let winActive = _io_q('.main__content').querySelector('.win._active')
 			let firstCard = winActive.querySelector('.card');
 
-			firstCard
-				? firstCard.focus()
-				: document.activeElement.blur()
+			firstCard ? firstCard.focus() : document.activeElement.blur()
 
 			winActive = null
 			firstCard = null
