@@ -30,16 +30,9 @@ const handleKeyDown = e => {
 		if (!winActive.classList.contains('settings') &&
 			!winActive.classList.contains('video')) {
 
-			let cardAll = winActive.classList.contains('subscriptions')
-				? winActive.querySelectorAll('.author')
-				: winActive.querySelectorAll('.card')
-			let btnNextPage = winActive.querySelector('.btns__next');
-			let btnPrevPage = winActive.querySelector('.btns__prev');
-			let typeCard = winActive.classList.contains('subscriptions')
-				? 'author'
-				: winActive.classList.contains('search-results')
-					? 'rich'
-					: cardAll[0].dataset.win
+			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } = scrapeInfoToSwitchPage(winActive)
+
+			if (tabContentActive) winActive = tabContentActive
 
 			if (btnNextPage && !btnNextPage.disabled)
 				nextPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
@@ -59,16 +52,9 @@ const handleKeyDown = e => {
 		if (!winActive.classList.contains('settings') &&
 			!winActive.classList.contains('video')) {
 
-			let cardAll = winActive.classList.contains('subscriptions')
-				? winActive.querySelectorAll('.author')
-				: winActive.querySelectorAll('.card')
-			let btnNextPage = winActive.querySelector('.btns__next');
-			let btnPrevPage = winActive.querySelector('.btns__prev');
-			let typeCard = winActive.classList.contains('subscriptions')
-				? 'author'
-				: winActive.classList.contains('search-results')
-					? 'rich'
-					: cardAll[0].dataset.win
+			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } = scrapeInfoToSwitchPage(winActive)
+
+			if (tabContentActive) winActive = tabContentActive
 
 			if (btnPrevPage && !btnPrevPage.disabled)
 				prevPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)

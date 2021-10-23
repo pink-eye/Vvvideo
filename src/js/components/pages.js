@@ -217,3 +217,34 @@ const initPages = async (parent, data, cardAll, typeCard, continuation = null) =
 	resetBtns(btnNextPage, btnPrevPage)
 	await getDataMore(typeCard)
 }
+
+const scrapeInfoToSwitchPage = winActive => {
+	let cardAll = null
+	let btnNextPage = null
+	let btnPrevPage = null
+	let typeCard = null
+	let tabContentActive = null
+
+	if (winActive.classList.contains('channel')) {
+		tabContentActive = winActive.querySelector('.tab-content._active')
+
+		cardAll = tabContentActive.querySelectorAll('.card')
+		btnPrevPage = tabContentActive.querySelector('.btns__prev');
+		btnNextPage = tabContentActive.querySelector('.btns__next');
+		typeCard = cardAll[0].dataset.win
+	} else {
+		cardAll = winActive.classList.contains('subscriptions')
+			? winActive.querySelectorAll('.author')
+			: winActive.querySelectorAll('.card')
+
+		btnPrevPage = winActive.querySelector('.btns__prev');
+		btnNextPage = winActive.querySelector('.btns__next');
+		typeCard = winActive.classList.contains('subscriptions')
+			? 'author'
+			: winActive.classList.contains('search-results')
+				? 'rich'
+				: cardAll[0].dataset.win
+	}
+
+	return { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive }
+}
