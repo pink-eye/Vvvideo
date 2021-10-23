@@ -14,23 +14,21 @@ const openWinSearchResults = async _ => {
 
 		for (let index = 0, length = cardAll.length; index < length; index++) {
 			let card = cardAll[index];
+			let typeCard = data.items[index].type;
 
-			switch (data.items[index].type) {
+			card.dataset.win = `${typeCard}`
+			card.classList.add(`_${typeCard}`);
+
+			switch (typeCard) {
 				case 'video':
-					card.dataset.win = 'video'
-					card.classList.add('_video');
 					fillVideoCard(card, index, data.items)
 					break;
 
 				case 'playlist':
-					card.dataset.win = 'playlist'
-					card.classList.add('_playlist');
 					fillPlaylistCard(card, index, data.items)
 					break;
 
 				case 'channel':
-					card.dataset.win = 'channel'
-					card.classList.add('_channel');
 					fillChannelCard(card, index, data.items)
 					break;
 			}

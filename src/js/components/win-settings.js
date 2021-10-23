@@ -281,45 +281,26 @@ const handleInputField = event => {
 	let input = event.target
 	let option = input.id
 
-	if (!isEmpty(input.value))
-		switch (option) {
-			case 'host':
-				input.value = formatIP(input.value)
-				storage.settings.proxy.host = input.value
-				break;
+	switch (option) {
+		case 'host':
+			input.value = formatIP(input.value)
+			storage.settings.proxy.host = isEmpty(input.value) ? '127.0.0.1' : input.value
+			break;
 
-			case 'port':
-				input.value = formatPort(input.value)
-				storage.settings.proxy.port = +input.value
-				break;
+		case 'port':
+			input.value = formatPort(input.value)
+			storage.settings.proxy.port = isEmpty(input.value) ? 9050 : +input.value
+			break;
 
-			case 'regionTrending':
-				storage.settings.regionTrending = input.value
-				break;
+		case 'regionTrending':
+			storage.settings.regionTrending = isEmpty(input.value) ? 'US' : input.value
+			break;
 
-			case 'maxHistoryLength':
-				storage.settings.maxHistoryLength = input.value
-				break;
-		}
-	else
-		switch (option) {
-			case 'host':
-				storage.settings.proxy.host = '127.0.0.1'
-				break;
+		case 'maxHistoryLength':
+			storage.settings.maxHistoryLength = isEmpty(input.value) ? 30 : +input.value
+			break;
 
-			case 'port':
-				storage.settings.proxy.port = 9050
-				break;
-
-			case 'regionTrending':
-				storage.settings.regionTrending = 'US'
-				break;
-
-			case 'maxHistoryLength':
-				storage.settings.maxHistoryLength = 30
-				break;
-		}
-
+	}
 	API.writeStorage(storage)
 }
 

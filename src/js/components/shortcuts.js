@@ -40,6 +40,7 @@ const handleKeyDown = e => {
 			btnPrevPage = null
 			typeCard = null
 		}
+
 		winActive = null
 	}
 
@@ -62,6 +63,7 @@ const handleKeyDown = e => {
 			btnPrevPage = null
 			typeCard = null
 		}
+
 		winActive = null
 	}
 

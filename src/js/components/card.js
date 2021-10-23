@@ -231,7 +231,6 @@ const resetCard = async card => {
 	let titleSkeleton = card.querySelector('.title-skeleton');
 	let imageSkeleton = card.querySelector('.image-skeleton');
 	let bottomSkeleton = card.querySelector('.bottom-skeleton');
-	let cardTitle = card.querySelector('.card__title span');
 
 	card.disabled = true
 
@@ -249,6 +248,5 @@ const resetCard = async card => {
 	titleSkeleton = null
 	imageSkeleton = null
 	bottomSkeleton = null
-	cardTitle = null
 }
 
