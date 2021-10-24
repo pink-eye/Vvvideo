@@ -388,54 +388,6 @@
         align-items: center;
     }
 
-    &__decorations {
-        cursor: pointer;
-        position: absolute;
-        display: grid;
-        place-items: center;
-        background-color: transparent;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-
-        svg {
-            position: relative;
-            z-index: 1;
-            fill: #fff !important
-        }
-
-        &._active {
-
-            svg,
-            &:after {
-                transform: scale(1.1);
-                opacity: 1;
-            }
-        }
-
-        svg,
-        &:after {
-            transform: scale(1);
-            opacity: 0;
-
-            transition: transform .3s var(--trns-timing-func),
-                opacity .3s var(--trns-timing-func);
-        }
-
-        &:after {
-            content: '';
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            border-radius: var(--brs-xl);
-            background-color: var(--color-bg-duration);
-        }
-
-        &._loading {
-            background-color: var(--color-bg-duration);
-        }
-    }
-
     &__bar {
         cursor: unset;
         position: absolute;
@@ -848,6 +800,51 @@
         &:hover {
             color: var(--color-bg-btn);
             background-color: var(--color-title);
+        }
+    }
+}
+
+.decorations {
+    cursor: pointer;
+    position: absolute;
+    display: grid;
+    place-items: center;
+    background-color: transparent;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+
+    &__item {
+        position: absolute;
+        display: grid;
+        place-items: center;
+        width: 150px;
+        height: 150px;
+        border-radius: var(--brs-xl);
+        background-color: var(--color-bg-duration);
+
+        &>svg {
+            position: relative;
+            z-index: 1;
+            fill: #fff !important
+        }
+
+        &:not(._active),
+        &:not(._active)>svg {
+            transform: scale(1);
+            opacity: 0;
+
+            transition: transform .3s var(--ease-in-sine),
+                opacity .3s var(--ease-in-sine);
+			}
+
+			&._active,
+			&._active>svg {
+				transform: scale(1.1);
+				opacity: 1;
+
+				transition: transform .3s var(--ease-out-sine),
+					opacity .3s var(--ease-out-sine);
         }
     }
 }

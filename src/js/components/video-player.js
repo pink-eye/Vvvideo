@@ -145,19 +145,23 @@ const initVideoPlayer = _ => {
 
 	const showDecoration = action => {
 		let icon = controlDecorations.querySelector(`#${action}`);
-		icon.hidden = false
+		icon.hidden &&= false
 
-		const activeDecoration = _ => { controlDecorations.classList.add('_active') }
+		const activeDecoration = _ => {
+			if (!icon.classList.contains('_active'))
+				icon.classList.add('_active')
+		}
 
 		setTimeout(activeDecoration, 15);
 
 		const afterHideDecoration = _ => {
-			icon.hidden = true
+			icon.hidden ||= true
 			icon = null
 		}
 
 		const hideDecoration = _ => {
-			controlDecorations.classList.remove('_active')
+			if (icon.classList.contains('_active'))
+				icon.classList.remove('_active')
 
 			setTimeout(afterHideDecoration, 300);
 		}
