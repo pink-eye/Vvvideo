@@ -25,6 +25,8 @@ const openWinHistory = _ => {
 }
 
 const saveToHistoryVideo = card => {
+	let sh = storage.history
+	let recentHistoryItem = sh[0]
 	let params = {
 		id: card.dataset.id,
 		title: card.querySelector('.card__title span').textContent,
@@ -36,19 +38,20 @@ const saveToHistoryVideo = card => {
 		lengthSeconds: card.querySelector('.card__duration').textContent
 	}
 
+	if (!recentHistoryItem || recentHistoryItem.id !== params.id) {
+		storage.history = [params].concat(sh)
 
-	storage.history = [params].concat(storage.history)
+		let numWasteItemAll = storage.history.length - storage.settings.maxHistoryLength
 
-	let numWasteItemAll = storage.history.length - storage.settings.maxHistoryLength
+		if (numWasteItemAll <= 0) {
+			for (let index = 0, length = numWasteItemAll.length; index < length; index++)
+				storage.history.pop()
+		}
 
-	if (numWasteItemAll <= 0) {
-		for (let index = 0, length = numWasteItemAll.length; index < length; index++)
-			storage.history.pop()
+		API.writeStorage(storage)
+
+		card = null
 	}
-
-	API.writeStorage(storage)
-
-	card = null
 }
 
 const clearHistory = async _ => {
