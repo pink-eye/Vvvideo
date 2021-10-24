@@ -1,4 +1,4 @@
-const { contextBridge } = require('electron');
+const { contextBridge, shell } = require('electron');
 const ytch = require('yt-channel-info');
 const ytpl = require('ytpl');
 const ytsr = require('ytsr');
@@ -109,4 +109,6 @@ contextBridge.exposeInMainWorld('API', {
 		writerStream.write(JSON.stringify(data));
 		writerStream.end();
 	},
+
+	openExternalLink: url => { shell.openExternal(url) }
 })

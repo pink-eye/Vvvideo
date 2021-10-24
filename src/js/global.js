@@ -114,7 +114,7 @@ const normalizeDesc = text => {
 
 		return text
 			.replace(patternHashtag, '')
-			.replace(patternURL, link => `<a href='${link}'>${link}</a>`)
+			.replace(patternURL, link => `<a href='${link}' onclick='handleClickLink(event)'>${link}</a>`)
 			.replace(patternTimecodeHHMMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
 			.replace(patternTimecodeHMMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
 			.replace(patternTimecodeMMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
@@ -228,4 +228,9 @@ const getPosStroryboard = (videoDuration, currentTime, count) => {
 	const posY = 90 * row
 
 	return { posX, posY }
+}
+
+const handleClickLink = event => {
+	event.preventDefault()
+	API.openExternalLink(event.target.href)
 }
