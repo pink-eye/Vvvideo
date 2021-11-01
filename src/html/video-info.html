@@ -2,33 +2,38 @@
 	<div class="video-info__body">
 		<div class="video-info__shell">
 			<h1 class="video-info__title title">
-				What's the name?
+				<div class="skeleton title-skeleton"></div>
+				<span>...</span>
 			</h1>
 			<div class="video-info__details">
-				<div class="video-info__views">
-					<svg width="26px" height="20px">
+				<aside class="video-info__part">
+					<div class="skeleton part-skeleton"></div>
+					<svg width="26px" height="17px">
 						<use xlink:href='img/svg/actions.svg#views'></use>
 					</svg>
-					<span>...</span>
-				</div>
-				<div class="video-info__date">
-					<svg width="20px" height="20px">
+					<span class="video-info__views">...</span>
+				</aside>
+				<aside class="video-info__part">
+					<div class="skeleton part-skeleton"></div>
+					<svg width="26px" height="20px">
 						<use xlink:href='img/svg/actions.svg#date'></use>
 					</svg>
-					<span>...</span>
-				</div>
-				<div class="video-info__likes">
+					<span class="video-info__date">...</span>
+				</aside>
+				<aside class="video-info__part">
+					<div class="skeleton part-skeleton"></div>
 					<svg stroke-width="0" width="20px" height="20px">
 						<use xlink:href='img/svg/actions.svg#like'></use>
 					</svg>
-					<span>...</span>
-				</div>
-				<div class="video-info__dislikes">
+					<span class="video-info__likes">...</span>
+				</aside>
+				<aside class="video-info__part">
+					<div class="skeleton part-skeleton"></div>
 					<svg stroke-width="0" width="20px" height="20px">
 						<use xlink:href='img/svg/actions.svg#dislike'></use>
 					</svg>
-					<span>...</span>
-				</div>
+					<span class="video-info__dislikes">...</span>
+				</aside>
 			</div>
 			<div class="video-info__about">
 				@include('author-card.html')
