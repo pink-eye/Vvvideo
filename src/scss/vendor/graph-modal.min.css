@@ -42,7 +42,7 @@ html {
     height: 100%
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
     .modal::-webkit-scrollbar {
         width: 14px;
     }
@@ -59,7 +59,7 @@ html {
 
 }
 
-@media (max-width: 767px) {
+@media (max-width: 47.9375em) {
     .modal::-webkit-scrollbar {
         width: 0;
     }

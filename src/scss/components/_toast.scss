@@ -7,38 +7,39 @@
     row-gap: 15px;
     flex-direction: column;
 
-    @media (min-width: 768px) {
+    @media (min-width: 48em) {
         bottom: 30px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 47.9375em) {
         top: 60px;
     }
 
     z-index: 1000;
 
-    @media (max-width: 575px) {
+    @media (max-width: 35.9375em) {
         width: 100%;
     }
 }
 
 .toast__item {
     position: relative;
-	display: flex;
+    display: flex;
+    color: var(--color-text-toast);
     background-color: var(--color-bg-form);
 
-    @media (min-width: 576px) {
-        font-size: 20px;
+    @media (min-width: 36em) {
+        font-size: 1.25rem;
     }
 
-    @media (max-width: 575px) {
-        font-size: 16px;
+    @media (max-width: 35.9375em) {
+        font-size: 1rem;
     }
 
-    padding: 10px 20px;
+    padding: 10px 30px;
     box-shadow: var(--box-shadow-m);
 
-    @media (min-width: 576px) {
+    @media (min-width: 36em) {
         border-radius: var(--brs-s);
     }
 
@@ -164,8 +165,9 @@
         left: 0;
         height: 100%;
         width: 6px;
+        background-color: var(--color-type);
 
-        @media (min-width: 576px) {
+        @media (min-width: 36em) {
             border-top-left-radius: var(--brs-s);
             border-bottom-left-radius: var(--brs-s);
         }

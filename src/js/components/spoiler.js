@@ -1,5 +1,5 @@
 const toggleSpoiler = event => {
-	let spoiler = event.target.closest('.spoiler')
+	let spoiler = event.currentTarget.closest('.spoiler')
 
 	if (spoiler.classList.contains("_opened")) {
 		spoiler.removeAttribute('style')

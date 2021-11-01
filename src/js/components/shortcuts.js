@@ -21,19 +21,29 @@ const handleKeyDown = e => {
 		}
 	}
 
-	// SHIFT + K
-	if (e.shiftKey && e.keyCode === 75) {
+	// SHIFT
+	if (e.shiftKey) {
 		let winActive = _io_q('.main__content').querySelector('.win._active')
 
-		if (!winActive.classList.contains('settings') &&
+		if (winActive &&
+			!winActive.classList.contains('settings') &&
 			!winActive.classList.contains('video')) {
 
 			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } = scrapeInfoToSwitchPage(winActive)
 
 			if (tabContentActive) winActive = tabContentActive
 
-			if (btnNextPage && !btnNextPage.disabled)
-				nextPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
+			// K
+			if (e.keyCode === 75) {
+				if (btnNextPage && !btnNextPage.disabled)
+					nextPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
+			}
+
+			// J
+			if (e.keyCode === 74) {
+				if (btnPrevPage && !btnPrevPage.disabled)
+					prevPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
+			}
 
 			cardAll = null
 			btnNextPage = null
@@ -44,29 +54,7 @@ const handleKeyDown = e => {
 		winActive = null
 	}
 
-	// SHIFT + J
-	if (e.shiftKey && e.keyCode === 74) {
-		let winActive = _io_q('.main__content').querySelector('.win._active')
-
-		if (!winActive.classList.contains('settings') &&
-			!winActive.classList.contains('video')) {
-
-			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } = scrapeInfoToSwitchPage(winActive)
-
-			if (tabContentActive) winActive = tabContentActive
-
-			if (btnPrevPage && !btnPrevPage.disabled)
-				prevPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
-
-			cardAll = null
-			btnNextPage = null
-			btnPrevPage = null
-			typeCard = null
-		}
-
-		winActive = null
-	}
-
+	// SPACE
 	if (e.keyCode === 32 && document.activeElement !== _io_q('.search__bar')) {
 		let winActive = _io_q('.main__content').querySelector('.win._active')
 

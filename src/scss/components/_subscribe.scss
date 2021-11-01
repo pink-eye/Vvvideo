@@ -1,18 +1,18 @@
 .subscribe {
     display: inline-block;
     position: relative;
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 20px / 16px * 100%;
     color: #fff;
 	border-radius: var(--brs-xl);
     font-weight: 500;
     padding: 14px 42px;
 
-    @media (min-width: 551px) {
+    @media (min-width: 34.4375em) {
         width: 187px;
     }
 
-    @media (max-width: 550px) {
+    @media (max-width: 34.375em) {
         width: 100%;
     }
 

@@ -3,21 +3,13 @@
 @import './global/settings';
 
 .outter-container {
-    width: 100%;
-    min-width: 320px;
-    max-width: 1600px;
+    width: clamp(320px, 100%, 1600px);
     margin-inline: auto;
 
-    @media (min-width: 1201px) {
-        padding-inline: 30px;
-    }
-
-    @media (max-width: 1200px) {
-        padding-inline: calc(16px + (30 - 16) * ((100vw - 320px) / (1200 - 320)));
-    }
+    padding-inline: unquote("clamp(1rem, 0.6818rem + 1.5909vw, 1.875rem)");
 
     &:is(.header__outter-container) {
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             padding-inline: unset;
         }
     }
@@ -34,7 +26,6 @@ svg {
     font-weight: 500;
     line-height: 33px / 26px * 100%;
     transition: color var(--trns);
-    font-size: 26px;
 }
 
 img {

@@ -1,4 +1,5 @@
 @import './components/header';
+@import './components/footer';
 @import './components/search';
 @import './components/grid';
 @import './components/card';
@@ -17,11 +18,14 @@
 @import './components/burger';
 @import './components/switch';
 @import './components/skeleton';
+@import './components/spinner';
 @import './components/overlay';
 @import './components/subscribe';
 
 
 .main {
+    --middle-val-pt: calc(84px + (114 - 84) * ((100vw - 320px) / (1200 - 320)));
+
     position: relative;
     min-height: 100vh;
     background-color: var(--color-bg);
@@ -29,20 +33,14 @@
 
     transition: background-color var(--trns);
 
-    @media (min-width: 1201px) {
-        padding-top: 114px;
-    }
-
-    @media (max-width: 1200px) and (min-width: 320px) {
-        padding-top: calc(74px + (104 - 74) * ((100vw - 320px) / (1200 - 320)));
-    }
+    padding-top: clamp(84px, var(--middle-val-pt), 114px);
 
     // .main__outter-container
 
     &__outter-container {
         position: relative;
 
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             padding-right: 0;
         }
     }
@@ -54,12 +52,12 @@
 
         --margin: 0;
 
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             margin-left: var(--margin);
         }
 
         .outter-container {
-            @media (max-width: 449px) {
+            @media (max-width: 28.0625em) {
                 padding-inline: 0;
             }
         }
@@ -67,7 +65,6 @@
 }
 
 .win {
-
     &:not(._active) {
         display: none;
     }
@@ -102,12 +99,12 @@
     }
 
     &__title {
-        font-size: 35px;
+        font-size: unquote("clamp(1.375rem, 1.0462rem + 1.4615vw, 2.8rem)");
         text-transform: uppercase;
         margin-bottom: 20px;
-		font-weight: 700;
+        font-weight: 700;
 
-        @media (max-width: 449px) {
+        @media (max-width: 28.0625em) {
             padding-inline: 15px;
         }
     }

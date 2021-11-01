@@ -135,7 +135,16 @@ const recycleDOM = async (increment, cardAll, typeCard) => {
 					break;
 
 				case "author":
-					fillAuthorCard(card, index + increment, itemArray);
+					let authorParams = {
+						parent: card,
+						avatarSrc: itemArray[index + increment].avatar,
+						name: itemArray[index + increment].name,
+						id: itemArray[index + increment].channelId,
+					}
+
+					fillAuthorCard(authorParams);
+
+					authorParams = null
 					break;
 
 				case "playlist":
@@ -224,10 +233,12 @@ const scrapeInfoToSwitchPage = winActive => {
 	if (winActive.classList.contains('channel')) {
 		tabContentActive = winActive.querySelector('.tab-content._active')
 
-		cardAll = tabContentActive.querySelectorAll('.card')
-		btnPrevPage = tabContentActive.querySelector('.btns__prev');
-		btnNextPage = tabContentActive.querySelector('.btns__next');
-		typeCard = cardAll[0].dataset.win
+		if (tabContentActive) {
+			cardAll = tabContentActive.querySelectorAll('.card')
+			btnPrevPage = tabContentActive.querySelector('.btns__prev');
+			btnNextPage = tabContentActive.querySelector('.btns__next');
+			typeCard = cardAll[0].dataset.win
+		}
 	} else {
 		cardAll = winActive.classList.contains('subscriptions')
 			? winActive.querySelectorAll('.author')

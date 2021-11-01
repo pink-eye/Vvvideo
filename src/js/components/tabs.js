@@ -32,6 +32,7 @@ const showRequiredTab = async (tab) => {
 
 	let data = null
 	const channelId = channel.dataset.id
+
 	try {
 		switch (channelTab) {
 			case 'Videos':
@@ -46,8 +47,7 @@ const showRequiredTab = async (tab) => {
 		showToast('error', error.message)
 	}
 
-	if (channelTab === 'Videos' ||
-		channelTab === 'Playlists') {
+	if (data && channelTab !== 'About') {
 
 		const { items, continuation } = data
 		let cardAll = reqTabContent.querySelectorAll('.card');
@@ -73,7 +73,7 @@ const showRequiredTab = async (tab) => {
 };
 
 const handleClickTab = async event => {
-	let tab = event.target
+	let tab = event.currentTarget
 
 	if (!tab.classList.contains('_active')) {
 		hideLastTab();

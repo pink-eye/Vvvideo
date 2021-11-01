@@ -56,11 +56,11 @@ contextBridge.exposeInMainWorld('API', {
 		requestOptions: { agent: makeAgent(obj) }
 	}),
 
-	scrapeChannelInfo: channelId => ytch.getChannelInfo(channelId, 1),
+	scrapeChannelInfo: channelId => ytch.getChannelInfo(channelId, 0),
 
-	scrapeChannelVideos: channelId => ytch.getChannelVideos(channelId, 'latest', 1),
+	scrapeChannelVideos: channelId => ytch.getChannelVideos(channelId, 'latest', 0),
 
-	scrapeChannelPlaylists: channelId => ytch.getChannelPlaylistInfo(channelId),
+	scrapeChannelPlaylists: channelId => ytch.getChannelPlaylistInfo(channelId, 'last', 0),
 
 	scrapeVideosMore: continuation => ytch.getChannelVideosMore(continuation),
 

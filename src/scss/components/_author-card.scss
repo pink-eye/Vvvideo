@@ -3,8 +3,8 @@
     padding: 10px;
     display: flex;
     align-items: center;
-	border-radius: var(--brs-m);
-	background-color: var(--color-bg-form);
+    border-radius: var(--brs-m);
+    background-color: var(--color-bg-form);
 
     transition: border-color var(--trns);
 
@@ -41,35 +41,23 @@
     }
 
     &:last-child {
-        @media (min-width: 491px) {
+        @media (min-width: 30.6875em) {
             justify-self: end;
         }
     }
 
     &__avatar {
+        --size: clamp(50px, 15vw, 80px);
+
         position: relative;
         border-radius: 50%;
         overflow: hidden;
-		margin-bottom: 0;
+        margin-bottom: 0;
         margin-right: 20px;
 
-        @media (min-width: 1201px) {
-            max-width: 80px;
-            min-width: 80px;
-            height: 80px;
-        }
-
-        @media (max-width: 1200px) and (min-width: 768px) {
-			max-width: 65px;
-			min-width: 65px;
-            height: 65px;
-        }
-
-        @media (max-width: 767px) and (min-width: 320px) {
-			max-width: 50px;
-			min-width: 50px;
-            height: 50px;
-        }
+        max-width: var(--size);
+        min-width: var(--size);
+        height: var(--size);
 
         img {
             width: 100%;
@@ -78,34 +66,34 @@
         }
     }
 
+    &__name,
+    &__subs {
+        position: relative;
+        min-width: 11ch;
+        overflow: hidden;
+
+        transition: margin-left var(--trns-time-default) var(--ease-in-sine);
+    }
+
     &__name {
         text-align: left;
-        position: relative;
         font-style: unset;
         z-index: 2;
 
-        @media (min-width: 1201px) {
-            font-size: 26px;
-        }
+        font-size: unquote("clamp(1.1rem, 0.9600rem + 0.7000vw, 1.8rem)");
 
-        @media (max-width: 1200px) and (min-width: 320px) {
-            font-size: calc(18px + (26 - 18) * ((100vw - 320px) / (1200 - 320)));
-        }
-
-        transition: margin-left var(--trns-time-default) var(--ease-in-sine);
         margin: 0;
 
-		display: -webkit-box;
-		-webkit-line-clamp: 1;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
 
     &__subs {
+        display: inline-block;
         color: var(--color-text);
         margin-top: 10px;
 
-        transition: margin-left var(--trns-time-default) var(--ease-in-sine);
         margin-left: 0;
     }
 }

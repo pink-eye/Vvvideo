@@ -15,19 +15,24 @@
 
     --color-buffered: hsl(250, 15%, 90%);
 
-    --width-line: 3px;
+    --width-line: 0.1875rem;
     --color-line: var(--color-accent-s);
 
-    --color-bg-duration: hsla(0, 0%, 0%, 0.6);
+    --color-bg-duration: hsla(0, 0%, 0%, 0.75);
     --color-bg-edge: var(--color-accent-s);
 
-    --caption-font-size: 16px;
-    --video-title: 36px;
+    --caption-font-size: 1rem;
+    --video-title: 2.25rem;
 
     --brs-s: 5px;
     --brs-m: 10px;
     --brs-l: 15px;
     --brs-xl: 20px;
+
+    --box-shadow-s: var(--color-box-shadow-s) 0 2px 48px;
+    --box-shadow-m: var(--color-box-shadow-m) 0 2px 12px;
+    --box-shadow-l: var(--color-box-shadow-l) 0 2px 12px;
+    --box-shadow-xl: var(--color-box-shadow-xl) 0 2px 12px;
 
     --trns-timing-func: ease;
     --ease-out-back: cubic-bezier(0.175, 0.885, 0.320, 1.175);
@@ -47,7 +52,7 @@
         --trns-time-slow: .5s;
     }
 
-	--trns: var(--trns-time-default) var(--trns-timing-func);
-	--trns-fast: var(--trns-time-fast) var(--trns-timing-func);
-	--trns-slow: var(--trns-time-slow) var(--trns-timing-func);
+    --trns: var(--trns-time-default) var(--trns-timing-func);
+    --trns-fast: var(--trns-time-fast) var(--trns-timing-func);
+    --trns-slow: var(--trns-time-slow) var(--trns-timing-func);
 }

@@ -1,6 +1,13 @@
 let lastSelected = null;
 
-const createSuggestHTML = textContent => `<button class="search__suggest">${textContent}</button>`
+const createSuggestHTML = textContent => `<button class="search__suggest suggest">
+											<aside class="suggest__icon">
+												<svg width="27px" height="27px">
+													<use xlink:href='img/svg/actions.svg#search'></use>
+												</svg>
+											</aside>
+											<span class="suggest__text">${textContent}</span>
+										</button>`
 
 const addSuggest = (parent, data) => {
 	let searchDropdown = parent.querySelector('.search__dropdown');
@@ -41,34 +48,29 @@ const resetSelected = parent => {
 }
 
 const insertSelectedSuggest = (parent, suggest) => {
-	let searchBar = parent.querySelector('.search__bar');
+	let searchBar = parent.querySelector('.search__bar')
+	let suggestText = suggest.querySelector('.suggest__text')
 
-	if (searchBar) searchBar.value = suggest
+	if (searchBar) searchBar.value = suggestText.textContent
 
 	searchBar = null
+	suggestText = null
 }
 
-const chooseSuggest = (parent, last, direction) => {
+const chooseSuggest = (parent, direction) => {
 	let suggestAll = parent.querySelectorAll('.search__suggest');
 
 	if (suggestAll.length > 0) {
-		if (last !== null) {
-			if (direction === 40) {
-				if (suggestAll[last + 1]) {
-					suggestAll[last + 1].classList.add('_selected');
-					lastSelected = last + 1
-				} else {
-					suggestAll[0].classList.add('_selected');
-					lastSelected = 0
-				}
-			} else if (direction === 38) {
-				if (suggestAll[last - 1]) {
-					suggestAll[last - 1].classList.add('_selected');
-					lastSelected = last - 1
-				} else {
-					suggestAll[suggestAll.length - 1].classList.add('_selected');
-					lastSelected = suggestAll.length - 1
-				}
+		if (lastSelected !== null) {
+			const index = direction === 40 ? lastSelected + 1 : lastSelected - 1
+			const sparedIndex = direction === 40 ? 0 : suggestAll.length - 1
+
+			if (suggestAll[index]) {
+				suggestAll[index].classList.add('_selected');
+				lastSelected = index
+			} else {
+				suggestAll[sparedIndex].classList.add('_selected');
+				lastSelected = sparedIndex
 			}
 		} else {
 			suggestAll[0].classList.add('_selected');
@@ -78,7 +80,7 @@ const chooseSuggest = (parent, last, direction) => {
 		let selectedSuggest = parent.querySelector('._selected');
 
 		if (selectedSuggest)
-			insertSelectedSuggest(parent, selectedSuggest.textContent)
+			insertSelectedSuggest(parent, selectedSuggest)
 
 		selectedSuggest = null
 	}
@@ -114,7 +116,9 @@ const initSuggests = parent => {
 						const suggest = suggestAll[index];
 
 						suggest.addEventListener('click', _ => {
-							insertSelectedSuggest(parent, suggest.textContent)
+							insertSelectedSuggest(parent, suggest)
+							resetSelected(parent)
+							lastSelected = null
 							searchBar.focus()
 						});
 					}
@@ -131,6 +135,17 @@ const initSuggests = parent => {
 		}
 
 		searchBar.addEventListener('input', handleInpt);
+
+		const handleBlur = _ => {
+			setTimeout(_ => {
+				if (!document.activeElement.closest('.search')) {
+					hideSuggest(parent)
+					hideOverlay()
+				}
+			}, 15);
+		}
+
+		searchBar.addEventListener('blur', handleBlur);
 
 	} else searchBar = null
 }

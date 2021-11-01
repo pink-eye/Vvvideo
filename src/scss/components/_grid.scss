@@ -6,16 +6,16 @@
         display: grid;
         gap: 15px;
 
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
         }
 
-        @media (max-width: 767px) and (min-width: 576px) {
+        @media (max-width: 47.9375em) and (min-width: 36em) {
             grid-template-columns: 1fr 1fr;
             justify-content: space-between;
         }
 
-        @media (max-width: 575px) {
+        @media (max-width: 35.9375em) {
             grid-template-columns: 1fr;
             justify-content: center;
         }
@@ -54,7 +54,7 @@
             }
         }
 
-        @media (max-width: 449px) {
+        @media (max-width: 28.0625em) {
             .author {
                 border-radius: 0;
             }
@@ -72,20 +72,21 @@
     }
 
     &__count {
-        font-size: 20px;
+        font-size: 1.25rem;
         color: var(--color-title);
     }
 }
 
 .btns {
-	button {
-		padding: 10px 35px;
+    button {
+        padding: 10px 35px;
 
-		&[disabled] {
-			opacity: 0;
-			visibility: hidden;
-		}
-	}
+        &[disabled] {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
     &__prev {
         svg {
             transform: scale(-1);
@@ -96,40 +97,40 @@
 .column {
 
     .grid__wrapper {
-        @media (min-width: 576px) {
+        @media (min-width: 36em) {
             grid-template-columns: 1fr;
         }
 
-        @media (min-width: 992px) {
-            width: 100%;
+        @media (min-width: 62em) {
+            max-width: 85vw;
             margin-inline: auto;
         }
     }
 
     .card {
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             grid-template-rows: 1fr;
             grid-template-columns: 35% auto;
             column-gap: 20px;
         }
 
-        @media (max-width: 767px) and (min-width: 576px) {
+        @media (max-width: 47.9375em) and (min-width: 36em) {
             grid-template-columns: 45% auto;
             column-gap: 15px;
         }
 
-        @media (max-width: 575px) {
+        @media (max-width: 35.9375em) {
             grid-template-rows: auto 1fr;
         }
     }
 
     .card__title {
 
-        @media (min-width: 768px) {
-            font-size: 22px;
+        @media (min-width: 48em) {
+            font-size: 1.375rem;
         }
 
-        @media (min-width: 576px) {
+        @media (min-width: 36em) {
             margin: 0;
         }
     }
@@ -139,8 +140,6 @@
     }
 
     .card__bottom {
-        display: flex;
-        flex-direction: column;
         gap: 13px;
         justify-content: space-between;
     }

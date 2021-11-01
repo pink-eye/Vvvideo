@@ -84,7 +84,7 @@ const makeResultImport = (classResult, tip) => {
 	impExpTip = null
 }
 
-const readInputFile = async _ => {
+const readInputFile = _ => {
 	const validTip = "Succesfully! Wait for refresh..."
 	const failTip = "Fail... :("
 
@@ -169,15 +169,30 @@ const toggleTransition = isDisabled => {
 const buildStorage = data => {
 
 	if (data.hasOwnProperty('subscriptions')) {
-		storage.subscriptions = []
 
-		for (let index = 0, length = data.subscriptions.length; index < length; index++) {
-			const subscription = data.subscriptions[index];
+		if (data.subscriptions.length > 0) {
 
-			storage.subscriptions.push({
-				channelId: getChannelIdOrUser(subscription.url),
-				name: subscription.name
-			})
+			if (data.subscriptions[0].hasOwnProperty('channelId') &&
+				data.subscriptions[0].hasOwnProperty('name')) {
+				storage.subscriptions.push(...data.subscriptions)
+			} else {
+				for (let index = 0, length = data.subscriptions.length; index < length; index++) {
+					const subscription = data.subscriptions[index];
+
+					storage.subscriptions.push({
+						channelId: getChannelIdOrUser(subscription.url),
+						name: subscription.name
+					})
+				}
+			}
+		}
+	}
+
+	if (data.hasOwnProperty('history')) {
+
+		if (data.history.length > 0) {
+			storage.history.push(...data.history)
+			keepHistoryArray()
 		}
 	}
 
@@ -278,7 +293,7 @@ const fillWinSettings = async _ => {
 }
 
 const handleInputField = event => {
-	let input = event.target
+	let input = event.currentTarget
 	let option = input.id
 
 	switch (option) {
@@ -305,7 +320,7 @@ const handleInputField = event => {
 }
 
 const handleChangeCheckbox = event => {
-	let checkbox = event.target
+	let checkbox = event.currentTarget
 	let option = checkbox.id
 
 	storage.settings[`${option}`] = checkbox.checked
@@ -317,7 +332,7 @@ const handleChangeCheckbox = event => {
 
 		case 'enableProxy':
 			checkbox.checked
-				? showToast('good', 'Restart app after the fields is filled in')
+				? showToast('info', 'Restart app after the fields is filled in')
 				: showToast('good', 'Restart app')
 			break;
 
@@ -327,7 +342,7 @@ const handleChangeCheckbox = event => {
 
 		case 'notAdaptContent':
 			if (checkbox.checked)
-				mainContent.style.setProperty('--margin', '0')
+				_io_q('.main__content').style.setProperty('--margin', '0')
 			break;
 
 		case 'disableSearchSuggestions':

@@ -3,17 +3,14 @@ const openWinChannel = async id => {
 	let channelBannerImg = channel.querySelector('.channel__banner img');
 	let channelBanner = channel.querySelector('.channel__banner');
 	let channelAvatar = channel.querySelector('.heading-channel__avatar img');
-	let channelAuthor = channel.querySelector('.heading-channel__author');
-	let channelFollowers = channel.querySelector('.heading-channel__followers');
+	let channelAuthor = channel.querySelector('.heading-channel__author span');
+	let channelFollowers = channel.querySelector('.heading-channel__followers span');
 	let channelDescription = channel.querySelector('.about__description');
 	let bannerSkeleton = channel.querySelector('.banner-skeleton');
 	let avatarSkeleton = channel.querySelector('.avatar-skeleton');
-
-	// SUBSCRIBE BTN
-
-	const channelSubscribeBtn = channel.querySelector('.subscribe');
-
-	channelSubscribeBtn.addEventListener('click', handleClickSubscribeBtn);
+	let titleSkeleton = channel.querySelector('.title-skeleton');
+	let followersSkeleton = channel.querySelector('.followers-skeleton');
+	let subscribeBtn = channel.querySelector('.subscribe');
 
 	// FILL WIN
 
@@ -25,8 +22,9 @@ const openWinChannel = async id => {
 		if (data.author !== channelAuthor.textContent)
 			channelAuthor.textContent = data.author
 
-		channelSubscribeBtn.dataset.name = data.author
-		channelSubscribeBtn.dataset.channelId = id
+		removeSkeleton(titleSkeleton)
+
+		prepareSubscribeBtn(subscribeBtn, id, data.author)
 
 		if (data.authorThumbnails) {
 			channelAvatar.src = data.authorThumbnails.at(-1).url
@@ -60,6 +58,7 @@ const openWinChannel = async id => {
 		}
 
 		channelFollowers.textContent = `${normalizeCount(data.subscriberCount)} subscribers`
+		removeSkeleton(followersSkeleton)
 
 		if (data.description)
 			channelDescription.innerHTML = `${normalizeDesc(data.description)}`
@@ -75,6 +74,9 @@ const openWinChannel = async id => {
 		channelBanner = null
 		channelFollowers = null
 		channelDescription = null
+		subscribeBtn = null
+		titleSkeleton = null
+		followersSkeleton = null
 	}
 }
 
@@ -83,29 +85,28 @@ const resetChannel = _ => {
 	let channelBanner = channel.querySelector('.channel__banner');
 	let channelBannerImg = channel.querySelector('.channel__banner img');
 	let channelTabContentVideos = channel.querySelector('.videos');
-	let channelFollowers = channel.querySelector('.heading-channel__followers');
+	let channelAuthor = channel.querySelector('.heading-channel__author span');
+	let channelFollowers = channel.querySelector('.heading-channel__followers span');
 	let channelTabContentPlaylists = channel.querySelector('.playlists');
-	let bannerSkeleton = channel.querySelector('.banner-skeleton');
-	let avatarSkeleton = channel.querySelector('.avatar-skeleton');
+	let skeletonAll = channel.querySelectorAll('.skeleton');
 	let channelDescription = channel.querySelector('.about__description');
 
 	channel.dataset.id = ''
 
 	// SUBSCRIBE BTN
-
-	let channelSubscribeBtn = channel.querySelector('.subscribe');
-
-	channelSubscribeBtn.removeEventListener('click', handleClickSubscribeBtn);
+	let subscribeBtn = channel.querySelector('.subscribe');
+	destroySubscribeBtn(subscribeBtn)
 
 	channelBanner.style.setProperty('--bg-image', 'none center')
 	channelBannerImg.removeAttribute('src')
-	channelSubscribeBtn.removeAttribute('data-channel-id')
-	channelSubscribeBtn.removeAttribute('data-name')
-	channelFollowers.textContent = '... subscribers'
+	channelFollowers.textContent = '...'
+	channelAuthor.textContent = '...'
 
-	if (avatarSkeleton.classList.contains('_removing')) {
-		resetSkeleton(avatarSkeleton)
-		resetSkeleton(bannerSkeleton)
+	if (skeletonAll.length > 0) {
+		for (let index = 0, length = skeletonAll.length; index < length; index++) {
+			const skeleton = skeletonAll[index];
+			resetSkeleton(skeleton)
+		}
 	}
 
 	resetGrid(channelTabContentVideos)
@@ -116,54 +117,41 @@ const resetChannel = _ => {
 	channelDescription.textContent = null
 
 	channel = null;
-	channelSubscribeBtn = null
+	subscribeBtn = null
 	channelBannerImg = null;
 	channelFollowers = null
+	skeletonAll = null
+	channelAuthor = null
 	channelBanner = null;
 	channelTabContentVideos = null
 	channelTabContentPlaylists = null
-	bannerSkeleton = null;
-	avatarSkeleton = null;
 }
 
-const fillSomeInfoChannel = (title, authorId) => {
+const fillSomeInfoChannel = (name, channelId) => {
 	let channel = _io_q('.channel');
-	let channelTitle = channel.querySelector('.heading-channel__author');
-	let channelSubscribeBtn = channel.querySelector('.subscribe');
-	let channelSubscribeText = channel.querySelector('.subscribe__text');
+	let channelName = channel.querySelector('.heading-channel__author span');
+	let subscribeBtn = channel.querySelector('.subscribe');
+	let titleSkeleton = channel.querySelector('.title-skeleton');
 
-	channelTitle.textContent = title
-	channelSubscribeBtn.dataset.channelId = authorId
-	channelSubscribeBtn.dataset.name = title
-
-	if (hasSubscription(authorId)) {
-		channelSubscribeBtn.classList.add('_subscribed')
-		channelSubscribeText.textContent = 'Unsubscribe'
-	} else {
-		channelSubscribeBtn.classList.remove('_subscribed')
-		channelSubscribeText.textContent = 'Subscribe'
+	if (!isEmpty(name)) {
+		channelName.textContent = name
+		removeSkeleton(titleSkeleton)
 	}
 
+	prepareSubscribeBtn(subscribeBtn, channelId, name)
+
 	channel = null
-	channelTitle = null
-	channelSubscribeBtn = null
-	channelSubscribeText = null
+	channelName = null
+	subscribeBtn = null
 }
 
 const prepareChannelWin = (btnWin, id) => {
 	if (btnWin) {
-		let channelTitle = btnWin.classList.contains('card')
-			? btnWin.querySelector('.card__title span')
-			: btnWin.querySelector('.author__name')
+		const { name, id } = btnWin.dataset
 
-		let channelId = btnWin.classList.contains('card') && !btnWin.classList.contains('_channel')
-			? btnWin.querySelector('.card__channel').dataset.id
-			: btnWin.dataset.id
+		fillSomeInfoChannel(name, id)
 
-		fillSomeInfoChannel(channelTitle.textContent, channelId)
-
-		channelTitle = null
-	} else fillSomeInfoChannel('-', '')
+	} else fillSomeInfoChannel('', '')
 
 	openWinChannel(id)
 }

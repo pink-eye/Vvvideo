@@ -112,7 +112,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 				let reqWin = mainContent.querySelector(`.${reqWinString}`);
 
 				if (!reqWin.classList.contains('_active') || reqWin.classList.contains('search-results')) {
-
 					hideLastWin()
 
 					if (btnWin.classList.contains('sidebar__btn')) {
@@ -139,9 +138,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 							case 'video':
 								prepareVideoWin(btnWin, reqID)
-
-								if (!storage.settings.disableHistory)
-									saveToHistoryVideo(btnWin)
 
 								break;
 
@@ -207,23 +203,17 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		// ARROWS
 		if (e.keyCode === 40 || e.keyCode === 38) {
 			resetSelected(headerSearch)
-			chooseSuggest(headerSearch, lastSelected, e.keyCode)
+			chooseSuggest(headerSearch, e.keyCode)
 		}
 
-		// ESC
-		if (e.keyCode === 27) {
-			hideSuggest(headerSearch)
-			hideOverlay()
+		// ESC || ENTER
+		if (e.keyCode === 27 || e.keyCode === 13)
 			searchBar.blur()
-		}
 
 		// ENTER
-		if (e.keyCode === 13 && !isEmpty(searchBar.value)) {
-			hideSuggest(headerSearch)
-			hideOverlay()
-			searchBar.blur()
+		if (e.keyCode === 13 && !isEmpty(searchBar.value))
 			manageWin(e)
-		}
+
 	}
 
 	searchBar.addEventListener('keydown', handleKeyDownSearch);

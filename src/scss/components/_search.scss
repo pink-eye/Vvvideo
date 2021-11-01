@@ -8,7 +8,7 @@
 
     background-color: transparent;
 
-    @media (min-width: 768px) {
+    @media (min-width: 48em) {
         max-width: 830px;
     }
 
@@ -34,7 +34,7 @@
         flex-direction: column;
         width: 100%;
 
-        box-shadow: var(--box-shadow-m);
+        box-shadow: var(--box-shadow-xl);
 
         border-radius: var(--brs-m);
 
@@ -45,7 +45,7 @@
         &:empty {
             opacity: 0;
             visibility: hidden;
-            transform: scale(0.9);
+            transform: scale(0.5);
         }
 
         &:not(:empty) {
@@ -58,27 +58,45 @@
                 transform .15s var(--ease-out-back);
         }
     }
+}
 
-    &__suggest {
-        background-color: var(--color-bg-field);
-        color: var(--color-text-field);
-        font-size: var(--caption-font-size);
-        font-weight: 400;
-        width: 100%;
-        height: 100%;
-        border: 0;
-        padding: 12px;
-        text-align: left;
+.suggest {
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg-field);
+    color: var(--color-text-field);
+    font-size: var(--caption-font-size);
+    font-weight: 400;
+    width: 100%;
+    height: 100%;
+    border: 3px solid transparent;
+    padding: 7px 5px;
+    text-align: left;
 
-        transition: background-color var(--trns);
+    transition: background-color var(--trns),
+        border-color var(--trns),
+        color var(--trns);
 
-        border-radius: var(--brs-s);
+    border-radius: var(--brs-s);
 
-        &._selected,
-        &:focus-visible,
-        &:hover {
-            background-color: var(--color-bg-suggest-selected);
-        }
-
+    &._selected,
+    &:focus-visible {
+        background-color: var(--color-bg-suggest-selected);
+        color: var(--color-text-suggest-selected);
     }
+
+    @media (hover: hover) and (pointer: fine) {
+
+        &:not(._selected):not(:focus-visible):hover {
+            background-color: var(--color-bg-suggest-hover);
+        }
+    }
+
+    &:not(:first-child) {
+        margin-top: 7px;
+    }
+
+	&__icon {
+		margin-right: 7px;
+	}
 }

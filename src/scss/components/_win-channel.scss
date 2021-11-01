@@ -7,20 +7,16 @@
     // .channel__banner
 
     &__banner {
+        --middle-val-height: calc(120px + (280 - 120) * ((100vw - 320px) / (1200 - 320)));
+        --bg-image: none;
+
         position: relative;
-		margin-bottom: 0;
+        margin-bottom: 0;
         width: 100%;
 
-        --bg-image: none;
         background: var(--bg-image) center;
 
-        @media (min-width: 1201px) {
-            height: 280px;
-        }
-
-        @media (max-width: 1200px) and (min-width: 320px) {
-            height: calc(120px + (280 - 120) * ((100vw - 320px) / (1200 - 320)));
-        }
+        height: clamp(120px, var(--middle-val-height), 280px);
 
         img {
             width: 100%;
@@ -29,9 +25,9 @@
         }
     }
 
-	.banner-skeleton {
-		border-radius: 0;
-	}
+    .banner-skeleton {
+        border-radius: 0;
+    }
 }
 
 .heading-channel {
@@ -47,19 +43,19 @@
         display: flex;
         width: 100%;
 
-        @media (min-width: 1101px) {
+        @media (min-width: 68.8125em) {
             flex-direction: column;
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 68.75em) {
             justify-content: center;
         }
 
-        @media (min-width: 551px) {
+        @media (min-width: 34.4375em) {
             margin-top: 45px;
         }
 
-        @media (max-width: 550px) {
+        @media (max-width: 34.375em) {
             flex-direction: column;
             margin-top: 25px;
         }
@@ -69,77 +65,95 @@
 
     &__avatar {
         z-index: 11;
-		border-radius: 50%;
-		overflow: hidden;
-		margin-bottom: 0;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 0;
 
-        @media (min-width: 1101px) {
+        @media (min-width: 68.8125em) {
             position: absolute;
             top: -110px;
             left: 50%;
             transform: translateX(-50%);
             width: 170px;
 
-			@media (hover: hover) and (pointer: fine) {
-				&:hover {
-					img {
-						transform: rotateX(90deg) perspective(100px);
-					}
-				}
-			}
+            @media (hover: hover) and (pointer: fine) {
+                &:hover {
+                    img {
+                        transform: rotateX(90deg) perspective(100px);
+                    }
+                }
+            }
         }
 
-        @media (max-width: 1100px) {
-			position: relative;
+        @media (max-width: 68.75em) {
+            position: relative;
         }
 
-        @media (min-width: 551px) {
-			flex: 0 0 170px;
+        @media (min-width: 34.4375em) {
+            flex: 0 0 170px;
             height: 170px;
         }
 
-        @media (max-width: 550px) {
-			flex: 0 0 130px;
+        @media (max-width: 34.375em) {
+            flex: 0 0 130px;
             width: 130px;
-			margin: auto;
+            margin: auto;
         }
 
         img {
-			width: 100%;
+            width: 100%;
             height: 100%;
-			border-radius: 50%;
-			border: 10px solid var(--color-bg);
+            border-radius: 50%;
+            border: 10px solid var(--color-bg);
             object-fit: cover;
-			transform: rotateX(0deg) perspective(100px);
+            transform: rotateX(0deg) perspective(100px);
 
-			transition: transform var(--trns);
+            transition: transform var(--trns);
         }
     }
 
     // .heading-channel__info
 
     &__info {
-        @media (min-width: 1101px) {
+        display: inline-flex;
+        flex-direction: column;
+
+        @media (min-width: 68.8125em) {
             text-align: center;
+            align-items: center;
         }
 
-        @media (max-width: 1100px) and (min-width: 551px) {
+        @media (max-width: 68.75em) and (min-width: 34.4375em) {
             margin-left: 40px;
             text-align: right;
+            align-items: flex-end;
         }
 
-        @media (max-width: 550px) {
+        @media (max-width: 34.375em) {
+            align-items: center;
             text-align: center;
             margin-top: 20px;
         }
     }
 
+    &__author,
+    &__followers {
+        position: relative;
+        overflow: hidden;
+        min-width: 11ch;
+    }
+
+    &__author {
+        font-size: unquote("clamp(1.25rem, 1.0500rem + 1.0000vw, 2.25rem)");
+    }
+
     // .heading-channel__followers
 
     &__followers {
-        font-size: 16px;
+        font-size: 1rem;
         line-height: 16px / 13px * 100%;
         color: var(--color-text);
+        margin-bottom: 1rem;
 
         transition: color var(--trns);
     }
@@ -157,11 +171,11 @@
     display: flex;
     justify-content: space-between;
 
-    @media (min-width: 768px) {
+    @media (min-width: 48em) {
         margin-top: 20px;
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: 47.9375em) {
         margin-top: 30px;
     }
 
@@ -184,7 +198,7 @@
             max-width: 450px;
         }
 
-        @media (max-width: 470px) {
+        @media (max-width: 29.375em) {
             .search {
                 width: 95%;
             }
@@ -198,7 +212,7 @@
         justify-content: center;
         position: relative;
         flex-wrap: wrap;
-		margin: auto;
+        margin: auto;
     }
 
     // .body-channel__item
@@ -222,9 +236,9 @@
     &__tab {
         position: relative;
         z-index: 1;
-		border-radius: var(--brs-m);
+        border-radius: var(--brs-m);
         background-color: transparent;
-        font-size: 20px;
+        font-size: 1.25rem;
         line-height: 23px / 18px * 100%;
 
         padding: 10px 25px;
@@ -292,9 +306,9 @@
     background-color: var(--color-bg-form);
     padding: 30px 20px;
 
-	@media (min-width: 450px) {
-		border-radius: var(--brs-m);
-	}
+    @media (min-width: 28.125em) {
+        border-radius: var(--brs-m);
+    }
 
     &__description {
         margin: 0;
@@ -302,7 +316,7 @@
         max-width: 85ch;
         width: 100%;
 
-		border-left: 3px solid;
-		padding-left: 15px;
+        border-left: 3px solid;
+        padding-left: 15px;
     }
 }

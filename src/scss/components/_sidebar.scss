@@ -10,7 +10,7 @@
         box-shadow var(--trns),
         visibility var(--trns);
 
-    @media (min-width: 768px) {
+    @media (min-width: 48em) {
         top: 0;
         left: 0;
         width: 227px;
@@ -27,13 +27,13 @@
     }
 
 
-    @media (max-width: 767px) {
+    @media (max-width: 47.9375em) {
         left: 50%;
         overflow: hidden;
         padding: 4px;
         width: calc(100% - 20px);
 
-        border-radius: var(--brs-xl);
+        border-radius: var(--brs-m);
 
         filter: drop-shadow(0px -5px 40px var(--box-shadow-s));
 
@@ -48,7 +48,7 @@
         }
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 48em) {
         &::-webkit-scrollbar {
             width: 14px;
         }
@@ -65,13 +65,13 @@
 
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: 47.9375em) {
         &::-webkit-scrollbar {
             width: 0;
         }
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: 47.9375em) {
 
         .sidebar__caption {
             display: none;
@@ -87,12 +87,12 @@
     &__list {
         display: flex;
 
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             flex-direction: column;
             height: 100%;
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 47.9375em) {
             flex-direction: row;
             justify-content: space-between;
         }
@@ -102,17 +102,17 @@
     // .sidebar__item
 
     &__item {
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             &:not(:first-child) {
                 margin-top: 10px;
             }
 
-			&:nth-last-child(-n+2) {
-				margin-bottom: 10px;
-			}
+            &:nth-last-child(-n+2) {
+                margin-bottom: 10px;
+            }
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 47.9375em) {
             flex: 0 1 25%;
             display: flex;
             justify-content: center;
@@ -125,7 +125,7 @@
         &:last-child {
             margin-top: auto;
 
-            @media (max-width: 767px) {
+            @media (max-width: 47.9375em) {
                 display: none;
             }
         }
@@ -139,9 +139,9 @@
         position: relative;
         background-color: transparent;
 
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             display: flex;
-			align-items: center;
+            align-items: center;
             padding-block: 14px;
             padding-left: 20px;
             padding-right: 10px;
@@ -155,55 +155,53 @@
                 background-size var(--trns-time-default) var(--ease-in-sine);
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 47.9375em) {
+            --middle-val-padbl: calc(7px + (15 - 7) * ((100vw - 320px) / (767 - 320)));
+
             display: grid;
             place-items: center;
-            padding-block: calc(7px + (15 - 7) * ((100vw - 320px) / (767 - 320)));
+            padding-block: clamp(7px, var(--middle-val-padbl), 15px);
             justify-content: center;
-            border-radius: var(--brs-l);
+            border-radius: var(--brs-m);
             transition: background-color var(--trns)
         }
 
-		&._active {
-		    background-color: var(--color-accent-s);
+        &._active {
+            background-color: var(--color-accent-s);
 
-		    .sidebar__caption {
-		        color: #fff;
-			}
+            .sidebar__caption {
+                color: #fff;
+            }
 
-		    .sidebar__icon {
-		        svg {
-		            fill: #fff !important;
-		            stroke: #fff !important;
-		        }
-		    }
-
-		    &:focus-visible {
-		        border: var(--width-line) solid var(--color-accent-l);
-		    }
-		}
-
-        @media (hover: hover) and (pointer: fine) {
-
-            &:not(._active) {
-                &:hover {
-                    .sidebar__caption {
-                        color: var(--color-accent-s);
-                        margin-left: 5px;
-                    }
-
-                    .sidebar__icon {
-                        svg {
-                            stroke: var(--color-accent-s) !important;
-                            fill: var(--color-accent-s) !important;
-                        }
-                    }
+            .sidebar__icon {
+                svg {
+                    fill: #fff !important;
+                    stroke: #fff !important;
                 }
             }
 
-            &:hover {
+            &:focus-visible {
+                border: var(--width-line) solid var(--color-accent-l);
+            }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+
+            &:not(._active):hover {
                 text-decoration: none;
                 background-size: 100% 100%;
+
+                .sidebar__caption {
+                    color: var(--color-accent-s);
+                    margin-left: 5px;
+                }
+
+                .sidebar__icon {
+                    svg {
+                        stroke: var(--color-accent-s) !important;
+                        fill: var(--color-accent-s) !important;
+                    }
+                }
             }
         }
     }
@@ -211,18 +209,18 @@
     &__icon {
         position: relative;
         display: grid;
-		place-content: center;
+        place-content: center;
         background-color: transparent;
 
-		@media (min-width: 768px) {
-			width: 30px;
-		}
+        @media (min-width: 48em) {
+            width: 30px;
+        }
 
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             margin-right: 15px;
         }
 
-        @media (max-width: 449px) {
+        @media (max-width: 28.0625em) {
             svg {
                 width: 22px;
                 height: 22px;
@@ -236,15 +234,15 @@
         }
     }
 
-	&__caption {
-		font-size: var(--caption-font-size);
-		font-weight: 400;
-		color: var(--color-icon);
-		white-space: nowrap;
+    &__caption {
+        font-size: var(--caption-font-size);
+        font-weight: 400;
+        color: var(--color-icon);
+        white-space: nowrap;
 
-		transition: color var(--trns),
-			opacity var(--trns),
-			margin-left var(--trns),
-			visibility var(--trns);
-	}
+        transition: color var(--trns),
+            opacity var(--trns),
+            margin-left var(--trns),
+            visibility var(--trns);
+    }
 }

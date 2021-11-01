@@ -3,76 +3,69 @@
         background-color: var(--color-bg-form);
         margin-bottom: 30px;
         padding-block: 20px;
-		width: 100%;
+        width: 100%;
     }
 
-	&__wrapper {
-		display: flex;
-		align-items: center;
+    &__wrapper {
+        display: inline-flex;
+        flex-direction: column;
 
-		@media (min-width: 1350px) {
-			flex-direction: row-reverse;
-			justify-content: space-between;
-		}
+        @media (min-width: 84.375em) {
+            align-items: flex-start;
+        }
 
-		@media (max-width: 1349px) {
-			flex-direction: column;
-		}
+        @media (max-width: 84.3125em) {
+            align-items: center;
+        }
+    }
 
-	}
-
-	&__about,
-	&__channel {
-		flex: 1 1 50%;
-	}
-
-	&__about {
-		padding-inline: 15px;
-	}
+    &__about {
+        width: 100%;
+        padding-inline: 15px;
+    }
 
     &__name {
-        font-size: 35px;
-		text-align: right;
-		word-break: break-all;
+        font-size: unquote("clamp(1.25rem, 1.0500rem + 1.0000vw, 2.25rem)");
+        word-break: break-all;
 
-		@media (max-width: 1349px) {
-			text-align: center;
-		}
+        @media (max-width: 84.3125em) {
+            text-align: center;
+        }
     }
 
     &__stat {
-		display: flex;
-		margin-top: 20px;
-		gap: 15px;
-		flex-wrap: wrap;
+        display: flex;
+        margin-top: 20px;
+        gap: 15px;
+        flex-wrap: wrap;
         color: var(--color-text);
 
-		@media (min-width: 1350px) {
-			justify-content: flex-end;
-		}
+        @media (min-width: 84.375em) {
+            justify-content: flex-start;
+        }
 
-		@media (max-width: 1349px) and (min-width: 320px) {
-			justify-content: center;
-		}
+        @media (max-width: 84.3125em) and (min-width: 20em) {
+            justify-content: center;
+        }
 
-		& > * {
-			display: flex;
-			align-items: center;
-			gap: 10px;
+        &>* {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 10px;
 
-			background-color: var(--color-bg);
-			border-radius: var(--brs-m);
-			padding: 5px 15px;
-		}
+            background-color: var(--color-bg);
+            border-radius: var(--brs-m);
+            padding: 5px 15px;
+        }
     }
 
-	@media (max-width: 1349px) {
-		.author {
-			margin-top: 20px;
-		}
-	}
+    .author {
+        margin-top: 20px;
+    }
 
-	.author__subs {
-		display: none;
-	}
+    .author__subs {
+        display: none;
+    }
 }

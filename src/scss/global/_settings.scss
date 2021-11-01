@@ -3,6 +3,7 @@
 }
 
 body {
+    min-width: 320px;
     position: relative;
     font-family: var(--ff);
     background-color: var(--color-bg-form);
@@ -11,7 +12,7 @@ body {
     transition: background-color var(--trns);
 
 
-    @media (min-width: 768px) {
+    @media (min-width: 48em) {
         &::-webkit-scrollbar {
             width: 14px;
         }
@@ -28,7 +29,7 @@ body {
 
     }
 
-    @media (max-width: 767px) {
+    @media (max-width: 47.9375em) {
         &::-webkit-scrollbar {
             width: 0;
         }
@@ -72,11 +73,11 @@ a:not(.btn-primary) {
         color: var(--color-link-visited)
     }
 
-	@media (hover: hover) and (pointer: fine) {
-		&:focus {
-			outline: 0;
-		}
-	}
+    @media (hover: hover) and (pointer: fine) {
+        &:focus {
+            outline: 0;
+        }
+    }
 }
 
 .btn-reset {
@@ -114,7 +115,7 @@ input[type="text"] {
     height: 100%;
     padding: 12.5px 23px;
     outline: 0;
-	border-radius: var(--brs-m);
+    border-radius: var(--brs-m);
 
 
     transition: border-radius var(--trns),

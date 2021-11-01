@@ -1,6 +1,6 @@
 let segmentsSB = [];
 
-const SponsorblockItemHTML = _ => `<li class="sponsorblock__item"></li>`
+const createSponsorblockItemHTML = _ => `<li class="sponsorblock__item"></li>`
 
 const getSegmentsSB = async videoId => {
 	segmentsSB.length = 0
@@ -8,7 +8,7 @@ const getSegmentsSB = async videoId => {
 	let video = _io_q('.video');
 	let controlsProgess = video.querySelector('.controls__progress');
 	let progressSponsorblock = controlsProgess.querySelector('.sponsorblock');
-	let sponsorblockItemHTML = SponsorblockItemHTML();
+	let sponsorblockItemHTML = createSponsorblockItemHTML();
 
 	try {
 		let data = await API.getSponsorblockInfo(videoId, uuidv4())

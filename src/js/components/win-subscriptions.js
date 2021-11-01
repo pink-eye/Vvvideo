@@ -6,26 +6,35 @@ const openWinSubs = async _ => {
 	let subscriptions = _io_q('.subscriptions');
 	let authorCardAll = subscriptions.querySelectorAll('.author');
 	let btnSubscriptions = document.querySelector('button[data-win="subscriptions"]');
+	let ss = storage.subscriptions
 
-	storage.subscriptions.length > authorCardAll.length
-		? initPages(subscriptions, storage.subscriptions, authorCardAll, 'author')
+	ss.length > authorCardAll.length
+		? initPages(subscriptions, ss, authorCardAll, 'author')
 		: disablePages(subscriptions)
 
 	for (let index = 0, length = authorCardAll.length; index < length; index++) {
 		let authorCard = authorCardAll[index];
 
-		storage.subscriptions[index]
-			? fillAuthorCard(authorCard, index, storage.subscriptions)
-			: authorCard.hidden = true;
+		if (ss[index]) {
+			let authorParams = {
+				parent: authorCard,
+				name: ss[index].name,
+				id: ss[index].channelId,
+			}
+
+			fillAuthorCard(authorParams)
+
+			authorParams = null
+		} else authorCard.hidden = true;
 	}
 
 	if (!isUpdated) {
 		try {
-			for (let index = 0, length = storage.subscriptions.length; index < length; index++) {
-				const subscription = storage.subscriptions[index];
+			for (let index = 0, length = ss.length; index < length; index++) {
+				const subscription = ss[index];
 
 				if (btnSubscriptions.classList.contains('_active'))
-					promises.push(getChannelInfoLocalScraper(subscription.channelId))
+					promises.push(API.scrapeChannelInfo(subscription.channelId))
 				else return
 			}
 
@@ -33,23 +42,13 @@ const openWinSubs = async _ => {
 
 			resetIndicator()
 
-			for (let index = 0, length = storage.subscriptions.length; index < length; index++) {
+			for (let index = 0, length = ss.length; index < length; index++) {
 				const subscription = storage.subscriptions[index];
 				const channelInfo = channelInfoArray[index];
 
 				if (btnSubscriptions.classList.contains('_active')) {
-					if (subscription.hasOwnProperty('avatar')) {
-						if (subscription.avatar !== channelInfo.authorThumbnails.at(-1).url)
-							subscription.avatar = channelInfo.authorThumbnails.at(-1).url
-					} else
-						subscription.avatar = channelInfo.authorThumbnails.at(-1).url
-
-					if (subscription.hasOwnProperty('name')) {
-						if (subscription.name !== channelInfo.author)
-							subscription.name = channelInfo.author
-					} else
-						subscription.name = channelInfo.author
-
+					subscription.avatar = channelInfo.authorThumbnails.at(-1).url
+					subscription.name = channelInfo.author
 				} else return
 			}
 
@@ -68,21 +67,22 @@ const openWinSubs = async _ => {
 	}
 }
 
-const hasSubscription = channelId => {
-	let hasSubscription = false
+const hasSubscription = (channelId, name) => {
+	let isSubscribed = false
 
 	if (storage.subscriptions.length > 0) {
 		for (let index = 0, length = storage.subscriptions.length; index < length; index++) {
 			const subscription = storage.subscriptions[index];
 
-			if (subscription.channelId === channelId) {
-				hasSubscription = true
+			if (subscription.channelId === channelId ||
+				subscription.name === name) {
+				isSubscribed = true
 				break
 			}
 		}
 	}
 
-	return hasSubscription
+	return isSubscribed
 }
 
 const addSubscription = async obj => {
@@ -92,67 +92,83 @@ const addSubscription = async obj => {
 
 const removeSubscription = async obj => {
 	storage.subscriptions = storage.subscriptions.filter(item =>
-		item.channelId !== obj.channelId
-		&& item.name !== obj.name)
+		item.channelId !== obj.channelId ||
+		item.name !== obj.name)
 	await API.writeStorage(storage);
 }
 
-const handleClickSubscribeBtn = (event) => {
-	let btn = event.target
+const handleClickSubscribeBtn = event => {
+	let btn = event.currentTarget
+
 	let btnText = btn.querySelector('.subscribe__text')
 
-	!btn.classList.contains('_subscribed')
-		? onClickSubscribe(btn, btnText)
-		: onClickUnsubscribe(btn, btnText)
+	const { channelId, name } = btn.dataset
+
+	if (!isEmpty(channelId) && !isEmpty(name)) {
+		let isSubscribed = hasSubscription(channelId, name)
+		let subObj = { channelId, name }
+
+		transformBtn(btn, btnText, isSubscribed)
+
+		isSubscribed ? removeSubscription(subObj) : addSubscription(subObj)
+	} else {
+		showToast('error', 'Did not get data about the channel')
+		btn.removeEventListener('click', handleClickSubscribeBtn)
+	}
 
 	btn = null
 	btnText = null
 }
 
-const onClickSubscribe = (btn, btnText) => {
+const transformBtn = (btn, btnText, isSubscribed) => {
+	btn.disabled = true
 
-	if (btn.dataset.channelId && btn.dataset.name) {
+	!isSubscribed
+		? btn.classList.add('_subscribed')
+		: btn.classList.remove('_subscribed')
 
-		btn.disabled = true
-		btn.classList.add('_subscribed')
-		btnText.style.opacity = '0'
+	btnText.style.opacity = '0'
 
-		const onChangeState = _ => {
-			btnText.textContent = 'Unsubscribe'
-			btnText.removeAttribute('style')
+	const onChangeState = _ => {
+		btnText.textContent = !isSubscribed ? 'Unsubscribe' : 'Subscribe'
+		btnText.removeAttribute('style')
 
-			btn.disabled = false
-		}
-
-		setTimeout(onChangeState, getDurationTimeout(200))
-
-		addSubscription(JSON.parse(`{
-			"channelId": "${btn.dataset.channelId}",
-			"name": "${btn.dataset.name}"
-		}`))
+		btn.disabled = false
 	}
+
+	setTimeout(onChangeState, getDurationTimeout(200))
 }
 
-const onClickUnsubscribe = (btn, btnText) => {
+const prepareSubscribeBtn = (btn, channelId, name) => {
+	let btnText = btn.querySelector('.subscribe__text');
 
-	if (btn.dataset.channelId && btn.dataset.name) {
+	if (!isEmpty(channelId) &&
+		isEmpty(btn.dataset.channelId)) {
+		btn.dataset.channelId = channelId
+		transformBtn(btn, btnText, !hasSubscription(channelId, name))
+	}
 
-		btn.disabled = true
+	if (!isEmpty(name) &&
+		isEmpty(btn.dataset.name))
+		btn.dataset.name = name
+
+	btn.addEventListener('click', handleClickSubscribeBtn);
+
+	btnText = null
+}
+
+const destroySubscribeBtn = btn => {
+	let btnText = btn.querySelector('.subscribe__text');
+
+	btn.removeAttribute('data-channel-id')
+	btn.removeAttribute('data-name')
+	btnText.textContent = ''
+
+	if (btn.classList.contains('_subscribed'))
 		btn.classList.remove('_subscribed')
-		btnText.style.opacity = '0'
 
-		const onChangeState = _ => {
-			btnText.textContent = 'Subscribe'
-			btnText.removeAttribute('style')
+	btn.removeEventListener('click', handleClickSubscribeBtn);
 
-			btn.disabled = false
-		}
-
-		setTimeout(onChangeState, getDurationTimeout(200))
-
-		removeSubscription(JSON.parse(`{
-			"channelId": "${btn.dataset.channelId}",
-			"name": "${btn.dataset.name}"
-		}`))
-	}
+	btnText = null
 }
+

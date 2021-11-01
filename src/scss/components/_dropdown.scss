@@ -20,30 +20,34 @@
 
     &:not(._active) {
         .dropdown__list {
+			--gap: 15px;
+
             opacity: 0;
             visibility: hidden;
 
             &_top {
-                bottom: calc(100% + 15px);
+				bottom: calc(100% + var(--gap));
             }
 
             &_bottom {
-                top: calc(100% + 15px);
+				top: calc(100% + var(--gap));
             }
         }
     }
 
     &._active {
-        .dropdown__list {
-            opacity: 1;
+		.dropdown__list {
+			--gap: 5px;
+
+			opacity: 1;
             visibility: visible;
 
             &_top {
-                bottom: calc(100% + 5px);
+                bottom: calc(100% + var(--gap));
             }
 
             &_bottom {
-                top: calc(100% + 5px);
+                top: calc(100% + var(--gap));
             }
         }
 

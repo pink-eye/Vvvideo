@@ -1,9 +1,9 @@
 .switch {
-	@media (min-width: 426px) {
+	@media (min-width: 26.625em) {
 		--thumb-size: 1rem;
 		--track-padding: 4px;
 	}
-	@media (max-width: 425px) {
+	@media (max-width: 26.5625em) {
 		--thumb-size: 0.8rem;
 		--track-padding: 3px;
 	}

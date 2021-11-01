@@ -83,14 +83,14 @@ const initVideoPlayer = _ => {
 		video.currentTime = currentTime
 	}
 
-	const chooseQuality = url => {
+	const chooseQuality = async url => {
 		const currentTime = video.currentTime
 
 		if (!video.paused) {
 			pauseVideo()
 			pauseAudio()
 			changeVideoSrc(url, currentTime)
-			playVideo()
+			await playVideo()
 		} else
 			changeVideoSrc(url, currentTime)
 
@@ -112,29 +112,32 @@ const initVideoPlayer = _ => {
 
 	const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime > 0;
 
-	const isPlayingLightVideo = _ => isPlayingLight(video)
-
-	const isPlayingLightAudio = _ => isPlayingLight(audio)
-
-	const pauseEl = el => { if (isPlayingLight(el)) el.pause() }
+	const pauseEl = el => {
+		if (isPlayingLight(el)) {
+			el.pause()
+			hideDecoration('load')
+		}
+	}
 
 	const pauseVideo = _ => pauseEl(video)
 
 	const pauseAudio = _ => pauseEl(audio)
 
-	const playEl = el => {
+	const playEl = async el => {
 		if (el) {
 			let playPromise = el.play();
 
 			if (playPromise !== undefined && !isPlaying(el)) {
-				playPromise
-					.then(_ => {
-						if (audio) {
-							if (isPlayingVideo() && isPlayingAudio())
-								syncMedia()
-						}
-					})
-					.catch(error => { showToast('error', error.message) });
+				try {
+					await playPromise
+
+					if (audio) {
+						if (isPlayingVideo() && isPlayingAudio())
+							syncMedia()
+					}
+				} catch (error) {
+					showToast('error', error.message)
+				}
 			}
 		}
 	}
@@ -143,61 +146,84 @@ const initVideoPlayer = _ => {
 
 	const playVideo = _ => playEl(video)
 
-	const showDecoration = action => {
+	const hideDecoration = action => {
 		let icon = controlDecorations.querySelector(`#${action}`);
-		icon.hidden &&= false
 
-		const activeDecoration = _ => {
-			if (!icon.classList.contains('_active'))
-				icon.classList.add('_active')
+		if (!icon.hidden) {
+			const afterRemoveDecoration = _ => {
+				icon.hidden ||= true
+				icon = null
+			}
+
+			const removeDecoration = _ => {
+				if (icon.classList.contains('_active'))
+					icon.classList.remove('_active')
+
+				setTimeout(afterRemoveDecoration, 300);
+			}
+
+			setTimeout(removeDecoration, 300)
 		}
-
-		setTimeout(activeDecoration, 15);
-
-		const afterHideDecoration = _ => {
-			icon.hidden ||= true
-			icon = null
-		}
-
-		const hideDecoration = _ => {
-			if (icon.classList.contains('_active'))
-				icon.classList.remove('_active')
-
-			setTimeout(afterHideDecoration, 300);
-		}
-
-		setTimeout(hideDecoration, 300)
 	}
 
-	const togglePlay = _ => {
+	const showDecoration = (action, doHide) => {
+		let icon = controlDecorations.querySelector(`#${action}`);
 
-		if (!isPlayingLightVideo()) {
-			playVideo()
-			!isPlayingAudio() && playAudio()
+		if (icon.hidden) {
+			icon.hidden = false
 
-			showDecoration('play')
+			const activeDecoration = _ => {
+				if (!icon.classList.contains('_active'))
+					icon.classList.add('_active')
 
-		} else {
-			pauseVideo()
-			pauseAudio()
+				if (!doHide) icon = null
+			}
 
-			showDecoration('pause')
+			setTimeout(activeDecoration, 15);
+
+			doHide && hideDecoration(action)
 		}
+	}
 
+	const hidePoster = _ => {
 		let videoPoster = videoWrapper.querySelector('.video__poster')
 
 		if (!videoPoster.classList.contains('_hidden'))
 			videoPoster.classList.add('_hidden');
 
-		toggleIconPlayPause()
-		isSync = false
-
 		videoPoster = null
+	}
+
+	const playVideoPlayer = async _ => {
+		await playVideo()
+		await playAudio()
+
+		showDecoration('play', true)
+	}
+
+	const pauseVideoPlayer = _ => {
+		pauseVideo()
+		pauseAudio()
+
+		showDecoration('pause', true)
+	}
+
+	const togglePlay = async _ => {
+		if (audio) {
+			video.paused && audio.paused
+				? playVideoPlayer()
+				: pauseVideoPlayer()
+		} else {
+			video.paused ? playVideoPlayer() : pauseVideoPlayer()
+		}
+
+		hidePoster()
+		isSync = false
 	}
 
 	const initVideo = _ => {
 		const videoDuration = ~~(video.duration)
-		const time = normalizeDuration(videoDuration)
+		const time = convertSecondsToDuration(videoDuration)
 
 		initSponsorblockSegments(segmentsSB)
 		progressSeek.setAttribute('max', videoDuration);
@@ -222,7 +248,7 @@ const initVideoPlayer = _ => {
 	}
 
 	const updateTimeElapsed = _ => {
-		const time = normalizeDuration(~~(video.currentTime));
+		const time = convertSecondsToDuration(~~(video.currentTime));
 
 		timeElapsed.textContent = time;
 		timeElapsed.setAttribute('datetime', time)
@@ -234,48 +260,50 @@ const initVideoPlayer = _ => {
 			`${convertToProc(Math.floor(video.currentTime), ~~(video.duration))}%`);
 	}
 
-	const updateSeekTooltip = event => {
-		const duration = isEmpty(hls) ? +event.target.getAttribute('max') : Math.floor(video.currentTime)
-		const skipTo = ~~((event.offsetX / event.target.clientWidth) * duration);
+	const updateStoryboard = params => {
+
+		if (progressStoryboard && isEmpty(hls)) {
+			const { skipTo, widthProgressBar, posCursor } = params
+			const { posX, posY } = getPosStroryboard(video.duration, skipTo, 100)
+
+			progressStoryboard.style.setProperty('--posX', `-${posX}px`)
+			progressStoryboard.style.setProperty('--posY', `-${posY}px`)
+
+			if (posCursor < widthProgressBar * 0.1) {
+				progressStoryboard.style.left = `${widthProgressBar * 0.1}px`;
+			}
+			if (posCursor > widthProgressBar * 0.1 &&
+				posCursor < widthProgressBar * 0.9) {
+				progressStoryboard.style.left = `${posCursor}px`;
+			}
+
+			if (posCursor > widthProgressBar * 0.9) {
+				progressStoryboard.style.left = `${widthProgressBar * 0.9}px`;
+			}
+		}
+	}
+
+	const updateSeekTooltip = params => {
+		const { duration, skipTo, widthProgressBar, posCursor } = params
 
 		if (skipTo > 0 && skipTo < Math.floor(duration)) {
-			const t = normalizeDuration(skipTo);
+			const t = convertSecondsToDuration(skipTo);
 			progressSeek.setAttribute('data-seek', skipTo)
 			progressSeekTooltip.textContent = t;
 		}
 
-		const rect = video.getBoundingClientRect();
-		const widthProgressBar = video.offsetWidth - 40
-		const posCursor = event.pageX - rect.left - 20
-
-		const { posX, posY } = getPosStroryboard(video.duration, skipTo, 100)
-
-		if (progressStoryboard) {
-			progressStoryboard.style.setProperty('--posX', `-${posX}px`)
-			progressStoryboard.style.setProperty('--posY', `-${posY}px`)
-		}
-
 		if (posCursor < widthProgressBar * 0.1) {
 			progressSeekTooltip.style.left = `${widthProgressBar * 0.1}px`;
-
-			if (progressStoryboard)
-				progressStoryboard.style.left = `${widthProgressBar * 0.1}px`;
 		}
+
 		if (posCursor > widthProgressBar * 0.1 &&
 			posCursor < widthProgressBar * 0.9) {
 			progressSeekTooltip.style.left = `${posCursor}px`;
-
-			if (progressStoryboard)
-				progressStoryboard.style.left = `${posCursor}px`;
 		}
 
 		if (posCursor > widthProgressBar * 0.9) {
 			progressSeekTooltip.style.left = `${widthProgressBar * 0.9}px`;
-
-			if (progressStoryboard)
-				progressStoryboard.style.left = `${widthProgressBar * 0.9}px`;
 		}
-
 	}
 
 	const updateBuffered = _ => {
@@ -301,6 +329,8 @@ const initVideoPlayer = _ => {
 		progressSeek.value = skipTo;
 
 		isSync = false
+
+		event.target.blur()
 	}
 
 	const updateVolumeEl = el => {
@@ -369,7 +399,7 @@ const initVideoPlayer = _ => {
 	}
 
 	const skipSegmentSB = _ => {
-		if (!video.paused) {
+		if (isPlayingVideo()) {
 			for (let index = 0, length = segmentsSB.length; index < length; index++) {
 				const segmentSB = segmentsSB[index];
 				if (video.currentTime >= segmentSB.startTime
@@ -378,7 +408,7 @@ const initVideoPlayer = _ => {
 					isSync = false
 
 					if (storage.settings.notifySkipSegment)
-						showToast('good', 'Segment is skipped!')
+						showToast('info', 'Segment is skipped!')
 				}
 			}
 		}
@@ -392,29 +422,33 @@ const initVideoPlayer = _ => {
 		dialogSbField = null
 	}
 
+	const showDialogSB = _ => {
+		if (document.fullscreenElement)
+			toggleFullscreen()
+
+		togglePlay()
+		resetDialogSB()
+		dialogSbStart.value = startTime
+		dialogSbEnd.value = endTime
+		modal.open('dialog-sb')
+
+		dialogSbStart.addEventListener('input', handleInputDialogField);
+		dialogSbEnd.addEventListener('input', handleInputDialogField);
+	}
+
 	const recordSegmentSB = _ => {
 		if (isPlayingVideo()) {
 			if (!isRecording) {
 				startTime = timeElapsed.textContent
 				isRecording = true
 				controlsSponsorblock.classList.add('_record')
-				showToast('good', 'Recording of segment is started...')
+				showToast('info', 'Recording of segment is started...')
 			} else {
 				endTime = timeElapsed.textContent
 				isRecording = false
 				controlsSponsorblock.classList.remove('_record')
 
-				if (document.fullscreenElement)
-					toggleFullscreen()
-
-				togglePlay()
-				resetDialogSB()
-				dialogSbStart.value = startTime
-				dialogSbEnd.value = endTime
-				modal.open('dialog-sb')
-
-				dialogSbStart.addEventListener('input', handleInputDialogField);
-				dialogSbEnd.addEventListener('input', handleInputDialogField);
+				showDialogSB()
 			}
 		} else showToast('error', 'You must play video!')
 	}
@@ -460,25 +494,45 @@ const initVideoPlayer = _ => {
 
 	// MEDIA LISTENERS
 
-	if (storage.settings.autoplay)
-		video.addEventListener('canplay', togglePlay, { once: true });
+	if (storage.settings.autoplay) {
 
-	video.addEventListener('loadedmetadata', initVideo, { once: true });
+		const handleCanPlay = _ => {
+			hidePoster()
+			showDecoration('load', false)
+		}
 
-	const handlePlayVideo = _ => {
-		showIconPause()
-		playAudio()
+		video.addEventListener('canplay', handleCanPlay, { once: true });
+
+		video.addEventListener('canplaythrough', playVideoPlayer, { once: true });
 	}
 
-	video.addEventListener('play', handlePlayVideo)
+	video.addEventListener('loadeddata', initVideo, { once: true });
 
-	video.addEventListener('playing', handlePlayVideo)
+	const handlePlaying = _ => {
+		playVideoPlayer()
+		hideDecoration('load')
+	}
+
+	video.addEventListener('playing', handlePlaying)
+
+	const startDecorationLoad = _ => {
+		let timeoutDecorationLoad = setTimeout(_ => {
+			if (video.readyState > 2 &&
+				audio.readyState > 2) {
+				clearTimeout(timeoutDecorationLoad)
+				hideDecoration('load')
+				return
+			}
+
+			showDecoration('load', false)
+		}, 150);
+	}
 
 	const handleLoadingVideo = _ => {
-		showToast('good', 'Loading video...')
-
 		if (!isPlayingVideo())
-			pauseAudio()
+			audio.pause()
+
+		startDecorationLoad()
 	}
 
 	video.addEventListener('waiting', handleLoadingVideo)
@@ -486,20 +540,14 @@ const initVideoPlayer = _ => {
 	video.addEventListener('stalled', handleLoadingVideo);
 
 	if (audio) {
-		const handlePlayAudio = _ => {
-			showIconPause()
-			playVideo()
-		}
 
-		audio.addEventListener('play', handlePlayAudio)
-
-		audio.addEventListener('playing', handlePlayAudio)
+		audio.addEventListener('playing', handlePlaying)
 
 		const handleLoadingAudio = _ => {
-			showToast('good', 'Loading audio...')
-
 			if (!isPlayingAudio())
-				pauseVideo()
+				video.pause()
+
+			startDecorationLoad()
 		}
 
 		audio.addEventListener('waiting', handleLoadingAudio)
@@ -509,7 +557,7 @@ const initVideoPlayer = _ => {
 
 	video.addEventListener('progress', updateBuffered);
 
-	video.addEventListener('timeupdate', _ => {
+	const handleTimeUpdate = _ => {
 		if (!isSync && isPlayingAudio() && isPlayingVideo())
 			syncMedia()
 
@@ -518,42 +566,39 @@ const initVideoPlayer = _ => {
 
 		if (doesSkipSegments && !storage.settings.disableSponsorblock)
 			skipSegmentSB()
-	});
+	}
 
-	video.addEventListener('abort', _ => {
+	video.addEventListener('timeupdate', handleTimeUpdate);
+	video.addEventListener('timeupdate', toggleIconPlayPause);
+
+	const handleAbort = _ => {
 		let winActive = _io_q('.main__content').querySelector('.win._active')
 
 		if (winActive && winActive.classList.contains('video')) {
 			showToast('error', 'Video is aborted ;(')
+			pauseVideo()
 			pauseAudio()
 		}
 
 		winActive = null
-	});
+	}
 
+	video.addEventListener('abort', handleAbort);
 
-	video.addEventListener('error', _ => {
-		showToast('error', video.error.message)
+	const handleError = _ => {
+		let errorMsg = video.error ? video.error.message : audio.error.message
+		showToast('error', errorMsg)
+		pauseVideo()
 		pauseAudio()
-	});
+	}
+
+	video.addEventListener('error', handleError);
 
 	if (audio) {
 
-		audio.addEventListener('error', _ => {
-			showToast('error', audio.error.message)
-			pauseVideo()
-		});
+		audio.addEventListener('error', handleError);
 
-		audio.addEventListener('abort', _ => {
-			let winActive = _io_q('.main__content').querySelector('.win._active')
-
-			if (winActive && winActive.classList.contains('video')) {
-				showToast('error', 'Audio is aborted ;(')
-				pauseVideo()
-			}
-
-			winActive = null
-		});
+		audio.addEventListener('abort', handleAbort);
 	}
 
 	video.addEventListener('ended', onEndVideo)
@@ -590,7 +635,20 @@ const initVideoPlayer = _ => {
 
 		volumeSeek.addEventListener('input', handleInputVolumeSeek);
 
-		progressSeek.addEventListener('mousemove', updateSeekTooltip);
+		const handleMouseMoveProgressSeek = event => {
+			const duration = isEmpty(hls) ? +event.target.getAttribute('max') : Math.floor(video.currentTime)
+			const skipTo = ~~((event.offsetX / event.target.clientWidth) * duration);
+			const rectVideo = video.getBoundingClientRect();
+			const widthProgressBar = video.offsetWidth - 40
+			const posCursor = event.pageX - rectVideo.left - 20
+
+			const params = { duration, skipTo, widthProgressBar, posCursor }
+
+			updateStoryboard(params)
+			updateSeekTooltip(params)
+		}
+
+		progressSeek.addEventListener('mousemove', handleMouseMoveProgressSeek);
 
 		progressSeek.addEventListener('input', skipAhead);
 
@@ -665,7 +723,7 @@ const initVideoPlayer = _ => {
 				if (e.keyCode === 86 && !storage.settings.disableSponsorblock) {
 					doesSkipSegments = !doesSkipSegments
 					showToast(
-						'good',
+						'info',
 						doesSkipSegments
 							? 'Sponsorblock is disabled on this video'
 							: 'Sponsorblock is enabled again'
@@ -699,6 +757,11 @@ const resetVideoPlayer = _ => {
 	let timeElapsed = controls.querySelector('.time__elapsed');
 	let speed = controls.querySelector('.controls__speed');
 	let speedCurrent = speed.querySelector('.dropdown__head');
+
+	let videoId = video.dataset.id
+	let watchedTime = videoInstance.currentTime
+
+	rememberWatchedTime(videoId, watchedTime)
 
 	while (sponsorblock.firstChild)
 		sponsorblock.firstChild.remove()

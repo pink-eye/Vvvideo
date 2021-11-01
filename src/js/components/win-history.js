@@ -1,33 +1,51 @@
 const openWinHistory = _ => {
-	let history = _io_q('.history')
-	let videoAll = history.querySelectorAll('.card');
-	let sh = storage.history
+	if (!storage.settings.disableHistory) {
+		let history = _io_q('.history')
+		let videoAll = history.querySelectorAll('.card');
+		let sh = storage.history
 
-	sh.length > videoAll.length
-		? initPages(history, sh, videoAll, 'video')
-		: disablePages(history)
+		sh.length > videoAll.length
+			? initPages(history, sh, videoAll, 'video')
+			: disablePages(history)
 
-	for (let index = 0, length = videoAll.length; index < length; index++) {
-		let video = videoAll[index];
+		for (let index = 0, length = videoAll.length; index < length; index++) {
+			let video = videoAll[index];
 
-		video.classList.add('_history-video');
+			video.classList.add('_history-video');
 
-		sh[index]
-			? fillVideoCard(video, index, sh)
-			: video.hidden = true;
+			sh[index]
+				? fillVideoCard(video, index, sh)
+				: video.hidden = true;
 
-		video = null;
+			video = null;
+		}
+
+		history = null
+		videoAll = null
+		sh = null
 	}
-
-	history = null
-	videoAll = null
-	sh = null
 }
 
-const saveToHistoryVideo = card => {
-	let sh = storage.history
-	let recentHistoryItem = sh[0]
-	let params = {
+const isThisRecentHistoryItem = newItem => {
+	let recentHistoryItem = storage.history[0]
+	return !recentHistoryItem || recentHistoryItem.id !== newItem.id
+}
+
+const addNewHistoryItem = newItem => {
+	storage.history = [newItem].concat(storage.history)
+}
+
+const keepHistoryArray = _ => {
+	let numWasteItemAll = storage.history.length - storage.settings.maxHistoryLength
+
+	if (numWasteItemAll <= 0) {
+		for (let index = 0, length = numWasteItemAll; index < length; index++)
+			storage.history.pop()
+	}
+}
+
+const scrapeVideoInfoFromCard = card => {
+	return {
 		id: card.dataset.id,
 		title: card.querySelector('.card__title span').textContent,
 		author: card.querySelector('.card__channel').textContent,
@@ -37,20 +55,34 @@ const saveToHistoryVideo = card => {
 		},
 		lengthSeconds: card.querySelector('.card__duration').textContent
 	}
+}
 
-	if (!recentHistoryItem || recentHistoryItem.id !== params.id) {
-		storage.history = [params].concat(sh)
+const scrapeVideoInfoFromData = data => {
+	const { videoDetails } = data
 
-		let numWasteItemAll = storage.history.length - storage.settings.maxHistoryLength
+	return {
+		id: videoDetails.videoId,
+		title: videoDetails.title,
+		author: videoDetails.author.name,
+		authorId: videoDetails.author.authorId,
+		bestThumbnail: {
+			url: videoDetails.thumbnails.at(-1).url
+		},
+		lengthSeconds: convertSecondsToDuration(videoDetails.lengthSeconds)
+	}
+}
 
-		if (numWasteItemAll <= 0) {
-			for (let index = 0, length = numWasteItemAll.length; index < length; index++)
-				storage.history.pop()
+const saveToHistoryVideo = (methodToScrapeInfo, arg) => {
+	if (arg) {
+		let newItem = methodToScrapeInfo(arg)
+
+		if (isThisRecentHistoryItem(newItem)) {
+			addNewHistoryItem(newItem)
+
+			keepHistoryArray()
+
+			API.writeStorage(storage)
 		}
-
-		API.writeStorage(storage)
-
-		card = null
 	}
 }
 
@@ -64,7 +96,7 @@ const clearHistory = async _ => {
 	} else {
 
 		if (!storage.settings.disableHistory)
-			showToast('good', "History's empty")
+			showToast('info', "History's empty")
 	}
 }
 
@@ -79,4 +111,29 @@ const disableHistory = _ => {
 
 	history = null
 	sidebarBtnHistory = null
+}
+
+const rememberWatchedTime = (videoId, watchedTime) => {
+	for (let index = 0, length = storage.history.length; index < length; index++) {
+		if (storage.history[index].videoId = videoId) {
+			storage.history[index].watchedTime = watchedTime
+			break
+		}
+	}
+
+	API.writeStorage(storage)
+}
+
+const getWatchedTime = videoId => {
+	let watchedTime = null
+
+	for (let index = 0, length = storage.history.length; index < length; index++) {
+		if (storage.history[index].videoId = videoId &&
+			storage.history[index].hasOwnPropery('watchedTime')) {
+			watchedTime = storage.history[index].watchedTime
+			break
+		}
+	}
+
+	return watchedTime
 }

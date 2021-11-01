@@ -3,15 +3,15 @@
         max-width: 900px;
         width: 100%;
 
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             margin-inline: auto;
         }
 
-        @media (max-width: 767px) {
+        @media (max-width: 47.9375em) {
             margin: 30px auto;
         }
 
-        @media (min-width: 576px) {
+        @media (min-width: 36em) {
             padding-inline: 15px;
         }
     }
@@ -29,30 +29,26 @@
 
     transition: background-color var(--trns);
 
-    @media (min-width: 576px) {
-		padding: 25px;
+    @media (min-width: 36em) {
+        padding: 25px;
     }
 
-	@media (min-width: 450px) {
-		border-radius: var(--brs-m);
-	}
+    @media (min-width: 28.125em) {
+        border-radius: var(--brs-m);
+    }
 
-    @media (max-width: 575px) {
+    @media (max-width: 35.9375em) {
         padding: 25px 15px;
     }
 
     &__title {
         color: var(--color-title);
         transition: color var(--trns);
-		font-weight: 500;
+        font-weight: 500;
 
-        @media (min-width: 768px) {
-            font-size: 30px;
-        }
+        font-size: unquote("clamp(1.25rem, 1.1250rem + 0.6250vw, 1.875rem)");
 
-        @media (max-width: 767px) and (min-width: 320px) {
-            font-size: calc(20px + (30 - 20) * ((100vw - 320px) / (767 - 320)));
-
+        @media (max-width: 47.9375em) and (min-width: 20em) {
             display: flex;
             align-items: center;
         }
@@ -63,13 +59,13 @@
     &__body {
         margin-top: 15px;
 
-        @media (min-width: 768px) {
+        @media (min-width: 48em) {
             padding: 15px;
         }
 
-		@media (max-width: 767px) {
-			padding-bottom: 15px;
-		}
+        @media (max-width: 47.9375em) {
+            padding-bottom: 15px;
+        }
     }
 
     &__item {
@@ -83,24 +79,24 @@
             flex-wrap: wrap;
 
             input[type="text"] {
-				padding: 5px 10px;
+                padding: 5px 10px;
                 border-radius: var(--brs-m);
 
                 width: unset;
             }
 
-			@media (min-width: 550px) {
-				align-items: center;
-			}
+            @media (min-width: 34.375em) {
+                align-items: center;
+            }
 
-			@media (max-width: 549px) {
-				align-items: start;
-				flex-direction: column;
+            @media (max-width: 34.3125em) {
+                align-items: start;
+                flex-direction: column;
 
-				input[type="text"] {
-					width: 100%;
-				}
-			}
+                input[type="text"] {
+                    width: 100%;
+                }
+            }
         }
 
 
@@ -149,18 +145,19 @@
         margin: 0;
         transition: color var(--trns);
 
-        @media (min-width: 768px) {
-            font-size: 18px;
+        @media (min-width: 36em) {
+            font-size: 1.125rem;
         }
 
-        @media (max-width: 767px) and (min-width: 320px) {
+        @media (max-width: 35.9375em) {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 47.9375em) and (min-width: 20em) {
             display: flex;
             align-items: center;
         }
 
-        @media (max-width: 575px) {
-            font-size: 16px;
-        }
     }
 
     .dropdown__head {
@@ -173,7 +170,7 @@
 
     label {
         padding-block: 15px;
-		gap: 15px;
+        gap: 15px;
     }
 }
 
@@ -224,12 +221,12 @@
         line-height: 26px / 18px * 100%;
         margin: 0;
 
-        @media (min-width: 576px) {
-            font-size: 18px;
+        @media (min-width: 36em) {
+            font-size: 1.125rem;
         }
 
-        @media (max-width: 575px) {
-            font-size: 16px;
+        @media (max-width: 35.9375em) {
+            font-size: 1rem;
         }
     }
 
@@ -244,9 +241,9 @@
         margin-top: 20px;
     }
 
-	&__actions {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		column-gap: 15px;
-	}
+    &__actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 15px;
+    }
 }

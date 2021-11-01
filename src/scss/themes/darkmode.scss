@@ -7,7 +7,7 @@
     --color-descr: hsl(240, 5%, 48%);
 
     --color-bg-field: hsl(240, 15%, 25%);
-    --color-text-field: var(--color-title);
+    --color-text-field: hsl(225, 5%, 80%);
 
     --color-icon: var(--color-text);
 
@@ -20,14 +20,14 @@
     --color-bg-btn-disabled: hsl(240, 15%, 5%);
     --color-bg-btn-primary-hover: hsl(240, 15%, 12%);
 
-    --bg-navbar-mobile: #e4e4e4;
-
-    --color-box-shadow-s: hsla(0, 0%, 0%, 0.10);
+    --color-box-shadow-s: hsla(0, 0%, 0%, 0.1);
     --color-box-shadow-m: hsla(0, 0%, 0%, 0.3);
-    --box-shadow-s: var(--color-box-shadow-s) 0 2px 48px;
-    --box-shadow-m: var(--color-box-shadow-m) 0 8px 24px;
+    --color-box-shadow-l: hsla(0, 0%, 0%, 0.5);
+    --color-box-shadow-xl: hsla(0, 0%, 0%, 0.7);
+
     --color-error: hsl(0, 100%, 60%);
     --color-good: hsl(145, 100%, 35%);
+    --color-info: hsl(205, 90%, 50%);
 
     --color-switch: hsl(0, 0%, 100%);
     --color-switch-highlight: hsl(0 0% 70% / 25%);
@@ -39,7 +39,11 @@
     --color-link-hover: hsl(200, 100%, 35%);
     --color-link-visited: var(--color-accent-s);
 
-    --color-bg-suggest-selected: var(--color-bg-form);
+    --color-bg-suggest-selected: hsl(240, 15%, 15%);
+    --color-bg-suggest-hover: hsl(240, 15%, 20%);
+    --color-text-suggest-selected: var(--color-title);
+
+    --color-text-toast: hsl(220, 5%, 85%);
 }
 
 img {
