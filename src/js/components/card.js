@@ -1,15 +1,15 @@
 const fillVideoCard = (video, index, data) => {
-	let videoImage = video.querySelector('.card__image img'),
-		imageSkeleton = video.querySelector('.image-skeleton'),
-		titleSkeleton = video.querySelector('.title-skeleton'),
-		bottomSkeleton = video.querySelector('.bottom-skeleton'),
-		videoTitle = video.querySelector('.card__title span'),
-		videoViews = video.querySelector('.card__views'),
-		videoDate = video.querySelector('.card__date'),
-		videoChannel = video.querySelector('.card__channel'),
-		videoDuration = video.querySelector('.card__duration');
+	let videoImage = video.querySelector('.card__image img')
+	let imageSkeleton = video.querySelector('.image-skeleton')
+	let titleSkeleton = video.querySelector('.title-skeleton')
+	let bottomSkeleton = video.querySelector('.bottom-skeleton')
+	let videoTitle = video.querySelector('.card__title span')
+	let videoViews = video.querySelector('.card__views')
+	let videoDate = video.querySelector('.card__date')
+	let videoChannel = video.querySelector('.card__channel')
+	let videoDuration = video.querySelector('.card__duration')
 
-	video.disabled = false;
+	video.disabled &&= false;
 
 	video.dataset.id = data[index].hasOwnProperty('videoId')
 		? data[index].videoId
@@ -24,7 +24,6 @@ const fillVideoCard = (video, index, data) => {
 		data[index].videoThumbnails.sort((a, b) => b.width - a.width)
 		videoImage.setAttribute('src', data[index].videoThumbnails[0].url)
 	}
-
 
 	const onLoadImage = _ => {
 		removeSkeleton(imageSkeleton)
@@ -70,6 +69,10 @@ const fillVideoCard = (video, index, data) => {
 		? data[index].author.name
 		: data[index].author
 
+	videoChannel.dataset.name = data[index].author.name
+		? data[index].author.name
+		: data[index].author
+
 	videoChannel.dataset.id = data[index].authorId
 		? data[index].authorId
 		: data[index].author.channelID
@@ -77,8 +80,8 @@ const fillVideoCard = (video, index, data) => {
 	videoDuration.textContent = data[index].hasOwnProperty('lengthSeconds')
 		? data[index].hasOwnProperty('simpleText')
 			? data[index].lengthSeconds.simpleText
-			: normalizeDuration(data[index].lengthSeconds)
-		: normalizeDuration(data[index].duration)
+			: convertSecondsToDuration(data[index].lengthSeconds)
+		: convertSecondsToDuration(data[index].duration)
 
 	removeSkeleton(bottomSkeleton)
 
@@ -90,15 +93,15 @@ const fillVideoCard = (video, index, data) => {
 }
 
 const fillPlaylistCard = (playlist, index, data) => {
-	let playlistImage = playlist.querySelector('.card__image img'),
-		imageSkeleton = playlist.querySelector('.image-skeleton'),
-		titleSkeleton = playlist.querySelector('.title-skeleton'),
-		bottomSkeleton = playlist.querySelector('.bottom-skeleton'),
-		playlistTitle = playlist.querySelector('.card__title span'),
-		playlistChannel = playlist.querySelector('.card__channel'),
-		playlistCount = playlist.querySelector('.card__count');
+	let playlistImage = playlist.querySelector('.card__image img')
+	let imageSkeleton = playlist.querySelector('.image-skeleton')
+	let titleSkeleton = playlist.querySelector('.title-skeleton')
+	let bottomSkeleton = playlist.querySelector('.bottom-skeleton')
+	let playlistTitle = playlist.querySelector('.card__title span')
+	let playlistChannel = playlist.querySelector('.card__channel')
+	let playlistCount = playlist.querySelector('.card__count')
 
-	playlist.disabled = false;
+	playlist.disabled &&= false;
 	playlist.dataset.id = data[index].hasOwnProperty('playlistID')
 		? data[index].playlistID
 		: data[index].playlistId
@@ -131,6 +134,10 @@ const fillPlaylistCard = (playlist, index, data) => {
 		? data[index].owner.name
 		: data[index].author
 
+	playlistChannel.dataset.name = data[index].hasOwnProperty('owner')
+		? data[index].owner.name
+		: data[index].author
+
 	playlistChannel.dataset.id = data[index].hasOwnProperty('owner')
 		? data[index].owner.channelID
 		: data[index].authorId
@@ -143,17 +150,18 @@ const fillPlaylistCard = (playlist, index, data) => {
 }
 
 const fillChannelCard = (channel, index, data) => {
-	let channelImage = channel.querySelector('.card__image img'),
-		imageSkeleton = channel.querySelector('.image-skeleton'),
-		titleSkeleton = channel.querySelector('.title-skeleton'),
-		bottomSkeleton = channel.querySelector('.bottom-skeleton'),
-		channelTitle = channel.querySelector('.card__title span'),
-		channelDescr = channel.querySelector('.card__channel-descr'),
-		channelSubs = channel.querySelector('.card__subs'),
-		channelVideoCount = channel.querySelector('.card__video-count');
+	let channelImage = channel.querySelector('.card__image img')
+	let imageSkeleton = channel.querySelector('.image-skeleton')
+	let titleSkeleton = channel.querySelector('.title-skeleton')
+	let bottomSkeleton = channel.querySelector('.bottom-skeleton')
+	let channelTitle = channel.querySelector('.card__title span')
+	let channelDescr = channel.querySelector('.card__channel-descr')
+	let channelSubs = channel.querySelector('.card__subs')
+	let channelVideoCount = channel.querySelector('.card__video-count')
 
-	channel.disabled = false;
+	channel.disabled &&= false;
 	channel.dataset.id = data[index].channelID
+	channel.dataset.name = data[index].name
 
 	channelImage.setAttribute('src', data[index].bestAvatar.url)
 
@@ -184,69 +192,40 @@ const fillChannelCard = (channel, index, data) => {
 	channelSubs = null
 }
 
-const fillAuthorCard = (author, index, data) => {
-	let authorAvatar = author.querySelector('.author__avatar img');
-	let avatarSkeleton = author.querySelector('.avatar-skeleton');
-	let authorName = author.querySelector('.author__name');
+const resetCard = card => {
+	let skeletonAll = card.querySelectorAll('.skeleton');
 
-	author.disabled = false
-
-	if (data[index].avatar) {
-		authorAvatar.src = data[index].avatar
-
-		const onLoadImage = _ => {
-			removeSkeleton(avatarSkeleton)
-
-			authorAvatar = null;
+	if (skeletonAll.length > 0) {
+		for (let index = 0, length = skeletonAll.length; index < length; index++) {
+			const skeleton = skeletonAll[index];
+			resetSkeleton(skeleton)
 		}
-
-		const onErrorImage = _ => {
-			showToast('error', 'Could not load images :(')
-		}
-
-		authorAvatar.addEventListener('load', onLoadImage, { once: true });
-		authorAvatar.addEventListener('error', onErrorImage, { once: true });
 	}
-	authorName.textContent = data[index].name
-	author.dataset.id = data[index].channelId
-	authorName = null
-}
-
-const resetAuthorCard = async author => {
-	let avatarSkeleton = author.querySelector('.avatar-skeleton');
-	let authorName = author.querySelector('.author__name');
-
-	author.disabled = true
-
-	author.hidden &&= false
-
-	resetSkeleton(avatarSkeleton)
-	authorName.textContent = '...'
-
-	avatarSkeleton = null
-	authorName = null
-}
-
-const resetCard = async card => {
-	let titleSkeleton = card.querySelector('.title-skeleton');
-	let imageSkeleton = card.querySelector('.image-skeleton');
-	let bottomSkeleton = card.querySelector('.bottom-skeleton');
 
 	card.disabled = true
-
-	if (imageSkeleton.classList.contains('_removing')) {
-		resetSkeleton(imageSkeleton)
-		resetSkeleton(titleSkeleton)
-		resetSkeleton(bottomSkeleton)
-	}
-
 	card.hidden &&= false;
 
 	if (card.classList.contains('_live'))
 		card.classList.remove('_live');
 
-	titleSkeleton = null
-	imageSkeleton = null
-	bottomSkeleton = null
+	let recentWin = card.closest('.win')
+
+	const typeAll = {
+		video: '_video',
+		playlist: '_playlist',
+		channel: '_channel'
+	}
+
+	if (recentWin && recentWin.classList.contains('search-results')) {
+		for (let key in typeAll) {
+			if (card.classList.contains(typeAll[key])) {
+				card.classList.remove(typeAll[key]);
+				break;
+			}
+		}
+	}
+
+	skeletonAll = null
+	recentWin = null
 }
 
