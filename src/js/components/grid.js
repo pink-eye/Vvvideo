@@ -1,14 +1,16 @@
-const resetGridAuthorCard = async _ => {
+const resetGridAuthorCard = _ => {
 	let subscriptions = _io_q('.subscriptions')
-	let authorAll = subscriptions.querySelectorAll('.author');
+	let authorCardAll = subscriptions.querySelectorAll('.author');
 
-	for (let index = 0, length = authorAll.length; index < length; index++) {
-		const author = authorAll[index];
-		resetAuthorCard(author)
+	if (authorCardAll.length > 0) {
+		for (let index = 0, length = authorCardAll.length; index < length; index++) {
+			const authorCard = authorCardAll[index];
+			resetAuthorCard(authorCard)
+		}
 	}
 
 	subscriptions = null
-	authorAll = null
+	authorCardAll = null
 }
 
 
@@ -16,24 +18,9 @@ const resetGrid = parent => {
 	const cardAll = parent.querySelectorAll('.card')
 
 	if (cardAll.length > 0) {
-		const typeAll = {
-			video: '_video',
-			playlist: '_playlist',
-			channel: '_channel',
-			live: '_live'
-		}
-
 		for (let index = 0, length = cardAll.length; index < length; index++) {
-			let card = cardAll[index];
-
+			const card = cardAll[index];
 			resetCard(card)
-
-			if (parent.classList.contains('search-results')) {
-				for (let key in typeAll) {
-					if (card.classList.contains(typeAll[key]))
-						card.classList.remove(typeAll[key]);
-				}
-			}
 		}
 	}
 }
