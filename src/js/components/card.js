@@ -190,10 +190,13 @@ const fillChannelCard = (channel, index, data) => {
 	channelTitle = null
 	channelDescr = null
 	channelSubs = null
+	channelVideoCount = null
 }
 
 const resetCard = card => {
 	let skeletonAll = card.querySelectorAll('.skeleton');
+	let cardTitle = card.querySelector('.card__title span');
+	let cardImg = card.querySelector('.card__image img');
 
 	if (skeletonAll.length > 0) {
 		for (let index = 0, length = skeletonAll.length; index < length; index++) {
@@ -202,21 +205,36 @@ const resetCard = card => {
 		}
 	}
 
-	card.disabled = true
-	card.hidden &&= false;
+	card.removeAttribute('data-id')
+	cardTitle.textContent = '...'
+	cardImg.removeAttribute('src')
 
-	if (card.classList.contains('_live'))
-		card.classList.remove('_live');
+	switch (card.dataset.win) {
+		case 'video':
+			resetVideoCard(card)
+			break;
+
+		case 'channel':
+			resetChannelCard(card)
+			break;
+
+		case 'playlist':
+			resetPlaylistCard(card)
+			break;
+	}
+
+	card.disabled ||= true
+	card.hidden &&= false;
 
 	let recentWin = card.closest('.win')
 
-	const typeAll = {
-		video: '_video',
-		playlist: '_playlist',
-		channel: '_channel'
-	}
-
 	if (recentWin && recentWin.classList.contains('search-results')) {
+		const typeAll = {
+			video: '_video',
+			playlist: '_playlist',
+			channel: '_channel'
+		}
+
 		for (let key in typeAll) {
 			if (card.classList.contains(typeAll[key])) {
 				card.classList.remove(typeAll[key]);
@@ -227,5 +245,55 @@ const resetCard = card => {
 
 	skeletonAll = null
 	recentWin = null
+	cardTitle = null
+	cardImg = null
 }
 
+const resetVideoCard = card => {
+	let videoViews = card.querySelector('.card__views')
+	let videoDate = card.querySelector('.card__date')
+	let videoChannel = card.querySelector('.card__channel')
+	let videoDuration = card.querySelector('.card__duration')
+
+	if (card.classList.contains('_live'))
+		card.classList.remove('_live');
+
+	videoViews.textContent = ''
+	videoDate.textContent = ''
+	videoChannel.textContent = ''
+	videoDuration.textContent = ''
+	videoChannel.removeAttribute('data-id')
+	videoChannel.removeAttribute('data-name')
+
+	videoViews = null
+	videoDate = null
+	videoChannel = null
+	videoDuration = null
+}
+
+const resetChannelCard = card => {
+	let channelDescr = card.querySelector('.card__channel-descr')
+	let channelSubs = card.querySelector('.card__subs')
+	let channelVideoCount = card.querySelector('.card__video-count')
+
+	channelDescr.textContent = ''
+	channelSubs.textContent = ''
+	channelVideoCount.textContent = ''
+
+	channelDescr = null
+	channelSubs = null
+	channelVideoCount = null
+}
+
+const resetPlaylistCard = card => {
+	let playlistChannel = card.querySelector('.card__channel')
+	let playlistCount = card.querySelector('.card__count')
+
+	playlistChannel.textContent = ''
+	playlistCount.textContent = ''
+	playlistChannel.removeAttribute('data-id')
+	playlistChannel.removeAttribute('data-name')
+
+	playlistChannel = null
+	playlistCount = null
+}
