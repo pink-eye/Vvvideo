@@ -2,21 +2,32 @@
 	<header class="playlist__heading">
 		<div class="playlist__wrapper outter-container">
 			<div class="playlist__about">
-				<h1 class="playlist__name title"></h1>
+				<h1 class="playlist__name title">
+					<div class="skeleton title-skeleton"></div>
+					<span></span>
+				</h1>
 				<div class="playlist__stat">
-					<span class="playlist__video-count">...</span>
-					<span class="playlist__last-upd">...</span>
-					<span class="playlist__views">
-						<svg width="26px" height="20px">
+					<div class="playlist__part">
+						<div class="skeleton part-skeleton"></div>
+						<span class="playlist__video-count">...</span>
+					</div>
+					<div class="playlist__part">
+						<div class="skeleton part-skeleton"></div>
+						<span class="playlist__last-upd">...</span>
+					</div>
+					<div class="playlist__part">
+						<div class="skeleton part-skeleton"></div>
+						<svg width="26px" height="17px">
 							<use xlink:href='img/svg/actions.svg#views'></use>
 						</svg>
-						<span>...</span>
-					</span>
-					<div class="playlist__duration">
+						<span class="playlist__views">...</span>
+					</div>
+					<div class="playlist__part">
+						<div class="skeleton part-skeleton"></div>
 						<svg width="20px" height="20px">
 							<use xlink:href='img/svg/actions.svg#date'></use>
 						</svg>
-						<span>...</span>
+						<span class="playlist__duration">...</span>
 					</div>
 				</div>
 			</div>
