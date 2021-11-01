@@ -10,8 +10,14 @@
 				<img crossorigin="anonymous" referrerpolicy="no-referrer" alt="This is avatar of the channel">
 			</figure>
 			<div class="heading-channel__info">
-				<h1 class="heading-channel__author title">Where's name of the channel?</h1>
-				<p class="heading-channel__followers">...</p>
+				<h1 class="heading-channel__author title">
+					<div class="skeleton title-skeleton"></div>
+					<span>Where's name of the channel?</span>
+				</h1>
+				<div class="heading-channel__followers">
+					<div class="skeleton followers-skeleton"></div>
+					<span>...</span>
+				</div>
 				@include('subscribe.html')
 			</div>
 		</div>
