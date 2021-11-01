@@ -24,10 +24,9 @@ const scrollToTop = _ => { window.scrollTo(0, 0); }
 const scrollToElem = y => {
 	let header = _io_q('.header');
 
-	if (header) {
-		window.scrollTo(0, y - header.offsetHeight - 20);
-		header = null;
-	}
+	header && window.scrollTo(0, y - header.offsetHeight - 20);
+
+	header = null;
 }
 
 const getCoordY = el => el.getBoundingClientRect().top + pageYOffset
@@ -65,29 +64,33 @@ const normalizeCount = count => typeof count === 'string'
 			? 0
 			: 'Unknown'
 
-const normalizeDuration = lengthSeconds => {
-	if (typeof lengthSeconds !== 'string') {
-		let minutes = Math.floor(lengthSeconds / 60),
-			hours = '';
+const convertSecondsToDuration = lengthSeconds => {
 
-		if (minutes > 59) {
-			hours = Math.floor(minutes / 60);
-			hours = (hours >= 10) ? hours : `0${hours}`;
-			minutes = minutes - (hours * 60);
-			minutes = (minutes >= 10) ? minutes : `0${minutes}`;
-		}
+	if (typeof lengthSeconds === 'string' && lengthSeconds.includes(':')) return lengthSeconds
 
-		lengthSeconds = Math.floor(lengthSeconds % 60);
-		lengthSeconds = (lengthSeconds >= 10) ? lengthSeconds : `0${lengthSeconds}`;
+	let seconds = +lengthSeconds
+	let minutes = Math.floor(seconds / 60)
+	let hours = '';
 
-		if (hours != '')
-			return `${hours}:${minutes}:${lengthSeconds}`;
+	if (minutes > 59) {
+		hours = Math.floor(minutes / 60);
+		hours = (hours >= 10) ? hours : `0${hours}`;
+		minutes = minutes - (hours * 60);
+		minutes = (minutes >= 10) ? minutes : `0${minutes}`;
+	}
 
-		return `${minutes}:${lengthSeconds}`;
-	} else return lengthSeconds
+	seconds = Math.floor(seconds % 60);
+	seconds = (seconds >= 10) ? seconds : `0${seconds}`;
+
+	if (hours != '')
+		return `${hours}:${minutes}:${seconds}`;
+
+	return `${minutes}:${seconds}`;
 }
 
 const convertDurationToSeconds = duration => {
+	if (!duration.includes(':')) return
+
 	if (duration.length === 5 || duration.length === 4) {
 		const [minutes, seconds] = duration.split(':');
 		return Number(minutes) * 60 + Number(seconds);
@@ -123,7 +126,7 @@ const normalizeDesc = text => {
 	}
 }
 
-const isEmpty = el => el === null || el === undefined || el === ''
+const isEmpty = el => el === null || el === undefined || el === '' || el === 'undefined' || el === 'null'
 
 const formatDuration = str => str.replace(new RegExp(/[^0-9:]/gmi), '')
 
@@ -150,21 +153,24 @@ const calculatePublishedDate = publishedText => {
 	const timeAmount = +textSplit[0]
 	let timeSpan = null
 
-	if (timeFrame.includes('second'))
-		timeSpan = timeAmount * 1000
-	else if (timeFrame.includes('minute'))
-		timeSpan = timeAmount * 60000
-	else if (timeFrame.includes('hour'))
-		timeSpan = timeAmount * 3600000
-	else if (timeFrame.includes('day'))
-		timeSpan = timeAmount * 86400000
-	else if (timeFrame.includes('week'))
-		timeSpan = timeAmount * 604800000
-	else if (timeFrame.includes('month'))
-		timeSpan = timeAmount * 2592000000
-	else if (timeFrame.includes('year'))
-		timeSpan = timeAmount * 31556952000
+	const timeUnits = {
+		second: 1000,
+		minute: 60000,
+		hour: 3600000,
+		day: 86400000,
+		week: 604800000,
+		month: 2592000000,
+		year: 31556952000,
+	}
 
+	for (const unit in timeUnits) {
+		if (Object.hasOwnProperty.call(timeUnits, unit)) {
+			const ms = timeUnits[unit];
+
+			if (timeFrame.includes(`${unit}`))
+				timeSpan = timeAmount * ms
+		}
+	}
 
 	return date.getTime() - timeSpan
 }
