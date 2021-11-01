@@ -180,12 +180,13 @@ const isValidURLYT = url => {
 	return url.match(regExp) && url.match(regExp).length > 0;
 }
 
-const isResourceIsChannel = url => (url.includes('/user/') || url.includes('/channel/')) && isValidURLYT(url)
+const isResourceIsChannel = url => isValidURLYT(url) &&
+	(url.includes('/user/') || url.includes('/channel/') || url.includes('/c/'))
 
-const isResourceIsPlaylist = url => url.includes('playlist?list=') && isValidURLYT(url)
+const isResourceIsPlaylist = url => isValidURLYT(url) && url.includes('playlist?list=')
 
 const getChannelIdOrUser = url => {
-	const regExpUser = /(channel|user)\/([a-zA-Z0-9\-_]*.)/.exec(url)
+	const regExpUser = /(channel|user|c)\/([a-zA-Z0-9\-_]*.)/.exec(url)
 
 	if (regExpUser)
 		return regExpUser[2].endsWith('/') ? regExpUser[2].substring(0, regExpUser[2].length - 1) : regExpUser[2]
@@ -197,7 +198,7 @@ const getPlaylistId = url => {
 	const regExp = new RegExp("[&?]list=([a-z0-9_]+)", "i");
 	const match = regExp.exec(url);
 
-	if (match && match[1].length > 0 && isValidURLYT(url))
+	if (match && match[1].length > 0)
 		return match[1];
 
 	return null;
