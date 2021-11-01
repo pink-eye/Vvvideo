@@ -4,12 +4,19 @@
 <head>
 	<link rel="stylesheet" href="css/preloader.css">
 	<script>
-		window.addEventListener('load', () => {
-			document.querySelector('.preloader').classList.add('_hidden');
-			setTimeout(() => {
-				document.querySelector('.preloader').remove();
-			}, 300)
-		});
+		const handleLoadWindow = _ => {
+			let preloader = document.querySelector('.preloader');
+
+			preloader.classList.add('_hidden');
+
+			const removePreloader = _ => {
+				preloader.remove();
+				preloader = null
+			}
+			setTimeout(removePreloader, 300)
+		}
+
+		window.addEventListener('load', handleLoadWindow);
 	</script>
 
 	<meta charset='utf-8'>
