@@ -12,11 +12,20 @@
 		<div class="card__bottom">
 			<div class="skeleton bottom-skeleton"></div>
 			<div class="card__details">
-				<span class="card__views">...</span>
-				<small class="card__separator">·</small>
-				<time class="card__date">...</time>
+				<aside class="card__part">
+					<svg width="26px" height="14px">
+						<use xlink:href='img/svg/actions.svg#views'></use>
+					</svg>
+					<span class="card__views">...</span>
+				</aside>
+				<aside class="card__part">
+					<svg width="26px" height="17px">
+						<use xlink:href='img/svg/actions.svg#date'></use>
+					</svg>
+					<time class="card__date">...</time>
+				</aside>
 			</div>
-			<address data-id="" class="card__channel">Author</address>
+			<address data-win="channel" class="card__channel">Author</address>
 		</div>
 	</div>
 </button>
