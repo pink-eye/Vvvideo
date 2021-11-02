@@ -231,7 +231,8 @@ const openWinVideo = async id => {
 
 				videoDesc.innerHTML = normalizeDesc(data.videoDetails.description);
 
-				saveToHistoryVideo(scrapeVideoInfoFromData, data)
+				if (!storage.settings.disableHistory)
+					saveToHistoryVideo(scrapeVideoInfoFromData, data)
 			}
 		} catch (error) {
 			showToast('error', error.message)
@@ -318,15 +319,15 @@ const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', aut
 	let titleSkeleton = videoInfo.querySelector('.title-skeleton');
 	let partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton');
 
-	if (!isEmpty(title)) {
+	if (!isEmpty(title) && title !== '...') {
 		videoTitle.textContent = title;
 		removeSkeleton(titleSkeleton)
 	}
-	if (!isEmpty(views)) {
+	if (!isEmpty(views) && views !== '...') {
 		videoViews.textContent = views;
 		removeSkeleton(partSkeletonAll[0])
 	}
-	if (!isEmpty(date)) {
+	if (!isEmpty(date) && date !== '...') {
 		videoDate.textContent = date;
 		removeSkeleton(partSkeletonAll[1])
 	}
@@ -361,7 +362,7 @@ const prepareVideoWin = (btnWin, id) => {
 			title: btnWin.querySelector('.card__title span').textContent,
 			views: btnWin.querySelector('.card__views').textContent,
 			date: btnWin.querySelector('.card__date').textContent,
-			author: btnWin.querySelector('.card__channel').textContent,
+			author: btnWin.querySelector('.card__channel').dataset.name,
 			authorId: btnWin.querySelector('.card__channel').dataset.id
 		}
 

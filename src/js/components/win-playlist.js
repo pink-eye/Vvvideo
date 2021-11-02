@@ -119,10 +119,11 @@ const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
 	let playlistName = playlist.querySelector('.playlist__name span');
 	let titleSkeleton = playlist.querySelector('.title-skeleton');
 
-	playlistName.textContent = title
 
-	if (playlistName.textContent !== '')
+	if (!isEmpty(title) && title !== '...') {
+		playlistName.textContent = title
 		removeSkeleton(titleSkeleton)
+	}
 
 	resetAuthorCard(authorCard)
 
@@ -145,7 +146,7 @@ const preparePlaylistWin = (btnWin, id) => {
 	if (btnWin) {
 		let params = {
 			title: btnWin.querySelector('.card__title span').textContent,
-			author: btnWin.querySelector('.card__channel').textContent,
+			author: btnWin.querySelector('.card__channel').dataset.name,
 			id: btnWin.querySelector('.card__channel').dataset.id
 		}
 
