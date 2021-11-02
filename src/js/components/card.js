@@ -85,8 +85,16 @@ const fillVideoCard = (video, index, data) => {
 
 	removeSkeleton(bottomSkeleton)
 
+
+	let cardImage = video.querySelector('.card__image');
+	let watchedProgress = getWatchedProgress(video.dataset.id)
+
+	if (watchedProgress)
+		cardImage.style.setProperty('--watched-progress', watchedProgress)
+
 	videoTitle = null
 	videoViews = null
+	cardImage = null
 	videoDate = null
 	videoChannel = null
 	videoDuration = null

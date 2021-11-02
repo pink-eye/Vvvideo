@@ -761,7 +761,8 @@ const resetVideoPlayer = _ => {
 	let videoId = video.dataset.id
 	let watchedTime = videoInstance.currentTime
 
-	rememberWatchedTime(videoId, watchedTime)
+	if (watchedTime > 0 && watchedTime < videoInstance.duration)
+		rememberWatchedTime(videoId, watchedTime)
 
 	while (sponsorblock.firstChild)
 		sponsorblock.firstChild.remove()

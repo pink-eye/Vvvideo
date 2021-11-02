@@ -115,7 +115,7 @@ const disableHistory = _ => {
 
 const rememberWatchedTime = (videoId, watchedTime) => {
 	for (let index = 0, length = storage.history.length; index < length; index++) {
-		if (storage.history[index].videoId = videoId) {
+		if (storage.history[index].id === videoId) {
 			storage.history[index].watchedTime = watchedTime
 			break
 		}
@@ -124,15 +124,25 @@ const rememberWatchedTime = (videoId, watchedTime) => {
 	API.writeStorage(storage)
 }
 
-const getWatchedTime = videoId => {
+const getWatchedProgress = videoId => {
 	let watchedTime = null
+	let lengthSeconds = null
 
 	for (let index = 0, length = storage.history.length; index < length; index++) {
-		if (storage.history[index].videoId = videoId &&
-			storage.history[index].hasOwnPropery('watchedTime')) {
-			watchedTime = storage.history[index].watchedTime
+		const historyItem = storage.history[index]
+
+		if (historyItem.id === videoId &&
+			historyItem.hasOwnProperty('watchedTime')) {
+			watchedTime = historyItem.watchedTime
+			lengthSeconds = historyItem.lengthSeconds
+
 			break
 		}
+	}
+
+	if (watchedTime) {
+		lengthSeconds = convertDurationToSeconds(lengthSeconds)
+		watchedTime = `${convertToProc(watchedTime, lengthSeconds)}%`
 	}
 
 	return watchedTime
