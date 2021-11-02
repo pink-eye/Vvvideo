@@ -90,6 +90,8 @@ const fillVideoCard = (video, index, data) => {
 	videoDate = null
 	videoChannel = null
 	videoDuration = null
+	titleSkeleton = null
+	bottomSkeleton = null
 }
 
 const fillPlaylistCard = (playlist, index, data) => {
@@ -147,6 +149,8 @@ const fillPlaylistCard = (playlist, index, data) => {
 	playlistTitle = null
 	playlistChannel = null
 	playlistCount = null
+	titleSkeleton = null
+	bottomSkeleton = null
 }
 
 const fillChannelCard = (channel, index, data) => {
@@ -191,6 +195,8 @@ const fillChannelCard = (channel, index, data) => {
 	channelDescr = null
 	channelSubs = null
 	channelVideoCount = null
+	titleSkeleton = null
+	bottomSkeleton = null
 }
 
 const resetCard = card => {
