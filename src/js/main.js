@@ -51,38 +51,34 @@ document.addEventListener('DOMContentLoaded', async _ => {
 			const onHideLastWin = _ => {
 				lastWin.classList.remove('_active');
 
-				if (lastWin.classList.contains('search-results'))
-					resetGrid(_io_q('.search-results'))
+				const afterOpenWin = _ => {
+					if (lastWin.classList.contains('search-results') ||
+						lastWin.classList.contains('trending') ||
+						lastWin.classList.contains('history') ||
+						lastWin.classList.contains('latest'))
+						resetGrid(lastWin)
 
-				if (lastWin.classList.contains('trending'))
-					resetGrid(_io_q('.trending'))
+					if (lastWin.classList.contains('subscriptions'))
+						resetGridAuthorCard()
 
-				if (lastWin.classList.contains('latest')) {
-					resetIndicator()
-					resetGrid(_io_q('.latest'))
+					if (lastWin.classList.contains('video')) {
+						resetVideoPlayer()
+						resetVideo()
+					}
+
+					if (lastWin.classList.contains('playlist'))
+						resetPlaylist()
+
+					if (lastWin.classList.contains('channel'))
+						resetChannel()
+
+					if (lastWin.classList.contains('settings'))
+						resetWinSettings()
+
+					lastWin = null;
 				}
 
-				if (lastWin.classList.contains('subscriptions'))
-					resetGridAuthorCard()
-
-				if (lastWin.classList.contains('video')) {
-					resetVideoPlayer()
-					resetVideo()
-				}
-
-				if (lastWin.classList.contains('playlist'))
-					resetPlaylist()
-
-				if (lastWin.classList.contains('channel'))
-					resetChannel()
-
-				if (lastWin.classList.contains('history'))
-					resetGrid(_io_q('.history'))
-
-				if (lastWin.classList.contains('settings'))
-					resetWinSettings()
-
-				lastWin = null;
+				setTimeout(afterOpenWin, 200);
 			}
 
 			setTimeout(onHideLastWin, getDurationTimeout(200));
