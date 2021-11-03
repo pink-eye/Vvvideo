@@ -115,6 +115,7 @@
             bottom: 0;
             left: 0;
             width: var(--watched-progress);
+            border-radius: var(--brs-s);
             height: 3%;
             z-index: 1;
             background-color: var(--color-accent-s);

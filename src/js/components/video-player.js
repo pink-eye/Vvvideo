@@ -22,8 +22,9 @@ const initVideoPlayer = _ => {
 	const volumeBar = controls.querySelector('.volume__bar')
 	const controlsScreen = controls.querySelector('.controls__screen')
 	const controlsSponsorblock = controls.querySelector('.controls__sponsorblock')
-	const videoWrapper = _io_q('.video').querySelector('.video__wrapper')
-	const videoDesc = _io_q('.video').querySelector('.desc-video-info__text')
+	const videoParent = _io_q('.video');
+	const videoWrapper = videoParent.querySelector('.video__wrapper')
+	const videoDesc = videoParent.querySelector('.desc-video-info__text')
 	const video = videoWrapper.querySelector('video')
 	const audio = videoWrapper.querySelector('audio')
 	const dialogSb = _io_q('.dialog-sb')
@@ -194,11 +195,28 @@ const initVideoPlayer = _ => {
 		videoPoster = null
 	}
 
+	let isFirstPlay = true
+
+	const startVideoFromLastPoint = _ => {
+		const videoId = videoParent.dataset.id
+
+		if (isEmpty(videoId)) return
+
+		if (hasWatchedTime(videoId))
+			video.currentTime = getWatchedtTime(videoId)
+	}
+
 	const playVideoPlayer = async _ => {
 		await playVideo()
 		await playAudio()
 
 		showDecoration('play', true)
+
+		if (isFirstPlay) {
+			startVideoFromLastPoint()
+
+			isFirstPlay = false
+		}
 	}
 
 	const pauseVideoPlayer = _ => {
@@ -468,7 +486,7 @@ const initVideoPlayer = _ => {
 	}
 
 	const sendSegmentSB = async _ => {
-		let videoId = _io_q('.video').dataset.id
+		let videoId = videoParent.dataset.id
 		let dialogSbCategory = dialogSb.querySelector('input[name="category"]:checked')
 
 		if (isValidFields()) {
@@ -691,7 +709,7 @@ const initVideoPlayer = _ => {
 		// HOT KEYS
 
 		const handleKeyDownWithinVideo = e => {
-			if (_io_q('.video').classList.contains('_active')
+			if (videoParent.classList.contains('_active')
 				&& (document.activeElement === _io_q('body')
 					|| document.activeElement === null)) {
 
@@ -741,11 +759,11 @@ const initVideoPlayer = _ => {
 }
 
 const resetVideoPlayer = _ => {
-	let video = _io_q('.video')
-	let videoWrapper = video.querySelector('.video__wrapper');
-	let videoInstance = videoWrapper.querySelector('video');
-	let audioInstance = videoWrapper.querySelector('audio');
-	let controls = video.querySelector('.controls');
+	let videoParent = _io_q('.video')
+	let videoWrapper = videoParent.querySelector('.video__wrapper');
+	let video = videoWrapper.querySelector('video');
+	let audio = videoWrapper.querySelector('audio');
+	let controls = videoParent.querySelector('.controls');
 	let controlsSwitchIcon = controls.querySelector('.controls__switch svg use');
 	let sponsorblock = controls.querySelector('.sponsorblock');
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock');
@@ -758,10 +776,10 @@ const resetVideoPlayer = _ => {
 	let speed = controls.querySelector('.controls__speed');
 	let speedCurrent = speed.querySelector('.dropdown__head');
 
-	let videoId = video.dataset.id
-	let watchedTime = videoInstance.currentTime
+	let videoId = videoParent.dataset.id
+	let watchedTime = video.currentTime
 
-	if (watchedTime > 0 && watchedTime < videoInstance.duration)
+	if (watchedTime > 0 && watchedTime < video.duration)
 		rememberWatchedTime(videoId, watchedTime)
 
 	while (sponsorblock.firstChild)
@@ -790,10 +808,10 @@ const resetVideoPlayer = _ => {
 	if (!storage.settings.disableStoryboard && !progressStoryboard)
 		progress.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
 
-	resetMediaEl(videoInstance)
+	resetMediaEl(video)
 
-	audioInstance
-		? resetMediaEl(audioInstance)
+	audio
+		? resetMediaEl(audio)
 		: videoWrapper.insertAdjacentHTML('afterBegin',
 			'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>')
 
@@ -804,8 +822,9 @@ const resetVideoPlayer = _ => {
 
 	controls.hidden &&= false
 
+	videoParent = null
+	audio = null
 	video = null
-	audioInstance = null
 	videoWrapper = null
 	progress = null
 	sponsorblock = null
@@ -818,4 +837,5 @@ const resetVideoPlayer = _ => {
 	controlsSwitchIcon = null
 	speed = null
 	speedCurrent = null
+	progressStoryboard = null
 }

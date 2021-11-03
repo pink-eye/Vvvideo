@@ -124,9 +124,40 @@ const rememberWatchedTime = (videoId, watchedTime) => {
 	API.writeStorage(storage)
 }
 
-const getWatchedProgress = videoId => {
+const hasWatchedTime = videoId => {
+	for (let index = 0, length = storage.history.length; index < length; index++) {
+		const historyItem = storage.history[index]
+
+		if (historyItem.id === videoId &&
+			historyItem.hasOwnProperty('watchedTime')) {
+			return true
+		}
+	}
+
+	return false
+}
+
+const getWatchedtTime = videoId => {
+	let watchedTime = null
+
+	for (let index = 0, length = storage.history.length; index < length; index++) {
+		const historyItem = storage.history[index]
+
+		if (historyItem.id === videoId &&
+			historyItem.hasOwnProperty('watchedTime')) {
+			watchedTime = historyItem.watchedTime
+
+			break
+		}
+	}
+
+	return watchedTime
+}
+
+const calculateWatchedProgress = videoId => {
 	let watchedTime = null
 	let lengthSeconds = null
+	let watchedProgress = null
 
 	for (let index = 0, length = storage.history.length; index < length; index++) {
 		const historyItem = storage.history[index]
@@ -140,10 +171,10 @@ const getWatchedProgress = videoId => {
 		}
 	}
 
-	if (watchedTime) {
+	if (watchedTime && lengthSeconds) {
 		lengthSeconds = convertDurationToSeconds(lengthSeconds)
-		watchedTime = `${convertToProc(watchedTime, lengthSeconds)}%`
+		watchedProgress = `${convertToProc(watchedTime, lengthSeconds)}%`
 	}
 
-	return watchedTime
+	return watchedProgress
 }
