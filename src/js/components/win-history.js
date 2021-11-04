@@ -125,7 +125,9 @@ const disableHistory = _ => {
 }
 
 const rememberWatchedTime = _ => {
-	if (storage.settings.disableHistory) return
+	const { disableHistory, dontRememberWatchedTime } = storage.settings
+
+	if (disableHistory && dontRememberWatchedTime) return
 
 	let videoParent = _io_q('.video');
 	let video = videoParent.querySelector('video');
@@ -149,8 +151,9 @@ const rememberWatchedTime = _ => {
 }
 
 const getWatchedtTime = videoId => {
-	if (storage.settings.disableHistory ||
-		storage.history.length === 0) return
+	const { disableHistory, dontRememberWatchedTime } = storage.settings
+
+	if (disableHistory && dontRememberWatchedTime) return
 
 	const requiredItem = storage.history.find(item => item.id === videoId && item.hasOwnProperty('watchedTime'))
 
