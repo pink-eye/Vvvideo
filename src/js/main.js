@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 		if (lastWin) {
 			lastWin.classList.remove('_anim-win');
 
+			if (lastWin.classList.contains('video'))
+				rememberWatchedTime()
+
 			const onHideLastWin = _ => {
 				lastWin.classList.remove('_active');
 

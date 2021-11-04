@@ -86,8 +86,8 @@ const fillVideoCard = (video, index, data) => {
 	removeSkeleton(bottomSkeleton)
 
 	const videoId = video.dataset.id
-
-	if (hasWatchedTime(videoId)) {
+	
+	if (getWatchedtTime(videoId)) {
 		let cardImage = video.querySelector('.card__image');
 		let watchedProgress = calculateWatchedProgress(videoId)
 

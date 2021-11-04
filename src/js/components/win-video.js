@@ -232,7 +232,7 @@ const openWinVideo = async id => {
 				videoDesc.innerHTML = normalizeDesc(data.videoDetails.description);
 
 				if (!storage.settings.disableHistory)
-					saveToHistoryVideo(scrapeVideoInfoFromData, data)
+					saveVideoInHistory(scrapeVideoInfoFromData, data)
 			}
 		} catch (error) {
 			showToast('error', error.message)
@@ -377,5 +377,5 @@ const prepareVideoWin = (btnWin, id) => {
 		getSegmentsSB(id)
 
 	if (!storage.settings.disableHistory)
-		saveToHistoryVideo(scrapeVideoInfoFromCard, btnWin)
+		saveVideoInHistory(scrapeVideoInfoFromCard, btnWin)
 }

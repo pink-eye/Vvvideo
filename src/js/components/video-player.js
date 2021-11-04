@@ -202,8 +202,10 @@ const initVideoPlayer = _ => {
 
 		if (isEmpty(videoId)) return
 
-		if (hasWatchedTime(videoId))
-			video.currentTime = getWatchedtTime(videoId)
+		const videoWatchedTime = getWatchedtTime(videoId)
+
+		if (videoWatchedTime)
+			video.currentTime = videoWatchedTime
 	}
 
 	const playVideoPlayer = async _ => {
@@ -775,12 +777,6 @@ const resetVideoPlayer = _ => {
 	let timeElapsed = controls.querySelector('.time__elapsed');
 	let speed = controls.querySelector('.controls__speed');
 	let speedCurrent = speed.querySelector('.dropdown__head');
-
-	let videoId = videoParent.dataset.id
-	let watchedTime = video.currentTime
-
-	if (watchedTime > 0 && watchedTime < video.duration)
-		rememberWatchedTime(videoId, watchedTime)
 
 	while (sponsorblock.firstChild)
 		sponsorblock.firstChild.remove()

@@ -26,9 +26,12 @@ const openWinHistory = _ => {
 	}
 }
 
-const isThisRecentHistoryItem = newItem => {
-	let recentHistoryItem = storage.history[0]
-	return !recentHistoryItem || recentHistoryItem.id !== newItem.id
+const isThisRecentHistoryItem = newItem => newItem.id === storage.history[0].id
+
+const getSameHistoryItem = newItem => storage.history.find(item => item.id === newItem.id)
+
+const removeSameHistoryItem = newItem => {
+	storage.history = storage.history.filter(item => item.id !== newItem.id)
 }
 
 const addNewHistoryItem = newItem => {
@@ -64,7 +67,7 @@ const scrapeVideoInfoFromData = data => {
 		id: videoDetails.videoId,
 		title: videoDetails.title,
 		author: videoDetails.author.name,
-		authorId: videoDetails.author.authorId,
+		authorId: videoDetails.author.id,
 		bestThumbnail: {
 			url: videoDetails.thumbnails.at(-1).url
 		},
@@ -72,15 +75,21 @@ const scrapeVideoInfoFromData = data => {
 	}
 }
 
-const saveToHistoryVideo = (methodToScrapeInfo, arg) => {
+const saveVideoInHistory = (methodToScrapeInfo, arg) => {
 	if (arg) {
 		let newItem = methodToScrapeInfo(arg)
 
-		if (isThisRecentHistoryItem(newItem)) {
+		if (!isThisRecentHistoryItem(newItem)) {
+			let sameItem = getSameHistoryItem(newItem)
+
+			if (sameItem && sameItem.hasOwnProperty('watchedTime')) {
+				newItem.watchedTime = sameItem.watchedTime
+				removeSameHistoryItem(newItem)
+			}
+
 			addNewHistoryItem(newItem)
 
 			keepHistoryArray()
-
 			API.writeStorage(storage)
 		}
 	}
@@ -113,7 +122,15 @@ const disableHistory = _ => {
 	sidebarBtnHistory = null
 }
 
-const rememberWatchedTime = (videoId, watchedTime) => {
+const rememberWatchedTime = _ => {
+	let videoParent = _io_q('.video');
+	let video = videoParent.querySelector('video');
+
+	let videoId = videoParent.dataset.id
+	let watchedTime = video.currentTime
+
+	if (watchedTime === 0 || watchedTime === video.duration) return
+
 	for (let index = 0, length = storage.history.length; index < length; index++) {
 		if (storage.history[index].id === videoId) {
 			storage.history[index].watchedTime = watchedTime
@@ -122,59 +139,20 @@ const rememberWatchedTime = (videoId, watchedTime) => {
 	}
 
 	API.writeStorage(storage)
-}
 
-const hasWatchedTime = videoId => {
-	for (let index = 0, length = storage.history.length; index < length; index++) {
-		const historyItem = storage.history[index]
-
-		if (historyItem.id === videoId &&
-			historyItem.hasOwnProperty('watchedTime')) {
-			return true
-		}
-	}
-
-	return false
+	videoParent = null
+	video = null
 }
 
 const getWatchedtTime = videoId => {
-	let watchedTime = null
-
-	for (let index = 0, length = storage.history.length; index < length; index++) {
-		const historyItem = storage.history[index]
-
-		if (historyItem.id === videoId &&
-			historyItem.hasOwnProperty('watchedTime')) {
-			watchedTime = historyItem.watchedTime
-
-			break
-		}
-	}
-
-	return watchedTime
+	const requiredItem = storage.history.find(item => item.id === videoId && item.hasOwnProperty('watchedTime'))
+	return requiredItem && requiredItem.watchedTime
 }
 
 const calculateWatchedProgress = videoId => {
-	let watchedTime = null
-	let lengthSeconds = null
-	let watchedProgress = null
+	const requiredItem = storage.history.find(item => item.id === videoId && item.hasOwnProperty('watchedTime'))
 
-	for (let index = 0, length = storage.history.length; index < length; index++) {
-		const historyItem = storage.history[index]
+	let lengthSeconds = convertDurationToSeconds(requiredItem.lengthSeconds)
 
-		if (historyItem.id === videoId &&
-			historyItem.hasOwnProperty('watchedTime')) {
-			watchedTime = historyItem.watchedTime
-			lengthSeconds = historyItem.lengthSeconds
-
-			break
-		}
-	}
-
-	if (watchedTime && lengthSeconds) {
-		lengthSeconds = convertDurationToSeconds(lengthSeconds)
-		watchedProgress = `${convertToProc(watchedTime, lengthSeconds)}%`
-	}
-
-	return watchedProgress
+	return `${convertToProc(requiredItem.watchedTime, lengthSeconds)}%`
 }
