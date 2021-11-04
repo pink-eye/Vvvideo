@@ -1,8 +1,16 @@
 const handleKeyDown = e => {
 
 	// CTRL + F
-	if (e.ctrlKey && e.keyCode === 70)
+	if (e.ctrlKey && e.keyCode === 70) {
+		let header = _io_q('.header');
+
+		if (header.classList.contains('_hidden'))
+			header.classList.remove('_hidden')
+
 		_io_q('.search__bar').focus()
+
+		header = null
+	}
 
 	// CTRL + B
 	if (e.ctrlKey && e.keyCode === 66)

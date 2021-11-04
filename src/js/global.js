@@ -33,6 +33,9 @@ const getCoordY = el => el.getBoundingClientRect().top + pageYOffset
 
 const hideOnScroll = (selector, mq) => {
 	const sidebar = _io_q('.sidebar');
+	const header = _io_q('.header');
+	const searchBar = header.querySelector('.search__bar')
+
 	let lastScrollValue = 0;
 
 	const handleScroll = _ => {
@@ -42,6 +45,9 @@ const hideOnScroll = (selector, mq) => {
 			let scrollDistance = window.scrollY
 
 			if (sidebar.classList.contains('_active')) return
+
+			if (selector === header &&
+				document.activeElement === searchBar) return
 
 			if (scrollDistance === 0) selector.classList.remove('_hidden')
 
