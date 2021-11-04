@@ -87,13 +87,17 @@ const openWinVideo = async id => {
 				? await API.scrapeVideoProxy(id, getProxyOptions())
 				: await API.scrapeVideo(id)
 
-			if (data.videoDetails.isLive)
+			const { formats, videoDetails } = data
+
+			console.log(formats);
+
+			if (videoDetails.isLive)
 				video.classList.add('_live')
 
 			if (video.classList.contains('_active')) {
 				video.dataset.id = id
 
-				prepareSubscribeBtn(subscribeBtn, data.videoDetails.author.id, data.videoDetails.author.name)
+				prepareSubscribeBtn(subscribeBtn, videoDetails.author.id, videoDetails.author.name)
 
 				const onLoadedData = _ => {
 					if (videoSkeleton)
@@ -101,9 +105,9 @@ const openWinVideo = async id => {
 				}
 
 				// FILL MEDIA
-				if (data.formats.length > 0) {
-					if (data.videoDetails.isLive) {
-						videoFormatAll = filterHLS(data.formats)
+				if (formats.length > 0) {
+					if (videoDetails.isLive) {
+						videoFormatAll = filterHLS(formats)
 
 						if (audioInstance) {
 							resetMediaEl(audioInstance)
@@ -144,7 +148,7 @@ const openWinVideo = async id => {
 						hls.on(Hls.Events.ERROR, handleError);
 					} else {
 						if (ss.disableSeparatedStreams) {
-							videoFormatAll = API.YTDLFilterFormats(data.formats)
+							videoFormatAll = API.YTDLFilterFormats(formats)
 
 							if (audioInstance) {
 								resetMediaEl(audioInstance)
@@ -153,19 +157,19 @@ const openWinVideo = async id => {
 						} else {
 							switch (ss.defaltVideoFormat) {
 								case 'mp4':
-									videoFormatAll = filterVideoMP4NoAudio(data.formats)
+									videoFormatAll = filterVideoMP4NoAudio(formats)
 									break;
 								case 'webm':
-									videoFormatAll = filterVideoWebm(data.formats)
+									videoFormatAll = filterVideoWebm(formats)
 									break;
 							}
-							audioInstance.src = getHighestAudio(data.formats).url
+							audioInstance.src = getHighestAudio(formats).url
 						}
 
 						let currentQuality = getPreferedQuality(videoFormatAll)
 
 						if (!currentQuality)
-							currentQuality = getDefaultFormat(data.formats)
+							currentQuality = getDefaultFormat(formats)
 
 						videoInstance.src = currentQuality.url
 						qualityCurrent.textContent = currentQuality.qualityLabel
@@ -180,33 +184,33 @@ const openWinVideo = async id => {
 				// FILL VIDEO INFO
 
 				if (!ss.disableStoryboard) {
-					if (data.videoDetails.storyboards.length > 0)
-						progressStoryboard.style.setProperty('--url', `url(${data.videoDetails.storyboards.at(0).templateUrl})`)
+					if (videoDetails.storyboards.length > 0)
+						progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
 					else progressStoryboard.remove()
 				} else if (progressStoryboard)
 					progressStoryboard.remove()
 
-				if (data.videoDetails.title !== videoTitle.textContent)
-					videoTitle.textContent = data.videoDetails.title
+				if (videoDetails.title !== videoTitle.textContent)
+					videoTitle.textContent = videoDetails.title
 
 				removeSkeleton(titleSkeleton)
 
-				if (data.videoDetails.thumbnails)
-					videoPoster.src = data.videoDetails.thumbnails.at(-1).url
+				if (videoDetails.thumbnails)
+					videoPoster.src = videoDetails.thumbnails.at(-1).url
 
 				if (videoViews.textContent === '...')
-					videoViews.textContent = normalizeCount(data.videoDetails.viewCount)
+					videoViews.textContent = normalizeCount(videoDetails.viewCount)
 
 				if (videoDate.textContent === '...')
-					videoDate.textContent = formatDate(data.videoDetails.publishDate)
+					videoDate.textContent = formatDate(videoDetails.publishDate)
 
 				if (videoDate.textContent === 'Premiere') {
 					videoDate.textContent = data.player_response.playabilityStatus.reason
 					controls.hidden = true
 				}
 
-				videoDislikes.textContent = normalizeCount(data.videoDetails.dislikes)
-				videoLikes.textContent = normalizeCount(data.videoDetails.likes)
+				videoDislikes.textContent = normalizeCount(videoDetails.dislikes)
+				videoLikes.textContent = normalizeCount(videoDetails.likes)
 
 				if (partSkeletonAll.length > 0) {
 					for (let index = 0, length = partSkeletonAll.length; index < length; index++) {
@@ -217,11 +221,11 @@ const openWinVideo = async id => {
 
 				let authorParams = {
 					parent: authorCard,
-					name: data.videoDetails.author.name,
-					subs: `${normalizeCount(data.videoDetails.author.subscriber_count)} subscribers`,
-					id: data.videoDetails.author.id,
-					avatarSrc: data.videoDetails.author.thumbnails
-						? data.videoDetails.author.thumbnails.at(-1).url
+					name: videoDetails.author.name,
+					subs: `${normalizeCount(videoDetails.author.subscriber_count)} subscribers`,
+					id: videoDetails.author.id,
+					avatarSrc: videoDetails.author.thumbnails
+						? videoDetails.author.thumbnails.at(-1).url
 						: ''
 				}
 
@@ -229,10 +233,9 @@ const openWinVideo = async id => {
 
 				authorParams = null
 
-				videoDesc.innerHTML = normalizeDesc(data.videoDetails.description);
+				videoDesc.innerHTML = normalizeDesc(videoDetails.description);
 
-				if (!storage.settings.disableHistory)
-					saveVideoInHistory(scrapeVideoInfoFromData, data)
+				saveVideoInHistory(scrapeVideoInfoFromData, data)
 			}
 		} catch (error) {
 			showToast('error', error.message)
@@ -373,9 +376,7 @@ const prepareVideoWin = (btnWin, id) => {
 
 	openWinVideo(id).then(initVideoPlayer)
 
-	if (!storage.settings.disableSponsorblock)
-		getSegmentsSB(id)
+	getSegmentsSB(id)
 
-	if (!storage.settings.disableHistory)
-		saveVideoInHistory(scrapeVideoInfoFromCard, btnWin)
+	saveVideoInHistory(scrapeVideoInfoFromCard, btnWin)
 }

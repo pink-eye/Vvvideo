@@ -5,6 +5,12 @@ const createSponsorblockItemHTML = _ => `<li class="sponsorblock__item"></li>`
 const getSegmentsSB = async videoId => {
 	segmentsSB.length = 0
 
+	const { disableSponsorblock } = storage.settings
+
+	toggleSponsorblock(disableSponsorblock)
+
+	if (disableSponsorblock) return
+
 	let video = _io_q('.video');
 	let controlsProgess = video.querySelector('.controls__progress');
 	let progressSponsorblock = controlsProgess.querySelector('.sponsorblock');

@@ -2,38 +2,39 @@
     position: fixed;
     z-index: 20;
 
-    box-shadow: var(--box-shadow-s);
     background-color: var(--color-bg-form);
 
     transition: transform var(--trns),
-        background-color var(--trns),
-        box-shadow var(--trns),
-        visibility var(--trns);
+	background-color var(--trns),
+	box-shadow var(--trns),
+	visibility var(--trns);
 
     @media (min-width: 48em) {
-        top: 0;
+		top: 0;
         left: 0;
         width: 227px;
         padding-bottom: 10px;
         overflow: hidden auto;
+		box-shadow: var(--box-shadow-s);
         overscroll-behavior: contain;
         padding-top: 114px;
         height: 100vh;
 
         &._closed {
-            transform: translateX(-100%);
+			transform: translateX(-100%);
             visibility: hidden;
         }
     }
 
 
     @media (max-width: 47.9375em) {
-        left: 50%;
+		left: 50%;
         overflow: hidden;
         padding: 4px;
         width: calc(100% - 20px);
 
         border-radius: var(--brs-m);
+		box-shadow: var(--box-shadow-m);
 
         filter: drop-shadow(0px -5px 40px var(--box-shadow-s));
 

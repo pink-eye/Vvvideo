@@ -229,10 +229,6 @@ const fillWinSettings = async _ => {
 	if (ss.disableTransition)
 		toggleTransition(ss.disableTransition)
 
-
-	if (ss.disableSponsorblock)
-		toggleSponsorblock(ss.disableSponsorblock)
-
 	if (ss.disableHistory)
 		disableHistory()
 
@@ -334,10 +330,6 @@ const handleChangeCheckbox = event => {
 			checkbox.checked
 				? showToast('info', 'Restart app after the fields is filled in')
 				: showToast('good', 'Restart app')
-			break;
-
-		case 'disableSponsorblock':
-			toggleSponsorblock(checkbox.checked)
 			break;
 
 		case 'notAdaptContent':

@@ -90,8 +90,11 @@ const chooseSuggest = (parent, direction) => {
 const initSuggests = parent => {
 	let searchBar = parent.querySelector('.search__bar');
 
-	if (searchBar && !storage.settings.disableSearchSuggestions) {
+	const { disableSearchSuggestions, enableProxy } = storage.settings
 
+	if (disableSearchSuggestions) return
+
+	if (searchBar) {
 		const handleInpt = async _ => {
 			showOverlay()
 
@@ -100,7 +103,7 @@ const initSuggests = parent => {
 
 			if (query.length > 0) {
 				try {
-					let data = storage.settings.enableProxy
+					let data = enableProxy
 						? await API.scrapeSuggestsProxy(query, getProxyOptions())
 						: await API.scrapeSuggests(query)
 

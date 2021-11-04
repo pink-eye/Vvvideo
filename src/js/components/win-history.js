@@ -76,6 +76,8 @@ const scrapeVideoInfoFromData = data => {
 }
 
 const saveVideoInHistory = (methodToScrapeInfo, arg) => {
+	if (storage.settings.disableHistory) return
+
 	if (arg) {
 		let newItem = methodToScrapeInfo(arg)
 
@@ -123,6 +125,8 @@ const disableHistory = _ => {
 }
 
 const rememberWatchedTime = _ => {
+	if (storage.settings.disableHistory) return
+
 	let videoParent = _io_q('.video');
 	let video = videoParent.querySelector('video');
 
@@ -145,7 +149,11 @@ const rememberWatchedTime = _ => {
 }
 
 const getWatchedtTime = videoId => {
+	if (storage.settings.disableHistory ||
+		storage.history.length === 0) return
+
 	const requiredItem = storage.history.find(item => item.id === videoId && item.hasOwnProperty('watchedTime'))
+
 	return requiredItem && requiredItem.watchedTime
 }
 
