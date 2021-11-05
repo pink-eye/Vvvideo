@@ -1,7 +1,7 @@
 let storage = {}
 let latestArray = null;
 
-const getChannelVideosLocalScraper = (channelId, index) => new Promise(async (resolve) => {
+const getChannelVideosLocalScraper = channelId => new Promise(async resolve => {
 	try {
 		const data = await API.scrapeChannelVideos(channelId);
 
@@ -37,7 +37,7 @@ const openWinLatest = async _ => {
 				const subscription = storage.subscriptions[index];
 
 				if (btnLatest.classList.contains('_active')) {
-					promises.push(getChannelVideosLocalScraper(subscription.channelId, index))
+					promises.push(getChannelVideosLocalScraper(subscription.channelId))
 				} else {
 					latestArray.length = 0
 					return

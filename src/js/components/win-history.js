@@ -26,7 +26,7 @@ const openWinHistory = _ => {
 	}
 }
 
-const isThisRecentHistoryItem = newItem => newItem.id === storage.history[0].id
+const isThisRecentHistoryItem = newItem => storage.history.length > 0 && newItem.id === storage.history[0].id
 
 const getSameHistoryItem = newItem => storage.history.find(item => item.id === newItem.id)
 

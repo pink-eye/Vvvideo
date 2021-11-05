@@ -360,19 +360,19 @@ const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', aut
 }
 
 const prepareVideoWin = (btnWin, id) => {
+	let params = {}
+
 	if (btnWin) {
-		let params = {
+		params = {
 			title: btnWin.querySelector('.card__title span').textContent,
 			views: btnWin.querySelector('.card__views').textContent,
 			date: btnWin.querySelector('.card__date').textContent,
 			author: btnWin.querySelector('.card__channel').dataset.name,
 			authorId: btnWin.querySelector('.card__channel').dataset.id
 		}
-
-		fillSomeInfoVideo(params);
-	} else {
-		fillSomeInfoVideo({});
 	}
+
+	fillSomeInfoVideo(params);
 
 	openWinVideo(id).then(initVideoPlayer)
 

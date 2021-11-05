@@ -127,7 +127,7 @@ const resetChannel = _ => {
 	channelTabContentPlaylists = null
 }
 
-const fillSomeInfoChannel = (name, channelId) => {
+const fillSomeInfoChannel = ({ name = '', id = '' }) => {
 	let channel = _io_q('.channel');
 	let channelName = channel.querySelector('.heading-channel__author span');
 	let subscribeBtn = channel.querySelector('.subscribe');
@@ -138,7 +138,7 @@ const fillSomeInfoChannel = (name, channelId) => {
 		removeSkeleton(titleSkeleton)
 	}
 
-	prepareSubscribeBtn(subscribeBtn, channelId, name)
+	prepareSubscribeBtn(subscribeBtn, id, name)
 
 	channel = null
 	channelName = null
@@ -146,12 +146,14 @@ const fillSomeInfoChannel = (name, channelId) => {
 }
 
 const prepareChannelWin = (btnWin, id) => {
+	let params = {}
+
 	if (btnWin) {
 		const { name, id } = btnWin.dataset
+		params = { name, id }
+	}
 
-		fillSomeInfoChannel(name, id)
-
-	} else fillSomeInfoChannel('', '')
+	fillSomeInfoChannel(params)
 
 	openWinChannel(id)
 }
