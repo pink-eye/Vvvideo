@@ -86,7 +86,7 @@ const fillVideoCard = (video, index, data) => {
 	removeSkeleton(bottomSkeleton)
 
 	const videoId = video.dataset.id
-	
+
 	if (getWatchedtTime(videoId)) {
 		let cardImage = video.querySelector('.card__image');
 		let watchedProgress = calculateWatchedProgress(videoId)
@@ -271,9 +271,13 @@ const resetVideoCard = card => {
 	let videoDate = card.querySelector('.card__date')
 	let videoChannel = card.querySelector('.card__channel')
 	let videoDuration = card.querySelector('.card__duration')
+	let videoImg = card.querySelector('.card__image');
 
 	if (card.classList.contains('_live'))
 		card.classList.remove('_live');
+
+	if (videoImg.hasAttribute('style'))
+		videoImg.removeAttribute('style')
 
 	videoViews.textContent = ''
 	videoDate.textContent = ''
@@ -286,6 +290,7 @@ const resetVideoCard = card => {
 	videoDate = null
 	videoChannel = null
 	videoDuration = null
+	videoImg = null
 }
 
 const resetChannelCard = card => {
