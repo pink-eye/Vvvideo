@@ -8,35 +8,43 @@ const openWinSearchResults = async _ => {
 			? await API.scrapeSearchResultsProxy(searchBar.value, getProxyOptions())
 			: await API.scrapeSearchResults(searchBar.value)
 
-		data.items.length > cardAll.length
-			? initPages(searchResults, data.items, cardAll, 'rich', data.continuation)
+		let { items, continuation } = data
+
+		items = filterSearchResults(items)
+
+		items.length > cardAll.length
+			? initPages(searchResults, items, cardAll, 'rich', continuation)
 			: disablePages(searchResults)
 
 		for (let index = 0, length = cardAll.length; index < length; index++) {
 			let card = cardAll[index];
-			let typeCard = data.items[index].type;
+			const { type: typeCard } = items[index];
 
 			card.dataset.win = `${typeCard}`
 			card.classList.add(`_${typeCard}`);
 
 			switch (typeCard) {
 				case 'video':
-					fillVideoCard(card, index, data.items)
+					fillVideoCard(card, index, items)
 					break;
 
 				case 'playlist':
-					fillPlaylistCard(card, index, data.items)
+					fillPlaylistCard(card, index, items)
 					break;
 
 				case 'channel':
-					fillChannelCard(card, index, data.items)
+					fillChannelCard(card, index, items)
 					break;
 			}
 		}
-	} catch (error) { showToast('error', error.message); }
+	} catch (error) {
+		showToast('error', error.message);
+	}
 	finally {
 		searchResults = null
 		searchBar = null
 		cardAll = null
 	}
 }
+
+const filterSearchResults = arr => arr.filter(el => el.type === 'video' || el.type === 'playlist' || el.type === 'channel')

@@ -6,8 +6,8 @@ let hasContinuation = null;
 const disablePages = parent => {
 	let btns = parent.querySelector('.btns');
 
-	if (btns && !btns.hidden)
-		btns.hidden = true;
+	if (btns)
+		btns.hidden ||= true;
 
 	btns = null;
 }
@@ -15,8 +15,8 @@ const disablePages = parent => {
 const enablePages = parent => {
 	let btns = parent.querySelector('.btns');
 
-	if (btns && btns.hidden)
-		btns.hidden = false;
+	if (btns)
+		btns.hidden &&= false;
 
 	btns = null;
 }
@@ -97,28 +97,32 @@ const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
 }
 
 const getDataMore = async typeCard => {
-	if (hasContinuation) {
-		try {
-			switch (typeCard) {
-				case 'video':
-					const dataChannelVideosMore = await API.scrapeVideosMore(hasContinuation);
-					itemArray.push(...dataChannelVideosMore.items);
-					hasContinuation = dataChannelVideosMore.continuation;
-					break;
+	if (!hasContinuation) return
 
-				case 'playlist':
-					const dataChannelPlaylistsMore = await API.scrapePlaylistsMore(hasContinuation);
-					itemArray.push(...dataChannelPlaylistsMore.items);
-					hasContinuation = dataChannelPlaylistsMore.continuation;
-					break;
+	let dataMore = null
 
-				case 'rich':
-					const dataSearchResultsMore = await API.scrapeSearchResultsMore(hasContinuation);
-					itemArray.push(...dataSearchResultsMore.items);
-					hasContinuation = dataSearchResultsMore.continuation;
-					break;
-			}
-		} catch (error) { showToast('error', error.message) }
+	try {
+		switch (typeCard) {
+			case 'video':
+				dataMore = await API.scrapeVideosMore(hasContinuation);
+				break;
+
+			case 'playlist':
+				dataMore = await API.scrapePlaylistsMore(hasContinuation);
+				break;
+
+			case 'rich':
+				dataMore = await API.scrapeSearchResultsMore(hasContinuation);
+				dataMore.items = filterSearchResults(dataMore.items)
+				break;
+		}
+	} catch (error) {
+		showToast('error', error.message)
+	}
+
+	if (dataMore) {
+		itemArray.push(...dataMore.items);
+		hasContinuation = dataMore.continuation;
 	}
 }
 
