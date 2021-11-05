@@ -66,7 +66,6 @@
     &__avatar {
         z-index: 11;
         border-radius: 50%;
-        overflow: hidden;
         margin-bottom: 0;
 
         @media (min-width: 68.8125em) {
@@ -105,6 +104,7 @@
             height: 100%;
             border-radius: 50%;
             border: 10px solid var(--color-bg);
+			box-shadow: var(--box-shadow-m);
             object-fit: cover;
             transform: rotateX(0deg) perspective(100px);
 

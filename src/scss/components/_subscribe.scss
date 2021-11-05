@@ -18,6 +18,7 @@
 
     &:after {
         border-radius: var(--brs-xl);
+		box-shadow: 0px 35px 15px -30px var(--color-box-shadow-xl);
         content: "";
         position: absolute;
         inset: 0;
