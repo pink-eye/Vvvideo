@@ -34,6 +34,8 @@ const initVideoPlayer = _ => {
 	const dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send')
 	const dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel')
 
+	const { notifySkipSegment, disableSponsorblock, disableStoryboard, autoplay } = storage.settings
+
 	let doesSkipSegments = true;
 
 	let iconPathPlay = 'img/svg/controls.svg#play'
@@ -419,6 +421,8 @@ const initVideoPlayer = _ => {
 	}
 
 	const skipSegmentSB = _ => {
+		if (disableSponsorblock) return
+
 		if (isPlayingVideo()) {
 			for (let index = 0, length = segmentsSB.length; index < length; index++) {
 				const segmentSB = segmentsSB[index];
@@ -427,7 +431,7 @@ const initVideoPlayer = _ => {
 					video.currentTime = segmentSB.endTime;
 					isSync = false
 
-					if (storage.settings.notifySkipSegment)
+					if (notifySkipSegment)
 						showToast('info', 'Segment is skipped!')
 				}
 			}
@@ -457,6 +461,8 @@ const initVideoPlayer = _ => {
 	}
 
 	const recordSegmentSB = _ => {
+		if (disableSponsorblock) return
+
 		if (isPlayingVideo()) {
 			if (!isRecording) {
 				startTime = timeElapsed.textContent
@@ -514,7 +520,7 @@ const initVideoPlayer = _ => {
 
 	// MEDIA LISTENERS
 
-	if (storage.settings.autoplay) {
+	if (autoplay) {
 
 		const handleCanPlay = _ => {
 			hidePoster()
@@ -584,8 +590,7 @@ const initVideoPlayer = _ => {
 		updateTimeElapsed()
 		updateProgress()
 
-		if (doesSkipSegments && !storage.settings.disableSponsorblock)
-			skipSegmentSB()
+		doesSkipSegments && skipSegmentSB()
 	}
 
 	video.addEventListener('timeupdate', handleTimeUpdate);
@@ -736,11 +741,11 @@ const initVideoPlayer = _ => {
 					audio ? toggleMuteAudio() : toggleMuteVideo()
 
 				// S
-				if (e.keyCode === 83 && !storage.settings.disableSponsorblock)
+				if (e.keyCode === 83)
 					recordSegmentSB()
 
 				// V
-				if (e.keyCode === 86 && !storage.settings.disableSponsorblock) {
+				if (e.keyCode === 86 && !disableSponsorblock) {
 					doesSkipSegments = !doesSkipSegments
 					showToast(
 						'info',
@@ -801,7 +806,7 @@ const resetVideoPlayer = _ => {
 	timeElapsed.removeAttribute('datetime')
 	progress.removeAttribute('style')
 
-	if (!storage.settings.disableStoryboard && !progressStoryboard)
+	if (!disableStoryboard && !progressStoryboard)
 		progress.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
 
 	resetMediaEl(video)
