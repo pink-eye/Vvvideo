@@ -66,6 +66,8 @@
     &__avatar {
         z-index: 11;
         border-radius: 50%;
+        box-shadow: var(--box-shadow-m);
+        overflow: hidden;
         margin-bottom: 0;
 
         @media (min-width: 68.8125em) {
@@ -75,10 +77,15 @@
             transform: translateX(-50%);
             width: 170px;
 
+            transition: box-shadow var(--trns);
+
             @media (hover: hover) and (pointer: fine) {
-                &:hover {
+				&:hover {
+					box-shadow: 0 0 0 0 transparent;
+
+					transition: box-shadow var(--trns-fast);
                     img {
-                        transform: rotateX(90deg) perspective(100px);
+						transform: rotateX(90deg) perspective(100px);
                     }
                 }
             }
@@ -104,7 +111,6 @@
             height: 100%;
             border-radius: 50%;
             border: 10px solid var(--color-bg);
-			box-shadow: var(--box-shadow-m);
             object-fit: cover;
             transform: rotateX(0deg) perspective(100px);
 
