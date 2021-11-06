@@ -17,9 +17,7 @@ const addSuggest = (parent, data) => {
 		for (let index = 0, length = 10; index < length; index++) {
 			const query = searchBar.value.trim()
 
-			if (!isEmpty(data[index]) &&
-				query.length > 0 &&
-				document.activeElement === searchBar)
+			if (!isEmpty(data[index]) && query.length > 0 && hasFocus(searchBar))
 				searchDropdown.insertAdjacentHTML('beforeEnd', createSuggestHTML(data[index]))
 			else break
 		}

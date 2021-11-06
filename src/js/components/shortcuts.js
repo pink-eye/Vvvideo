@@ -63,7 +63,7 @@ const handleKeyDown = e => {
 	}
 
 	// SPACE
-	if (e.keyCode === 32 && document.activeElement !== _io_q('.search__bar')) {
+	if (e.keyCode === 32 && !hasFocus(_io_q('.search__bar'))) {
 		let winActive = _io_q('.main__content').querySelector('.win._active')
 
 		if (winActive.classList.contains('video'))

@@ -46,8 +46,7 @@ const hideOnScroll = (selector, mq) => {
 
 			if (sidebar.classList.contains('_active')) return
 
-			if (selector === header &&
-				document.activeElement === searchBar) return
+			if (selector === header && hasFocus(searchBar)) return
 
 			if (scrollDistance === 0) selector.classList.remove('_hidden')
 
@@ -247,3 +246,5 @@ const handleClickLink = event => {
 	event.preventDefault()
 	API.openExternalLink(event.target.href)
 }
+
+const hasFocus = el => document.activeElement === el

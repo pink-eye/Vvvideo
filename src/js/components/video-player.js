@@ -717,8 +717,7 @@ const initVideoPlayer = _ => {
 
 		const handleKeyDownWithinVideo = e => {
 			if (videoParent.classList.contains('_active')
-				&& (document.activeElement === _io_q('body')
-					|| document.activeElement === null)) {
+				&& (hasFocus(_io_q('body')) || hasFocus(null))) {
 
 				// ENTER || SPACE
 				if (e.keyCode === 13 || e.keyCode === 32)
