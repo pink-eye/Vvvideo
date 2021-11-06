@@ -231,13 +231,9 @@ const initVideoPlayer = _ => {
 	}
 
 	const togglePlay = async _ => {
-		if (audio) {
-			video.paused && audio.paused
-				? playVideoPlayer()
-				: pauseVideoPlayer()
-		} else {
-			video.paused ? playVideoPlayer() : pauseVideoPlayer()
-		}
+		let conditionTogglePlay = audio ? video.paused && audio.paused : video.paused
+
+		conditionTogglePlay ? playVideoPlayer() : pauseVideoPlayer()
 
 		hidePoster()
 		isSync = false
@@ -543,8 +539,11 @@ const initVideoPlayer = _ => {
 
 	const startDecorationLoad = _ => {
 		let timeoutDecorationLoad = setTimeout(_ => {
-			if (video.readyState > 2 &&
-				audio.readyState > 2) {
+			let conditionDecorationLoad = audio
+				? video.readyState > 2 && audio.readyState > 2
+				: video.readyState > 2
+
+			if (conditionDecorationLoad) {
 				clearTimeout(timeoutDecorationLoad)
 				hideDecoration('load')
 				return
@@ -556,7 +555,7 @@ const initVideoPlayer = _ => {
 
 	const handleLoadingVideo = _ => {
 		if (!isPlayingVideo())
-			audio.pause()
+			audio && audio.pause()
 
 		startDecorationLoad()
 	}
