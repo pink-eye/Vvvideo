@@ -1,7 +1,7 @@
 let storage = {}
 let latestArray = null;
 
-const getChannelVideosLocalScraper = channelId => new Promise(async resolve => {
+const getChannelVideosLocalScraper = channelId => new Promise(async (resolve, reject) => {
 	try {
 		const data = await API.scrapeChannelVideos(channelId);
 
@@ -21,6 +21,7 @@ const getChannelVideosLocalScraper = channelId => new Promise(async resolve => {
 	} catch (error) {
 		showToast('error', error.message)
 		resetIndicator()
+		reject(error)
 	}
 })
 
@@ -30,7 +31,7 @@ const openWinLatest = async _ => {
 	let videoAll = latest.querySelectorAll('.card');
 
 	if (storage.subscriptions.length > 0) {
-		if (!latestArray) {
+		try {
 			let btnLatest = document.querySelector('button[data-win="latest"]');
 
 			for (let index = 0, length = storage.subscriptions.length; index < length; index++) {
@@ -64,7 +65,9 @@ const openWinLatest = async _ => {
 			}
 
 			btnLatest = null;
-		} else {
+		} catch (error) {
+			if (!latestArray) return
+
 			latestArray.length > videoAll.length
 				? initPages(latest, latestArray, videoAll, 'video')
 				: disablePages(latest)
