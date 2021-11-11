@@ -59,17 +59,14 @@ const chooseSuggest = (parent, direction) => {
 	let suggestAll = parent.querySelectorAll('.search__suggest');
 
 	if (suggestAll.length > 0) {
+
 		if (lastSelected !== null) {
 			const index = direction === 40 ? lastSelected + 1 : lastSelected - 1
 			const sparedIndex = direction === 40 ? 0 : suggestAll.length - 1
+			const nextSelect = suggestAll[index] ?? suggestAll[sparedIndex]
 
-			if (suggestAll[index]) {
-				suggestAll[index].classList.add('_selected');
-				lastSelected = index
-			} else {
-				suggestAll[sparedIndex].classList.add('_selected');
-				lastSelected = sparedIndex
-			}
+			nextSelect.classList.add('_selected');
+			lastSelected = suggestAll[index] ? index : sparedIndex
 		} else {
 			suggestAll[0].classList.add('_selected');
 			lastSelected = 0
@@ -82,6 +79,7 @@ const chooseSuggest = (parent, direction) => {
 
 		selectedSuggest = null
 	}
+
 	suggestAll = null
 }
 
