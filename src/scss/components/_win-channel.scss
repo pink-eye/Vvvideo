@@ -77,14 +77,15 @@
             transform: translateX(-50%);
             width: 170px;
 
-            transition: box-shadow var(--trns);
+            transition: box-shadow var(--trns-slow);
 
             @media (hover: hover) and (pointer: fine) {
 				&:hover {
 					box-shadow: 0 0 0 0 transparent;
 
-					transition: box-shadow var(--trns-fast);
-                    img {
+					transition: box-shadow .1s;
+
+					img {
 						transform: rotateX(90deg) perspective(100px);
                     }
                 }

@@ -36,7 +36,9 @@
         font-size: 1rem;
     }
 
-    padding: 10px 30px;
+    padding-block: 16px 10px;
+    padding-inline: 15px 30px;
+    overflow: hidden;
     box-shadow: var(--box-shadow-m);
 
     @media (min-width: 36em) {
@@ -105,6 +107,7 @@
 
     &._info {
         .toast__icon {
+
             &:before,
             &:after {
                 content: '';
@@ -133,6 +136,7 @@
 
     &._good {
         .toast__icon {
+
             &:before,
             &:after {
                 content: '';
@@ -163,14 +167,9 @@
         position: absolute;
         top: 0;
         left: 0;
-        height: 100%;
-        width: 6px;
+        height: 6px;
+        width: 100%;
         background-color: var(--color-type);
-
-        @media (min-width: 36em) {
-            border-top-left-radius: var(--brs-s);
-            border-bottom-left-radius: var(--brs-s);
-        }
     }
 }
 
@@ -180,7 +179,7 @@
     aspect-ratio: 1 / 1;
 
     border-radius: 50%;
-    margin-right: 20px;
+    margin-right: 30px;
     box-shadow: var(--box-shadow-s);
     background-color: var(--color-type);
 }
