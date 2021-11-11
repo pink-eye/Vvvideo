@@ -1,7 +1,7 @@
 'use strict'
 
 const cache = (key, value) => {
-	if (typeof value == 'undefined')
+	if (typeof value === 'undefined')
 		return cache[key];
 
 	cache[key] = value;

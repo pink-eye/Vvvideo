@@ -187,8 +187,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	sidebar.addEventListener('click', manageWin);
 
 	const handleClickSearch = e => {
-		if (!isEmpty(searchBar.value))
-			manageWin(e)
+		if (!isEmpty(searchBar.value)) manageWin(e)
 	}
 
 	searchBtn.addEventListener('click', handleClickSearch);
