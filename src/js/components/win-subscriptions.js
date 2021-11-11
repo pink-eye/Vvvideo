@@ -13,13 +13,17 @@ const openWinSubs = async _ => {
 		: disablePages(subscriptions)
 
 	for (let index = 0, length = authorCardAll.length; index < length; index++) {
-		let authorCard = authorCardAll[index];
+		const authorCard = authorCardAll[index];
+		const sub = ss[index]
 
-		if (ss[index]) {
+		if (sub) {
+			const { name, channelId, avatar = '' } = sub
+
 			let authorParams = {
 				parent: authorCard,
-				name: ss[index].name,
-				id: ss[index].channelId,
+				id: channelId,
+				avatarSrc: avatar,
+				name,
 			}
 
 			fillAuthorCard(authorParams)
