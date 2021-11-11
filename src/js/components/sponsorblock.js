@@ -21,12 +21,14 @@ const getSegmentsSB = async videoId => {
 
 		segmentsSB.push(...data)
 
-		for (let index = 0, length = data.length; index < length; index++)
-			progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML)
+		if (data.length > 0) {
+			for (let index = 0, length = data.length; index < length; index++)
+				progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML)
+		}
 
 		data = null
 	} catch (error) {
-
+		showToast('error', error.message)
 	}
 	finally {
 		video = null
