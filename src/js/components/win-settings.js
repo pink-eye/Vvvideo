@@ -94,16 +94,15 @@ const readInputFile = _ => {
 	let reader = new FileReader();
 	reader.readAsText(impExpField.files[0]);
 
-	const onLoadReader = async _ => {
+	const onLoadReader = _ => {
 		let data = JSON.parse(reader.result)
 
 		if (!data.hasOwnProperty('subscriptions'))
 			makeResultImport('_invalid', failTip);
 		else {
 			buildStorage(data)
-			await API.writeStorage(storage);
 			makeResultImport('_valid', validTip);
-			reloadApp()
+			API.writeStorage(storage).then(reloadApp);
 		}
 	}
 
@@ -220,8 +219,7 @@ const fillWinSettings = async _ => {
 	for (let key in ss) {
 		let checkbox = settings.querySelector(`input#${key}`);
 
-		if (checkbox)
-			checkbox.checked = ss[`${key}`];
+		if (checkbox) checkbox.checked = ss[`${key}`];
 
 		checkbox = null;
 	}

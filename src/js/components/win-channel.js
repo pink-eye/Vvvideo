@@ -146,12 +146,7 @@ const fillSomeInfoChannel = ({ name = '', id = '' }) => {
 }
 
 const prepareChannelWin = (btnWin, id) => {
-	let params = {}
-
-	if (btnWin) {
-		const { name, id } = btnWin.dataset
-		params = { name, id }
-	}
+	let params = btnWin.dataset || {}
 
 	fillSomeInfoChannel(params)
 
