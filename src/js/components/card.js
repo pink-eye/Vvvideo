@@ -11,18 +11,18 @@ const fillVideoCard = (video, index, data) => {
 
 	video.disabled &&= false;
 
-	video.dataset.id = data[index].hasOwnProperty('videoId')
-		? data[index].videoId
-		: data[index].id
+	const info = data[index]
 
-	if (data[index].hasOwnProperty('bestThumbnail'))
-		videoImage.setAttribute('src', data[index].bestThumbnail.url)
-	else if (data[index].videoThumbnails.find(el => el.quality === 'maxresdefault')) {
-		let maxResImage = data[index].videoThumbnails.find(el => el.quality === 'maxresdefault')
+	video.dataset.id = info?.videoId ?? info.id
+
+	if (info.hasOwnProperty('bestThumbnail'))
+		videoImage.setAttribute('src', info.bestThumbnail.url)
+	else if (info.videoThumbnails.find(el => el.quality === 'maxresdefault')) {
+		let maxResImage = info.videoThumbnails.find(el => el.quality === 'maxresdefault')
 		videoImage.setAttribute('src', maxResImage.url)
 	} else {
-		data[index].videoThumbnails.sort((a, b) => b.width - a.width)
-		videoImage.setAttribute('src', data[index].videoThumbnails[0].url)
+		info.videoThumbnails.sort((a, b) => b.width - a.width)
+		videoImage.setAttribute('src', info.videoThumbnails[0].url)
 	}
 
 	const onLoadImage = _ => {
@@ -38,50 +38,44 @@ const fillVideoCard = (video, index, data) => {
 	videoImage.addEventListener('load', onLoadImage, { once: true });
 	videoImage.addEventListener('error', onErrorImage, { once: true });
 
-	videoTitle.textContent = data[index].title;
+	videoTitle.textContent = info.title;
 
 	removeSkeleton(titleSkeleton)
 
-	videoViews.textContent = data[index].hasOwnProperty('viewCount')
-		? normalizeCount(data[index].viewCount)
-		: data[index].hasOwnProperty('views')
-			? normalizeCount(data[index].views)
+	videoViews.textContent = info.hasOwnProperty('viewCount')
+		? normalizeCount(info.viewCount)
+		: info.hasOwnProperty('views')
+			? normalizeCount(info.views)
 			: '...'
 
-	if (data[index].liveNow || data[index].premiere || data[index].isLive)
+	if (info.liveNow || info.premiere || info.isLive)
 		video.classList.add('_live');
 
-	videoDate.textContent = data[index].viewCountText
-		? data[index].premiere || data[index].viewCountText.includes('wait')
+	videoDate.textContent = info.viewCountText
+		? info.premiere || info.viewCountText.includes('wait')
 			? 'Premiere'
-			: data[index].liveNow
+			: info.liveNow
 				? 'Live'
-				: data[index].publishedText
-		: data[index].hasOwnProperty('publishedText')
-			? data[index].publishedText
-			: data[index].isLive
+				: info.publishedText
+		: info.hasOwnProperty('publishedText')
+			? info.publishedText
+			: info.isLive
 				? 'Live'
-				: data[index].hasOwnProperty('uploadedAt')
-					? data[index].uploadedAt
+				: info.hasOwnProperty('uploadedAt')
+					? info.uploadedAt
 					: '...'
 
-	videoChannel.textContent = data[index].author.name
-		? data[index].author.name
-		: data[index].author
+	videoChannel.textContent = info.author?.name ?? info.author
 
-	videoChannel.dataset.name = data[index].author.name
-		? data[index].author.name
-		: data[index].author
+	videoChannel.dataset.name = info.author?.name ?? info.author
 
-	videoChannel.dataset.id = data[index].authorId
-		? data[index].authorId
-		: data[index].author.channelID
+	videoChannel.dataset.id = info?.authorId ?? info.author.channelID
 
-	videoDuration.textContent = data[index].hasOwnProperty('lengthSeconds')
-		? data[index].hasOwnProperty('simpleText')
-			? data[index].lengthSeconds.simpleText
-			: convertSecondsToDuration(data[index].lengthSeconds)
-		: convertSecondsToDuration(data[index].duration)
+	videoDuration.textContent = info.hasOwnProperty('lengthSeconds')
+		? info.hasOwnProperty('simpleText')
+			? info.lengthSeconds.simpleText
+			: convertSecondsToDuration(info.lengthSeconds)
+		: convertSecondsToDuration(info.duration)
 
 	removeSkeleton(bottomSkeleton)
 
@@ -115,13 +109,14 @@ const fillPlaylistCard = (playlist, index, data) => {
 	let playlistCount = playlist.querySelector('.card__count')
 
 	playlist.disabled &&= false;
-	playlist.dataset.id = data[index].hasOwnProperty('playlistID')
-		? data[index].playlistID
-		: data[index].playlistId
 
-	data[index].firstVideo
-		? playlistImage.setAttribute('src', data[index].firstVideo.bestThumbnail.url)
-		: playlistImage.setAttribute('src', data[index].playlistThumbnail)
+	const info = data[index]
+
+	playlist.dataset.id = info?.playlistID ?? info.playlistId
+
+	let playlistImageSrc = info?.playlistThumbnail ?? info.firstVideo.bestThumbnail.url
+
+	playlistImage.setAttribute('src', playlistImageSrc)
 
 	const onLoadImage = _ => {
 		removeSkeleton(imageSkeleton)
@@ -136,24 +131,16 @@ const fillPlaylistCard = (playlist, index, data) => {
 	playlistImage.addEventListener('load', onLoadImage, { once: true });
 	playlistImage.addEventListener('error', onErrorImage, { once: true });
 
-	playlistTitle.textContent = data[index].title;
+	playlistTitle.textContent = info.title;
 	removeSkeleton(titleSkeleton)
 
-	playlistCount.textContent = data[index].hasOwnProperty('length')
-		? data[index].length
-		: data[index].videoCount
+	playlistCount.textContent = info?.videoCount ?? info.length
 
-	playlistChannel.textContent = data[index].hasOwnProperty('owner')
-		? data[index].owner.name
-		: data[index].author
+	playlistChannel.textContent = info?.author ?? info.owner.name
 
-	playlistChannel.dataset.name = data[index].hasOwnProperty('owner')
-		? data[index].owner.name
-		: data[index].author
+	playlistChannel.dataset.name = info?.author ?? info.owner.name
 
-	playlistChannel.dataset.id = data[index].hasOwnProperty('owner')
-		? data[index].owner.channelID
-		: data[index].authorId
+	playlistChannel.dataset.id = info?.authorId ?? info.owner.channelID
 
 	removeSkeleton(bottomSkeleton)
 
@@ -175,10 +162,13 @@ const fillChannelCard = (channel, index, data) => {
 	let channelVideoCount = channel.querySelector('.card__video-count')
 
 	channel.disabled &&= false;
-	channel.dataset.id = data[index].channelID
-	channel.dataset.name = data[index].name
 
-	channelImage.setAttribute('src', data[index].bestAvatar.url)
+	const info = data[index]
+
+	channel.dataset.id = info.channelID
+	channel.dataset.name = info.name
+
+	channelImage.setAttribute('src', info.bestAvatar.url)
 
 	const onLoadImage = _ => {
 		removeSkeleton(imageSkeleton)
@@ -193,12 +183,12 @@ const fillChannelCard = (channel, index, data) => {
 	channelImage.addEventListener('load', onLoadImage, { once: true });
 	channelImage.addEventListener('error', onErrorImage, { once: true });
 
-	channelTitle.textContent = data[index].name;
+	channelTitle.textContent = info.name;
 	removeSkeleton(titleSkeleton)
 
-	channelDescr.textContent = data[index].descriptionShort;
-	channelSubs.textContent = data[index].subscribers;
-	channelVideoCount.textContent = `${data[index].videos} video`;
+	channelDescr.textContent = info.descriptionShort;
+	channelSubs.textContent = info.subscribers;
+	channelVideoCount.textContent = `${info.videos} video`;
 
 	removeSkeleton(bottomSkeleton)
 
@@ -246,18 +236,14 @@ const resetCard = card => {
 	let recentWin = card.closest('.win')
 
 	if (recentWin && recentWin.classList.contains('search-results')) {
-		const typeAll = {
-			video: '_video',
-			playlist: '_playlist',
-			channel: '_channel'
-		}
+		const typeArray = ['_video', '_playlist', '_channel']
 
-		for (let key in typeAll) {
-			if (card.classList.contains(typeAll[key])) {
-				card.classList.remove(typeAll[key]);
-				break;
+		typeArray.forEach(type => {
+			if (card.classList.contains(type)) {
+				card.classList.remove(type);
+				return
 			}
-		}
+		});
 	}
 
 	skeletonAll = null

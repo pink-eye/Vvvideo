@@ -6,8 +6,7 @@ let hasContinuation = null;
 const disablePages = parent => {
 	let btns = parent.querySelector('.btns');
 
-	if (btns)
-		btns.hidden ||= true;
+	btns && (btns.hidden ||= true)
 
 	btns = null;
 }
@@ -15,8 +14,7 @@ const disablePages = parent => {
 const enablePages = parent => {
 	let btns = parent.querySelector('.btns');
 
-	if (btns)
-		btns.hidden &&= false;
+	btns &&	(btns.hidden &&= false);
 
 	btns = null;
 }
@@ -53,22 +51,22 @@ const resetPages = async parent => {
 }
 
 const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
-	typeCard !== 'author'
-		? resetGrid(parent)
-		: resetGridAuthorCard()
+	typeCard !== 'author' ? resetGrid(parent) : resetGridAuthorCard()
 
 	if (increment < itemArray.length - 1) {
+		let firstCard = cardAll[0]
+		firstCard.focus()
 
-		cardAll[0].focus()
-
-		increment += 20;
+		increment += 20
 		getDataMore(typeCard)
 		recycleDOM(increment, cardAll, typeCard)
-		scrollToElem(getCoordY(cardAll[0]))
+		scrollToElem(getCoordY(firstCard))
 		page++
 		updateCount(page, parent)
 
 		btnPrevPage.disabled &&= false
+
+		firstCard = null
 	}
 
 	if (page * 20 > itemArray.length - 1)
@@ -83,16 +81,18 @@ const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
 	if (page === 2) btnPrevPage.disabled = true
 
 	if (page > 1) {
-
-		cardAll[0].focus()
+		let firstCard = cardAll[0]
+		firstCard.focus()
 
 		increment -= 20;
 		recycleDOM(increment, cardAll, typeCard)
-		scrollToElem(getCoordY(cardAll[0]))
+		scrollToElem(getCoordY(firstCard))
 		page--
 		updateCount(page, parent)
 
 		btnNextPage.disabled &&= false
+
+		firstCard = null
 	}
 }
 
@@ -128,9 +128,10 @@ const getDataMore = async typeCard => {
 
 const recycleDOM = async (increment, cardAll, typeCard) => {
 	for (let index = 0, length = cardAll.length; index < length; index++) {
-		let card = cardAll[index];
+		const card = cardAll[index];
+		const nextItem = itemArray[index + increment]
 
-		if (itemArray[index + increment]) {
+		if (nextItem) {
 			card.hidden &&= false
 
 			switch (typeCard) {
@@ -139,11 +140,13 @@ const recycleDOM = async (increment, cardAll, typeCard) => {
 					break;
 
 				case "author":
+					const { avatar, name, channelId } = nextItem
+
 					let authorParams = {
 						parent: card,
-						avatarSrc: itemArray[index + increment].avatar,
-						name: itemArray[index + increment].name,
-						id: itemArray[index + increment].channelId,
+						avatarSrc: avatar,
+						name: name,
+						id: channelId,
 					}
 
 					fillAuthorCard(authorParams);
@@ -156,9 +159,12 @@ const recycleDOM = async (increment, cardAll, typeCard) => {
 					break;
 
 				case "rich":
-					card.dataset.win = `${itemArray[index + increment].type}`
-					card.classList.add(`_${itemArray[index + increment].type}`);
-					switch (itemArray[index + increment].type) {
+					const { type } = nextItem
+
+					card.dataset.win = `${type}`
+					card.classList.add(`_${type}`);
+
+					switch (type) {
 						case 'video':
 							fillVideoCard(card, index + increment, itemArray);
 							break;
@@ -179,8 +185,7 @@ const recycleDOM = async (increment, cardAll, typeCard) => {
 const updateCount = (page, parent) => {
 	let gridCount = parent.querySelector('.grid__count');
 
-	if (gridCount)
-		gridCount.textContent = page;
+	gridCount && (gridCount.textContent = page);
 
 	gridCount = null;
 }

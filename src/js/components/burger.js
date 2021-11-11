@@ -1,6 +1,5 @@
 const isLargeScreen = _ => (innerWidth - 1600) / 2 > 226
 
-
 const toggleMenu = _ => {
 	let burger = _io_q('.header').querySelector('.burger')
 	let sidebar = _io_q('.sidebar');
@@ -16,9 +15,7 @@ const toggleMenu = _ => {
 			_io_q('.main__content').style.setProperty('--margin', '227px');
 
 		const onOpenMenu = _ => {
-			sidebarBtnActive
-				? sidebarBtnActive.focus()
-				: sidebarBtn.focus()
+			sidebarBtnActive ? sidebarBtnActive.focus() : sidebarBtn.focus()
 
 			sidebarBtn = null
 			sidebarBtnActive = null

@@ -39,7 +39,7 @@ const handleKeyDown = e => {
 
 			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } = scrapeInfoToSwitchPage(winActive)
 
-			if (tabContentActive) winActive = tabContentActive
+			tabContentActive && (winActive = tabContentActive)
 
 			// K
 			if (e.keyCode === 75) {
