@@ -87,7 +87,7 @@ const convertSecondsToDuration = lengthSeconds => {
 	seconds = Math.floor(seconds % 60);
 	seconds = (seconds >= 10) ? seconds : `0${seconds}`;
 
-	if (hours != '')
+	if (hours !== '')
 		return `${hours}:${minutes}:${seconds}`;
 
 	return `${minutes}:${seconds}`;

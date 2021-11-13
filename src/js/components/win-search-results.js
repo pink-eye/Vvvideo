@@ -1,12 +1,22 @@
+let lastSearchResult = null
+
 const openWinSearchResults = async _ => {
 	let searchResults = _io_q('.search-results')
 	let searchBar = _io_q('.header').querySelector('.search__bar');
 	let cardAll = searchResults.querySelectorAll('.card');
 
 	try {
-		let data = storage.settings.enableProxy
-			? await API.scrapeSearchResultsProxy(searchBar.value, getProxyOptions())
-			: await API.scrapeSearchResults(searchBar.value)
+		let data = null
+
+		if (lastSearchResult?.originalQuery !== searchBar.value) {
+			data = storage.settings.enableProxy
+				? await API.scrapeSearchResultsProxy(searchBar.value, getProxyOptions())
+				: await API.scrapeSearchResults(searchBar.value)
+
+			lastSearchResult = data
+		}
+
+		data ||= lastSearchResult
 
 		let { items, continuation } = data
 

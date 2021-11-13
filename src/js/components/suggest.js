@@ -63,10 +63,12 @@ const chooseSuggest = (parent, direction) => {
 		if (lastSelected !== null) {
 			const index = direction === 40 ? lastSelected + 1 : lastSelected - 1
 			const sparedIndex = direction === 40 ? 0 : suggestAll.length - 1
-			const nextSelect = suggestAll[index] ?? suggestAll[sparedIndex]
+			let nextSelect = suggestAll[index] ?? suggestAll[sparedIndex]
 
 			nextSelect.classList.add('_selected');
 			lastSelected = suggestAll[index] ? index : sparedIndex
+
+			nextSelect = null
 		} else {
 			suggestAll[0].classList.add('_selected');
 			lastSelected = 0

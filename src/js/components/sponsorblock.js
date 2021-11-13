@@ -28,7 +28,7 @@ const getSegmentsSB = async videoId => {
 
 		data = null
 	} catch (error) {
-		showToast('error', error.message)
+
 	}
 	finally {
 		video = null

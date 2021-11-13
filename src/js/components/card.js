@@ -72,9 +72,7 @@ const fillVideoCard = (video, index, data) => {
 	videoChannel.dataset.id = info?.authorId ?? info.author.channelID
 
 	videoDuration.textContent = info.hasOwnProperty('lengthSeconds')
-		? info.hasOwnProperty('simpleText')
-			? info.lengthSeconds.simpleText
-			: convertSecondsToDuration(info.lengthSeconds)
+		? info.lengthSeconds?.simpleText ?? convertSecondsToDuration(info.lengthSeconds)
 		: convertSecondsToDuration(info.duration)
 
 	removeSkeleton(bottomSkeleton)
