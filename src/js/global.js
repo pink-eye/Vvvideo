@@ -248,3 +248,39 @@ const handleClickLink = event => {
 }
 
 const hasFocus = el => document.activeElement === el
+
+const getHighestVideo = formats => API.YTDLChooseFormat(formats, 'highestvideo')
+
+const getHighestAudio = formats => API.YTDLChooseFormat(formats, 'highestaudio')
+
+const filterFormats = (formats, fn) => Object.values(formats).filter(fn)
+
+const filterVideoWebm = formats => filterFormats(formats,
+	format =>
+		format.container === 'webm' &&
+		format.hasVideo &&
+		!format.isDashMPD &&
+		!format?.type)
+
+const filterVideoMP4NoAudio = formats => filterFormats(formats,
+	format =>
+		format.container === 'mp4' &&
+		format.hasVideo &&
+		!format.hasAudio &&
+		!format.isDashMPD &&
+		!format?.type)
+
+const filterVideoAndAudio = formats => filterFormats(formats, format => format.hasAudio && format.hasVideo)
+
+const filterHLS = formats => filterFormats(formats, format => format.isHLS && format.hasAudio && format.hasVideo)
+
+const getPreferedQuality = formats => {
+
+	if (formats.length === 0) return null
+
+	const { defaultQuality } = storage.settings
+
+	return defaultQuality === 'highest'
+		? getHighestVideo(formats)
+		: formats.find(el => el.qualityLabel.includes(defaultQuality))
+}
