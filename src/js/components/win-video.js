@@ -21,32 +21,81 @@ const insertQualityList = videoFormatAll => {
 	qualityList = null
 }
 
-const getHighestVideo = formats => API.YTDLChooseFormat(formats, 'highestvideo')
+const disableAudio = _ => {
+	let audio = _io_q('audio');
 
-const getHighestAudio = formats => API.YTDLChooseFormat(formats, 'highestaudio')
+	if (audio) {
+		resetMediaEl(audio)
+		audio.remove()
+	}
 
-const getDefaultFormat = formats => API.YTDLChooseFormat(formats, 'highest')
+	audio = null
+}
 
-const filterFormats = (formats, fn) => Object.values(formats).filter(fn)
+const prepareVideoLive = formats => {
+	let video = _io_q('video');
 
-const filterVideoWebm = formats => filterFormats(formats,
-	format =>
-		format.container === 'webm'
-		&& format.hasVideo)
+	videoFormatAll = filterHLS(formats)
 
-const filterVideoMP4NoAudio = formats => filterFormats(formats,
-	format =>
-		format.container === 'mp4'
-		&& format.hasVideo
-		&& !format.hasAudio)
+	disableAudio()
 
-const filterHLS = formats => filterFormats(formats, format => format.isHLS && format.hasAudio && format.hasVideo)
+	hls = new Hls();
 
-const isInvalidFormats = formats => formats.find(el => el.type === 'FORMAT_STREAM_TYPE_OTF')
+	let currentQuality = getPreferedQuality(videoFormatAll) ?? videoFormatAll[0]
 
-const getPreferedQuality = formats => storage.settings.defaultQuality === 'highest'
-	? getHighestVideo(formats)
-	: formats.find(el => el.qualityLabel.includes(storage.settings.defaultQuality))
+	hls.loadSource(currentQuality.url);
+	qualityCurrent.textContent = currentQuality.qualityLabel
+
+	hls.attachMedia(video);
+
+	const handleError = (event, { fatal, type }) => {
+		if (fatal) {
+			switch (type) {
+				case Hls.ErrorTypes.NETWORK_ERROR:
+					showToast('error', 'Fatal network error encountered, try to recover...');
+					hls.startLoad();
+					break;
+				case Hls.ErrorTypes.MEDIA_ERROR:
+					showToast('error', 'Fatal media error encountered, try to recover...');
+					hls.recoverMediaError();
+					break;
+				default:
+					showToast('error', 'Fatal error was occured. Cannot recover :(');
+					hls.destroy();
+					break;
+			}
+		}
+	}
+
+	hls.on(Hls.Events.ERROR, handleError);
+
+	video = null
+}
+
+const prepareVideoOnly = formats => {
+	videoFormatAll = filterVideoAndAudio(formats)
+
+	disableAudio()
+}
+
+const prepareVideoAndAudio = (audio, formats) => {
+	let ss = storage.settings
+
+	switch (ss.defaltVideoFormat) {
+		case 'mp4':
+			videoFormatAll = filterVideoMP4NoAudio(formats)
+			break;
+		case 'webm':
+			videoFormatAll = filterVideoWebm(formats)
+			break;
+	}
+
+	audio.src = getHighestAudio(formats).url
+
+	if (videoFormatAll.length === 0) prepareVideoOnly(formats)
+
+	audio = null
+}
 
 let hls = null
 
@@ -89,8 +138,6 @@ const openWinVideo = async id => {
 
 			const { formats, videoDetails } = data
 
-			console.log(formats);
-
 			if (videoDetails.isLive)
 				video.classList.add('_live')
 
@@ -102,74 +149,20 @@ const openWinVideo = async id => {
 				const onLoadedData = _ => {
 					if (videoSkeleton)
 						removeSkeleton(videoSkeleton)
+
+					videoInstance = null
 				}
 
 				// FILL MEDIA
 				if (formats.length > 0) {
-					if (videoDetails.isLive) {
-						videoFormatAll = filterHLS(formats)
+					if (videoDetails.isLive)
+						prepareVideoLive(formats)
+					else {
+						ss.disableSeparatedStreams
+							? prepareVideoOnly(formats)
+							: prepareVideoAndAudio(audioInstance, formats)
 
-						if (audioInstance) {
-							resetMediaEl(audioInstance)
-							audioInstance.remove()
-						}
-
-						hls = new Hls();
-
-						let currentQuality = getPreferedQuality(videoFormatAll)
-
-						if (!currentQuality)
-							currentQuality = videoFormatAll[0]
-
-						hls.loadSource(currentQuality.url);
-						qualityCurrent.textContent = currentQuality.qualityLabel
-
-						hls.attachMedia(videoInstance);
-
-						const handleError = (event, data) => {
-							if (data.fatal) {
-								switch (data.type) {
-									case Hls.ErrorTypes.NETWORK_ERROR:
-										showToast('error', 'Fatal network error encountered, try to recover...');
-										hls.startLoad();
-										break;
-									case Hls.ErrorTypes.MEDIA_ERROR:
-										showToast('error', 'Fatal media error encountered, try to recover...');
-										hls.recoverMediaError();
-										break;
-									default:
-										showToast('error', 'Fatal error was occured. Cannot recover :(');
-										hls.destroy();
-										break;
-								}
-							}
-						}
-
-						hls.on(Hls.Events.ERROR, handleError);
-					} else {
-						if (ss.disableSeparatedStreams) {
-							videoFormatAll = API.YTDLFilterFormats(formats)
-
-							if (audioInstance) {
-								resetMediaEl(audioInstance)
-								audioInstance.remove()
-							}
-						} else {
-							switch (ss.defaltVideoFormat) {
-								case 'mp4':
-									videoFormatAll = filterVideoMP4NoAudio(formats)
-									break;
-								case 'webm':
-									videoFormatAll = filterVideoWebm(formats)
-									break;
-							}
-							audioInstance.src = getHighestAudio(formats).url
-						}
-
-						let currentQuality = getPreferedQuality(videoFormatAll)
-
-						if (!currentQuality)
-							currentQuality = getDefaultFormat(formats)
+						let currentQuality = getPreferedQuality(videoFormatAll) ?? videoFormatAll.at(-1)
 
 						videoInstance.src = currentQuality.url
 						qualityCurrent.textContent = currentQuality.qualityLabel
