@@ -176,12 +176,10 @@ const openWinVideo = async id => {
 
 				// FILL VIDEO INFO
 
-				if (!ss.disableStoryboard) {
-					if (videoDetails.storyboards.length > 0)
-						progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
-					else progressStoryboard.remove()
-				} else if (progressStoryboard)
-					progressStoryboard.remove()
+				if (ss.disableStoryboard || videoDetails.storyboards.length === 0) progressStoryboard.remove()
+
+				if (progressStoryboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
+					progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
 
 				if (videoDetails.title !== videoTitle.textContent)
 					videoTitle.textContent = videoDetails.title
