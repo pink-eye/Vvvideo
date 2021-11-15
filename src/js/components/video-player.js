@@ -766,7 +766,7 @@ const initVideoPlayer = _ => {
 			const controlsSpeed = controls.querySelector('.controls__speed')
 
 			initDropdown(controlsSpeed, btn => {
-				audio.playbackRate &&= btn.dataset.speed
+				audio && (audio.playbackRate = btn.dataset.speed)
 
 				video.playbackRate = btn.dataset.speed
 
