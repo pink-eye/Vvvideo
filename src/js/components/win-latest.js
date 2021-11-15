@@ -1,91 +1,71 @@
 let storage = {}
-let latestArray = null;
+let latestArray = null
 
-const getChannelVideosLocalScraper = channelId => new Promise(async (resolve, reject) => {
-	try {
-		const data = await API.scrapeChannelVideos(channelId);
+const getChannelVideosLocalScraper = channelId =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const data = await API.scrapeChannelVideos(channelId)
+			let { items } = data
 
-		startIndicator()
+			startIndicator()
 
-		for (let index = 0, length = data.items.length; index < length; index++) {
-			let video = data.items[index];
+			for (let index = 0, length = items.length; index < length; index++) {
+				const video = items[index]
 
-			video.liveNow
-				? video.publishedDate = new Date().getTime()
-				: video.publishedDate = calculatePublishedDate(video.publishedText)
+				video.publishedDate = video.liveNow ? new Date().getTime() : calculatePublishedDate(video.publishedText)
+			}
 
-			video = null
+			resolve(items)
+		} catch (error) {
+			showToast("error", error.message)
+			resetIndicator()
+			reject(error)
 		}
-
-		resolve(data.items)
-	} catch (error) {
-		showToast('error', error.message)
-		resetIndicator()
-		reject(error)
-	}
-})
+	})
 
 const openWinLatest = async _ => {
-	let latest = _io_q('.latest');
+	let latest = _io_q(".latest")
 	let promises = []
-	let videoAll = latest.querySelectorAll('.card');
+	let videoAll = latest.querySelectorAll(".card")
 
 	if (storage.subscriptions.length > 0) {
-		try {
-			let btnLatest = document.querySelector('button[data-win="latest"]');
+		let btnLatest = document.querySelector('button[data-win="latest"]')
 
-			for (let index = 0, length = storage.subscriptions.length; index < length; index++) {
-				const subscription = storage.subscriptions[index];
+		for (let index = 0, length = storage.subscriptions.length; index < length; index++) {
+			const subscription = storage.subscriptions[index]
 
-				if (btnLatest.classList.contains('_active')) {
-					promises.push(getChannelVideosLocalScraper(subscription.channelId))
-				} else {
-					latestArray.length = 0
-					return
-				}
-			}
-
-			latestArray = [].concat.apply([], await Promise.all(promises));
-			latestArray = await Promise.all(latestArray.sort((a, b) => b.publishedDate - a.publishedDate))
-			showToast('good', 'Latest uploads is got successfully')
-			promises.length = 0
-
-			resetIndicator()
-
-			latestArray.length > videoAll.length
-				? initPages(latest, latestArray, videoAll, 'video')
-				: disablePages(latest)
-
-			for (let index = 0, length = videoAll.length; index < length; index++) {
-				let video = videoAll[index];
-
-				latestArray[index]
-					? fillVideoCard(video, index, latestArray)
-					: video.hidden = true;
-			}
-
-			btnLatest = null;
-		} catch (error) {
-			if (!latestArray) return
-
-			latestArray.length > videoAll.length
-				? initPages(latest, latestArray, videoAll, 'video')
-				: disablePages(latest)
-
-			for (let index = 0, length = videoAll.length; index < length; index++) {
-				let video = videoAll[index];
-
-				latestArray[index]
-					? fillVideoCard(video, index, latestArray)
-					: video.hidden = true;
+			if (btnLatest.classList.contains("_active")) {
+				promises.push(getChannelVideosLocalScraper(subscription.channelId))
+			} else {
+				latestArray.length = 0
+				return
 			}
 		}
-	} else {
-		for (let index = 0, length = videoAll.length; index < length; index++)
-			videoAll[index].hidden = true;
+
+		btnLatest = null
+
+		try {
+			latestArray = [].concat.apply([], await Promise.all(promises))
+			latestArray = await Promise.all(latestArray.sort((a, b) => b.publishedDate - a.publishedDate))
+
+			showToast("good", "Latest uploads is got successfully")
+		} catch (error) {
+			showToast("error", error.message)
+		}
+
+		promises.length = 0
+
+		resetIndicator()
+
+		latestArray?.length > videoAll.length ? initPages(latest, latestArray, videoAll, "video") : disablePages(latest)
 	}
 
-	videoAll = null;
-	latest = null;
-}
+	for (let index = 0, length = videoAll.length; index < length; index++) {
+		let video = videoAll[index]
 
+		latestArray?.[index] ? fillVideoCard(video, index, latestArray) : (video.hidden = true)
+	}
+
+	videoAll = null
+	latest = null
+}
