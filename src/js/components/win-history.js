@@ -1,29 +1,23 @@
 const openWinHistory = _ => {
-	if (!storage.settings.disableHistory) {
-		let history = _io_q('.history')
-		let videoAll = history.querySelectorAll('.card');
-		let sh = storage.history
+	if (storage.settings.disableHistory) return
 
-		sh.length > videoAll.length
-			? initPages(history, sh, videoAll, 'video')
-			: disablePages(history)
+	const { history } = storage
 
-		for (let index = 0, length = videoAll.length; index < length; index++) {
-			let video = videoAll[index];
+	let historyWin = _io_q(".history")
+	let videoAll = historyWin.querySelectorAll(".card")
 
-			video.classList.add('_history-video');
+	history.length > videoAll.length ? initPages(history, history, videoAll, "video") : disablePages(history)
 
-			sh[index]
-				? fillVideoCard(video, index, sh)
-				: video.hidden = true;
+	for (let index = 0, length = videoAll.length; index < length; index++) {
+		const video = videoAll[index]
 
-			video = null;
-		}
+		video.classList.add("_history-video")
 
-		history = null
-		videoAll = null
-		sh = null
+		history[index] ? fillVideoCard(video, index, history) : (video.hidden = true)
 	}
+
+	history = null
+	videoAll = null
 }
 
 const isThisRecentHistoryItem = newItem => storage.history.length > 0 && newItem.id === storage.history[0].id
@@ -42,21 +36,20 @@ const keepHistoryArray = _ => {
 	let numWasteItemAll = storage.history.length - storage.settings.maxHistoryLength
 
 	if (numWasteItemAll <= 0) {
-		for (let index = 0, length = numWasteItemAll; index < length; index++)
-			storage.history.pop()
+		for (let index = 0, length = numWasteItemAll; index < length; index++) storage.history.pop()
 	}
 }
 
 const scrapeVideoInfoFromCard = card => {
 	return {
 		id: card.dataset.id,
-		title: card.querySelector('.card__title span').textContent,
-		author: card.querySelector('.card__channel').textContent,
-		authorId: card.querySelector('.card__channel').dataset.id,
+		title: card.querySelector(".card__title span").textContent,
+		author: card.querySelector(".card__channel").textContent,
+		authorId: card.querySelector(".card__channel").dataset.id,
 		bestThumbnail: {
-			url: card.querySelector('.card__image img').src
+			url: card.querySelector(".card__image img").src,
 		},
-		lengthSeconds: card.querySelector('.card__duration').textContent
+		lengthSeconds: card.querySelector(".card__duration").textContent,
 	}
 }
 
@@ -69,9 +62,9 @@ const scrapeVideoInfoFromData = data => {
 		author: videoDetails.author.name,
 		authorId: videoDetails.author.id,
 		bestThumbnail: {
-			url: videoDetails.thumbnails.at(-1).url
+			url: videoDetails.thumbnails.at(-1).url,
 		},
-		lengthSeconds: convertSecondsToDuration(videoDetails.lengthSeconds)
+		lengthSeconds: convertSecondsToDuration(videoDetails.lengthSeconds),
 	}
 }
 
@@ -84,7 +77,7 @@ const saveVideoInHistory = (methodToScrapeInfo, arg) => {
 		if (!isThisRecentHistoryItem(newItem)) {
 			let sameItem = getSameHistoryItem(newItem)
 
-			if (sameItem && sameItem.hasOwnProperty('watchedTime')) {
+			if (sameItem && sameItem.hasOwnProperty("watchedTime")) {
 				newItem.watchedTime = sameItem.watchedTime
 				removeSameHistoryItem(newItem)
 			}
@@ -102,23 +95,20 @@ const clearHistory = async _ => {
 		storage.history.length = 0
 		await API.writeStorage(storage)
 
-		if (!storage.settings.disableHistory)
-			showToast('good', "History's been cleaned")
+		if (!storage.settings.disableHistory) showToast("good", "History's been cleaned")
 	} else {
-
-		if (!storage.settings.disableHistory)
-			showToast('info', "History's empty")
+		if (!storage.settings.disableHistory) showToast("info", "History's empty")
 	}
 }
 
 const disableHistory = _ => {
 	clearHistory()
 
-	let history = _io_q('.history')
+	let history = _io_q(".history")
 	let sidebarBtnHistory = document.querySelector('[data-win="history"]')
 
 	history.remove()
-	sidebarBtnHistory.closest('.sidebar__item').remove()
+	sidebarBtnHistory.closest(".sidebar__item").remove()
 
 	history = null
 	sidebarBtnHistory = null
@@ -129,13 +119,14 @@ const rememberWatchedTime = _ => {
 
 	if (disableHistory && dontRememberWatchedTime) return
 
-	let videoParent = _io_q('.video');
-	let video = videoParent.querySelector('video');
+	let videoParent = _io_q(".video")
+	let video = videoParent.querySelector("video")
 
-	let videoId = videoParent.dataset.id
 	let watchedTime = video.currentTime
 
-	if (watchedTime === 0 || watchedTime === video.duration) return
+	if (watchedTime === 0) return
+
+	let videoId = videoParent.dataset.id
 
 	for (let index = 0, length = storage.history.length; index < length; index++) {
 		if (storage.history[index].id === videoId) {
@@ -150,18 +141,21 @@ const rememberWatchedTime = _ => {
 	video = null
 }
 
+const getItemWithWatchedTime = videoId =>
+	storage.history.find(item => item.id === videoId && item.hasOwnProperty("watchedTime"))
+
 const getWatchedtTime = videoId => {
 	const { disableHistory, dontRememberWatchedTime } = storage.settings
 
 	if (disableHistory && dontRememberWatchedTime) return
 
-	const requiredItem = storage.history.find(item => item.id === videoId && item.hasOwnProperty('watchedTime'))
+	const requiredItem = getItemWithWatchedTime(videoId)
 
 	return requiredItem && requiredItem.watchedTime
 }
 
 const calculateWatchedProgress = videoId => {
-	const requiredItem = storage.history.find(item => item.id === videoId && item.hasOwnProperty('watchedTime'))
+	const requiredItem = getItemWithWatchedTime(videoId)
 
 	let lengthSeconds = convertDurationToSeconds(requiredItem.lengthSeconds)
 
