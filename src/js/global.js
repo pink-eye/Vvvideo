@@ -181,7 +181,7 @@ const calculatePublishedDate = publishedText => {
 }
 
 const isValidURLYT = url => {
-	const regExp = /^(?:https?:\/\/)?(?:www\.)?youtube\.com(?:\S+)?$/;
+	const regExp = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/
 	return url.match(regExp) && url.match(regExp).length > 0;
 }
 
