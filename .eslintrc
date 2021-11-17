@@ -1,0 +1,15 @@
+{
+	"plugins": [],
+	"parserOptions": { "ecmaVersion": "latest" },
+	"extends": ["airbnb-base"],
+	"env": {
+		"es2021": true,
+		"browser": true,
+		"node": true
+	},
+	"rules": {},
+	"globals": {
+        "_": "readonly",
+        "API": "readonly"
+    }
+}
