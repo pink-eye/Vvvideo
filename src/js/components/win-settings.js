@@ -1,65 +1,65 @@
 const openWinSettings = _ => {
-	const settings = _io_q('.settings');
+	const settings = _io_q('.settings')
 
 	// IMPLEMENT IMPORT
 
 	const impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
 	const impExpField = settings.querySelector('.imp-exp__field')
 
-	impExpField.addEventListener('change', handleFile);
+	impExpField.addEventListener('change', handleFile)
 
-	impExpBtn.addEventListener('click', handleClickImport);
+	impExpBtn.addEventListener('click', handleClickImport)
 
 	// CHECKBOXES
 
-	const checkboxAll = settings.querySelectorAll('input[type="checkbox"]');
+	const checkboxAll = settings.querySelectorAll('input[type="checkbox"]')
 
-	for (let index = 0, length = checkboxAll.length; index < length; index++) {
-		const checkbox = checkboxAll[index];
+	for (let index = 0, { length } = checkboxAll; index < length; index += 1) {
+		const checkbox = checkboxAll[index]
 
-		checkbox.addEventListener('change', handleChangeCheckbox);
+		checkbox.addEventListener('change', handleChangeCheckbox)
 	}
 
 	// INPUTS
 
-	const inputAll = settings.querySelectorAll('input[type="text"]');
+	const inputAll = settings.querySelectorAll('input[type="text"]')
 
-	for (let index = 0, length = inputAll.length; index < length; index++) {
-		const input = inputAll[index];
+	for (let index = 0, { length } = inputAll; index < length; index += 1) {
+		const input = inputAll[index]
 
-		input.addEventListener('input', handleInputField);
+		input.addEventListener('input', handleInputField)
 	}
 }
 
 const resetWinSettings = _ => {
-	let settings = _io_q('.settings');
+	let settings = _io_q('.settings')
 
 	// RESET IMPORT
 
 	let impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
 	let impExpField = settings.querySelector('.imp-exp__field')
 
-	impExpField.removeEventListener('change', handleFile);
-	impExpBtn.removeEventListener('click', handleClickImport);
+	impExpField.removeEventListener('change', handleFile)
+	impExpBtn.removeEventListener('click', handleClickImport)
 
 	// RESET CHECKBOXES
 
-	let checkboxAll = settings.querySelectorAll('input[type="checkbox"]');
+	let checkboxAll = settings.querySelectorAll('input[type="checkbox"]')
 
-	for (let index = 0, length = checkboxAll.length; index < length; index++) {
-		const checkbox = checkboxAll[index];
+	for (let index = 0, { length } = checkboxAll; index < length; index += 1) {
+		const checkbox = checkboxAll[index]
 
-		checkbox.removeEventListener('change', handleChangeCheckbox);
+		checkbox.removeEventListener('change', handleChangeCheckbox)
 	}
 
 	// RESET INPUTS
 
-	let inputAll = settings.querySelectorAll('input[type="text"]');
+	let inputAll = settings.querySelectorAll('input[type="text"]')
 
-	for (let index = 0, length = inputAll.length; index < length; index++) {
-		const input = inputAll[index];
+	for (let index = 0, { length } = inputAll; index < length; index += 1) {
+		const input = inputAll[index]
 
-		input.removeEventListener('input', handleInputField);
+		input.removeEventListener('input', handleInputField)
 	}
 
 	settings = null
@@ -70,12 +70,12 @@ const resetWinSettings = _ => {
 }
 
 const makeResultImport = (classResult, tip) => {
-	let settings = _io_q('.settings');
+	let settings = _io_q('.settings')
 	let impExpBody = settings.querySelector('.imp-exp')
 	let impExpTip = settings.querySelector('.imp-exp__tip')
 
 	if (!impExpBody.classList.contains(classResult)) {
-		impExpBody.classList.add(classResult);
+		impExpBody.classList.add(classResult)
 		impExpTip.textContent = tip
 	}
 
@@ -85,28 +85,28 @@ const makeResultImport = (classResult, tip) => {
 }
 
 const readInputFile = _ => {
-	const validTip = "Succesfully! Wait for refresh..."
-	const failTip = "Fail... :("
+	const validTip = 'Succesfully! Wait for refresh...'
+	const failTip = 'Fail... :('
 
-	let settings = _io_q('.settings');
+	let settings = _io_q('.settings')
 	let impExpField = settings.querySelector('.imp-exp__field')
 
-	let reader = new FileReader();
-	reader.readAsText(impExpField.files[0]);
+	const reader = new FileReader()
+	reader.readAsText(impExpField.files[0])
 
-	const onLoadReader = _ => {
-		let data = JSON.parse(reader.result)
+	const onLoadReader = async _ => {
+		const data = JSON.parse(reader.result)
 
-		if (!data.hasOwnProperty('subscriptions'))
-			makeResultImport('_invalid', failTip);
+		if (!data?.subscriptions) makeResultImport('_invalid', failTip)
 		else {
 			buildStorage(data)
-			makeResultImport('_valid', validTip);
-			API.writeStorage(storage).then(reloadApp);
+			makeResultImport('_valid', validTip)
+			await API.writeStorage(storage)
+			setTimeout(reloadApp, 3000)
 		}
 	}
 
-	reader.addEventListener('load', onLoadReader, { once: true });
+	reader.addEventListener('load', onLoadReader, { once: true })
 
 	settings = null
 	impExpField = null
@@ -114,10 +114,10 @@ const readInputFile = _ => {
 
 const handleClickImport = _ => {
 	const invalidTip = "I've not found a JSON file.\n Ensure you interacted this area"
-	let settings = _io_q('.settings');
+	let settings = _io_q('.settings')
 	let impExpField = settings.querySelector('.imp-exp__field')
 
-	impExpField.value === '' || (/\.(json)$/i).test(impExpField.files[0].name) === false
+	impExpField.value === '' || /\.(json)$/i.test(impExpField.files[0].name) === false
 		? makeResultImport('_invalid', invalidTip)
 		: readInputFile()
 
@@ -126,7 +126,7 @@ const handleClickImport = _ => {
 }
 
 const handleFile = _ => {
-	let settings = _io_q('.settings');
+	let settings = _io_q('.settings')
 	let impExpBody = settings.querySelector('.imp-exp')
 	let impExpTip = settings.querySelector('.imp-exp__tip')
 	let impExpField = settings.querySelector('.imp-exp__field')
@@ -142,23 +142,23 @@ const handleFile = _ => {
 }
 
 const setTheme = themeOption => {
-	if (themeOption === 'light') theme.setMode('light');
-	if (themeOption === 'dark') theme.setMode('dark');
-	if (themeOption === 'system') theme.setMode(theme.getSystemScheme());
+	if (themeOption === 'light') theme.setMode('light')
+	if (themeOption === 'dark') theme.setMode('dark')
+	if (themeOption === 'system') theme.setMode(theme.getSystemScheme())
 }
 
 const toggleTransition = isDisabled => {
 	let modalContainer = document.querySelector('.modal__container')
 
 	if (isDisabled) {
-		document.documentElement.style.setProperty('--trns-time-default', '0');
-		document.documentElement.style.setProperty('--trns-time-fast', '0');
-		document.documentElement.style.setProperty('--trns-time-slow', '0');
+		document.documentElement.style.setProperty('--trns-time-default', '0')
+		document.documentElement.style.setProperty('--trns-time-fast', '0')
+		document.documentElement.style.setProperty('--trns-time-slow', '0')
 		modalContainer.dataset.graphSpeed = 0
 	} else {
-		document.documentElement.style.setProperty('--trns-time-default', '.3s');
-		document.documentElement.style.setProperty('--trns-time-fast', '.1s');
-		document.documentElement.style.setProperty('--trns-time-slow', '1s');
+		document.documentElement.style.setProperty('--trns-time-default', '.3s')
+		document.documentElement.style.setProperty('--trns-time-fast', '.1s')
+		document.documentElement.style.setProperty('--trns-time-slow', '1s')
 		modalContainer.dataset.graphSpeed = 300
 	}
 
@@ -166,85 +166,82 @@ const toggleTransition = isDisabled => {
 }
 
 const buildStorage = data => {
+	if (data?.subscriptions) {
+		const { subscriptions } = data
 
-	if (data.hasOwnProperty('subscriptions')) {
+		if (subscriptions.length > 0) {
+			const { channelId, name } = subscriptions[0]
 
-		if (data.subscriptions.length > 0) {
-
-			if (data.subscriptions[0].hasOwnProperty('channelId') &&
-				data.subscriptions[0].hasOwnProperty('name')) {
-				storage.subscriptions.push(...data.subscriptions)
+			if (channelId && name) {
+				storage.subscriptions.push(...subscriptions)
 			} else {
-				for (let index = 0, length = data.subscriptions.length; index < length; index++) {
-					const subscription = data.subscriptions[index];
+				for (let index = 0, { length } = subscriptions; index < length; index += 1) {
+					const subscription = subscriptions[index]
+					const { url, name } = subscription
 
 					storage.subscriptions.push({
-						channelId: getChannelIdOrUser(subscription.url),
-						name: subscription.name
+						channelId: getChannelIdOrUser(url),
+						name,
 					})
 				}
 			}
 		}
 	}
 
-	if (data.hasOwnProperty('history')) {
+	if (data?.history) {
+		const { history } = data
 
-		if (data.history.length > 0) {
-			storage.history.push(...data.history)
+		if (history.length > 0) {
+			storage.history.push(...history)
 			keepHistoryArray()
 		}
 	}
 
-	if (data.hasOwnProperty('settings')) {
+	if (data?.settings) {
 		storage.settings = {}
 		Object.assign(storage.settings, data.settings)
 	}
 }
 
 const fillWinSettings = async _ => {
-	let ss = storage.settings
-	let settings = _io_q('.settings');
+	const ss = storage.settings
+	const settings = _io_q('.settings')
 
-	let themeDropdown = settings.querySelector('.option__theme');
-	let themeDropdownHead = themeDropdown.querySelector('.dropdown__head');
+	let themeDropdown = settings.querySelector('.option__theme')
+	let themeDropdownHead = themeDropdown.querySelector('.dropdown__head')
 
-	themeDropdownHead.childNodes[0].data = ss.theme === 'system'
-		? 'System default'
-		: ss.theme === 'light'
-			? 'Light'
-			: 'Dark'
+	themeDropdownHead.childNodes[0].data =
+		ss.theme === 'system' ? 'System default' : ss.theme === 'light' ? 'Light' : 'Dark'
 
 	setTheme(ss.theme)
 
-	for (let key in ss) {
-		let checkbox = settings.querySelector(`input#${key}`);
+	const settingsArray = Object.entries(ss)
 
-		if (checkbox) checkbox.checked = ss[`${key}`];
+	for (const [key, value] of settingsArray) {
+		let checkbox = settings.querySelector(`input#${key}`)
 
-		checkbox = null;
+		if (checkbox) checkbox.checked = value
+
+		checkbox = null
 	}
 
-	if (ss.disableTransition)
-		toggleTransition(ss.disableTransition)
+	if (ss.disableTransition) toggleTransition(ss.disableTransition)
 
-	if (ss.disableHistory)
-		disableHistory()
+	if (ss.disableHistory) disableHistory()
 
 	if (ss.defaultQuality !== '1080p') {
-		let qualityDropdown = settings.querySelector('.option__quality');
-		let qualityDropdownHead = qualityDropdown.querySelector('.dropdown__head');
+		let qualityDropdown = settings.querySelector('.option__quality')
+		let qualityDropdownHead = qualityDropdown.querySelector('.dropdown__head')
 
-		qualityDropdownHead.childNodes[0].data = ss.defaultQuality === 'highest'
-			? 'Highest'
-			: ss.defaultQuality
+		qualityDropdownHead.childNodes[0].data = ss.defaultQuality === 'highest' ? 'Highest' : ss.defaultQuality
 
 		qualityDropdown = null
 		qualityDropdownHead = null
 	}
 
 	if (ss.defaltVideoFormat !== 'mp4') {
-		let formatDropdown = settings.querySelector('.option__format');
-		let formatDropdownHead = formatDropdown.querySelector('.dropdown__head');
+		let formatDropdown = settings.querySelector('.option__format')
+		let formatDropdownHead = formatDropdown.querySelector('.dropdown__head')
 
 		formatDropdownHead.childNodes[0].data = ss.defaltVideoFormat
 
@@ -252,12 +249,9 @@ const fillWinSettings = async _ => {
 		formatDropdownHead = null
 	}
 
-	if (ss.proxy.protocol !== 'socks5' &&
-		ss.proxy.host !== '127.0.0.1' &&
-		ss.proxy.port !== 9050) {
-
-		let protocolDropdown = settings.querySelector('.option__protocol');
-		let protocolDropdownHead = protocolDropdown.querySelector('.dropdown__head');
+	if (ss.proxy.protocol !== 'socks5' && ss.proxy.host !== '127.0.0.1' && ss.proxy.port !== 9050) {
+		let protocolDropdown = settings.querySelector('.option__protocol')
+		let protocolDropdownHead = protocolDropdown.querySelector('.dropdown__head')
 
 		protocolDropdownHead.textContent = ss.proxy.protocol
 
@@ -281,65 +275,62 @@ const fillWinSettings = async _ => {
 		inputRegionTrending = null
 	}
 
-
 	themeDropdown = null
 	themeDropdownHead = null
 }
 
 const handleInputField = event => {
-	let input = event.currentTarget
-	let option = input.id
+	const input = event.currentTarget
+	const option = input.id
 
 	switch (option) {
 		case 'host':
 			input.value = formatIP(input.value)
 			storage.settings.proxy.host = isEmpty(input.value) ? '127.0.0.1' : input.value
-			break;
+			break
 
 		case 'port':
 			input.value = formatPort(input.value)
 			storage.settings.proxy.port = isEmpty(input.value) ? 9050 : +input.value
-			break;
+			break
 
 		case 'regionTrending':
 			storage.settings.regionTrending = isEmpty(input.value) ? 'US' : input.value
-			break;
+			break
 
 		case 'maxHistoryLength':
 			storage.settings.maxHistoryLength = isEmpty(input.value) ? 30 : +input.value
-			break;
-
+			break
 	}
 	API.writeStorage(storage)
 }
 
 const handleChangeCheckbox = event => {
-	let checkbox = event.currentTarget
-	let option = checkbox.id
+	const checkbox = event.currentTarget
+	const option = checkbox.id
 
 	storage.settings[`${option}`] = checkbox.checked
 
 	switch (option) {
 		case 'disableTransition':
 			toggleTransition(checkbox.checked)
-			break;
+			break
 
 		case 'enableProxy':
 			checkbox.checked
 				? showToast('info', 'Restart app after the fields is filled in')
 				: showToast('good', 'Restart app')
-			break;
+			break
 
 		case 'notAdaptContent':
-			if (checkbox.checked)
-				_io_q('.main__content').style.setProperty('--margin', '0')
-			break;
+			if (checkbox.checked) _io_q('.main__content').style.setProperty('--margin', '0')
+			break
 
 		case 'disableSearchSuggestions':
 		case 'disableStoryboard':
 		case 'disableHistory':
 			showToast('good', 'Refresh app')
-			break;
+			break
 	}
 
 	API.writeStorage(storage)

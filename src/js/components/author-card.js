@@ -1,10 +1,10 @@
 const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
-	let authorAvatar = parent.querySelector('.author__avatar img');
-	let authorInfo = parent.querySelector('.author__info');
-	let authorName = authorInfo.querySelector('.author__name span');
-	let authorSubs = authorInfo.querySelector('.author__subs span');
-	let avatarSkeleton = parent.querySelector('.avatar-skeleton');
-	let skeletonAll = authorInfo.querySelectorAll('.skeleton');
+	let authorAvatar = parent.querySelector('.author__avatar img')
+	let authorInfo = parent.querySelector('.author__info')
+	let authorName = authorInfo.querySelector('.author__name span')
+	let authorSubs = authorInfo.querySelector('.author__subs span')
+	let avatarSkeleton = parent.querySelector('.avatar-skeleton')
+	let skeletonAll = authorInfo.querySelectorAll('.skeleton')
 
 	parent.disabled &&= false
 
@@ -22,8 +22,8 @@ const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 			showToast('error', 'Could not load images :(')
 		}
 
-		authorAvatar.addEventListener('load', onLoadImage, { once: true });
-		authorAvatar.addEventListener('error', onErrorImage, { once: true });
+		authorAvatar.addEventListener('load', onLoadImage, { once: true })
+		authorAvatar.addEventListener('error', onErrorImage, { once: true })
 	}
 
 	if (!isEmpty(name) && authorName.textContent !== name) {
@@ -47,15 +47,15 @@ const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 }
 
 const resetAuthorCard = parent => {
-	let authorAvatar = parent.querySelector('.author__avatar img');
-	let authorInfo = parent.querySelector('.author__info');
-	let authorName = authorInfo.querySelector('.author__name span');
+	let authorAvatar = parent.querySelector('.author__avatar img')
+	let authorInfo = parent.querySelector('.author__info')
+	let authorName = authorInfo.querySelector('.author__name span')
 	let authorSubs = authorInfo.querySelector('.author__subs span')
-	let skeletonAll = parent.querySelectorAll('.skeleton');
+	let skeletonAll = parent.querySelectorAll('.skeleton')
 
 	if (skeletonAll.length > 0) {
-		for (let index = 0, length = skeletonAll.length; index < length; index++) {
-			const skeleton = skeletonAll[index];
+		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
+			const skeleton = skeletonAll[index]
 			resetSkeleton(skeleton)
 		}
 	}

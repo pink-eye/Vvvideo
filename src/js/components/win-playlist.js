@@ -1,41 +1,42 @@
 const openWinPlaylist = async id => {
-	let playlist = _io_q('.playlist');
-	let playlistName = playlist.querySelector('.playlist__name span');
-	let playlistViews = playlist.querySelector('.playlist__views');
-	let playlistVideoCount = playlist.querySelector('.playlist__video-count');
-	let playlistLastUpdated = playlist.querySelector('.playlist__last-upd');
-	let playlistDuration = playlist.querySelector('.playlist__duration');
-	let titleSkeleton = playlist.querySelector('.title-skeleton');
-	let partSkeletonAll = playlist.querySelectorAll('.part-skeleton');
-	let authorCard = playlist.querySelector('.author');
+	let playlist = _io_q('.playlist')
+	let playlistName = playlist.querySelector('.playlist__name span')
+	let playlistViews = playlist.querySelector('.playlist__views')
+	let playlistVideoCount = playlist.querySelector('.playlist__video-count')
+	let playlistLastUpdated = playlist.querySelector('.playlist__last-upd')
+	let playlistDuration = playlist.querySelector('.playlist__duration')
+	let titleSkeleton = playlist.querySelector('.title-skeleton')
+	let partSkeletonAll = playlist.querySelectorAll('.part-skeleton')
+	let authorCard = playlist.querySelector('.author')
 
 	try {
-		let data = storage.settings.enableProxy
+		const data = storage.settings.enableProxy
 			? await API.scrapePlaylistVideosProxy(id, getProxyOptions())
 			: await API.scrapePlaylistVideos(id)
 
-		if (playlistName.textContent !== data.title)
-			playlistName.textContent = data.title
+		const { items } = data
+
+		if (playlistName.textContent !== data.title) playlistName.textContent = data.title
 
 		removeSkeleton(titleSkeleton)
 
-		playlistVideoCount.textContent = `${data.items.length} / ${data.estimatedItemCount} available videos`
+		playlistVideoCount.textContent = `${items.length} / ${data.estimatedItemCount} available videos`
 		playlistViews.textContent = normalizeCount(data.views)
 
 		playlistLastUpdated.textContent = data.lastUpdated
 
 		let duration = 0
 
-		for (let index = 0, length = data.items.length; index < length; index++) {
-			const video = data.items[index];
+		for (let index = 0, { length } = items; index < length; index += 1) {
+			const video = items[index]
 			duration += video.durationSec
 		}
 
 		playlistDuration.textContent = convertSecondsToDuration(duration)
 
 		if (partSkeletonAll.length > 0) {
-			for (let index = 0, length = partSkeletonAll.length; index < length; index++) {
-				const partSkeleton = partSkeletonAll[index];
+			for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
+				const partSkeleton = partSkeletonAll[index]
 				removeSkeleton(partSkeleton)
 			}
 		}
@@ -44,57 +45,61 @@ const openWinPlaylist = async id => {
 			parent: authorCard,
 			name: data.author.name,
 			avatarSrc: data.author.bestAvatar.url,
-			id: data.author.channelID
+			id: data.author.channelID,
 		}
 
 		fillAuthorCard(authorParams)
 
 		authorParams = null
 
-		let videoAll = playlist.querySelectorAll('.card');
+		let videoAll = playlist.querySelectorAll('.card')
 
-		data.items.length > videoAll.length
-			? initPages(playlist, data.items, videoAll, 'video', data.continuation)
+		items.length > videoAll.length
+			? initPages(playlist, items, videoAll, 'video', data.continuation)
 			: disablePages(playlist)
 
-		for (let index = 0, length = videoAll.length; index < length; index++) {
-			let video = videoAll[index];
+		for (let index = 0, { length } = videoAll; index < length; index += 1) {
+			let video = videoAll[index]
 
-			video.classList.add('_playlist-video');
+			video.classList.add('_playlist-video')
 
-			data.items[index]
-				? fillVideoCard(video, index, data.items)
-				: video.hidden = true;
+			items[index] ? fillVideoCard(video, index, items) : (video.hidden = true)
 
-			video = null;
+			video = null
 		}
+
+		videoAll = null
 	} catch (error) {
-		showToast('error', error.message);
+		showToast('error', error.message)
 	} finally {
 		playlist = null
 		playlistViews = null
 		playlistVideoCount = null
 		playlistDuration = null
 		partSkeletonAll = null
+		playlistName = null
+		playlistLastUpdated = null
+		titleSkeleton = null
+		authorCard = null
 	}
 }
 
 const resetPlaylist = _ => {
-	let playlist = _io_q('.playlist');
-	let playlistName = playlist.querySelector('.playlist__name span');
-	let playlistViews = playlist.querySelector('.playlist__views');
-	let playlistVideoCount = playlist.querySelector('.playlist__video-count');
-	let playlistLastUpdated = playlist.querySelector('.playlist__last-upd');
-	let playlistDuration = playlist.querySelector('.playlist__duration');
-	let titleSkeleton = playlist.querySelector('.title-skeleton');
-	let partSkeletonAll = playlist.querySelectorAll('.part-skeleton');
+	let playlist = _io_q('.playlist')
+	let playlistName = playlist.querySelector('.playlist__name span')
+	let playlistViews = playlist.querySelector('.playlist__views')
+	let playlistVideoCount = playlist.querySelector('.playlist__video-count')
+	let playlistLastUpdated = playlist.querySelector('.playlist__last-upd')
+	let playlistDuration = playlist.querySelector('.playlist__duration')
+	let titleSkeleton = playlist.querySelector('.title-skeleton')
+	let partSkeletonAll = playlist.querySelectorAll('.part-skeleton')
 
 	resetSkeleton(titleSkeleton)
 	playlistName.textContent = ''
 
 	if (partSkeletonAll.length > 0) {
-		for (let index = 0, length = partSkeletonAll.length; index < length; index++) {
-			const partSkeleton = partSkeletonAll[index];
+		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
+			const partSkeleton = partSkeletonAll[index]
 			resetSkeleton(partSkeleton)
 		}
 	}
@@ -111,13 +116,16 @@ const resetPlaylist = _ => {
 	playlistVideoCount = null
 	playlistLastUpdated = null
 	playlistDuration = null
+	playlistName = null
+	titleSkeleton = null
+	partSkeletonAll = null
 }
 
 const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
-	let playlist = _io_q('.playlist');
-	let authorCard = playlist.querySelector('.author');
-	let playlistName = playlist.querySelector('.playlist__name span');
-	let titleSkeleton = playlist.querySelector('.title-skeleton');
+	let playlist = _io_q('.playlist')
+	let authorCard = playlist.querySelector('.author')
+	let playlistName = playlist.querySelector('.playlist__name span')
+	let titleSkeleton = playlist.querySelector('.title-skeleton')
 
 	if (!isEmpty(title) && title !== '...') {
 		playlistName.textContent = title
@@ -137,9 +145,9 @@ const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
 	playlist = null
 	playlistName = null
 	authorCard = null
+	titleSkeleton = null
 	authorParams = null
 }
-
 
 const preparePlaylistWin = (btnWin, id) => {
 	let params = {}
@@ -148,7 +156,7 @@ const preparePlaylistWin = (btnWin, id) => {
 		params = {
 			title: btnWin.querySelector('.card__title span').textContent,
 			author: btnWin.querySelector('.card__channel').dataset.name,
-			id: btnWin.querySelector('.card__channel').dataset.id
+			id: btnWin.querySelector('.card__channel').dataset.id,
 		}
 	}
 

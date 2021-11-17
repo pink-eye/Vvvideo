@@ -18,14 +18,15 @@ const getMedia = () => {
 }
 
 const initSponsorblockSegments = data => {
+	let video = _io_q('video')
 	let progressSponsorblock = _io_q('.controls').querySelector('.progress__sponsorblock')
 	let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item')
 
-	for (let index = 0, length = sponsorblockItemAll.length; index < length; index++) {
+	for (let index = 0, { length } = sponsorblockItemAll; index < length; index += 1) {
 		const sponsorblockItem = sponsorblockItemAll[index]
 		const { startTime, endTime, videoDuration } = data[index]
 		const segmentLength = endTime - startTime
-		const vDuration = videoDuration !== 0 ? videoDuration : ~~(video.duration)
+		const vDuration = videoDuration !== 0 ? videoDuration : ~~video.duration
 		const sponsorblockItemWidth = convertToProc(segmentLength, vDuration)
 		const sponsorblockItemLeft = convertToProc(startTime, vDuration)
 
@@ -33,6 +34,7 @@ const initSponsorblockSegments = data => {
 		sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`)
 	}
 
+	video = null
 	progressSponsorblock = null
 	sponsorblockItemAll = null
 }
@@ -59,8 +61,7 @@ const chooseQuality = url => {
 		pauseVideoPlayer()
 		changeVideoSrc(url, currentTime)
 		playVideoPlayer()
-	} else
-		changeVideoSrc(url, currentTime)
+	} else changeVideoSrc(url, currentTime)
 
 	isSync = false
 
@@ -80,8 +81,7 @@ const hideDecoration = action => {
 		}
 
 		const removeDecoration = _ => {
-			if (icon.classList.contains('_active'))
-				icon.classList.remove('_active')
+			if (icon.classList.contains('_active')) icon.classList.remove('_active')
 
 			setTimeout(afterRemoveDecoration, 300)
 		}
@@ -98,8 +98,7 @@ const showDecoration = (action, doHide) => {
 		icon.hidden = false
 
 		const activeDecoration = _ => {
-			if (!icon.classList.contains('_active'))
-				icon.classList.add('_active')
+			if (!icon.classList.contains('_active')) icon.classList.add('_active')
 
 			controls = null
 			icon = null
@@ -146,8 +145,7 @@ const playEl = async el => {
 				let video = _io_q('video')
 
 				if (audio) {
-					if (isPlaying(video) && isPlaying(audio))
-						syncMedia()
+					if (isPlaying(video) && isPlaying(audio)) syncMedia()
 				}
 
 				audio = null
@@ -166,9 +164,7 @@ const startVideoFromLastPoint = _ => {
 
 	const videoWatchedTime = getWatchedtTime(videoId)
 
-	if (videoWatchedTime)
-		_io_q('video').currentTime = videoWatchedTime
-
+	if (videoWatchedTime) _io_q('video').currentTime = videoWatchedTime
 }
 
 const playVideoPlayer = async _ => {
@@ -215,7 +211,9 @@ const togglePlay = _ => {
 	video = null
 }
 
-const toggleIconPlayPause = _ => { _io_q('video').paused ? showIconPlay() : showIconPause() }
+const toggleIconPlayPause = _ => {
+	_io_q('video').paused ? showIconPlay() : showIconPause()
+}
 
 const changeIcon = iconPath => {
 	let controls = _io_q('.controls')
@@ -227,14 +225,18 @@ const changeIcon = iconPath => {
 	controlsSwitchIcon = null
 }
 
-const showIconPlay = _ => { changeIcon('img/svg/controls.svg#play') }
+const showIconPlay = _ => {
+	changeIcon('img/svg/controls.svg#play')
+}
 
-const showIconPause = _ => { changeIcon('img/svg/controls.svg#pause') }
+const showIconPause = _ => {
+	changeIcon('img/svg/controls.svg#pause')
+}
 
 const updateTimeElapsed = _ => {
 	let controls = _io_q('.controls')
 	let timeElapsed = controls.querySelector('.time__elapsed')
-	const time = convertSecondsToDuration(~~(_io_q('video').currentTime))
+	const time = convertSecondsToDuration(~~_io_q('video').currentTime)
 
 	timeElapsed.textContent = time
 	timeElapsed.setAttribute('datetime', time)
@@ -263,8 +265,7 @@ const hideControls = _ => {
 	let dropdownActive = controls.querySelector('.dropdown._active')
 	let controlsBar = controls.querySelector('.controls__bar')
 
-	if (!dropdownActive)
-		controlsBar.classList.remove('_opened')
+	if (!dropdownActive) controlsBar.classList.remove('_opened')
 
 	dropdownActive = null
 	controlsBar = null
@@ -282,8 +283,7 @@ const showControls = _ => {
 const hidePoster = _ => {
 	let videoPoster = _io_q('.video').querySelector('.video__poster')
 
-	if (!videoPoster.classList.contains('_hidden'))
-		videoPoster.classList.add('_hidden')
+	if (!videoPoster.classList.contains('_hidden')) videoPoster.classList.add('_hidden')
 
 	videoPoster = null
 }
@@ -291,9 +291,7 @@ const hidePoster = _ => {
 const toggleFullscreen = _ => {
 	let videoWrapper = _io_q('.video').querySelector('.video__wrapper')
 
-	document.fullscreenElement
-		? document.exitFullscreen()
-		: videoWrapper.requestFullscreen()
+	document.fullscreenElement ? document.exitFullscreen() : videoWrapper.requestFullscreen()
 
 	videoWrapper = null
 }
@@ -312,8 +310,7 @@ const updateStoryboard = params => {
 			progressStoryboard.style.left = `${widthProgressBar * 0.1}px`
 		}
 
-		if (posCursor > widthProgressBar * 0.1 &&
-			posCursor < widthProgressBar * 0.9) {
+		if (posCursor > widthProgressBar * 0.1 && posCursor < widthProgressBar * 0.9) {
 			progressStoryboard.style.left = `${posCursor}px`
 		}
 
@@ -331,8 +328,7 @@ const updateProgress = _ => {
 	let video = _io_q('video')
 
 	progressSeek.value = Math.floor(video.currentTime)
-	progress.style.setProperty('--progress',
-		`${convertToProc(Math.floor(video.currentTime), ~~(video.duration))}%`)
+	progress.style.setProperty('--progress', `${convertToProc(Math.floor(video.currentTime), ~~video.duration)}%`)
 
 	progress = null
 	progressSeek = null
@@ -356,8 +352,7 @@ const updateSeekTooltip = params => {
 		progressSeekTooltip.style.left = `${widthProgressBar * 0.1}px`
 	}
 
-	if (posCursor > widthProgressBar * 0.1 &&
-		posCursor < widthProgressBar * 0.9) {
+	if (posCursor > widthProgressBar * 0.1 && posCursor < widthProgressBar * 0.9) {
 		progressSeekTooltip.style.left = `${posCursor}px`
 	}
 
@@ -370,7 +365,6 @@ const updateSeekTooltip = params => {
 	progressSeekTooltip = null
 }
 
-
 const updateBuffered = _ => {
 	let progress = _io_q('.controls').querySelector('.progress')
 	let { video, audio } = getMedia()
@@ -378,13 +372,10 @@ const updateBuffered = _ => {
 	if (isEmpty(hls)) {
 		if (video.buffered.length > 0) {
 			let videoLastBuffered = video.buffered.end(video.buffered.length - 1)
-			let audioLastBuffered = audio && audio.buffered.length > 0
-				? audio.buffered.end(audio.buffered.length - 1)
-				: null
-			let minBuffered = audioLastBuffered
-				? getMin(videoLastBuffered, audioLastBuffered)
-				: videoLastBuffered
-			progress.style.setProperty('--buffered', `${convertToProc(minBuffered, ~~(video.duration))}%`)
+			let audioLastBuffered =
+				audio && audio.buffered.length > 0 ? audio.buffered.end(audio.buffered.length - 1) : null
+			let minBuffered = audioLastBuffered ? getMin(videoLastBuffered, audioLastBuffered) : videoLastBuffered
+			progress.style.setProperty('--buffered', `${convertToProc(minBuffered, ~~video.duration)}%`)
 		}
 	}
 
@@ -400,7 +391,7 @@ const skipAhead = event => {
 	const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value
 
 	video.currentTime = skipTo
-	progress.style.setProperty('--progress', `${convertToProc(skipTo, ~~(video.duration))}%`)
+	progress.style.setProperty('--progress', `${convertToProc(skipTo, ~~video.duration)}%`)
 	progressSeek.value = skipTo
 
 	isSync = false
@@ -420,8 +411,7 @@ const toggleMuteEl = el => {
 	if (el.muted) {
 		volumeSeek.setAttribute('data-volume', volumeSeek.value)
 		volumeSeek.value = 0
-	} else
-		volumeSeek.value = volumeSeek.dataset.volume
+	} else volumeSeek.value = volumeSeek.dataset.volume
 
 	volumeSeek = null
 }
@@ -439,9 +429,7 @@ const startDecorationLoad = _ => {
 	let { video, audio } = getMedia()
 
 	let timeoutDecorationLoad = setTimeout(_ => {
-		let conditionDecorationLoad = audio
-			? video.readyState > 2 && audio.readyState > 2
-			: video.readyState > 2
+		let conditionDecorationLoad = audio ? video.readyState > 2 && audio.readyState > 2 : video.readyState > 2
 
 		video = null
 		audio = null
@@ -454,7 +442,6 @@ const startDecorationLoad = _ => {
 
 		showDecoration('load', false)
 	}, 150)
-
 }
 
 const skipSegmentSB = _ => {
@@ -465,15 +452,13 @@ const skipSegmentSB = _ => {
 	let video = _io_q('video')
 
 	if (isPlaying(video)) {
-		for (let index = 0, length = segmentsSB.length; index < length; index++) {
+		for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
 			const segmentSB = segmentsSB[index]
-			if (video.currentTime >= segmentSB.startTime &&
-				video.currentTime <= segmentSB.endTime) {
+			if (video.currentTime >= segmentSB.startTime && video.currentTime <= segmentSB.endTime) {
 				video.currentTime = segmentSB.endTime
 				isSync = false
 
-				if (notifySkipSegment)
-					showToast('info', 'Segment is skipped!')
+				if (notifySkipSegment) showToast('info', 'Segment is skipped!')
 			}
 		}
 	}
@@ -489,8 +474,7 @@ const handlePlaying = _ => {
 const handleLoadingVideo = _ => {
 	let { video, audio } = getMedia()
 
-	if (audio && !isPlaying(video))
-		audio.pause()
+	if (audio && !isPlaying(video)) audio.pause()
 
 	startDecorationLoad()
 
@@ -501,8 +485,7 @@ const handleLoadingVideo = _ => {
 const handleLoadingAudio = _ => {
 	let { video, audio } = getMedia()
 
-	if (!isPlaying(audio))
-		video.pause()
+	if (!isPlaying(audio)) video.pause()
 
 	startDecorationLoad()
 
@@ -513,8 +496,7 @@ const handleLoadingAudio = _ => {
 const handleTimeUpdate = _ => {
 	let { video, audio } = getMedia()
 
-	if (!isSync && isPlaying(audio) && isPlaying(video))
-		syncMedia()
+	if (!isSync && isPlaying(audio) && isPlaying(video)) syncMedia()
 
 	updateTimeElapsed()
 	updateProgress()
@@ -599,9 +581,7 @@ const handleMouseMoveProgressSeek = event => {
 }
 
 const handleKeyDownWithinVideo = e => {
-	if (_io_q('.video').classList.contains('_active')
-		&& (hasFocus(_io_q('body')) || hasFocus(null))) {
-
+	if (_io_q('.video').classList.contains('_active') && (hasFocus(_io_q('body')) || hasFocus(null))) {
 		// ENTER || SPACE
 		if (e.keyCode === 13 || e.keyCode === 32) togglePlay()
 
@@ -622,15 +602,12 @@ const handleKeyDownWithinVideo = e => {
 			doesSkipSegments = !doesSkipSegments
 			showToast(
 				'info',
-				doesSkipSegments
-					? 'Sponsorblock is disabled on this video'
-					: 'Sponsorblock is enabled again'
+				doesSkipSegments ? 'Sponsorblock is disabled on this video' : 'Sponsorblock is enabled again'
 			)
 		}
 
 		// F
-		if (e.keyCode === 70)
-			toggleFullscreen()
+		if (e.keyCode === 70) toggleFullscreen()
 	}
 }
 
@@ -663,7 +640,7 @@ const initVideoPlayer = _ => {
 	const { autoplay } = storage.settings
 
 	const initVideo = _ => {
-		const videoDuration = ~~(video.duration)
+		const videoDuration = ~~video.duration
 		const time = convertSecondsToDuration(videoDuration)
 
 		initSponsorblockSegments(segmentsSB)
@@ -678,7 +655,6 @@ const initVideoPlayer = _ => {
 	// MEDIA LISTENERS
 
 	if (autoplay) {
-
 		const handleCanPlay = _ => {
 			hidePoster()
 			showDecoration('load', false)
@@ -698,7 +674,6 @@ const initVideoPlayer = _ => {
 	video.addEventListener('stalled', handleLoadingVideo)
 
 	if (audio) {
-
 		audio.addEventListener('playing', handlePlaying)
 
 		audio.addEventListener('waiting', handleLoadingAudio)
@@ -717,7 +692,6 @@ const initVideoPlayer = _ => {
 	video.addEventListener('error', handleError)
 
 	if (audio) {
-
 		audio.addEventListener('error', handleError)
 
 		audio.addEventListener('abort', handleAbort)
@@ -744,18 +718,16 @@ const initVideoPlayer = _ => {
 	const controlsQuality = controls.querySelector('.controls__quality')
 
 	initDropdown(controlsQuality, btn => {
-		for (let index = 0, length = videoFormatAll.length; index < length; index++) {
+		for (let index = 0, { length } = videoFormatAll; index < length; index += 1) {
 			const videoFormat = videoFormatAll[index]
 
-			if (videoFormat.qualityLabel === btn.textContent)
-				chooseQuality(videoFormat.url)
+			if (videoFormat.qualityLabel === btn.textContent) chooseQuality(videoFormat.url)
 		}
 	})
 
 	// HOT KEYS
 
 	document.addEventListener('keydown', handleKeyDownWithinVideo)
-
 
 	if (!hasListeners) {
 		hasListeners = true
@@ -783,7 +755,6 @@ const initVideoPlayer = _ => {
 		}
 
 		controls.addEventListener('mousemove', handleMouseMove)
-
 	}
 }
 
@@ -815,14 +786,11 @@ const resetVideoPlayer = _ => {
 	isSync &&= false
 	doesSkipSegments ||= true
 
-	while (sponsorblock.firstChild)
-		sponsorblock.firstChild.remove()
+	while (sponsorblock.firstChild) sponsorblock.firstChild.remove()
 
-	if (sponsorblockBtn.classList.contains('_record'))
-		sponsorblockBtn.classList.remove('_record')
+	if (sponsorblockBtn.classList.contains('_record')) sponsorblockBtn.classList.remove('_record')
 
-	while (qualityList.firstChild)
-		qualityList.firstChild.remove()
+	while (qualityList.firstChild) qualityList.firstChild.remove()
 
 	speedCurrent.textContent = 'x1'
 
@@ -840,8 +808,7 @@ const resetVideoPlayer = _ => {
 
 	const { disableStoryboard } = storage.settings
 
-	if (!disableStoryboard && !progressStoryboard)
-		progress.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
+	if (!disableStoryboard && !progressStoryboard) progress.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
 
 	video.removeEventListener('playing', handlePlaying)
 
@@ -850,7 +817,6 @@ const resetVideoPlayer = _ => {
 	video.removeEventListener('stalled', handleLoadingVideo)
 
 	if (audio) {
-
 		audio.removeEventListener('playing', handlePlaying)
 
 		audio.removeEventListener('waiting', handleLoadingAudio)
@@ -869,7 +835,6 @@ const resetVideoPlayer = _ => {
 	video.removeEventListener('error', handleError)
 
 	if (audio) {
-
 		audio.removeEventListener('error', handleError)
 
 		audio.removeEventListener('abort', handleAbort)
@@ -899,8 +864,10 @@ const resetVideoPlayer = _ => {
 
 	audio
 		? resetMediaEl(audio)
-		: videoWrapper.insertAdjacentHTML('beforeEnd',
-			'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>')
+		: videoWrapper.insertAdjacentHTML(
+				'beforeEnd',
+				'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>'
+		  )
 
 	let iconPathPlay = 'img/svg/controls.svg#play'
 

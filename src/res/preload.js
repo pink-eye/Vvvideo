@@ -1,15 +1,15 @@
-const { contextBridge, shell } = require('electron');
-const ytch = require('yt-channel-info');
-const ytpl = require('ytpl');
-const ytsr = require('ytsr');
-const ytdl = require('ytdl-core');
-const youtubeSuggest = require('youtube-suggest');
-const ytrend = require("@freetube/yt-trending-scraper");
-const { SponsorBlock } = require('sponsorblock-api');
-const SocksProxyAgent = require('socks-proxy-agent');
-const HttpProxyAgent = require('http-proxy-agent');
-const HttpsProxyAgent = require('https-proxy-agent');
-const fs = require('fs');
+const { contextBridge, shell } = require('electron')
+const ytch = require('yt-channel-info')
+const ytpl = require('ytpl')
+const ytsr = require('ytsr')
+const ytdl = require('ytdl-core')
+const youtubeSuggest = require('youtube-suggest')
+const ytrend = require('@freetube/yt-trending-scraper')
+const { SponsorBlock } = require('sponsorblock-api')
+const SocksProxyAgent = require('socks-proxy-agent')
+const HttpProxyAgent = require('http-proxy-agent')
+const HttpsProxyAgent = require('https-proxy-agent')
+const fs = require('fs')
 
 const STORAGE_PATH = `${__dirname}\\storage.json`
 
@@ -20,41 +20,41 @@ const makeAgent = obj => {
 		case 'http':
 			agent = new HttpProxyAgent({
 				host: obj.host,
-				port: obj.port
+				port: obj.port,
 			})
-			break;
+			break
 		case 'https':
 			agent = new HttpsProxyAgent({
 				host: obj.host,
-				port: obj.port
+				port: obj.port,
 			})
-			break;
+			break
 		case 'socks4':
 			agent = new SocksProxyAgent({
 				host: obj.host,
 				port: obj.port,
-				type: 4
+				type: 4,
 			})
-			break;
+			break
 		case 'socks5':
 			agent = new SocksProxyAgent({
 				host: obj.host,
 				port: obj.port,
-				type: 5
+				type: 5,
 			})
-			break;
+			break
 	}
 
 	return agent
 }
 
 contextBridge.exposeInMainWorld('API', {
-
 	scrapeVideo: videoId => ytdl.getInfo(`https://www.youtube.com/watch?v=${videoId}`),
 
-	scrapeVideoProxy: (videoId, obj) => ytdl.getInfo(`https://www.youtube.com/watch?v=${videoId}`, {
-		requestOptions: { agent: makeAgent(obj) }
-	}),
+	scrapeVideoProxy: (videoId, obj) =>
+		ytdl.getInfo(`https://www.youtube.com/watch?v=${videoId}`, {
+			requestOptions: { agent: makeAgent(obj) },
+		}),
 
 	scrapeChannelInfo: channelId => ytch.getChannelInfo(channelId, 0),
 
@@ -82,33 +82,42 @@ contextBridge.exposeInMainWorld('API', {
 
 	scrapeTrending: parameters => ytrend.scrape_trending_page(parameters),
 
-	YTDLvalidateURL: str => ytdl.validateURL(str),
+	isYTVideoURL: str => ytdl.validateURL(str),
 
-	YTDLgetVideoID: str => ytdl.getVideoID(str),
+	getVideoId: str => ytdl.getVideoID(str),
 
 	YTDLFilterFormats: formats => ytdl.filterFormats(formats, 'videoandaudio'),
 
 	YTDLChooseFormat: (formats, quality) => ytdl.chooseFormat(formats, { quality }),
 
-	getSponsorblockInfo: (videoId, uuidv4) => new SponsorBlock(uuidv4)
-		.getSegmentsPrivately(videoId,
-			['sponsor', 'intro', 'outro', 'interaction', 'selfpromo', 'music_offtopic', 'preview']),
+	getSponsorblockInfo: (videoId, uuidv4) =>
+		new SponsorBlock(uuidv4).getSegmentsPrivately(videoId, [
+			'sponsor',
+			'intro',
+			'outro',
+			'interaction',
+			'selfpromo',
+			'music_offtopic',
+			'preview',
+		]),
 
 	postSponsorblockInfo: (videoId, uuidv4, segment) => new SponsorBlock(uuidv4).postSegments(videoId, segment),
 
 	readStorage: async callback => {
-		let readerStream = fs.createReadStream(STORAGE_PATH);
+		let readerStream = fs.createReadStream(STORAGE_PATH)
 
-		readerStream.setEncoding('UTF8');
-		readerStream.on('data', callback);
+		readerStream.setEncoding('UTF8')
+		readerStream.on('data', callback)
 	},
 
 	writeStorage: async data => {
-		let writerStream = fs.createWriteStream(STORAGE_PATH);
+		let writerStream = fs.createWriteStream(STORAGE_PATH)
 
-		writerStream.write(JSON.stringify(data));
-		writerStream.end();
+		writerStream.write(JSON.stringify(data))
+		writerStream.end()
 	},
 
-	openExternalLink: url => { shell.openExternal(url) }
+	openExternalLink: url => {
+		shell.openExternal(url)
+	},
 })

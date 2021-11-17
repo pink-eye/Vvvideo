@@ -1,16 +1,16 @@
 const openWinChannel = async id => {
-	let channel = _io_q('.channel');
-	let channelBannerImg = channel.querySelector('.channel__banner img');
-	let channelBanner = channel.querySelector('.channel__banner');
-	let channelAvatar = channel.querySelector('.heading-channel__avatar img');
-	let channelAuthor = channel.querySelector('.heading-channel__author span');
-	let channelFollowers = channel.querySelector('.heading-channel__followers span');
-	let channelDescription = channel.querySelector('.about__description');
-	let bannerSkeleton = channel.querySelector('.banner-skeleton');
-	let avatarSkeleton = channel.querySelector('.avatar-skeleton');
-	let titleSkeleton = channel.querySelector('.title-skeleton');
-	let followersSkeleton = channel.querySelector('.followers-skeleton');
-	let subscribeBtn = channel.querySelector('.subscribe');
+	let channel = _io_q('.channel')
+	let channelBannerImg = channel.querySelector('.channel__banner img')
+	let channelBanner = channel.querySelector('.channel__banner')
+	let channelAvatar = channel.querySelector('.heading-channel__avatar img')
+	let channelAuthor = channel.querySelector('.heading-channel__author span')
+	let channelFollowers = channel.querySelector('.heading-channel__followers span')
+	let channelDescription = channel.querySelector('.about__description')
+	let bannerSkeleton = channel.querySelector('.banner-skeleton')
+	let avatarSkeleton = channel.querySelector('.avatar-skeleton')
+	let titleSkeleton = channel.querySelector('.title-skeleton')
+	let followersSkeleton = channel.querySelector('.followers-skeleton')
+	let subscribeBtn = channel.querySelector('.subscribe')
 
 	// FILL WIN
 
@@ -19,8 +19,7 @@ const openWinChannel = async id => {
 	try {
 		const data = await API.scrapeChannelInfo(id)
 
-		if (data.author !== channelAuthor.textContent)
-			channelAuthor.textContent = data.author
+		if (data.author !== channelAuthor.textContent) channelAuthor.textContent = data.author
 
 		removeSkeleton(titleSkeleton)
 
@@ -33,9 +32,10 @@ const openWinChannel = async id => {
 				removeSkeleton(avatarSkeleton)
 
 				channelAvatar = null
+				avatarSkeleton = null
 			}
 
-			channelAvatar.addEventListener('load', onLoadAvatar, { once: true });
+			channelAvatar.addEventListener('load', onLoadAvatar, { once: true })
 		}
 
 		if (data.authorBanners) {
@@ -45,27 +45,31 @@ const openWinChannel = async id => {
 				removeSkeleton(bannerSkeleton)
 
 				channelBannerImg = null
+				bannerSkeleton = null
 			}
 
-			channelBannerImg.addEventListener('load', onLoadBanner, { once: true });
-
+			channelBannerImg.addEventListener('load', onLoadBanner, { once: true })
 		} else if (data.authorThumbnails) {
 			channelBanner.style.setProperty('--bg-image', `url(${data.authorThumbnails.at(-1).url})`)
 			removeSkeleton(bannerSkeleton)
+
+			channelBannerImg = null
+			bannerSkeleton = null
 		} else {
 			channelBanner.style.setProperty('--bg-image', '#fff')
 			removeSkeleton(bannerSkeleton)
+
+			channelBannerImg = null
+			bannerSkeleton = null
 		}
 
 		channelFollowers.textContent = `${normalizeCount(data.subscriberCount)} subscribers`
 		removeSkeleton(followersSkeleton)
 
-		if (data.description)
-			channelDescription.innerHTML = `${normalizeDesc(data.description)}`
+		if (data.description) channelDescription.innerHTML = `${normalizeDesc(data.description)}`
 
-		hideLastTab();
-		initTabs(0);
-
+		hideLastTab()
+		initTabs(0)
 	} catch (error) {
 		showToast('error', error.message)
 		resetIndicator()
@@ -75,26 +79,27 @@ const openWinChannel = async id => {
 		channelFollowers = null
 		channelDescription = null
 		subscribeBtn = null
+		channelAuthor = null
 		titleSkeleton = null
 		followersSkeleton = null
 	}
 }
 
 const resetChannel = _ => {
-	let channel = _io_q('.channel');
-	let channelBanner = channel.querySelector('.channel__banner');
-	let channelBannerImg = channel.querySelector('.channel__banner img');
-	let channelTabContentVideos = channel.querySelector('.videos');
-	let channelAuthor = channel.querySelector('.heading-channel__author span');
-	let channelFollowers = channel.querySelector('.heading-channel__followers span');
-	let channelTabContentPlaylists = channel.querySelector('.playlists');
-	let skeletonAll = channel.querySelectorAll('.skeleton');
-	let channelDescription = channel.querySelector('.about__description');
+	let channel = _io_q('.channel')
+	let channelBanner = channel.querySelector('.channel__banner')
+	let channelBannerImg = channel.querySelector('.channel__banner img')
+	let channelTabContentVideos = channel.querySelector('.videos')
+	let channelAuthor = channel.querySelector('.heading-channel__author span')
+	let channelFollowers = channel.querySelector('.heading-channel__followers span')
+	let channelTabContentPlaylists = channel.querySelector('.playlists')
+	let skeletonAll = channel.querySelectorAll('.skeleton')
+	let channelDescription = channel.querySelector('.about__description')
 
 	channel.dataset.id = ''
 
 	// SUBSCRIBE BTN
-	let subscribeBtn = channel.querySelector('.subscribe');
+	let subscribeBtn = channel.querySelector('.subscribe')
 	destroySubscribeBtn(subscribeBtn)
 
 	channelBanner.style.setProperty('--bg-image', 'none center')
@@ -103,8 +108,8 @@ const resetChannel = _ => {
 	channelAuthor.textContent = '...'
 
 	if (skeletonAll.length > 0) {
-		for (let index = 0, length = skeletonAll.length; index < length; index++) {
-			const skeleton = skeletonAll[index];
+		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
+			const skeleton = skeletonAll[index]
 			resetSkeleton(skeleton)
 		}
 	}
@@ -116,22 +121,23 @@ const resetChannel = _ => {
 
 	channelDescription.textContent = null
 
-	channel = null;
+	channel = null
 	subscribeBtn = null
-	channelBannerImg = null;
+	channelBannerImg = null
 	channelFollowers = null
+	channelDescription = null
 	skeletonAll = null
 	channelAuthor = null
-	channelBanner = null;
+	channelBanner = null
 	channelTabContentVideos = null
 	channelTabContentPlaylists = null
 }
 
 const fillSomeInfoChannel = ({ name = '', id = '' }) => {
-	let channel = _io_q('.channel');
-	let channelName = channel.querySelector('.heading-channel__author span');
-	let subscribeBtn = channel.querySelector('.subscribe');
-	let titleSkeleton = channel.querySelector('.title-skeleton');
+	let channel = _io_q('.channel')
+	let channelName = channel.querySelector('.heading-channel__author span')
+	let subscribeBtn = channel.querySelector('.subscribe')
+	let titleSkeleton = channel.querySelector('.title-skeleton')
 
 	if (!isEmpty(name)) {
 		channelName.textContent = name
@@ -143,13 +149,13 @@ const fillSomeInfoChannel = ({ name = '', id = '' }) => {
 	channel = null
 	channelName = null
 	subscribeBtn = null
+	titleSkeleton = null
 }
 
 const prepareChannelWin = (btnWin, id) => {
-	let params = btnWin.dataset || {}
+	const params = btnWin.dataset || {}
 
 	fillSomeInfoChannel(params)
 
 	openWinChannel(id)
 }
-

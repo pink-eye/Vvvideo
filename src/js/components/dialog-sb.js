@@ -32,17 +32,18 @@ const isValidFields = _ => {
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
 
-	let patternTimecodeMSS = new RegExp(/^[0-9]:[0-5][0-9]$/g)
-	let patternTimecodeMMSS = new RegExp(/^[0-5][0-9]:[0-5][0-9]$/g)
-	let patternTimecodeHMMSS = new RegExp(/^[0-9]:[0-5][0-9]:[0-5][0-9]$/g)
-	let patternTimecodeHHMMSS = new RegExp(/^[0-2][0-3]:[0-5][0-9]:[0-5][0-9]$/g)
+	let patternTimecodeMSS = /^[0-9]:[0-5][0-9]$/g
+	let patternTimecodeMMSS = /^[0-5][0-9]:[0-5][0-9]$/g
+	let patternTimecodeHMMSS = /^[0-9]:[0-5][0-9]:[0-5][0-9]$/g
+	let patternTimecodeHHMMSS = /^[0-2][0-3]:[0-5][0-9]:[0-5][0-9]$/g
 
-	let result = (dialogSbStart.value.match(patternTimecodeHHMMSS) && dialogSbEnd.value.match(patternTimecodeHHMMSS)
-		|| dialogSbStart.value.match(patternTimecodeHMMSS) && dialogSbEnd.value.match(patternTimecodeHMMSS)
-		|| dialogSbStart.value.match(patternTimecodeMMSS) && dialogSbEnd.value.match(patternTimecodeMMSS)
-		|| dialogSbStart.value.match(patternTimecodeMSS) && dialogSbEnd.value.match(patternTimecodeMSS))
-		&& convertDurationToSeconds(dialogSbStart.value) < convertDurationToSeconds(dialogSbEnd.value)
-		&& convertDurationToSeconds(dialogSbEnd.value) <= convertDurationToSeconds(timeDuration.textContent)
+	let result =
+		((dialogSbStart.value.match(patternTimecodeHHMMSS) && dialogSbEnd.value.match(patternTimecodeHHMMSS)) ||
+			(dialogSbStart.value.match(patternTimecodeHMMSS) && dialogSbEnd.value.match(patternTimecodeHMMSS)) ||
+			(dialogSbStart.value.match(patternTimecodeMMSS) && dialogSbEnd.value.match(patternTimecodeMMSS)) ||
+			(dialogSbStart.value.match(patternTimecodeMSS) && dialogSbEnd.value.match(patternTimecodeMSS))) &&
+		convertDurationToSeconds(dialogSbStart.value) < convertDurationToSeconds(dialogSbEnd.value) &&
+		convertDurationToSeconds(dialogSbEnd.value) <= convertDurationToSeconds(timeDuration.textContent)
 
 	dialogSb = null
 	dialogSbStart = null
@@ -107,7 +108,6 @@ const sendSegmentSB = async _ => {
 		} catch (error) {
 			showToast('error', error.message)
 		}
-
 	} else showInvalidUI()
 
 	dialogSb = null
@@ -158,8 +158,7 @@ const recordSegmentSB = _ => {
 }
 
 const showDialogSB = _ => {
-	if (document.fullscreenElement)
-		toggleFullscreen()
+	if (document.fullscreenElement) toggleFullscreen()
 
 	pauseVideoPlayer()
 	hideInvalidUI()
@@ -168,8 +167,8 @@ const showDialogSB = _ => {
 	const dialogSbStart = dialogSb.querySelector('input#start')
 	const dialogSbEnd = dialogSb.querySelector('input#end')
 
-	dialogSbStart.addEventListener('input', handleInputDialogField);
-	dialogSbEnd.addEventListener('input', handleInputDialogField);
+	dialogSbStart.addEventListener('input', handleInputDialogField)
+	dialogSbEnd.addEventListener('input', handleInputDialogField)
 
 	const modal = new GraphModal()
 	modal.open('dialog-sb')
@@ -194,7 +193,9 @@ const initDialogSB = _ => {
 
 	dialogSbBtnSend.addEventListener('click', sendSegmentSB)
 
-	dialogSbBtnCancel.addEventListener('click', _ => { modal.close() })
+	dialogSbBtnCancel.addEventListener('click', _ => {
+		modal.close()
+	})
 
 	controlsSponsorblock.addEventListener('click', recordSegmentSB)
 }

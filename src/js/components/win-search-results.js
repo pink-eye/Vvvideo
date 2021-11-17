@@ -2,8 +2,8 @@ let lastSearchResult = null
 
 const openWinSearchResults = async _ => {
 	let searchResults = _io_q('.search-results')
-	let searchBar = _io_q('.header').querySelector('.search__bar');
-	let cardAll = searchResults.querySelectorAll('.card');
+	let searchBar = _io_q('.header').querySelector('.search__bar')
+	let cardAll = searchResults.querySelectorAll('.card')
 
 	try {
 		let data = null
@@ -26,35 +26,33 @@ const openWinSearchResults = async _ => {
 			? initPages(searchResults, items, cardAll, 'rich', continuation)
 			: disablePages(searchResults)
 
-		for (let index = 0, length = cardAll.length; index < length; index++) {
-			let card = cardAll[index];
-			const { type: typeCard } = items[index];
+		for (let index = 0, { length } = cardAll; index < length; index += 1) {
+			let card = cardAll[index]
+			const { type: typeCard } = items[index]
 
 			card.dataset.win = `${typeCard}`
-			card.classList.add(`_${typeCard}`);
+			card.classList.add(`_${typeCard}`)
 
 			switch (typeCard) {
 				case 'video':
 					fillVideoCard(card, index, items)
-					break;
+					break
 
 				case 'playlist':
 					fillPlaylistCard(card, index, items)
-					break;
+					break
 
 				case 'channel':
 					fillChannelCard(card, index, items)
-					break;
+					break
 			}
 		}
 	} catch (error) {
-		showToast('error', error.message);
-	}
-	finally {
+		showToast('error', error.message)
+	} finally {
 		searchResults = null
 		searchBar = null
 		cardAll = null
 	}
 }
 
-const filterSearchResults = arr => arr.filter(el => el.type === 'video' || el.type === 'playlist' || el.type === 'channel')

@@ -9,7 +9,7 @@ const getChannelVideosLocalScraper = channelId =>
 
 			startIndicator()
 
-			for (let index = 0, length = items.length; index < length; index++) {
+			for (let index = 0, { length } = items; index < length; index += 1) {
 				const video = items[index]
 
 				video.publishedDate = video.liveNow ? new Date().getTime() : calculatePublishedDate(video.publishedText)
@@ -17,24 +17,26 @@ const getChannelVideosLocalScraper = channelId =>
 
 			resolve(items)
 		} catch (error) {
-			showToast("error", error.message)
+			showToast('error', error.message)
 			resetIndicator()
 			reject(error)
 		}
 	})
 
 const openWinLatest = async _ => {
-	let latest = _io_q(".latest")
+	let latest = _io_q('.latest')
 	let promises = []
-	let videoAll = latest.querySelectorAll(".card")
+	let videoAll = latest.querySelectorAll('.card')
 
-	if (storage.subscriptions.length > 0) {
+	const { subscriptions } = storage
+
+	if (subscriptions.length > 0) {
 		let btnLatest = document.querySelector('button[data-win="latest"]')
 
-		for (let index = 0, length = storage.subscriptions.length; index < length; index++) {
-			const subscription = storage.subscriptions[index]
+		for (let index = 0, { length } = subscriptions; index < length; index += 1) {
+			const subscription = subscriptions[index]
 
-			if (btnLatest.classList.contains("_active")) {
+			if (btnLatest.classList.contains('_active')) {
 				promises.push(getChannelVideosLocalScraper(subscription.channelId))
 			} else {
 				latestArray.length = 0
@@ -48,19 +50,19 @@ const openWinLatest = async _ => {
 			latestArray = [].concat.apply([], await Promise.all(promises))
 			latestArray = await Promise.all(latestArray.sort((a, b) => b.publishedDate - a.publishedDate))
 
-			showToast("good", "Latest uploads is got successfully")
+			showToast('good', 'Latest uploads is got successfully')
 		} catch (error) {
-			showToast("error", error.message)
+			showToast('error', error.message)
 		}
 
 		promises.length = 0
 
 		resetIndicator()
 
-		latestArray?.length > videoAll.length ? initPages(latest, latestArray, videoAll, "video") : disablePages(latest)
+		latestArray?.length > videoAll.length ? initPages(latest, latestArray, videoAll, 'video') : disablePages(latest)
 	}
 
-	for (let index = 0, length = videoAll.length; index < length; index++) {
+	for (let index = 0, { length } = videoAll; index < length; index += 1) {
 		let video = videoAll[index]
 
 		latestArray?.[index] ? fillVideoCard(video, index, latestArray) : (video.hidden = true)
