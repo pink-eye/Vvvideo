@@ -17,6 +17,7 @@ const image = require('gulp-image')
 const { readFileSync } = require('fs')
 const concat = require('gulp-concat')
 const chalk = require('chalk')
+const columnify = require('columnify')
 
 let isProd = false
 
@@ -55,69 +56,113 @@ const scripts = () => {
 		.pipe(dest('./bundle/js/'))
 	return src(['./src/js/global.js', './src/js/components/**.js', './src/js/main.js'])
 		.pipe(gulpif(!isProd, sourcemaps.init()))
+		.pipe(gulpif(!isProd, eslint({ fix: true })))
+		.pipe(
+			gulpif(
+				!isProd,
+				eslint.result(result => {
+					const {
+						filePath,
+						warningCount,
+						fixableWarningCount,
+						errorCount,
+						fixableErrorCount,
+						fatalErrorCount,
+					} = result
+
+					let { messages } = result
+
+					const unnecessaryPathLength = 47
+					const pathLength = filePath.length
+					const slicedPath = filePath.slice(unnecessaryPathLength, pathLength)
+
+					console.log('')
+					console.log('')
+
+					console.log(`${chalk.red('x')} [${chalk.blue('ESLint')}]: ${path(slicedPath)}`)
+
+					console.log('')
+
+					messages.forEach(msg => {
+						const { line, column } = msg
+
+						const msgPos = `${chalk.yellow(`${slicedPath}:${chalk.cyanBright(`${line}:${column}`)}`)}`
+
+						msg.position = msgPos
+					})
+
+					const columnsMessages = columnify(messages, {
+						columnSplitter: ' | ',
+						columns: ['position', 'message'],
+					})
+
+					console.log(columnsMessages)
+
+					console.log('')
+
+					const total = [
+						{
+							path: path(slicedPath),
+							messages: resultChalk(`${messages.length}`),
+							warnings: warning(`${warningCount} (${fixableWarningCount} fixable)`),
+							errors: error(`${errorCount} (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`),
+						},
+					]
+
+					const columnTotal = columnify(total, {
+						columnSplitter: ' | ',
+						preserveNewLines: true,
+						columns: ['path', 'messages', 'warnings', 'errors'],
+					})
+
+					console.log(columnTotal)
+
+					console.log('')
+					console.log('')
+				})
+			)
+		)
+		.pipe(
+			gulpif(
+				!isProd,
+				eslint.results(results => {
+					console.log('')
+					console.log('')
+
+					const {
+						warningCount,
+						fatalErrorCount,
+						fixableWarningCount,
+						errorCount,
+						fixableErrorCount,
+						length,
+					} = results
+
+					const total = [
+						{
+							results: resultChalk(`${length}`),
+							warnings: warning(`${warningCount} (${fixableWarningCount} fixable)`),
+							errors: error(`${errorCount} (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`),
+						},
+					]
+
+					const columnTotal = columnify(total, {
+						columnSplitter: ' | ',
+						preserveNewLines: true,
+						columns: ['results', 'warnings', 'errors'],
+					})
+
+					console.log(`[${chalk.blue('ESLint')}]: SUMMARY`)
+					console.log('')
+
+					console.log(columnTotal)
+
+					console.log('')
+					console.log('')
+				})
+			)
+		)
 		.pipe(concat('main.js'))
-		// .pipe(gulpif(!isProd, eslint({ fix: true })))
-		// .pipe(
-		// 	gulpif(
-		// 		!isProd,
-		// 		eslint.result(result => {
-		// 			const {
-		// 				filePath,
-		// 				messages,
-		// 				warningCount,
-		// 				fixableWarningCount,
-		// 				errorCount,
-		// 				fixableErrorCount,
-		// 				fatalErrorCount,
-		// 			} = result
-
-		// 			const unnecessaryPathLength = 50
-		// 			const pathLength = filePath.length
-		// 			const slicedPath = filePath.slice(unnecessaryPathLength, pathLength)
-
-		// 			console.log('=================')
-		// 			console.log(path(slicedPath))
-
-		// 			console.log('')
-
-		// 			messages.forEach(msg => {
-		// 				const { ruleId, line, column, endLine, endColumn, message } = msg
-
-		// 				const logRuleId = ruleId ? `[${chalk.green(ruleId)}]` : `[${chalk.green('idk')}]`
-		// 				const logPosition =
-		// 					endLine && endColumn
-		// 						? `(${chalk.yellow(`${line}:${column};${endLine}:${endColumn}`)})`
-		// 						: `(${chalk.yellow(`${line}:${column}`)})`
-
-		// 				console.log(`${logRuleId} ${message} ${logPosition}`)
-		// 			})
-
-		// 			console.log('')
-
-		// 			console.log(resultChalk(`Messages: ${messages.length}`))
-		// 			console.log(warning(`Warnings: ${warningCount} (${fixableWarningCount} fixable)`))
-		// 			console.log(error(`Errors: ${errorCount} (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`))
-		// 			console.log('=================')
-		// 		})
-		// 	)
-		// )
-		// .pipe(
-		// 	gulpif(
-		// 		!isProd,
-		// 		eslint.results(results => {
-		// 			console.log(resultChalk(`TOTAL Results: ${results.length}`))
-		// 			console.log(
-		// 				warning(`TOTAL Warnings: ${results.warningCount} (${results.fixableWarningCount} fixable)`)
-		// 			)
-		// 			console.log(
-		// 				error(
-		// 					`TOTAL Errors: ${results.errorCount} (${results.fixableErrorCount} fixable, ${results.fatalErrorCount} fatal)`
-		// 				)
-		// 			)
-		// 			console.log('')
-		// 		})
-		// 	)
-		// )
 		.pipe(gulpif(isProd, uglify().on('error', notify.onError())))
 		.pipe(gulpif(!isProd, sourcemaps.write('.')))
 		.pipe(dest('./bundle/js'))
