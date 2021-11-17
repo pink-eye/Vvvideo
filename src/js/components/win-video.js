@@ -81,7 +81,7 @@ const prepareVideoOnly = formats => {
 }
 
 const prepareVideoAndAudio = (audio, formats) => {
-	let ss = storage.settings
+	const ss = storage.settings
 
 	switch (ss.defaltVideoFormat) {
 		case 'mp4':
@@ -107,6 +107,8 @@ const openWinVideo = async id => {
 	let audioInstance = video.querySelector('audio')
 	let videoPoster = video.querySelector('.video__poster img')
 	let videoSkeleton = video.querySelector('.video-skeleton')
+	let topBarTitle = video.querySelector('.top-bar__title')
+	let topBarAuthor = video.querySelector('.top-bar__author')
 	let controls = _io_q('.controls')
 	let quality = controls.querySelector('.controls__quality')
 	let qualityCurrent = quality.querySelector('.dropdown__head')
@@ -178,6 +180,7 @@ const openWinVideo = async id => {
 					progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
 
 				if (videoDetails.title !== videoTitle.textContent) videoTitle.textContent = videoDetails.title
+				topBarTitle.textContent = videoDetails.title
 
 				removeSkeleton(titleSkeleton)
 
@@ -201,6 +204,8 @@ const openWinVideo = async id => {
 						removeSkeleton(partSkeleton)
 					}
 				}
+
+				topBarAuthor.textContent = videoDetails.author.name
 
 				let authorParams = {
 					parent: authorCard,
@@ -230,6 +235,8 @@ const openWinVideo = async id => {
 			controls = null
 			videoDesc = null
 			videoLikes = null
+			topBarTitle = null
+			topBarAuthor = null
 			videoDislikes = null
 			progressStoryboard = null
 			partSkeletonAll = null

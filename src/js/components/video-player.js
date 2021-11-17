@@ -260,24 +260,32 @@ const updateVolumeEl = el => {
 	volumeBar = null
 }
 
-const hideControls = _ => {
+const hideBars = _ => {
 	let controls = _io_q('.controls')
 	let dropdownActive = controls.querySelector('.dropdown._active')
 	let controlsBar = controls.querySelector('.controls__bar')
+	let topBar = _io_q('.video').querySelector('.top-bar')
 
-	if (!dropdownActive) controlsBar.classList.remove('_opened')
+	if (!dropdownActive) {
+		controlsBar.classList.remove('_opened')
+		topBar.classList.remove('_opened')
+	}
 
 	dropdownActive = null
 	controlsBar = null
 	controls = null
+	topBar = null
 }
 
-const showControls = _ => {
+const showBars = _ => {
+	let topBar = _io_q('.video').querySelector('.top-bar')
 	let controlsBar = _io_q('.controls').querySelector('.controls__bar')
 
 	controlsBar.classList.add('_opened')
+	topBar.classList.add('_opened')
 
 	controlsBar = null
+	topBar = null
 }
 
 const hidePoster = _ => {
@@ -711,7 +719,7 @@ const initVideoPlayer = _ => {
 
 	controlDecorations.addEventListener('click', togglePlay)
 
-	controls.addEventListener('mouseleave', hideControls)
+	controls.addEventListener('mouseleave', hideBars)
 
 	progressSeek.addEventListener('mousemove', handleMouseMoveProgressSeek)
 
@@ -750,8 +758,8 @@ const initVideoPlayer = _ => {
 
 		const handleMouseMove = _ => {
 			clearTimeout(timeout)
-			timeout = setTimeout(hideControls, 3000)
-			showControls()
+			timeout = setTimeout(hideBars, 3000)
+			showBars()
 		}
 
 		controls.addEventListener('mousemove', handleMouseMove)
@@ -854,7 +862,7 @@ const resetVideoPlayer = _ => {
 
 	controlDecorations.removeEventListener('click', togglePlay)
 
-	controls.removeEventListener('mouseleave', hideControls)
+	controls.removeEventListener('mouseleave', hideBars)
 
 	progressSeek.removeEventListener('mousemove', handleMouseMoveProgressSeek)
 
