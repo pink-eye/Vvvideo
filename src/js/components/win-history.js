@@ -28,7 +28,7 @@ const removeSameHistoryItem = newItem => {
 }
 
 const addNewHistoryItem = newItem => {
-	storage.history = [newItem].concat(storage.history)
+	storage.history = [newItem, ...storage.history]
 }
 
 const keepHistoryArray = _ => {
@@ -136,8 +136,7 @@ const rememberWatchedTime = _ => {
 	video = null
 }
 
-const getItemWithWatchedTime = videoId =>
-	storage.history.find(item => item.id === videoId && item?.watchedTime)
+const getItemWithWatchedTime = videoId => storage.history.find(item => item.id === videoId && item?.watchedTime)
 
 const getWatchedtTime = videoId => {
 	const { disableHistory, dontRememberWatchedTime } = storage.settings

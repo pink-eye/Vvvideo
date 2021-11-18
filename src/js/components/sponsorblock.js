@@ -28,6 +28,7 @@ const getSegmentsSB = async videoId => {
 
 		data = null
 	} catch (error) {
+		showToast('info', `Sponsorblock doesn't have segments for this video`)
 	} finally {
 		video = null
 		controlsProgess = null

@@ -36,8 +36,8 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	sidebar.addEventListener('click', manageWin)
 
-	const handleClickSearch = e => {
-		if (!isEmpty(searchBar.value)) manageWin(e)
+	const handleClickSearch = event => {
+		if (!isEmpty(searchBar.value)) manageWin(event)
 	}
 
 	searchBtn.addEventListener('click', handleClickSearch)
@@ -46,29 +46,29 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	// HOT KEYS ON SEARCH
 
-	const handleKeyDownSearch = e => {
+	const handleKeyDownSearch = event => {
 		// ARROWS
-		if (e.keyCode === 40 || e.keyCode === 38) {
+		if (event.keyCode === 40 || event.keyCode === 38) {
 			resetSelected(headerSearch)
-			chooseSuggest(headerSearch, e.keyCode)
+			chooseSuggest(headerSearch, event.keyCode)
 		}
 
 		// ENTER
-		if (e.keyCode === 13) {
+		if (event.keyCode === 13) {
 			hideSuggest(headerSearch)
 			hideOverlay()
 
-			if (!isEmpty(searchBar.value)) manageWin(e)
+			if (!isEmpty(searchBar.value)) manageWin(event)
 		}
 	}
 
 	searchBar.addEventListener('keydown', handleKeyDownSearch)
 
-	const handleClickWindow = e => {
-		if (!e.target.closest('.dropdown')) {
+	const handleClickWindow = event => {
+		if (!event.target.closest('.dropdown')) {
 			hideLastDropdown()
 		}
-		if (!e.target.closest('.search')) {
+		if (!event.target.closest('.search')) {
 			hideSuggest(headerSearch)
 			hideOverlay()
 		}

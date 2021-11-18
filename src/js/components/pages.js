@@ -60,38 +60,54 @@ const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
 		firstCard.focus()
 
 		increment += 20
-		getDataMore(typeCard)
-		recycleDOM(increment, cardAll, typeCard)
-		scrollToElem(getCoordY(firstCard))
 		page += 1
-		updateCount(page, parent)
 
-		btnPrevPage.disabled &&= false
+		getDataMore(typeCard)
+		recycleDOM(cardAll, typeCard)
+		scrollToElem(getCoordY(firstCard))
+		updateCount(parent)
+
+		let givenBtnPrevPage = btnPrevPage
+
+		givenBtnPrevPage.disabled &&= false
 
 		firstCard = null
+		givenBtnPrevPage = null
 	}
 
-	if (page * 20 > itemArray.length - 1) btnNextPage.disabled = true
+	if (page * 20 > itemArray.length - 1) {
+		let givenBtnNextPage = btnNextPage
+		givenBtnNextPage.disabled = true
+		givenBtnNextPage = null
+	}
 }
 
 const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
 	typeCard !== 'author' ? resetGrid(parent) : resetGridAuthorCard()
 
-	if (page === 2) btnPrevPage.disabled = true
+	if (page === 2) {
+		let givenBtnPrevPage = btnPrevPage
+		givenBtnPrevPage.disabled = true
+		givenBtnPrevPage = null
+	}
 
 	if (page > 1) {
 		let firstCard = cardAll[0]
 		firstCard.focus()
 
 		increment -= 20
-		recycleDOM(increment, cardAll, typeCard)
-		scrollToElem(getCoordY(firstCard))
-		page--
-		updateCount(page, parent)
+		page -= 1
 
-		btnNextPage.disabled &&= false
+		recycleDOM(cardAll, typeCard)
+		scrollToElem(getCoordY(firstCard))
+		updateCount(parent)
+
+		let givenBtnNextPage = btnNextPage
+
+		givenBtnNextPage.disabled &&= false
 
 		firstCard = null
+		givenBtnNextPage = null
 	}
 }
 
@@ -125,7 +141,7 @@ const getDataMore = async typeCard => {
 	}
 }
 
-const recycleDOM = async (increment, cardAll, typeCard) => {
+const recycleDOM = async (cardAll, typeCard) => {
 	for (let index = 0, { length } = cardAll; index < length; index += 1) {
 		const card = cardAll[index]
 		const nextItem = itemArray[index + increment]
@@ -173,7 +189,7 @@ const recycleDOM = async (increment, cardAll, typeCard) => {
 	}
 }
 
-const updateCount = (page, parent) => {
+const updateCount = (parent) => {
 	let gridCount = parent.querySelector('.grid__count')
 
 	gridCount && (gridCount.textContent = page)
@@ -190,8 +206,14 @@ const resetCount = parent => {
 }
 
 const resetBtns = (btnNextPage, btnPrevPage) => {
-	btnNextPage.disabled &&= false
-	btnPrevPage.disabled ||= true
+	let givenBtnNextPage = btnNextPage
+	let givenBtnPrevPage = btnPrevPage
+
+	givenBtnNextPage.disabled &&= false
+	givenBtnPrevPage.disabled ||= true
+
+	givenBtnNextPage = null
+	givenBtnPrevPage = null
 }
 
 const initPages = (parent, data, cardAll, typeCard, continuation = null) => {

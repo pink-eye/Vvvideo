@@ -108,15 +108,19 @@ const initSuggests = parent => {
 
 					let suggestAll = parent.querySelectorAll('.search__suggest')
 
+					const handleClickSuggest = event => {
+						let { currentTarget } = event
+						insertSelectedSuggest(parent, currentTarget)
+						resetSelected(parent)
+						lastSelected = null
+						currentTarget = null
+						searchBar.focus()
+					}
+
 					for (let index = 0, { length } = suggestAll; index < length; index += 1) {
 						const suggest = suggestAll[index]
 
-						suggest.addEventListener('click', _ => {
-							insertSelectedSuggest(parent, suggest)
-							resetSelected(parent)
-							lastSelected = null
-							searchBar.focus()
-						})
+						suggest.addEventListener('click', handleClickSuggest)
 					}
 				} catch (error) {
 					showToast('error', error.message)

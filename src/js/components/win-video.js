@@ -1,3 +1,6 @@
+let hls = null
+let videoFormatAll = null
+
 const createQualityItemHTML = quality => `<li class="dropdown__item">
 											<button class="dropdown__btn btn-reset">${quality}</button>
 										</li>`
@@ -92,14 +95,14 @@ const prepareVideoAndAudio = (audio, formats) => {
 			break
 	}
 
-	audio.src = getHighestAudio(formats).url
+	let givenAudio = audio
+	const { url } = getHighestAudio(formats)
+	givenAudio.src = url
 
 	if (videoFormatAll.length === 0) prepareVideoOnly(formats)
 
-	audio = null
+	givenAudio = null
 }
-
-let hls = null
 
 const openWinVideo = async id => {
 	let video = _io_q('.video')
@@ -139,6 +142,8 @@ const openWinVideo = async id => {
 			let data = ss.enableProxy ? await API.scrapeVideoProxy(id, getProxyOptions()) : await API.scrapeVideo(id)
 
 			const { formats, videoDetails } = data
+
+			console.log(videoDetails?.chapters)
 
 			if (videoDetails.isLive) video.classList.add('_live')
 

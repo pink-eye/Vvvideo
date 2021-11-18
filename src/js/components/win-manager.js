@@ -86,8 +86,6 @@ const hideWin = win => {
 
 			const afterOpenWin = _ => {
 				resetWin(win)
-
-				win = null
 			}
 
 			setTimeout(afterOpenWin, 200)
@@ -97,8 +95,8 @@ const hideWin = win => {
 	}
 }
 
-const manageWin = async e => {
-	let btnWin = e.target.dataset.win ? e.target : e.target.closest('[data-win]')
+const manageWin = async event => {
+	let btnWin = event.target.dataset.win ? event.target : event.target.closest('[data-win]')
 
 	if (btnWin && !btnWin.disabled) {
 		let { win, id } = btnWin.dataset

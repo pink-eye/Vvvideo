@@ -1,4 +1,3 @@
-let videoFormatAll = null
 let hasListeners = false
 let isFirstPlay = true
 let isSync = false
@@ -55,9 +54,10 @@ const changeVideoSrc = (url, currentTime) => {
 
 const chooseQuality = url => {
 	let video = _io_q('video')
-	const currentTime = video.currentTime
 
-	if (!video.paused) {
+	const { currentTime, paused } = video
+
+	if (!paused) {
 		pauseVideoPlayer()
 		changeVideoSrc(url, currentTime)
 		playVideoPlayer()
@@ -249,14 +249,16 @@ const updateVolumeEl = el => {
 	let controls = _io_q('.controls')
 	let volumeBar = controls.querySelector('.volume__bar')
 	let volumeSeek = controls.querySelector('.volume__seek')
+	let givenEl = el
 
-	el.muted &&= false
+	givenEl.muted &&= false
 
-	el.volume = volumeSeek.value
+	givenEl.volume = volumeSeek.value
 	volumeBar.value = volumeSeek.value
 
 	controls = null
 	volumeSeek = null
+	givenEl = null
 	volumeBar = null
 }
 
@@ -413,11 +415,12 @@ const skipAhead = event => {
 
 const toggleMuteEl = el => {
 	let volumeSeek = _io_q('.controls').querySelector('.volume__seek')
+	let givenEl = el
 
-	el.muted = !el.muted
+	givenEl.muted = !givenEl.muted
 
-	if (el.muted) {
-		volumeSeek.setAttribute('data-volume', volumeSeek.value)
+	if (givenEl.muted) {
+		volumeSeek.dataset.volume = volumeSeek.value
 		volumeSeek.value = 0
 	} else volumeSeek.value = volumeSeek.dataset.volume
 
@@ -542,9 +545,9 @@ const handleError = _ => {
 	video = null
 }
 
-const handleClickTimecode = e => {
-	if (e.target.classList.contains('timecode')) {
-		let timecode = e.target
+const handleClickTimecode = event => {
+	if (event.target.classList.contains('timecode')) {
+		let timecode = event.target
 		_io_q('video').currentTime = convertDurationToSeconds(timecode.textContent)
 		isSync = false
 		document.activeElement.blur()
@@ -588,25 +591,25 @@ const handleMouseMoveProgressSeek = event => {
 	video = null
 }
 
-const handleKeyDownWithinVideo = e => {
+const handleKeyDownWithinVideo = event => {
 	if (_io_q('.video').classList.contains('_active') && (hasFocus(_io_q('body')) || hasFocus(null))) {
 		// ENTER || SPACE
-		if (e.keyCode === 13 || e.keyCode === 32) togglePlay()
+		if (event.keyCode === 13 || event.keyCode === 32) togglePlay()
 
 		// ARROW LEFT
-		if (e.keyCode === 37) backwardTime()
+		if (event.keyCode === 37) backwardTime()
 
 		// ARROW RIGHT
-		if (e.keyCode === 39) forwardTime()
+		if (event.keyCode === 39) forwardTime()
 
 		// M
-		if (e.keyCode === 77) toggleMuteVideoPlayer()
+		if (event.keyCode === 77) toggleMuteVideoPlayer()
 
 		// S
-		if (e.keyCode === 83) recordSegmentSB()
+		if (event.keyCode === 83) recordSegmentSB()
 
 		// V
-		if (e.keyCode === 86 && !disableSponsorblock) {
+		if (event.keyCode === 86 && !disableSponsorblock) {
 			doesSkipSegments = !doesSkipSegments
 			showToast(
 				'info',
@@ -615,7 +618,7 @@ const handleKeyDownWithinVideo = e => {
 		}
 
 		// F
-		if (e.keyCode === 70) toggleFullscreen()
+		if (event.keyCode === 70) toggleFullscreen()
 	}
 }
 

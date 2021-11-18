@@ -1,5 +1,5 @@
-const handleInputDialogField = e => {
-	let dialogSbField = e.target
+const handleInputDialogField = event => {
+	let dialogSbField = event.target
 	dialogSbField.value = formatDuration(dialogSbField.value)
 
 	hideInvalidUI()
@@ -176,6 +176,11 @@ const showDialogSB = _ => {
 
 let isRecording = false
 
+const onCloseModal = _ => {
+	playVideoPlayer()
+	resetDialogSB()
+}
+
 const initDialogSB = _ => {
 	const dialogSb = _io_q('.dialog-sb')
 	const dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send')
@@ -184,10 +189,6 @@ const initDialogSB = _ => {
 
 	isRecording &&= false
 
-	const onCloseModal = _ => {
-		playVideoPlayer()
-		resetDialogSB()
-	}
 
 	const modal = new GraphModal({ isClose: onCloseModal })
 

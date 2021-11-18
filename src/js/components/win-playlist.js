@@ -14,16 +14,16 @@ const openWinPlaylist = async id => {
 			? await API.scrapePlaylistVideosProxy(id, getProxyOptions())
 			: await API.scrapePlaylistVideos(id)
 
-		const { items } = data
+		const { title, estimatedItemCount, views, lastUpdated, items, author, continuation } = data
 
-		if (playlistName.textContent !== data.title) playlistName.textContent = data.title
+		if (playlistName.textContent !== title) playlistName.textContent = title
 
 		removeSkeleton(titleSkeleton)
 
-		playlistVideoCount.textContent = `${items.length} / ${data.estimatedItemCount} available videos`
-		playlistViews.textContent = normalizeCount(data.views)
+		playlistVideoCount.textContent = `${items.length} / ${estimatedItemCount} available videos`
+		playlistViews.textContent = normalizeCount(views)
 
-		playlistLastUpdated.textContent = data.lastUpdated
+		playlistLastUpdated.textContent = lastUpdated
 
 		let duration = 0
 
@@ -43,9 +43,9 @@ const openWinPlaylist = async id => {
 
 		let authorParams = {
 			parent: authorCard,
-			name: data.author.name,
-			avatarSrc: data.author.bestAvatar.url,
-			id: data.author.channelID,
+			name: author.name,
+			avatarSrc: author.bestAvatar.url,
+			id: author.channelID,
 		}
 
 		fillAuthorCard(authorParams)
@@ -55,7 +55,7 @@ const openWinPlaylist = async id => {
 		let videoAll = playlist.querySelectorAll('.card')
 
 		items.length > videoAll.length
-			? initPages(playlist, items, videoAll, 'video', data.continuation)
+			? initPages(playlist, items, videoAll, 'video', continuation)
 			: disablePages(playlist)
 
 		for (let index = 0, { length } = videoAll; index < length; index += 1) {

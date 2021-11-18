@@ -126,47 +126,57 @@ const handleClickSubscribeBtn = event => {
 }
 
 const transformBtn = (btn, btnText, isSubscribed) => {
-	btn.disabled = true
+	let givenBtn = btn
+	let givenBtnText = btnText
 
-	!isSubscribed ? btn.classList.add('_subscribed') : btn.classList.remove('_subscribed')
+	givenBtn.disabled = true
 
-	btnText.style.opacity = '0'
+	!isSubscribed ? givenBtn.classList.add('_subscribed') : givenBtn.classList.remove('_subscribed')
+
+	givenBtnText.style.opacity = '0'
 
 	const onChangeState = _ => {
-		btnText.textContent = !isSubscribed ? 'Unsubscribe' : 'Subscribe'
-		btnText.removeAttribute('style')
+		givenBtnText.textContent = !isSubscribed ? 'Unsubscribe' : 'Subscribe'
+		givenBtnText.removeAttribute('style')
 
-		btn.disabled = false
+		givenBtn.disabled = false
+
+		givenBtn = null
+		givenBtnText = null
 	}
 
 	setTimeout(onChangeState, getDurationTimeout(200))
 }
 
 const prepareSubscribeBtn = (btn, channelId, name) => {
-	let btnText = btn.querySelector('.subscribe__text')
+	let givenBtn = btn
+	let btnText = givenBtn.querySelector('.subscribe__text')
 
-	if (!isEmpty(channelId) && isEmpty(btn.dataset.channelId)) {
-		btn.dataset.channelId = channelId
-		transformBtn(btn, btnText, !hasSubscription(channelId, name))
+	if (!isEmpty(channelId) && isEmpty(givenBtn.dataset.channelId)) {
+		givenBtn.dataset.channelId = channelId
+		transformBtn(givenBtn, btnText, !hasSubscription(channelId, name))
 	}
 
-	if (!isEmpty(name) && isEmpty(btn.dataset.name)) btn.dataset.name = name
+	if (!isEmpty(name) && isEmpty(givenBtn.dataset.name)) givenBtn.dataset.name = name
 
-	btn.addEventListener('click', handleClickSubscribeBtn)
+	givenBtn.addEventListener('click', handleClickSubscribeBtn)
 
+	givenBtn = null
 	btnText = null
 }
 
 const destroySubscribeBtn = btn => {
+	let givenBtn = btn
 	let btnText = btn.querySelector('.subscribe__text')
 
-	btn.removeAttribute('data-channel-id')
-	btn.removeAttribute('data-name')
+	givenBtn.removeAttribute('data-channel-id')
+	givenBtn.removeAttribute('data-name')
 	btnText.textContent = ''
 
-	if (btn.classList.contains('_subscribed')) btn.classList.remove('_subscribed')
+	if (givenBtn.classList.contains('_subscribed')) givenBtn.classList.remove('_subscribed')
 
-	btn.removeEventListener('click', handleClickSubscribeBtn)
+	givenBtn.removeEventListener('click', handleClickSubscribeBtn)
 
+	givenBtn = null
 	btnText = null
 }

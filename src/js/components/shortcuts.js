@@ -1,8 +1,8 @@
-const handleKeyDown = e => {
+const handleKeyDown = event => {
 	// ESC
-	if (e.keyCode === 27) {
+	if (event.keyCode === 27) {
 		document.activeElement.blur()
-		
+
 		hideOverlay()
 
 		let winActive = _io_q('.main__content').querySelector('.win._active')
@@ -15,7 +15,7 @@ const handleKeyDown = e => {
 	}
 
 	// CTRL + F
-	if (e.ctrlKey && e.keyCode === 70) {
+	if (event.ctrlKey && event.keyCode === 70) {
 		let header = _io_q('.header')
 
 		if (header.classList.contains('_hidden')) header.classList.remove('_hidden')
@@ -26,10 +26,10 @@ const handleKeyDown = e => {
 	}
 
 	// CTRL + B
-	if (e.ctrlKey && e.keyCode === 66) toggleMenu()
+	if (event.ctrlKey && event.keyCode === 66) toggleMenu()
 
 	// SHIFT
-	if (e.shiftKey) {
+	if (event.shiftKey) {
 		let winActive = _io_q('.main__content').querySelector('.win._active')
 
 		if (winActive && !winActive.classList.contains('settings') && !winActive.classList.contains('video')) {
@@ -41,14 +41,14 @@ const handleKeyDown = e => {
 
 			if (btns && btns.hidden) return
 
-			if (e.keyCode === 75) {
+			if (event.keyCode === 75) {
 				// K
 				if (btnNextPage && !btnNextPage.disabled)
 					nextPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
 			}
 
 			// J
-			if (e.keyCode === 74) {
+			if (event.keyCode === 74) {
 				if (btnPrevPage && !btnPrevPage.disabled)
 					prevPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
 			}
@@ -63,10 +63,10 @@ const handleKeyDown = e => {
 	}
 
 	// SPACE
-	if (e.keyCode === 32 && !hasFocus(_io_q('.search__bar'))) {
+	if (event.keyCode === 32 && !hasFocus(_io_q('.search__bar'))) {
 		let winActive = _io_q('.main__content').querySelector('.win._active')
 
-		if (winActive.classList.contains('video')) e.preventDefault()
+		if (winActive.classList.contains('video')) event.preventDefault()
 
 		winActive = null
 	}

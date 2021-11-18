@@ -47,8 +47,9 @@ const openWinLatest = async _ => {
 		btnLatest = null
 
 		try {
-			latestArray = [].concat.apply([], await Promise.all(promises))
-			latestArray = await Promise.all(latestArray.sort((a, b) => b.publishedDate - a.publishedDate))
+			latestArray = await Promise.all(promises)
+			latestArray = latestArray.flat()
+			latestArray = latestArray.sort((a, b) => b.publishedDate - a.publishedDate)
 
 			showToast('good', 'Latest uploads is got successfully')
 		} catch (error) {

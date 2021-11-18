@@ -10,14 +10,18 @@ const initDropdown = (dropdown, callback) => {
 	const dropdownBtnAll = dropdown.querySelectorAll('.dropdown__btn')
 
 	if (dropdownBtnAll.length > 0) {
+		const handleClickBtn = event => {
+			let { currentTarget } = event
+
+			chooseDropdownItem(dropdown, currentTarget)
+			focusCurrentChoice(dropdown)
+			callback(currentTarget)
+
+			currentTarget = null
+		}
+
 		for (let index = 0, { length } = dropdownBtnAll; index < length; index += 1) {
 			const dropdownBtn = dropdownBtnAll[index]
-
-			const handleClickBtn = _ => {
-				chooseDropdownItem(dropdown, dropdownBtn)
-				focusCurrentChoice(dropdown)
-				callback(dropdownBtn)
-			}
 
 			dropdownBtn.addEventListener('click', handleClickBtn)
 		}

@@ -1,12 +1,13 @@
 const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
-	let authorAvatar = parent.querySelector('.author__avatar img')
-	let authorInfo = parent.querySelector('.author__info')
+	let givenParent = parent
+	let authorAvatar = givenParent.querySelector('.author__avatar img')
+	let authorInfo = givenParent.querySelector('.author__info')
 	let authorName = authorInfo.querySelector('.author__name span')
 	let authorSubs = authorInfo.querySelector('.author__subs span')
-	let avatarSkeleton = parent.querySelector('.avatar-skeleton')
+	let avatarSkeleton = givenParent.querySelector('.avatar-skeleton')
 	let skeletonAll = authorInfo.querySelectorAll('.skeleton')
 
-	parent.disabled &&= false
+	givenParent.disabled &&= false
 
 	if (!isEmpty(avatarSrc)) {
 		authorAvatar.src = avatarSrc
@@ -29,7 +30,7 @@ const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 	if (!isEmpty(name) && authorName.textContent !== name) {
 		authorName.textContent = name
 		removeSkeleton(skeletonAll[0])
-		parent.dataset.name = name
+		givenParent.dataset.name = name
 	}
 
 	if (!isEmpty(subs) && authorSubs.textContent !== subs) {
@@ -37,21 +38,22 @@ const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 		removeSkeleton(skeletonAll[1])
 	}
 
-	parent.dataset.id = id
+	givenParent.dataset.id = id
 
 	authorInfo = null
 	authorName = null
 	authorSubs = null
 	skeletonAll = null
-	parent = null
+	givenParent = null
 }
 
 const resetAuthorCard = parent => {
-	let authorAvatar = parent.querySelector('.author__avatar img')
-	let authorInfo = parent.querySelector('.author__info')
+	let givenParent = parent
+	let authorAvatar = givenParent.querySelector('.author__avatar img')
+	let authorInfo = givenParent.querySelector('.author__info')
 	let authorName = authorInfo.querySelector('.author__name span')
 	let authorSubs = authorInfo.querySelector('.author__subs span')
-	let skeletonAll = parent.querySelectorAll('.skeleton')
+	let skeletonAll = givenParent.querySelectorAll('.skeleton')
 
 	if (skeletonAll.length > 0) {
 		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
@@ -60,16 +62,17 @@ const resetAuthorCard = parent => {
 		}
 	}
 
-	parent.removeAttribute('data-id')
-	parent.removeAttribute('data-name')
+	givenParent.removeAttribute('data-id')
+	givenParent.removeAttribute('data-name')
 	authorAvatar.removeAttribute('src')
 	authorName.textContent = '...'
 	authorSubs.textContent = '...'
 
-	parent.disabled ||= true
+	givenParent.disabled ||= true
 
-	parent.hidden &&= false
+	givenParent.hidden &&= false
 
+	givenParent = null
 	skeletonAll = null
 	authorAvatar = null
 	authorInfo = null

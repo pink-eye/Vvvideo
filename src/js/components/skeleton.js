@@ -1,18 +1,20 @@
 const removeSkeleton = skeleton => {
-	if (!skeleton.classList.contains('_active'))
-		skeleton.classList.add('_removing');
+	let givenSkeleton = skeleton
+
+	if (!givenSkeleton.classList.contains('_active')) givenSkeleton.classList.add('_removing')
 
 	const onRemoveSkeleton = _ => {
-		skeleton.hidden ||= true
-		skeleton = null
+		givenSkeleton.hidden ||= true
+		givenSkeleton = null
 	}
 
 	setTimeout(onRemoveSkeleton, getDurationTimeout())
 }
 
 const resetSkeleton = skeleton => {
-	if (skeleton.classList.contains('_removing'))
-		skeleton.classList.remove('_removing')
+	let givenSkeleton = skeleton
+	if (givenSkeleton.classList.contains('_removing')) givenSkeleton.classList.remove('_removing')
 
-	skeleton.hidden &&= false
+	givenSkeleton.hidden &&= false
+	givenSkeleton = null
 }
