@@ -1,15 +1,18 @@
 {
 	"plugins": ["prettier"],
 	"parserOptions": { "ecmaVersion": "latest" },
-	"extends": ["airbnb-base", "plugin:prettier/recommended", "prettier"],
+	"extends": ["airbnb-base", "plugin:unicorn/recommended", "plugin:prettier/recommended", "prettier"],
 	"env": {
 		"es2021": true,
 		"browser": true,
 		"node": true
 	},
-	"rules": {},
-	"globals": {
-		"_": "readonly",
-		"API": "readonly"
-	}
+	"rules": {
+		"no-undef": "off",
+		"unicorn/no-null": "off",
+		"unicorn/prevent-abbreviations": "off",
+		"no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true }],
+		"no-unused-vars": ["error", { "argsIgnorePattern": "^_$" }]
+	},
+	"globals": {}
 }
