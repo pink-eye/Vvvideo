@@ -1,0 +1,10 @@
+{
+	"plugins": [
+		"stylelint-scss",
+		"stylelint-order",
+		"stylelint-declaration-block-no-ignored-properties",
+		"stylelint-config-rational-order/plugin"
+	],
+	"extends": ["stylelint-config-standard-scss", "stylelint-config-rational-order"],
+	"rules": {}
+}

@@ -68,6 +68,7 @@
 		"@electron-forge/maker-rpm": "^6.0.0-beta.61",
 		"@electron-forge/maker-squirrel": "^6.0.0-beta.61",
 		"@electron-forge/maker-zip": "^6.0.0-beta.61",
+		"@ronilaukkarinen/gulp-stylelint": "^14.0.5",
 		"babel-loader": "^8.2.3",
 		"browser-sync": "^2.27.7",
 		"chalk": "^4.1.2",
@@ -98,6 +99,14 @@
 		"gulp-uglify-es": "^3.0.0",
 		"jest": "^27.3.1",
 		"node-sass": "^6.0.1",
-		"prettier": "2.4.1"
+		"prettier": "2.4.1",
+		"stylelint": "^14.1.0",
+		"stylelint-config-prettier": "^9.0.3",
+		"stylelint-config-rational-order": "^0.1.2",
+		"stylelint-config-standard-scss": "^2.0.1",
+		"stylelint-declaration-block-no-ignored-properties": "^2.5.0",
+		"stylelint-order": "^5.0.0",
+		"stylelint-prettier": "^2.0.0",
+		"stylelint-scss": "^4.0.0"
 	}
 }

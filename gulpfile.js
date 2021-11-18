@@ -18,6 +18,7 @@ const { readFileSync } = require('fs')
 const concat = require('gulp-concat')
 const chalk = require('chalk')
 const columnify = require('columnify')
+const stylelint = require('@ronilaukkarinen/gulp-stylelint')
 
 let isProd = false
 
@@ -39,6 +40,7 @@ const clean = () => {
 const styles = () => {
 	return src('./src/scss/**/*.scss')
 		.pipe(gulpif(!isProd, sourcemaps.init()))
+		.pipe(stylelint({ fix: true }))
 		.pipe(sass().on('error', notify.onError()))
 		.pipe(
 			gulpif(
@@ -108,7 +110,7 @@ const scripts = () => {
 									maxWidth: 100,
 								},
 							},
-							columns: ['severity', 'position', 'message'],
+							columns: ['position', 'severity', 'message'],
 						})
 
 						console.log(columnsMessages)
