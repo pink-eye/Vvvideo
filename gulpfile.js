@@ -216,12 +216,6 @@ const htmlInclude = () => {
 }
 
 const watchFiles = () => {
-	browserSync.init({
-		server: {
-			baseDir: './bundle',
-		},
-	})
-
 	watch('./src/scss/**/*.scss', styles)
 	watch('./src/js/**/*.js', scripts)
 	watch('./src/html/*.html', htmlInclude)
