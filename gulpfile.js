@@ -23,10 +23,14 @@ let isProd = false
 
 // CHALKS
 
-const error = chalk.white.bgRed.bold
-const warning = chalk.hex('#000000').bgYellow.bold
+const error = chalk.redBright
+const errorBright = chalk.hex('#ff6666')
+const warning = chalk.yellowBright
+const warningBright = chalk.hex('#e6ff8a')
 const path = chalk.whiteBright.bgHex('#3c5cec')
-const resultChalk = chalk.magenta.bold
+const info = chalk.hex('#3c5cec')
+const secondary = chalk.hex('#818c98')
+const resultChalk = chalk.cyanBright
 
 const clean = () => {
 	return del(['bundle/*'])
@@ -72,53 +76,57 @@ const scripts = () => {
 
 					let { messages } = result
 
-					const unnecessaryPathLength = 47
-					const pathLength = filePath.length
-					const slicedPath = filePath.slice(unnecessaryPathLength, pathLength)
+					if (messages.length > 0) {
+						const unnecessaryPathLength = 47
+						const pathLength = filePath.length
+						const slicedPath = filePath.slice(unnecessaryPathLength, pathLength)
 
-					console.log('')
-					console.log('')
+						console.log('')
+						console.log('')
+						console.log(`[${chalk.blue('ESLint')}]: ${path(slicedPath)}`)
+						console.log('')
 
-					console.log(`${chalk.red('x')} [${chalk.blue('ESLint')}]: ${path(slicedPath)}`)
+						messages.forEach(msg => {
+							const { line, column, severity } = msg
 
-					console.log('')
+							const msgPos = `${secondary(`:${line}:${column}`)}`
+							msg.position = msgPos
 
-					messages.forEach(msg => {
-						const { line, column } = msg
+							const severityArray = [`${info('ℹ')}`, `${warning('⚠')}`, `${error('✖')}`]
+							msg.severity = severityArray[severity]
+						})
 
-						const msgPos = `${chalk.yellow(`${slicedPath}:${chalk.cyanBright(`${line}:${column}`)}`)}`
+						const columnsMessages = columnify(messages, {
+							showHeaders: false,
+							columnSplitter: '  ',
+							config: {
+								position: {
+									minWidth: 8,
+									align: 'right',
+								},
+								message: {
+									maxWidth: 100,
+								},
+							},
+							columns: ['severity', 'position', 'message'],
+						})
 
-						msg.position = msgPos
-					})
+						console.log(columnsMessages)
+						console.log('')
 
-					const columnsMessages = columnify(messages, {
-						columnSplitter: ' | ',
-						columns: ['position', 'message'],
-					})
+						if (warningCount > 0)
+							console.log(warningBright(`${warningCount} warnings (${fixableWarningCount} fixable)`))
 
-					console.log(columnsMessages)
+						if (errorCount > 0)
+							console.log(
+								errorBright(
+									`${errorCount} errors (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`
+								)
+							)
 
-					console.log('')
-
-					const total = [
-						{
-							path: path(slicedPath),
-							messages: resultChalk(`${messages.length}`),
-							warnings: warning(`${warningCount} (${fixableWarningCount} fixable)`),
-							errors: error(`${errorCount} (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`),
-						},
-					]
-
-					const columnTotal = columnify(total, {
-						columnSplitter: ' | ',
-						preserveNewLines: true,
-						columns: ['path', 'messages', 'warnings', 'errors'],
-					})
-
-					console.log(columnTotal)
-
-					console.log('')
-					console.log('')
+						console.log('')
+						console.log('')
+					}
 				})
 			)
 		)
@@ -140,16 +148,19 @@ const scripts = () => {
 
 					const total = [
 						{
-							results: resultChalk(`${length}`),
-							warnings: warning(`${warningCount} (${fixableWarningCount} fixable)`),
-							errors: error(`${errorCount} (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`),
+							files: resultChalk(`${length} files`),
+							warnings: warningBright(`${warningCount} warnings (${fixableWarningCount} fixable)`),
+							errors: errorBright(
+								`${errorCount} error (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`
+							),
 						},
 					]
 
 					const columnTotal = columnify(total, {
-						columnSplitter: ' | ',
+						showHeaders: false,
+						columnSplitter: '  ',
 						preserveNewLines: true,
-						columns: ['results', 'warnings', 'errors'],
+						columns: ['files', 'warnings', 'errors'],
 					})
 
 					console.log(`[${chalk.blue('ESLint')}]: SUMMARY`)
