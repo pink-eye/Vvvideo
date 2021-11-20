@@ -10,7 +10,8 @@
 		"make": "electron-forge make",
 		"publish": "electron-forge publish",
 		"format": "prettier src/",
-		"test": "jest"
+		"test": "jest",
+		"stylelint": "stylelint src/scss/**/*.scss --fix"
 	},
 	"keywords": [],
 	"author": {
@@ -101,6 +102,7 @@
 		"stylelint": "^14.1.0",
 		"stylelint-color-format": "^1.1.0",
 		"stylelint-config-prettier": "^9.0.3",
+		"stylelint-config-rational-order": "^0.1.2",
 		"stylelint-config-standard-scss": "^2.0.1",
 		"stylelint-declaration-block-no-ignored-properties": "^2.5.0",
 		"stylelint-order": "^5.0.0",
