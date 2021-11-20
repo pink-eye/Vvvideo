@@ -1,51 +1,50 @@
 .spinner {
-    --spinner-size: 5;
-    --line-color: #ffffff;
-    --line-alpha: 1;
-    --ring-color: #000000;
-    --ring-alpha: 0;
-    --ring-size: 10;
+	--spinner-size: 5;
+	--line-color: hsl(0, 0%, 100%);
+	--line-alpha: 1;
+	--ring-color: hsl(0, 0%, 0%);
+	--ring-alpha: 0;
+	--ring-size: 10;
 
-    font-size: calc(var(--spinner-size) * 1em);
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
+	width: 1em;
+	height: 1em;
+	border-radius: 50%;
+
+	font-size: calc(var(--spinner-size) * 1em);
 }
 
 .spinner .line {
-    fill: none;
-    stroke: var(--line-color);
-    stroke-width: var(--ring-size);
-    opacity: var(--line-alpha);
-    stroke-linecap: round;
-    transform-origin: 50% 50%;
-    transform: rotate3d(0, 0, 1, 0deg);
-    animation:
-        1800ms spinner-arc ease-in-out infinite,
-        1500ms spinner-rotate linear infinite;
+	fill: none;
+	stroke: var(--line-color);
+	stroke-linecap: round;
+	stroke-width: var(--ring-size);
+	opacity: var(--line-alpha);
+	transform: rotate3d(0, 0, 1, 0deg);
+	transform-origin: 50% 50%;
+	animation: 1800ms spinner-arc ease-in-out infinite, 1500ms spinner-rotate linear infinite;
 }
 
 .spinner .ring {
-    fill: none;
-    stroke: var(--ring-color);
-    stroke-width: var(--ring-size);
-    opacity: var(--ring-alpha);
+	fill: none;
+	stroke: var(--ring-color);
+	stroke-width: var(--ring-size);
+	opacity: var(--ring-alpha);
 }
 
 @keyframes spinner-rotate {
-    to {
-        transform: rotate3d(0, 0, 1, 360deg);
-    }
+	to {
+		transform: rotate3d(0, 0, 1, 360deg);
+	}
 }
 
 @keyframes spinner-arc {
-    from {
-        stroke-dasharray: 0 150;
-        stroke-dashoffset: 0;
-    }
+	from {
+		stroke-dasharray: 0 150;
+		stroke-dashoffset: 0;
+	}
 
-    to {
-        stroke-dasharray: 100 150;
-        stroke-dashoffset: -140;
-    }
+	to {
+		stroke-dasharray: 100 150;
+		stroke-dashoffset: -140;
+	}
 }

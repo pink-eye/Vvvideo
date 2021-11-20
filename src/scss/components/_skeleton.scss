@@ -1,52 +1,51 @@
 .skeleton {
-    position: absolute;
-    overflow: hidden;
-    border-radius: var(--brs-s);
-    inset: 0;
+	position: absolute;
+	inset: 0;
+	z-index: 11;
+	overflow: hidden;
+	border-radius: var(--brs-s);
 
-    background-color: var(--color-bg-skeleton);
-    z-index: 11;
+	background-color: var(--color-bg-skeleton);
 
-    &:after {
-        content: '';
-        position: absolute;
+	&:after {
+		content: '';
+		position: absolute;
 
-        animation: shimmer 1.8s ease-in-out infinite;
+		top: 0;
+		left: 0;
 
-        top: 0;
-        left: 0;
-
-        width: 15px;
-        height: 100%;
+		width: 15px;
+		height: 100%;
 		box-shadow: 0 0 10px 10px var(--color-bg-skeleton-item);
 
-        background-color: var(--color-bg-skeleton-item);
-    }
+		background-color: var(--color-bg-skeleton-item);
 
-    &:not(._removing) {
-        opacity: 1;
-        visibility: visible;
-    }
+		animation: shimmer 1.8s ease-in-out infinite;
+	}
 
-    &._removing {
-        opacity: 0;
-        visibility: hidden;
+	&:not(._removing) {
+		opacity: 1;
+		visibility: visible;
+	}
 
-        transition: opacity var(--trns),
-            visibility var(--trns);
-    }
+	&._removing {
+		opacity: 0;
+		visibility: hidden;
+
+		transition: opacity var(--trns), visibility var(--trns);
+	}
 }
 
 @keyframes shimmer {
-    0% {
-        left: calc(0% - 32px);
-    }
+	0% {
+		left: calc(0% - 32px);
+	}
 
-    25% {
-        left: calc(0% - 32px);
-    }
+	25% {
+		left: calc(0% - 32px);
+	}
 
-    100% {
-        left: calc(100% + 15px);
-    }
+	100% {
+		left: calc(100% + 15px);
+	}
 }

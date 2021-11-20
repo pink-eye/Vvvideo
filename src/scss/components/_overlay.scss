@@ -1,22 +1,21 @@
 .overlay {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+	position: absolute;
+	inset: 0;
 	z-index: 30;
+	width: 100%;
+	height: 100%;
 
-    background-color: var(--color-bg-duration);
+	background-color: var(--color-bg-duration);
 
-    transition: opacity var(--trns),
-        visibility var(--trns);
+	transition: opacity var(--trns), visibility var(--trns);
 
-    &:not(._active) {
-        opacity: 0;
-        visibility: hidden;
-    }
+	&:not(._active) {
+		opacity: 0;
+		visibility: hidden;
+	}
 
-    &._active {
-        opacity: 1;
-        visibility: visible;
-    }
+	&._active {
+		opacity: 1;
+		visibility: visible;
+	}
 }

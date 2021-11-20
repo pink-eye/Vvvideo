@@ -1,74 +1,68 @@
 .header {
+	position: fixed;
+	right: 0;
+	z-index: 100;
+	width: 100%;
 
-    position: fixed;
-    right: 0;
-    background-color: var(--color-bg-form);
+	box-shadow: var(--box-shadow-s);
+	background-color: var(--color-bg-form);
 
-    box-shadow: var(--box-shadow-s);
-    width: 100%;
-    z-index: 100;
+	transition: top var(--trns), box-shadow var(--trns), background-color var(--trns);
 
-    @media (max-width: 47.9375em) {
-        padding-block: unquote("clamp(0.625rem, 0.3977rem + 1.1364vw, 1.25rem)");
-    }
+	&:not(._hidden) {
+		top: 0;
+	}
 
-    transition: top var(--trns),
-    box-shadow var(--trns),
-    background-color var(--trns);
+	.burger {
+		padding: 30px;
+	}
 
-    &:not(._hidden) {
-        top: 0;
-    }
+	.search {
+		margin: auto;
+	}
 
-    &._hidden {
-        top: -84px;
-    }
+	&._hidden {
+		top: -84px;
+	}
 
-    .burger {
-        padding: 30px;
-    }
+	// .header__outter-container
 
-    .search {
-        margin: auto;
-    }
+	&__outter-container {
+		position: relative;
+		display: flex;
+		column-gap: 20px;
+		align-items: stretch;
+		justify-content: space-between;
+	}
 
+	&__btn {
+		padding-inline: 30px;
+		background-color: transparent;
 
-    // .header__outter-container
+		transition: background-color var(--trns), border-color var(--trns);
 
-    &__outter-container {
-        position: relative;
-        display: flex;
-        column-gap: 20px;
-        align-items: stretch;
-        justify-content: space-between;
-    }
+		svg {
+			fill: var(--color-title) !important;
 
+			transition: fill var(--trns);
+		}
 
-    &__btn {
-        padding-inline: 30px;
-        background-color: transparent;
+		@media (hover: hover) and (pointer: fine) {
+			&:hover {
+				background-color: var(--color-accent-l);
 
-        transition: background-color var(--trns),
-            border-color var(--trns);
+				svg {
+					fill: var(--color-accent-s) !important;
+				}
+			}
+		}
 
-        svg {
-            fill: var(--color-title) !important;
+		@media (max-width: 47.9375em) {
+			display: none;
+		}
+	}
 
-            transition: fill var(--trns);
-        }
-
-        @media (hover: hover) and (pointer: fine) {
-            &:hover {
-                background-color: var(--color-accent-l);
-
-                svg {
-                    fill: var(--color-accent-s) !important;
-                }
-            }
-        }
-
-        @media (max-width: 47.9375em) {
-            display: none;
-        }
-    }
+	@media (max-width: 47.9375em) {
+		padding-block: unquote('clamp(0.625rem, 0.3977rem + 1.1364vw, 1.25rem)');
+	}
 }

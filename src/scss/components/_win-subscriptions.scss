@@ -1,18 +1,16 @@
 .subscriptions {
+	.author {
+		width: 100%;
+	}
 
-    &__item {
-        width: 100%;
+	.author__subs {
+		display: none;
+	}
+	&__item {
+		width: 100%;
 
 		&:not(:first-child) {
 			margin-top: 15px;
 		}
-    }
-
-    .author {
-        width: 100%;
-    }
-
-	.author__subs {
-		display: none;
 	}
 }

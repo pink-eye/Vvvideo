@@ -1,71 +1,75 @@
 .playlist {
-    &__heading {
-        background-color: var(--color-bg-form);
-        margin-bottom: 30px;
-        padding-block: 20px;
-        width: 100%;
-    }
+	.author {
+		margin-top: 20px;
+	}
 
-    &__wrapper {
-        display: inline-flex;
-        flex-direction: column;
+	.author__subs {
+		display: none;
+	}
+	&__heading {
+		width: 100%;
+		margin-bottom: 30px;
+		padding-block: 20px;
 
-        @media (min-width: 84.375em) {
-            align-items: flex-start;
-        }
+		background-color: var(--color-bg-form);
+	}
 
-        @media (max-width: 84.3125em) {
-            align-items: center;
-        }
-    }
+	&__wrapper {
+		display: inline-flex;
+		flex-direction: column;
 
-    &__about {
-        width: 100%;
-        padding-inline: 15px;
-    }
+		@media (min-width: 84.375em) {
+			align-items: flex-start;
+		}
 
-    &__name {
-        font-size: unquote("clamp(1.25rem, 1.0500rem + 1.0000vw, 2.25rem)");
-        word-break: break-all;
+		@media (max-width: 84.3125em) {
+			align-items: center;
+		}
+	}
 
-        @media (max-width: 84.3125em) {
-            text-align: center;
-        }
-    }
+	&__about {
+		width: 100%;
+		padding-inline: 15px;
+	}
 
-    &__stat {
-        display: flex;
-        margin-top: 20px;
-        gap: 15px;
-        flex-wrap: wrap;
-        color: var(--color-text);
+	&__name {
+		font-size: unquote('clamp(1.25rem, 1.0500rem + 1.0000vw, 2.25rem)');
+		word-break: break-all;
 
-        @media (min-width: 84.375em) {
-            justify-content: flex-start;
-        }
+		@media (max-width: 84.3125em) {
+			text-align: center;
+		}
+	}
 
-        @media (max-width: 84.3125em) and (min-width: 20em) {
-            justify-content: center;
-        }
+	&__stat {
+		display: flex;
+		flex-wrap: wrap;
+		margin-top: 20px;
 
-        &>* {
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+		color: var(--color-text);
 
-            background-color: var(--color-bg);
-            border-radius: var(--brs-m);
-            padding: 5px 15px;
-        }
-    }
+		gap: 15px;
 
-    .author {
-        margin-top: 20px;
-    }
+		& > * {
+			position: relative;
 
-    .author__subs {
-        display: none;
-    }
+			display: flex;
+			align-items: center;
+			overflow: hidden;
+			padding: 5px 15px;
+			border-radius: var(--brs-m);
+
+			background-color: var(--color-bg);
+
+			gap: 10px;
+		}
+
+		@media (min-width: 84.375em) {
+			justify-content: flex-start;
+		}
+
+		@media (max-width: 84.3125em) and (min-width: 20em) {
+			justify-content: center;
+		}
+	}
 }

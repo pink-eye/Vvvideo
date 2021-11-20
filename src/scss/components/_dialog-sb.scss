@@ -1,58 +1,57 @@
 .dialog-sb {
+	&__title {
+		margin-bottom: 10px;
+		font-size: 2rem;
+	}
 
-    &__title {
-        font-size: 2rem;
-        margin-bottom: 10px;
-    }
+	&__section {
+		margin-top: 20px;
+	}
 
-    &__section {
-        margin-top: 20px;
-    }
+	&__warning {
+		margin-top: 5px;
+		color: var(--color-error);
+	}
 
-    &__warning {
-        margin-top: 5px;
-        color: var(--color-error);
-    }
+	&__time {
+		label {
+			display: block;
+			color: var(--color-title);
+		}
 
-    &__time {
-        label {
-            display: block;
-            color: var(--color-title);
-        }
+		input {
+			width: 100%;
+			margin-top: 5px;
+			padding: 5px 10px;
+			border-radius: var(--brs-m);
 
-        input {
-            margin-top: 5px;
-            width: 100%;
-            padding: 5px 10px;
-            border-radius: var(--brs-m);
+			&._error {
+				border: var(--width-line) solid var(--color-error);
 
-            &._error {
-                border: var(--width-line) solid var(--color-error);
+				@media (hover: hover) and (pointer: fine) {
+					&:hover {
+						border: var(--width-line) solid var(--color-error);
+					}
+				}
+			}
+		}
 
-                @media (hover: hover) and (pointer: fine) {
-                    &:hover {
-                        border: var(--width-line) solid var(--color-error);
-                    }
-                }
-            }
-        }
+		&:not(:first-child) {
+			margin-top: 10px;
+		}
+	}
 
-        &:not(:first-child) {
-            margin-top: 10px;
-        }
-    }
+	&__list {
+		margin-top: 20px;
+	}
 
-    &__list {
-        margin-top: 20px;
-    }
+	&__actions {
+		margin-top: 30px;
+	}
 
-    &__actions {
-        margin-top: 30px;
-    }
-
-    &__btn {
+	&__btn {
 		&:last-child {
 			margin-top: 10px;
 		}
-    }
+	}
 }

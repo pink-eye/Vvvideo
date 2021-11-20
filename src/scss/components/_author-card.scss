@@ -1,100 +1,102 @@
 .author {
-    position: relative;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    border-radius: var(--brs-m);
-    background-color: var(--color-bg-form);
+	position: relative;
+	display: flex;
+	align-items: center;
 
-    transition: border-color var(--trns);
+	padding: 10px;
+	border-radius: var(--brs-m);
+	background-color: var(--color-bg-form);
 
-    &:first-child {
-        text-align: left;
-    }
+	transition: border-color var(--trns);
 
-    &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 0%;
-        border-radius: var(--brs-m);
-        opacity: 0.2;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 0%;
+		height: 100%;
+		border-radius: var(--brs-m);
 
-        background-color: var(--color-text);
+		background-color: var(--color-text);
+		opacity: 0.2;
 
-        transition: width var(--trns-time-default) var(--ease-in-sine);
-    }
+		transition: width var(--trns-time-default) var(--ease-in-sine);
+	}
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            &:before {
-                width: 100%;
-            }
+	&:first-child {
+		text-align: left;
+	}
 
-            .author__name,
-            .author__subs {
-                margin-left: 10px;
-            }
-        }
-    }
+	&:last-child {
+		@media (min-width: 30.6875em) {
+			justify-self: end;
+		}
+	}
 
-    &:last-child {
-        @media (min-width: 30.6875em) {
-            justify-self: end;
-        }
-    }
+	&__avatar {
+		--size: clamp(50px, 15vw, 80px);
 
-    &__avatar {
-        --size: clamp(50px, 15vw, 80px);
+		position: relative;
+		overflow: hidden;
+		height: var(--size);
+		min-width: var(--size);
 
-        position: relative;
-        border-radius: 50%;
-        overflow: hidden;
+		max-width: var(--size);
+		margin-right: 20px;
+		margin-bottom: 0;
+		border-radius: 50%;
 		box-shadow: var(--box-shadow-s);
-        margin-bottom: 0;
-        margin-right: 20px;
 
-        max-width: var(--size);
-        min-width: var(--size);
-        height: var(--size);
+		img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
 
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    }
+	&__name,
+	&__subs {
+		position: relative;
+		overflow: hidden;
+		min-width: 11ch;
 
-    &__name,
-    &__subs {
-        position: relative;
-        min-width: 11ch;
-        overflow: hidden;
+		transition: margin-left var(--trns-time-default) var(--ease-in-sine);
+	}
 
-        transition: margin-left var(--trns-time-default) var(--ease-in-sine);
-    }
+	&__name {
+		z-index: 2;
 
-    &__name {
-        text-align: left;
-        font-style: unset;
-        z-index: 2;
+		display: box;
 
-        font-size: unquote("clamp(1.1rem, 0.9600rem + 0.7000vw, 1.8rem)");
+		margin: 0;
+		font-style: unset;
 
-        margin: 0;
+		font-size: unquote('clamp(1.1rem, 0.9600rem + 0.7000vw, 1.8rem)');
+		text-align: left;
 
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-    }
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+	}
 
-    &__subs {
-        display: inline-block;
-        color: var(--color-text);
-        margin-top: 10px;
+	&__subs {
+		display: inline-block;
+		margin-top: 10px;
 
-        margin-left: 0;
-    }
+		margin-left: 0;
+		color: var(--color-text);
+	}
+
+	@media (hover: hover) and (pointer: fine) {
+		&:hover {
+			&::before {
+				width: 100%;
+			}
+
+			.author__name,
+			.author__subs {
+				margin-left: 10px;
+			}
+		}
+	}
 }
