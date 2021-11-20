@@ -1,3 +1,5 @@
-/bundle
-/node_modules
-/out
+__tests__
+bundle
+node_modules
+out
+**/*.js
