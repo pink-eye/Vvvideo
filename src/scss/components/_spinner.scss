@@ -14,21 +14,24 @@
 }
 
 .spinner .line {
+	transform: rotate3d(0, 0, 1, 0deg);
+	transform-origin: 50% 50%;
+	opacity: var(--line-alpha);
+
+	animation: 1800ms spinner-arc ease-in-out infinite, 1500ms spinner-rotate linear infinite;
+
 	fill: none;
 	stroke: var(--line-color);
 	stroke-linecap: round;
 	stroke-width: var(--ring-size);
-	opacity: var(--line-alpha);
-	transform: rotate3d(0, 0, 1, 0deg);
-	transform-origin: 50% 50%;
-	animation: 1800ms spinner-arc ease-in-out infinite, 1500ms spinner-rotate linear infinite;
 }
 
 .spinner .ring {
+	opacity: var(--ring-alpha);
+
 	fill: none;
 	stroke: var(--ring-color);
 	stroke-width: var(--ring-size);
-	opacity: var(--ring-alpha);
 }
 
 @keyframes spinner-rotate {

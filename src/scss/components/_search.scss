@@ -1,6 +1,7 @@
 .search {
 	position: relative;
 	z-index: 50;
+
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
@@ -15,6 +16,7 @@
 		top: 50%;
 		right: 7.5px;
 		z-index: 10;
+
 		display: grid;
 		place-items: center;
 		padding: 2px;
@@ -26,28 +28,30 @@
 		position: absolute;
 		top: calc(100% + 5px);
 		left: 0;
+
 		display: flex;
 		flex-direction: column;
 		width: 100%;
 
+		border-radius: var(--brs-m);
+
+		background-color: var(--color-bg-field);
+
+		box-shadow: var(--box-shadow-xl);
+
 		padding-block: 20px;
 		padding-inline: 11px;
 
-		border-radius: var(--brs-m);
-
-		box-shadow: var(--box-shadow-xl);
-		background-color: var(--color-bg-field);
-
 		&:empty {
-			opacity: 0;
-			visibility: hidden;
 			transform: scale(0.5);
+			visibility: hidden;
+			opacity: 0;
 		}
 
 		&:not(:empty) {
-			opacity: 1;
-			visibility: visible;
 			transform: scale(1);
+			visibility: visible;
+			opacity: 1;
 
 			transition: opacity 0.15s var(--ease-out-back), visibility 0.15s var(--ease-out-back),
 				transform 0.15s var(--ease-out-back);
@@ -68,10 +72,12 @@
 	border: 3px solid transparent;
 
 	border-radius: var(--brs-s);
+
+	color: var(--color-text-field);
 	font-weight: 400;
 	font-size: var(--caption-font-size);
 	text-align: left;
-	color: var(--color-text-field);
+
 	background-color: var(--color-bg-field);
 
 	transition: background-color var(--trns), border-color var(--trns), color var(--trns);
@@ -83,6 +89,7 @@
 	&._selected,
 	&:focus-visible {
 		color: var(--color-text-suggest-selected);
+
 		background-color: var(--color-bg-suggest-selected);
 	}
 

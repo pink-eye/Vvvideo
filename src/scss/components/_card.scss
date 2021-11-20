@@ -5,6 +5,7 @@
 	height: 100%;
 
 	padding: 6px;
+
 	background-color: var(--color-bg-form);
 
 	transition: box-shadow var(--trns), transform var(--trns), opacity var(--trns), border-color var(--trns),
@@ -20,9 +21,11 @@
 			display: inline-block;
 			padding: 2px 10px;
 			border-radius: var(--brs-s);
+
+			color: hsl(0, 0%, 100%);
 			font-weight: 500;
 			text-transform: uppercase;
-			color: hsl(0, 0%, 100%);
+
 			background-color: var(--color-error);
 		}
 	}
@@ -45,8 +48,8 @@
 		.card__video-count,
 		.card__details {
 			@media (min-width: 36em) {
-				opacity: 0;
 				visibility: hidden;
+				opacity: 0;
 			}
 			@media (max-width: 35.9375em) {
 				display: none;
@@ -94,12 +97,14 @@
 	&__image {
 		--watched-progress: 0%;
 		position: relative;
+
 		display: flex;
 
 		justify-self: start;
-		overflow: hidden;
 		width: 100%;
 		border-radius: var(--brs-l);
+		overflow: hidden;
+
 		background-color: var(--color-bg-form);
 
 		transition: width var(--trns), aspect-ratio var(--trns);
@@ -107,26 +112,32 @@
 		aspect-ratio: 16 / 9;
 
 		&:before {
-			content: '';
 			position: absolute;
-			left: 0;
 			bottom: 0;
+			left: 0;
 			z-index: 1;
+
 			width: var(--watched-progress);
 			height: 3%;
 			border-radius: var(--brs-s);
+
 			background-color: var(--color-accent-s);
 
 			transition: width var(--trns);
+
+			content: '';
 		}
 
 		img {
 			width: 100%;
 			height: 100%;
-			font-size: 0;
-			background-color: var(--color-bg-form);
 			object-fit: cover;
 			object-position: center;
+
+			font-size: 0;
+
+			background-color: var(--color-bg-form);
+
 			transition: transform var(--trns);
 		}
 	}
@@ -143,12 +154,13 @@
 		position: relative;
 
 		display: -webkit-box;
-		overflow: hidden;
 		margin: 10px 0 0;
+		overflow: hidden;
+
+		color: var(--color-title);
 		font-weight: 500;
 		line-height: 23px / 16px * 100%;
 		text-align: left;
-		color: var(--color-title);
 
 		transition: color var(--trns);
 
@@ -165,11 +177,12 @@
 
 	&__channel-descr {
 		display: -webkit-box;
-		overflow: hidden;
 
 		max-width: 65ch;
 		padding-left: 10px;
 		border-left: 3px solid var(--color-text);
+		overflow: hidden;
+
 		line-height: 23px / 16px * 100%;
 
 		-webkit-box-orient: vertical;
@@ -187,6 +200,7 @@
 
 	&__bottom {
 		position: relative;
+
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -194,11 +208,12 @@
 
 		margin-top: 15px;
 
-		font-family: inherit;
+		color: var(--color-text);
 		font-size: 1rem;
+
+		font-family: inherit;
 		line-height: 16px / 13px * 100%;
 		text-align: left;
-		color: var(--color-text);
 
 		transition: color var(--trns);
 	}
@@ -214,26 +229,29 @@
 		align-items: center;
 		justify-content: space-between;
 
-		clip-path: circle(40% at 110% 50%);
-
 		width: 100%;
 		height: 100%;
 
 		padding-right: 10px;
 		padding-left: 30px;
 
-		font-size: 1.375rem;
 		color: hsl(0, 0%, 100%);
+
+		font-size: 1.375rem;
 
 		background-color: var(--color-bg-unsubscribe);
 
 		transition: clip-path var(--trns-time-default) var(--ease-in-sine),
 			width var(--trns-time-default) var(--ease-in-sine);
 
+		clip-path: circle(40% at 110% 50%);
+
 		&:before {
-			content: 'VIEW ALL';
 			text-transform: uppercase;
+
 			background-color: transparent;
+
+			content: 'VIEW ALL';
 		}
 	}
 
@@ -249,9 +267,9 @@
 
 	&__part {
 		display: flex;
-		align-items: center;
 
 		gap: 5px;
+		align-items: center;
 
 		&:not(:first-child) {
 			margin-top: 10px;
@@ -262,12 +280,12 @@
 
 	&__wrapper {
 		display: grid;
-		place-content: center;
+
+		gap: 10px;
 		height: 100%;
 
 		background-color: transparent;
-
-		gap: 10px;
+		place-content: center;
 
 		span {
 			text-align: center;
@@ -279,10 +297,11 @@
 		margin-top: 10px;
 		padding: 10px 20px;
 		border-radius: var(--brs-m);
+
+		color: var(--color-title);
 		font-size: 1rem;
 		line-height: 22px / 16px * 100%;
 		text-transform: uppercase;
-		color: var(--color-title);
 
 		background-color: var(--bg-playlist-btn);
 
@@ -297,13 +316,16 @@
 		position: absolute;
 		right: 10px;
 		bottom: 10px;
+
 		padding: 3px 9px;
 
 		border-radius: var(--brs-l);
 
+		color: hsl(0, 0%, 100%);
+
 		font-size: 0.875rem;
 		line-height: 18px / 14px * 100%;
-		color: hsl(0, 0%, 100%);
+
 		background-color: var(--color-bg-duration);
 	}
 
@@ -325,6 +347,7 @@
 
 	&__channel {
 		position: relative;
+
 		margin-top: 15px;
 		margin-bottom: 0;
 		padding-block: 6px;
@@ -333,16 +356,18 @@
 		transition: background-color var(--trns);
 
 		&:after {
-			content: '';
 			position: absolute;
-			left: 0;
 			bottom: 0;
+			left: 0;
+
 			width: 0%;
 			height: 2px;
 
 			background-color: var(--color-text);
 
 			transition: width var(--trns);
+
+			content: '';
 		}
 
 		@media (hover: hover) and (pointer: fine) {

@@ -1,6 +1,7 @@
 .dialog-sb {
 	&__title {
 		margin-bottom: 10px;
+
 		font-size: 2rem;
 	}
 
@@ -10,12 +11,14 @@
 
 	&__warning {
 		margin-top: 5px;
+
 		color: var(--color-error);
 	}
 
 	&__time {
 		label {
 			display: block;
+
 			color: var(--color-title);
 		}
 

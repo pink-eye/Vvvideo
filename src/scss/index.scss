@@ -26,10 +26,12 @@
 	--middle-val-pt: calc(84px + (114 - 84) * ((100vw - 320px) / (1200 - 320)));
 
 	position: relative;
+
 	min-height: 100vh;
 
 	padding-top: clamp(84px, var(--middle-val-pt), 114px);
 	padding-bottom: 50px;
+
 	background-color: var(--color-bg);
 
 	transition: background-color var(--trns);
@@ -68,9 +70,9 @@
 	}
 
 	&:not(._anim-win) {
-		opacity: 0;
-		visibility: hidden;
 		transform: scaleY(0.97);
+		visibility: hidden;
+		opacity: 0;
 
 		transition: transform 0s var(--ease-out-sine) var(--trns-time-default),
 			opacity var(--trns-time-fast) var(--ease-out-sine), visibility var(--trns-time-fast) var(--ease-out-sine);
@@ -81,9 +83,9 @@
 	}
 
 	&._anim-win {
-		opacity: 1;
-		visibility: visible;
 		transform: scaleY(1);
+		visibility: visible;
+		opacity: 1;
 
 		transition: transform var(--trns-time-default) var(--ease-in-sine),
 			opacity var(--trns-time-default) var(--ease-in-sine),
@@ -97,6 +99,7 @@
 
 	&__title {
 		margin-bottom: 20px;
+
 		font-weight: 700;
 		font-size: unquote('clamp(1.375rem, 1.0462rem + 1.4615vw, 2.8rem)');
 		text-transform: uppercase;

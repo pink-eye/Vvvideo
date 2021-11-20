@@ -1,39 +1,43 @@
 .indicator {
 	--progress: 0;
 	position: fixed;
-	left: 0;
 	bottom: 0;
+	left: 0;
 	z-index: 10;
+
 	display: grid;
-	place-items: center;
 	width: 100%;
 	height: 10px;
-	padding-block: 5px;
-	box-shadow: var(--color-box-shadow-s) 0 -8px 24px;
-	background-color: var(--color-bg-form);
 
-	opacity: 0;
+	background-color: var(--color-bg-form);
+	box-shadow: var(--color-box-shadow-s) 0 -8px 24px;
 	visibility: hidden;
 
+	opacity: 0;
+
 	transition: opacity var(--trns), visibility var(--trns);
+	place-items: center;
+	padding-block: 5px;
 
 	&:before {
 		// content: attr(data-progress);
 		position: relative;
 		z-index: 2;
+
 		height: 100%;
-		padding-inline: 5px;
 		border-radius: var(--brs-m);
+
 		color: var(--color-accent-s);
 
 		background-color: hsl(0, 0%, 100%);
+		padding-inline: 5px;
 	}
 
 	&:after {
-		content: '';
 		position: absolute;
 		top: 0;
 		left: 0;
+
 		width: 35%;
 		height: 100%;
 
@@ -42,11 +46,13 @@
 		transform: translateX(-100%);
 
 		animation: unset;
+
+		content: '';
 	}
 
 	&._visible {
-		opacity: 1;
 		visibility: visible;
+		opacity: 1;
 
 		&:after {
 			animation: indicator 2s linear infinite;

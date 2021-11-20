@@ -61,7 +61,9 @@
 
 	&__btn {
 		position: relative;
+
 		width: 100%;
+
 		background-color: transparent;
 
 		&._active {
@@ -87,15 +89,16 @@
 			--wipe-dir: 90deg;
 			display: flex;
 			align-items: center;
-			padding-block: 14px;
 			padding-right: 10px;
 			padding-left: 20px;
+
 			background-image: linear-gradient(var(--wipe-dir), var(--color-accent-l), var(--color-accent-l));
-			background-size: 0% 100%;
 			background-repeat: no-repeat;
+			background-size: 0% 100%;
 
 			transition: border-color var(--trns), background-color var(--trns),
 				background-size var(--trns-time-default) var(--ease-in-sine);
+			padding-block: 14px;
 		}
 
 		@media (max-width: 47.9375em) {
@@ -103,19 +106,23 @@
 
 			display: grid;
 			place-items: center;
+
 			justify-content: center;
 			padding-block: clamp(7px, var(--middle-val-padbl), 15px);
 			border-radius: var(--brs-m);
+
 			transition: background-color var(--trns);
 		}
 
 		@media (hover: hover) and (pointer: fine) {
 			&:not(._active):hover {
 				text-decoration: none;
+
 				background-size: 100% 100%;
 
 				.sidebar__caption {
 					margin-left: 5px;
+
 					color: var(--color-accent-s);
 				}
 
@@ -131,8 +138,10 @@
 
 	&__icon {
 		position: relative;
+
 		display: grid;
 		place-content: center;
+
 		background-color: transparent;
 
 		img {
@@ -158,10 +167,10 @@
 	}
 
 	&__caption {
+		color: var(--color-icon);
 		font-weight: 400;
 		font-size: var(--caption-font-size);
 		white-space: nowrap;
-		color: var(--color-icon);
 
 		transition: color var(--trns), opacity var(--trns), margin-left var(--trns), visibility var(--trns);
 	}
@@ -169,39 +178,45 @@
 	@media (min-width: 48em) {
 		top: 0;
 		left: 0;
-		overflow: hidden auto;
+
 		width: 227px;
 		height: 100vh;
 		padding-top: 114px;
 		padding-bottom: 10px;
+		overflow: hidden auto;
+
 		box-shadow: var(--box-shadow-s);
 
 		overscroll-behavior: contain;
 
 		&._closed {
-			visibility: hidden;
 			transform: translateX(-100%);
+			visibility: hidden;
 		}
 	}
 
 	@media (max-width: 47.9375em) {
 		left: 50%;
-		overflow: hidden;
+
 		width: calc(100% - 20px);
 		padding: 4px;
 
 		border-radius: var(--brs-m);
+		overflow: hidden;
+
 		box-shadow: var(--box-shadow-m);
 
 		filter: drop-shadow(0px -5px 40px var(--box-shadow-s));
 
 		&:not(._hidden) {
 			bottom: 10px;
+
 			transform: translateX(-50%);
 		}
 
 		&._hidden {
 			bottom: 0;
+
 			transform: translateX(-50%) translateY(100%);
 		}
 	}
@@ -214,6 +229,7 @@
 		&::-webkit-scrollbar-thumb {
 			border: 3px solid var(--color-bg-form);
 			border-radius: var(--brs-m);
+
 			background-color: var(--color-bg-field);
 		}
 

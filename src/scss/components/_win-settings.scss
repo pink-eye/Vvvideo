@@ -29,10 +29,11 @@
 	transition: background-color var(--trns);
 
 	&__title {
+		color: var(--color-title);
 		font-weight: 500;
 
 		font-size: unquote('clamp(1.25rem, 1.1250rem + 0.6250vw, 1.875rem)');
-		color: var(--color-title);
+
 		transition: color var(--trns);
 
 		@media (max-width: 47.9375em) and (min-width: 20em) {
@@ -59,13 +60,16 @@
 
 		&:before,
 		&:after {
-			content: '';
 			position: absolute;
 			left: 0;
+
 			width: 100%;
 			height: 1px;
+
 			background-color: var(--color-descr);
 			opacity: 0.1;
+
+			content: '';
 		}
 
 		&:before {
@@ -149,9 +153,11 @@
 
 	&__title {
 		margin: 0;
+
+		color: var(--color-text);
 		font-weight: 300;
 		line-height: 26px / 18px * 100%;
-		color: var(--color-text);
+
 		transition: color var(--trns);
 
 		@media (min-width: 36em) {
@@ -192,6 +198,7 @@
 
 	&__wrapper {
 		position: relative;
+
 		display: grid;
 		place-items: center;
 		width: 100%;
@@ -199,6 +206,7 @@
 
 		border: 3px dashed var(--color-descr);
 		border-radius: var(--brs-m);
+
 		background-color: var(--color-bg);
 
 		transition: background-color var(--trns), border-color var(--trns);
@@ -208,12 +216,15 @@
 
 	&__tip {
 		position: absolute;
+
 		margin: 0;
-		padding-inline: 15px;
+
+		color: var(--color-descr);
 		line-height: 26px / 18px * 100%;
 		text-align: center;
-		color: var(--color-descr);
+
 		transition: color var(--trns);
+		padding-inline: 15px;
 
 		@media (min-width: 36em) {
 			font-size: 1.125rem;
@@ -227,8 +238,9 @@
 	&__field {
 		width: 100%;
 		height: 100%;
-		opacity: 0;
+
 		cursor: pointer;
+		opacity: 0;
 	}
 
 	&__btn {
@@ -237,7 +249,8 @@
 
 	&__actions {
 		display: grid;
-		column-gap: 15px;
 		grid-template-columns: 1fr 1fr;
+
+		column-gap: 15px;
 	}
 }

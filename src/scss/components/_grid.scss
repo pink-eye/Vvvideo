@@ -10,12 +10,12 @@
 			grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
 		}
 		@media (max-width: 47.9375em) and (min-width: 36em) {
-			justify-content: space-between;
 			grid-template-columns: 1fr 1fr;
+			justify-content: space-between;
 		}
 		@media (max-width: 35.9375em) {
-			justify-content: center;
 			grid-template-columns: 1fr;
+			justify-content: center;
 		}
 	}
 
@@ -45,8 +45,9 @@
 				}
 
 				.card__edge {
-					clip-path: circle(100% at 70% 50%);
 					width: 100%;
+
+					clip-path: circle(100% at 70% 50%);
 				}
 			}
 		}
@@ -68,8 +69,8 @@
 	}
 
 	&__count {
-		font-size: 1.25rem;
 		color: var(--color-title);
+		font-size: 1.25rem;
 	}
 }
 
@@ -78,8 +79,8 @@
 		padding: 10px 35px;
 
 		&[disabled] {
-			opacity: 0;
 			visibility: hidden;
+			opacity: 0;
 		}
 	}
 
@@ -103,13 +104,15 @@
 
 	.card {
 		@media (min-width: 48em) {
-			column-gap: 20px;
-			grid-template-columns: 35% auto;
 			grid-template-rows: 1fr;
+			grid-template-columns: 35% auto;
+
+			column-gap: 20px;
 		}
 		@media (max-width: 47.9375em) and (min-width: 36em) {
-			column-gap: 15px;
 			grid-template-columns: 56% auto;
+
+			column-gap: 15px;
 		}
 		@media (max-width: 35.9375em) {
 			grid-template-rows: auto 1fr;
@@ -130,8 +133,8 @@
 	}
 
 	.card__bottom {
-		justify-content: space-between;
 
 		gap: 13px;
+		justify-content: space-between;
 	}
 }

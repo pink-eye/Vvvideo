@@ -1,14 +1,14 @@
 const fillVideoCard = (video, index, data) => {
-	let videoCard = video
-	let videoImage = videoCard.querySelector('.card__image img')
-	let imageSkeleton = videoCard.querySelector('.image-skeleton')
-	let titleSkeleton = videoCard.querySelector('.title-skeleton')
+	let videoCard      = video
+	let videoImage     = videoCard.querySelector('.card__image img')
+	let imageSkeleton  = videoCard.querySelector('.image-skeleton')
+	let titleSkeleton  = videoCard.querySelector('.title-skeleton')
 	let bottomSkeleton = videoCard.querySelector('.bottom-skeleton')
-	let videoTitle = videoCard.querySelector('.card__title span')
-	let videoViews = videoCard.querySelector('.card__views')
-	let videoDate = videoCard.querySelector('.card__date')
-	let videoChannel = videoCard.querySelector('.card__channel')
-	let videoDuration = videoCard.querySelector('.card__duration')
+	let videoTitle     = videoCard.querySelector('.card__title span')
+	let videoViews     = videoCard.querySelector('.card__views')
+	let videoDate      = videoCard.querySelector('.card__date')
+	let videoChannel   = videoCard.querySelector('.card__channel')
+	let videoDuration  = videoCard.querySelector('.card__duration')
 
 	videoCard.disabled &&= false
 
@@ -80,25 +80,25 @@ const fillVideoCard = (video, index, data) => {
 		cardImage = null
 	}
 
-	videoCard = null
-	videoTitle = null
-	videoViews = null
-	videoDate = null
-	videoChannel = null
-	videoDuration = null
-	titleSkeleton = null
+	videoCard      = null
+	videoTitle     = null
+	videoViews     = null
+	videoDate      = null
+	videoChannel   = null
+	videoDuration  = null
+	titleSkeleton  = null
 	bottomSkeleton = null
 }
 
 const fillPlaylistCard = (playlist, index, data) => {
-	let playlistCard = playlist
-	let playlistImage = playlistCard.querySelector('.card__image img')
-	let imageSkeleton = playlistCard.querySelector('.image-skeleton')
-	let titleSkeleton = playlistCard.querySelector('.title-skeleton')
-	let bottomSkeleton = playlistCard.querySelector('.bottom-skeleton')
-	let playlistTitle = playlistCard.querySelector('.card__title span')
+	let playlistCard    = playlist
+	let playlistImage   = playlistCard.querySelector('.card__image img')
+	let imageSkeleton   = playlistCard.querySelector('.image-skeleton')
+	let titleSkeleton   = playlistCard.querySelector('.title-skeleton')
+	let bottomSkeleton  = playlistCard.querySelector('.bottom-skeleton')
+	let playlistTitle   = playlistCard.querySelector('.card__title span')
 	let playlistChannel = playlistCard.querySelector('.card__channel')
-	let playlistCount = playlistCard.querySelector('.card__count')
+	let playlistCount   = playlistCard.querySelector('.card__count')
 
 	playlistCard.disabled &&= false
 
@@ -145,21 +145,21 @@ const fillPlaylistCard = (playlist, index, data) => {
 }
 
 const fillChannelCard = (channel, index, data) => {
-	let channelCard = channel
-	let channelImage = channelCard.querySelector('.card__image img')
-	let imageSkeleton = channelCard.querySelector('.image-skeleton')
-	let titleSkeleton = channelCard.querySelector('.title-skeleton')
-	let bottomSkeleton = channelCard.querySelector('.bottom-skeleton')
-	let channelTitle = channelCard.querySelector('.card__title span')
-	let channelDescr = channelCard.querySelector('.card__channel-descr')
-	let channelSubs = channelCard.querySelector('.card__subs')
+	let channelCard       = channel
+	let channelImage      = channelCard.querySelector('.card__image img')
+	let imageSkeleton     = channelCard.querySelector('.image-skeleton')
+	let titleSkeleton     = channelCard.querySelector('.title-skeleton')
+	let bottomSkeleton    = channelCard.querySelector('.bottom-skeleton')
+	let channelTitle      = channelCard.querySelector('.card__title span')
+	let channelDescr      = channelCard.querySelector('.card__channel-descr')
+	let channelSubs       = channelCard.querySelector('.card__subs')
 	let channelVideoCount = channelCard.querySelector('.card__video-count')
 
 	channelCard.disabled &&= false
 
 	const info = data[index]
 
-	channelCard.dataset.id = info.channelID
+	channelCard.dataset.id   = info.channelID
 	channelCard.dataset.name = info.name
 
 	channelImage.setAttribute('src', info.bestAvatar.url)
@@ -186,20 +186,20 @@ const fillChannelCard = (channel, index, data) => {
 
 	removeSkeleton(bottomSkeleton)
 
-	channelCard = null
-	channelTitle = null
-	channelDescr = null
-	channelSubs = null
+	channelCard       = null
+	channelTitle      = null
+	channelDescr      = null
+	channelSubs       = null
 	channelVideoCount = null
-	titleSkeleton = null
-	bottomSkeleton = null
+	titleSkeleton     = null
+	bottomSkeleton    = null
 }
 
 const resetCard = card => {
-	let givenCard = card
+	let givenCard   = card
 	let skeletonAll = givenCard.querySelectorAll('.skeleton')
-	let cardTitle = givenCard.querySelector('.card__title span')
-	let cardImg = givenCard.querySelector('.card__image img')
+	let cardTitle   = givenCard.querySelector('.card__title span')
+	let cardImg     = givenCard.querySelector('.card__image img')
 
 	if (skeletonAll.length > 0) {
 		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
@@ -242,20 +242,20 @@ const resetCard = card => {
 		})
 	}
 
-	givenCard = null
+	givenCard   = null
 	skeletonAll = null
-	recentWin = null
-	cardTitle = null
-	cardImg = null
+	recentWin   = null
+	cardTitle   = null
+	cardImg     = null
 }
 
 const resetVideoCard = card => {
-	let videoCard = card
-	let videoViews = videoCard.querySelector('.card__views')
-	let videoDate = videoCard.querySelector('.card__date')
-	let videoChannel = videoCard.querySelector('.card__channel')
+	let videoCard     = card
+	let videoViews    = videoCard.querySelector('.card__views')
+	let videoDate     = videoCard.querySelector('.card__date')
+	let videoChannel  = videoCard.querySelector('.card__channel')
 	let videoDuration = videoCard.querySelector('.card__duration')
-	let videoImg = videoCard.querySelector('.card__image')
+	let videoImg      = videoCard.querySelector('.card__image')
 
 	if (videoCard.classList.contains('_live')) videoCard.classList.remove('_live')
 
@@ -268,41 +268,41 @@ const resetVideoCard = card => {
 	videoChannel.removeAttribute('data-id')
 	videoChannel.removeAttribute('data-name')
 
-	videoCard = null
-	videoViews = null
-	videoDate = null
-	videoChannel = null
+	videoCard     = null
+	videoViews    = null
+	videoDate     = null
+	videoChannel  = null
 	videoDuration = null
-	videoImg = null
+	videoImg      = null
 }
 
 const resetChannelCard = card => {
-	let channelCard = card
-	let channelDescr = channelCard.querySelector('.card__channel-descr')
-	let channelSubs = channelCard.querySelector('.card__subs')
+	let channelCard       = card
+	let channelDescr      = channelCard.querySelector('.card__channel-descr')
+	let channelSubs       = channelCard.querySelector('.card__subs')
 	let channelVideoCount = channelCard.querySelector('.card__video-count')
 
 	channelDescr.textContent = ''
 	channelSubs.textContent = ''
 	channelVideoCount.textContent = ''
 
-	channelCard = null
-	channelDescr = null
-	channelSubs = null
+	channelCard       = null
+	channelDescr      = null
+	channelSubs       = null
 	channelVideoCount = null
 }
 
 const resetPlaylistCard = card => {
-	let playlistCard = card
+	let playlistCard    = card
 	let playlistChannel = playlistCard.querySelector('.card__channel')
-	let playlistCount = playlistCard.querySelector('.card__count')
+	let playlistCount   = playlistCard.querySelector('.card__count')
 
 	playlistChannel.textContent = ''
 	playlistCount.textContent = ''
 	playlistChannel.removeAttribute('data-id')
 	playlistChannel.removeAttribute('data-name')
 
-	playlistCard = null
+	playlistCard    = null
 	playlistChannel = null
-	playlistCount = null
+	playlistCount   = null
 }

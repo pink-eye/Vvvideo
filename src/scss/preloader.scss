@@ -2,18 +2,20 @@
 	position: fixed;
 	top: 0;
 	z-index: 1000;
+
 	display: grid;
 	place-content: center;
 	width: 100%;
 	height: 100%;
+
 	background-color: var(--color-accent-s);
 
 	transition: transform var(--trns), opacity var(--trns), visibility var(--trns);
 
 	&._hidden {
-		opacity: 0;
-		visibility: hidden;
 		transform: scale(15);
+		visibility: hidden;
+		opacity: 0;
 	}
 
 	&__el {

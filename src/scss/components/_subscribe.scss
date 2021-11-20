@@ -1,21 +1,26 @@
 .subscribe {
 	position: relative;
+
 	display: inline-block;
 	padding: 21px 42px;
 	border-radius: var(--brs-xl);
+
+	color: hsl(0, 0%, 100%);
 	font-weight: 500;
 	font-size: 1rem;
 	line-height: 20px / 16px * 100%;
-	color: hsl(0, 0%, 100%);
 
 	&::after {
-		content: '';
 		position: absolute;
-		inset: 0;
 
 		border-radius: var(--brs-xl);
+
 		box-shadow: 0 35px 15px -30px var(--color-box-shadow-xl);
+
 		transition: transform var(--trns), background-color var(--trns);
+
+		content: '';
+		inset: 0;
 	}
 
 	&:not(._subscribed) {
@@ -33,7 +38,9 @@
 	&__text {
 		position: relative;
 		z-index: 2;
+
 		opacity: 1;
+
 		transition: opacity var(--trns-fast);
 	}
 

@@ -1,14 +1,14 @@
 .skeleton {
 	position: absolute;
-	inset: 0;
 	z-index: 11;
-	overflow: hidden;
+
 	border-radius: var(--brs-s);
+	overflow: hidden;
 
 	background-color: var(--color-bg-skeleton);
+	inset: 0;
 
 	&:after {
-		content: '';
 		position: absolute;
 
 		top: 0;
@@ -16,21 +16,23 @@
 
 		width: 15px;
 		height: 100%;
-		box-shadow: 0 0 10px 10px var(--color-bg-skeleton-item);
 
 		background-color: var(--color-bg-skeleton-item);
+		box-shadow: 0 0 10px 10px var(--color-bg-skeleton-item);
 
 		animation: shimmer 1.8s ease-in-out infinite;
+
+		content: '';
 	}
 
 	&:not(._removing) {
-		opacity: 1;
 		visibility: visible;
+		opacity: 1;
 	}
 
 	&._removing {
-		opacity: 0;
 		visibility: hidden;
+		opacity: 0;
 
 		transition: opacity var(--trns), visibility var(--trns);
 	}

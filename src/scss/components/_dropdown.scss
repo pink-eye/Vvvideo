@@ -5,9 +5,9 @@
 	&:not(._active) {
 		.dropdown__list {
 			--gap: 15px;
-			opacity: 0;
 
 			visibility: hidden;
+			opacity: 0;
 
 			&_top {
 				bottom: calc(100% + var(--gap));
@@ -22,9 +22,9 @@
 	&._active {
 		.dropdown__list {
 			--gap: 5px;
+			visibility: visible;
 
 			opacity: 1;
-			visibility: visible;
 
 			&_top {
 				bottom: calc(100% + var(--gap));
@@ -64,16 +64,18 @@
 	&__list {
 		position: absolute;
 		right: 0;
-		overflow-y: auto;
+
 		width: auto;
 		max-height: 125px;
 		padding: 10px 5px;
 		border-radius: var(--brs-m);
-		box-shadow: var(--box-shadow-m);
+		overflow-y: auto;
+
 		white-space: nowrap;
 		text-align: right;
 
 		background-color: var(--color-bg-form);
+		box-shadow: var(--box-shadow-m);
 
 		transition: opacity var(--trns), visibility var(--trns), background-color var(--trns), box-shadow var(--trns),
 			bottom var(--trns), top var(--trns);
@@ -99,6 +101,7 @@
 		border-radius: var(--brs-s);
 
 		text-align: left;
+
 		transition: background-color var(--trns), color var(--trns), border-color var(--trns);
 
 		&:not(._current) {
@@ -107,6 +110,7 @@
 
 		&._current {
 			color: hsl(0, 0%, 100%);
+
 			background-color: var(--color-accent-s);
 
 			@media (hover: hover) and (pointer: fine) {
@@ -119,6 +123,7 @@
 		@media (hover: hover) and (pointer: fine) {
 			&:not(._current):hover {
 				color: var(--color-title);
+
 				background-color: var(--color-bg);
 			}
 		}

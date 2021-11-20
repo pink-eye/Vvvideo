@@ -14,9 +14,11 @@
 		--bg-image: none;
 
 		position: relative;
+
 		width: 100%;
 		height: clamp(120px, var(--middle-val-height), 280px);
 		margin-bottom: 0;
+
 		background: var(--bg-image) center;
 
 		img {
@@ -29,8 +31,10 @@
 
 .heading-channel {
 	position: relative;
+
 	display: flex;
 	padding: 20px;
+
 	background-color: var(--color-bg-form);
 
 	// .heading-channel__wrapper
@@ -61,9 +65,11 @@
 
 	&__avatar {
 		z-index: 11;
-		overflow: hidden;
+
 		margin-bottom: 0;
 		border-radius: 50%;
+		overflow: hidden;
+
 		box-shadow: var(--box-shadow-m);
 
 		img {
@@ -72,7 +78,9 @@
 			border: 10px solid var(--color-bg);
 			border-radius: 50%;
 			object-fit: cover;
+
 			transform: rotateX(0deg) perspective(100px);
+
 			transition: transform var(--trns);
 		}
 
@@ -80,13 +88,17 @@
 			position: absolute;
 			top: -110px;
 			left: 50%;
+
 			width: 170px;
+
 			transform: translateX(-50%);
+
 			transition: box-shadow var(--trns-slow);
 
 			@media (hover: hover) and (pointer: fine) {
 				&:hover {
 					box-shadow: 0 0 0 0 transparent;
+
 					transition: box-shadow 0.1s;
 
 					img {
@@ -120,18 +132,21 @@
 
 		@media (min-width: 68.8125em) {
 			align-items: center;
+
 			text-align: center;
 		}
 
 		@media (max-width: 68.75em) and (min-width: 34.4375em) {
 			align-items: flex-end;
 			margin-left: 40px;
+
 			text-align: right;
 		}
 
 		@media (max-width: 34.375em) {
 			align-items: center;
 			margin-top: 20px;
+
 			text-align: center;
 		}
 	}
@@ -139,8 +154,9 @@
 	&__author,
 	&__followers {
 		position: relative;
-		overflow: hidden;
+
 		min-width: 11ch;
+		overflow: hidden;
 	}
 
 	&__author {
@@ -151,9 +167,11 @@
 
 	&__followers {
 		margin-bottom: 1rem;
+
+		color: var(--color-text);
 		font-size: 1rem;
 		line-height: 16px / 13px * 100%;
-		color: var(--color-text);
+
 		transition: color var(--trns);
 	}
 }
@@ -172,8 +190,10 @@
 
 	&__nav {
 		position: relative;
+
 		display: flex;
 		padding-block: 10px;
+
 		background-color: var(--color-bg-form);
 
 		.search {
@@ -192,6 +212,7 @@
 
 	&__list {
 		position: relative;
+
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
@@ -202,6 +223,7 @@
 
 	&__item {
 		position: relative;
+
 		display: flex;
 		align-items: center;
 
@@ -219,11 +241,15 @@
 	&__tab {
 		position: relative;
 		z-index: 1;
+
 		padding: 10px 25px;
 		border-radius: var(--brs-m);
+
 		font-size: 1.25rem;
 		line-height: 23px / 18px * 100%;
+
 		background-color: transparent;
+
 		transition: color var(--trns), border-color var(--trns);
 
 		&:not(._active) {
@@ -237,22 +263,28 @@
 
 		&::after,
 		&::before {
-			content: '';
 			position: absolute;
 			bottom: 0;
+
 			height: 3px;
 			border-radius: var(--brs-s);
+
 			background-color: var(--color-accent-s);
+
 			transition: width var(--trns);
+
+			content: '';
 		}
 
 		&::after {
 			left: 50%;
+
 			transform: translateX(-50%);
 		}
 
 		&::before {
 			right: 50%;
+
 			transform: translateX(50%);
 		}
 
@@ -291,6 +323,7 @@
 
 .about {
 	padding: 30px 20px;
+
 	background-color: var(--color-bg-form);
 
 	&__description {
@@ -299,6 +332,7 @@
 		margin: 0;
 		padding-left: 15px;
 		border-left: 3px solid;
+
 		color: var(--color-text);
 	}
 

@@ -5,7 +5,6 @@
 .outter-container {
 	width: clamp(320px, 100%, 1600px);
 	margin-inline: auto;
-
 	padding-inline: unquote('clamp(1rem, 0.6818rem + 1.5909vw, 1.875rem)');
 
 	&:is(.header__outter-container) {
@@ -16,15 +15,17 @@
 }
 
 svg {
-	stroke: var(--color-icon) !important;
-	fill: var(--color-icon) !important;
 	transition: stroke var(--trns), fill var(--trns);
+
+	fill: var(--color-icon) !important;
+	stroke: var(--color-icon) !important;
 }
 
 .title {
 	color: var(--color-title);
 	font-weight: 500;
 	line-height: 33px / 26px * 100%;
+
 	transition: color var(--trns);
 }
 
@@ -35,25 +36,23 @@ img {
 .btn-accent,
 .btn-primary {
 	display: inline-block;
-	text-align: center;
 	width: 100%;
-	border-radius: var(--brs-m);
 	padding-block: 13px;
+	border-radius: var(--brs-m);
+
+	text-align: center;
 }
 
 .btn-accent {
-	background-color: var(--color-accent-s);
 	border: 3px solid var(--color-accent-s);
-	color: #fff;
+
+	color: hsl(0, 0%, 100%);
+
+	background-color: var(--color-accent-s);
 
 	transition: background-color var(--trns), border-color var(--trns), transform var(--trns-fast), color var(--trns);
 
 	@media (hover: hover) and (pointer: fine) {
-		&:hover {
-			background-color: var(--color-accent-l);
-			color: var(--color-accent-s);
-		}
-
 		&:not(:focus-visible):hover {
 			border: 3px solid var(--color-accent-m);
 		}
@@ -61,44 +60,42 @@ img {
 		&:focus-visible {
 			border: 3px solid var(--color-descr);
 		}
+		&:hover {
+			color: var(--color-accent-s);
+
+			background-color: var(--color-accent-l);
+		}
 	}
 }
 
 .btn-primary {
-	background-color: var(--color-bg-btn);
 	border: 3px solid var(--color-bg-btn);
 
 	color: var(--color-title);
 
+	background-color: var(--color-bg-btn);
+
 	transition: background-color var(--trns), color var(--trns), transform var(--trns-fast), border-color var(--trns);
 
 	@media (hover: hover) and (pointer: fine) {
-		&:hover {
-			background-color: var(--color-bg-btn-primary-hover);
-			color: var(--color-text);
-			text-decoration: none;
-		}
-
 		&:focus {
 			outline: 0;
+		}
+		&:hover {
+			color: var(--color-text);
+			text-decoration: none;
+
+			background-color: var(--color-bg-btn-primary-hover);
 		}
 	}
 }
 
 .btn-secondary {
 	border-radius: var(--brs-s);
+
 	font-size: 0;
 
 	transition: background-color var(--trns), transform var(--trns-fast), border-color var(--trns);
-
-	&[disabled] {
-		background-color: var(--color-bg-btn-disabled);
-
-		svg {
-			fill: var(--color-text) !important;
-			stroke: var(--color-text) !important;
-		}
-	}
 
 	&:not([disabled]) {
 		background-color: var(--color-bg-form);
@@ -106,6 +103,15 @@ img {
 		svg {
 			fill: var(--color-title) !important;
 			stroke: var(--color-title) !important;
+		}
+	}
+
+	&[disabled] {
+		background-color: var(--color-bg-btn-disabled);
+
+		svg {
+			fill: var(--color-text) !important;
+			stroke: var(--color-text) !important;
 		}
 	}
 
@@ -134,24 +140,29 @@ img {
 
 	&:before,
 	&:after {
-		content: '';
-		display: block;
 		position: relative;
 		top: 9px;
+
+		display: block;
 		width: 10px;
 		height: 2px;
+
 		background-color: var(--color-descr);
 
 		transition: transform var(--trns), background-color var(--trns);
+
+		content: '';
 	}
 
 	&:before {
 		left: 2px;
+
 		transform: rotate(45deg);
 	}
 
 	&:after {
 		right: 2px;
+
 		transform: rotate(-45deg);
 	}
 }

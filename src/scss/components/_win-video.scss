@@ -18,24 +18,24 @@
 		position: relative;
 
 		display: grid;
-		place-items: center;
-		overflow: hidden;
 		margin: auto;
-		box-shadow: var(--box-shadow-s);
+		overflow: hidden;
 
 		background-color: var(--color-bg);
+		box-shadow: var(--box-shadow-s);
+		place-items: center;
 
 		aspect-ratio: 16 / 9;
 
 		video {
 			position: absolute;
-			inset: 0;
 
 			width: 100%;
 			height: 100%;
+			object-fit: contain;
 
 			background-color: hsl(0, 0%, 0%);
-			object-fit: contain;
+			inset: 0;
 		}
 
 		@media (min-width: 78.1875em) {
@@ -73,6 +73,7 @@
 	&__poster {
 		position: absolute;
 		inset: 0;
+
 		z-index: 1;
 
 		width: 100%;
@@ -89,17 +90,17 @@
 
 		&:not(._hidden) {
 			img {
-				opacity: 1;
-				visibility: visible;
 				transform: scale(1);
+				visibility: visible;
+				opacity: 1;
 			}
 		}
 
 		&._hidden {
 			img {
-				opacity: 0;
-				visibility: hidden;
 				transform: scale(3);
+				visibility: hidden;
+				opacity: 0;
 			}
 		}
 	}
@@ -140,6 +141,7 @@
 
 		@media (min-width: 48em) {
 			padding-inline: 40px;
+
 			padding-top: 40px;
 
 			transition: padding var(--trns);
@@ -155,6 +157,7 @@
 
 	&__shell {
 		padding-block: 30px;
+
 		background-color: var(--color-bg-form);
 
 		@media (min-width: 78.1875em) {
@@ -186,12 +189,12 @@
 	&__details {
 		display: flex;
 		flex-wrap: wrap;
-		font-size: 1rem;
-		line-height: 22px / 16px * 100%;
-
-		color: var(--color-text);
 
 		gap: 15px;
+
+		color: var(--color-text);
+		font-size: 1rem;
+		line-height: 22px / 16px * 100%;
 
 		@media (min-width: 71.9375em) {
 			align-items: center;
@@ -211,9 +214,9 @@
 
 		display: flex;
 		align-items: center;
-		overflow: hidden;
 		padding: 5px 15px;
 		border-radius: var(--brs-m);
+		overflow: hidden;
 
 		background-color: var(--color-bg);
 
@@ -228,10 +231,10 @@
 		--middle-val-mt: calc(25px + (50 - 25) * ((100vw - 320px) / (767 - 320)));
 
 		display: flex;
-
-		column-gap: 15px;
 		justify-content: space-between;
 		margin-top: clamp(25px, var(--middle-val-mt), 50px);
+
+		column-gap: 15px;
 
 		@media (max-width: 34.375em) {
 			flex-direction: column;
@@ -257,10 +260,10 @@
 	--height-content: 0;
 
 	flex-direction: column;
-	font-size: 1rem;
-	line-height: 22px;
 
 	color: var(--color-descr);
+	font-size: 1rem;
+	line-height: 22px;
 
 	&._opened {
 		.desc-video-info__shell {
@@ -283,8 +286,8 @@
 	}
 
 	&__shell {
-		overflow: hidden;
 		max-height: 0;
+		overflow: hidden;
 
 		background-color: var(--color-bg-form);
 
@@ -305,12 +308,11 @@
 		transition: var(--trns);
 
 		@media (min-width: 48em) {
-			padding-block: 25px;
 			padding-right: 25px;
 			padding-left: 50px;
+			padding-block: 25px;
 
 			&::before {
-				content: '';
 				position: absolute;
 				top: 25px;
 				left: 25px;
@@ -319,6 +321,8 @@
 				height: calc(100% - 50px);
 
 				background-color: var(--color-bg-field);
+
+				content: '';
 			}
 		}
 
@@ -333,9 +337,9 @@
 		padding: 10px 20px;
 		border-top: 3px solid var(--color-bg-field);
 		border-bottom: 3px solid var(--color-bg-field);
-		font-size: 1rem;
 
 		color: var(--color-descr);
+		font-size: 1rem;
 
 		background-color: transparent;
 
@@ -379,6 +383,7 @@
 .controls {
 	position: absolute;
 	inset: 0;
+
 	z-index: 10;
 
 	width: 100%;
@@ -402,17 +407,17 @@
 
 	&__bar {
 		position: absolute;
-		left: 0;
 		bottom: 0;
+		left: 0;
 		z-index: 10;
 
 		width: 100%;
-		padding-inline: 10px;
 
 		background-color: transparent;
+		cursor: unset;
 
 		transition: transform var(--trns-slow) var(--trns-time-default);
-		cursor: unset;
+		padding-inline: 10px;
 
 		&:not(._opened) {
 			transform: translateY(100%);
@@ -420,8 +425,8 @@
 			transition: transform var(--trns-slow) var(--trns-time-default);
 
 			.controls__wrapper {
-				opacity: 0;
 				visibility: hidden;
+				opacity: 0;
 
 				transition: opacity var(--trns) 0.3s, visibility var(--trns) 0.3s;
 			}
@@ -433,8 +438,8 @@
 			transition: transform var(--trns);
 
 			.controls__wrapper {
-				opacity: 1;
 				visibility: visible;
+				opacity: 1;
 
 				transition: opacity var(--trns), visibility var(--trns);
 			}
@@ -568,9 +573,9 @@
 
 	background-color: var(--color-icon);
 	transform: translateY(-100%) translateX(-50%);
+	cursor: pointer;
 
 	transition: height var(--trns);
-	cursor: pointer;
 
 	&:hover {
 		height: 30px;
@@ -587,25 +592,24 @@
 
 	&__sponsorblock {
 		position: absolute;
-		inset: 0;
-		overflow: hidden;
 
 		width: 100%;
 		height: 100%;
 		border-radius: var(--brs-m);
+		overflow: hidden;
+		inset: 0;
 	}
 
 	&__bar {
 		position: absolute;
-		overflow: hidden;
 
 		width: 100%;
 		height: 100%;
 		border-radius: var(--brs-m);
+		overflow: hidden;
 
 		&::before,
 		&::after {
-			content: '';
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -613,6 +617,8 @@
 			height: 100%;
 
 			transition: width var(--trns);
+
+			content: '';
 		}
 
 		&::before {
@@ -632,8 +638,6 @@
 		--url: none;
 		--posX: 0;
 		--posY: 0;
-
-		content: '';
 		position: absolute;
 		top: 0;
 		left: 100px;
@@ -642,16 +646,18 @@
 		width: 160px;
 		height: 90px;
 		border-radius: var(--brs-s);
-		box-shadow: var(--box-shadow-m);
 
 		background-image: var(--url);
+		background-repeat: no-repeat;
 		background-position: var(--posX) var(--posY);
 		background-size: 1000%;
-		background-repeat: no-repeat;
-		opacity: 0;
+		box-shadow: var(--box-shadow-m);
 		transform: translateY(-100%) translateX(-50%);
+		opacity: 0;
 
 		transition: opacity var(--trns);
+
+		content: '';
 	}
 }
 
@@ -668,23 +674,24 @@
 .seek,
 .bar {
 	position: absolute;
-	inset: 0;
-	overflow: hidden;
 
 	width: 100%;
 	height: 100%;
 	border-radius: var(--brs-m);
+	overflow: hidden;
+	inset: 0;
 }
 
 .seek {
-	appearance: none;
 	z-index: 10;
 
 	padding: 0;
+	border: 0;
 
 	outline-offset: 0;
-	border: 0;
 	cursor: pointer;
+
+	appearance: none;
 
 	&::-webkit-slider-thumb {
 		width: 2px;
@@ -692,9 +699,9 @@
 		border: 0;
 
 		background-color: hsl(0, 0%, 100%);
+		cursor: pointer;
 
 		transition: height var(--trns);
-		cursor: pointer;
 	}
 
 	&::-webkit-slider-runnable-track {
@@ -712,14 +719,14 @@
 	padding: 2px 10px;
 	border-top-left-radius: var(--brs-m);
 	border-top-right-radius: var(--brs-m);
+
+	color: hsl(0, 0%, 100%);
 	font-size: 0.875rem;
 	letter-spacing: 0.8px;
 
-	color: hsl(0, 0%, 100%);
-
 	background-color: var(--color-bg-duration);
-	opacity: 0;
 	transform: translateY(-100%) translateX(-50%);
+	opacity: 0;
 
 	transition: opacity var(--trns);
 }
@@ -736,7 +743,6 @@
 		position: relative;
 
 		&::before {
-			content: '';
 			position: absolute;
 			top: 50%;
 			left: 0;
@@ -745,10 +751,12 @@
 			border-radius: var(--brs-s);
 
 			background-color: hsl(0, 0%, 100%);
-			opacity: 0;
 			transform: translateY(-50%) rotate(45deg);
+			opacity: 0;
 
 			transition: opacity var(--trns);
+
+			content: '';
 
 			@media (min-width: 31.3125em) {
 				height: 5px;
@@ -810,6 +818,7 @@
 
 		width: var(--width);
 		height: 100%;
+
 		background-color: hsl(152, 100%, 42%);
 	}
 }
@@ -845,6 +854,7 @@
 .decorations {
 	position: absolute;
 	inset: 0;
+
 	display: grid;
 	place-items: center;
 	width: 100%;
@@ -855,6 +865,7 @@
 
 	&__item {
 		position: absolute;
+
 		display: grid;
 
 		place-items: center;
@@ -873,16 +884,16 @@
 
 		&:not(._active),
 		&:not(._active) > svg {
-			opacity: 0;
 			transform: scale(1);
+			opacity: 0;
 
 			transition: transform 0.3s var(--ease-in-sine), opacity 0.3s var(--ease-in-sine);
 		}
 
 		&._active,
 		&._active > svg {
-			opacity: 1;
 			transform: scale(1.1);
+			opacity: 1;
 
 			transition: transform 0.3s var(--ease-out-sine), opacity 0.3s var(--ease-out-sine);
 		}
@@ -923,9 +934,9 @@
 	&__title {
 		display: box;
 		overflow: hidden;
-		font-size: 1.5rem;
 
 		color: hsl(0, 0%, 100%);
+		font-size: 1.5rem;
 
 		opacity: 0.8;
 

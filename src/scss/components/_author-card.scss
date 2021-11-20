@@ -1,19 +1,21 @@
 .author {
 	position: relative;
+
 	display: flex;
 	align-items: center;
 
 	padding: 10px;
 	border-radius: var(--brs-m);
+
 	background-color: var(--color-bg-form);
 
 	transition: border-color var(--trns);
 
 	&::before {
-		content: '';
 		position: absolute;
 		top: 0;
 		left: 0;
+
 		width: 0%;
 		height: 100%;
 		border-radius: var(--brs-m);
@@ -22,6 +24,8 @@
 		opacity: 0.2;
 
 		transition: width var(--trns-time-default) var(--ease-in-sine);
+
+		content: '';
 	}
 
 	&:first-child {
@@ -38,14 +42,16 @@
 		--size: clamp(50px, 15vw, 80px);
 
 		position: relative;
-		overflow: hidden;
-		height: var(--size);
+
 		min-width: var(--size);
 
 		max-width: var(--size);
+		height: var(--size);
 		margin-right: 20px;
 		margin-bottom: 0;
 		border-radius: 50%;
+		overflow: hidden;
+
 		box-shadow: var(--box-shadow-s);
 
 		img {
@@ -58,8 +64,9 @@
 	&__name,
 	&__subs {
 		position: relative;
-		overflow: hidden;
+
 		min-width: 11ch;
+		overflow: hidden;
 
 		transition: margin-left var(--trns-time-default) var(--ease-in-sine);
 	}
@@ -70,9 +77,9 @@
 		display: box;
 
 		margin: 0;
-		font-style: unset;
 
 		font-size: unquote('clamp(1.1rem, 0.9600rem + 0.7000vw, 1.8rem)');
+		font-style: unset;
 		text-align: left;
 
 		-webkit-box-orient: vertical;
@@ -84,6 +91,7 @@
 		margin-top: 10px;
 
 		margin-left: 0;
+
 		color: var(--color-text);
 	}
 

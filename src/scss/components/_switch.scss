@@ -2,30 +2,36 @@
 	--track-size: calc(var(--thumb-size) * 2.5);
 
 	display: flex;
+
+	gap: 2ch;
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
-	color: var(--color-text);
-	-webkit-tap-highlight-color: transparent;
-	cursor: pointer;
-	user-select: none;
 
-	gap: 2ch;
+	color: var(--color-text);
+
+	cursor: pointer;
+
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
 
 	& > input {
 		--thumb-position: 0%;
-		appearance: none;
 
 		display: grid;
 		flex-shrink: 0;
-		align-items: center;
 		grid: [track] 1fr / [track] 1fr;
-		padding: var(--track-padding);
-		outline-offset: 5px;
-		border-radius: var(--track-size);
+		align-items: center;
 		box-sizing: content-box;
+		padding: var(--track-padding);
+		border-radius: var(--track-size);
+
 		background: var(--color-track-inactive);
+		outline-offset: 5px;
+
 		transition: background-color var(--trns), border-color var(--trns);
+
+		appearance: none;
 		pointer-events: none;
 		touch-action: pan-y;
 
@@ -34,15 +40,18 @@
 
 		&::before {
 			--highlight-size: 0;
-			content: '';
 
 			grid-area: track;
 			border-radius: 50%;
-			box-shadow: 0 0 0 var(--highlight-size) var(--color-switch-highlight);
+
 			background-color: var(--color-switch);
+			box-shadow: 0 0 0 var(--highlight-size) var(--color-switch-highlight);
 			transform: translateX(var(--thumb-position));
-			transition: transform var(--trns), box-shadow var(--trns);
 			cursor: pointer;
+
+			transition: transform var(--trns), box-shadow var(--trns);
+
+			content: '';
 			pointer-events: auto;
 
 			block-size: var(--thumb-size);
