@@ -46,13 +46,13 @@ const fillVideoCard = (video, index, data) => {
 
 	let date = null
 
-	if (info?.liveNow || info?.isLive) date = 'Live'
-
-	if (info?.premiere || info?.viewCountText?.includes('wait')) date = 'Premiere'
-
 	info?.publishedText && (date = info.publishedText)
 
 	info?.uploadedAt && (date = info.uploadedAt)
+
+	if (info?.liveNow || info?.isLive) date = 'Live'
+
+	if (info?.premiere || info?.viewCountText?.includes('wait')) date = 'Premiere'
 
 	videoDate.textContent = date
 
