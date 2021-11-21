@@ -9,9 +9,10 @@
 		"package": "electron-forge package",
 		"make": "electron-forge make",
 		"publish": "electron-forge publish",
-		"format": "prettier src/",
+		"format": "prettier src/ gulp/ gulpfile.js --write",
 		"test": "jest",
-		"stylelint": "stylelint src/scss/**/*.scss --fix"
+		"stylelint": "stylelint src/scss/**/*.scss --fix",
+		"prepare": "husky install"
 	},
 	"keywords": [],
 	"author": {
@@ -96,6 +97,7 @@
 		"gulp-sass": "^5.0.0",
 		"gulp-sourcemaps": "^3.0.0",
 		"gulp-uglify-es": "^3.0.0",
+		"husky": "^7.0.4",
 		"jest": "^27.3.1",
 		"node-sass": "^6.0.1",
 		"prettier": "2.4.1",

@@ -35,12 +35,14 @@
 }
 
 @keyframes spinner-rotate {
+
 	to {
 		transform: rotate3d(0, 0, 1, 360deg);
 	}
 }
 
 @keyframes spinner-arc {
+
 	from {
 		stroke-dasharray: 0 150;
 		stroke-dashoffset: 0;

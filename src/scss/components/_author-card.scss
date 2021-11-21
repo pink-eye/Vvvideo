@@ -3,7 +3,6 @@
 
 	display: flex;
 	align-items: center;
-
 	padding: 10px;
 	border-radius: var(--brs-m);
 
@@ -16,7 +15,7 @@
 		top: 0;
 		left: 0;
 
-		width: 0%;
+		width: 0;
 		height: 100%;
 		border-radius: var(--brs-m);
 
@@ -40,11 +39,9 @@
 
 	&__avatar {
 		--size: clamp(50px, 15vw, 80px);
-
 		position: relative;
 
 		min-width: var(--size);
-
 		max-width: var(--size);
 		height: var(--size);
 		margin-right: 20px;
@@ -74,14 +71,12 @@
 	&__name {
 		z-index: 2;
 
-		display: box;
-
+		display: -webkit-box;
 		margin: 0;
 
-		font-size: unquote('clamp(1.1rem, 0.9600rem + 0.7000vw, 1.8rem)');
+		font-size: unquote('clamp(1.1rem,.9600rem + .7000vw,1.8rem)');
 		font-style: unset;
 		text-align: left;
-
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 1;
 	}
@@ -89,14 +84,15 @@
 	&__subs {
 		display: inline-block;
 		margin-top: 10px;
-
 		margin-left: 0;
 
 		color: var(--color-text);
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:hover {
+
 			&::before {
 				width: 100%;
 			}

@@ -15,6 +15,7 @@ body {
 	transition: background-color var(--trns);
 
 	@media (min-width: 48em) {
+
 		&::-webkit-scrollbar {
 			width: 14px;
 		}
@@ -32,6 +33,7 @@ body {
 	}
 
 	@media (max-width: 47.9375em) {
+
 		&::-webkit-scrollbar {
 			width: 0;
 		}
@@ -57,6 +59,7 @@ input {
 	transition: border-color var(--trns);
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:focus-visible {
 			border: var(--width-line) solid var(--color-accent-s);
 		}
@@ -73,6 +76,7 @@ a:not(.btn-primary) {
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:hover {
 			color: var(--color-link-hover);
 			text-decoration: none;
@@ -80,6 +84,7 @@ a:not(.btn-primary) {
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:focus {
 			outline: 0;
 		}
@@ -144,6 +149,7 @@ input[type='text'] {
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:not(:focus-visible):hover {
 			border: var(--width-line) solid var(--color-accent-m);
 		}

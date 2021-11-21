@@ -1,23 +1,23 @@
 .burger {
 	--height-buger: 17px;
 	--height-line: 3px;
-
 	position: relative;
 
 	box-sizing: content-box;
-
 	width: 20px;
 	height: var(--height-buger);
 
 	background-color: transparent;
 
-	transition: background-color var(--trns), border-color var(--trns);
+	transition: background-color var(--trns),
+		border-color var(--trns);
 
 	&._active {
 		background-color: var(--color-accent-l);
 	}
 
 	&._active > &__wrapper {
+
 		&:before {
 			left: 50%;
 		}
@@ -61,7 +61,8 @@
 
 			width: 50%;
 
-			transition: left var(--trns), background-color var(--trns);
+			transition: left var(--trns),
+				background-color var(--trns);
 
 			content: '';
 		}
@@ -69,7 +70,9 @@
 		&:after {
 			bottom: 0;
 
-			transition: left var(--trns), width var(--trns), background-color var(--trns);
+			transition: left var(--trns),
+				width var(--trns),
+				background-color var(--trns);
 
 			content: '';
 		}
@@ -79,12 +82,14 @@
 		}
 	}
 
-	@media (hover: hover) and (pointer: fine) {
+	@media (hover:hover) and (pointer:fine) {
+
 		&:hover {
 			background-color: var(--color-accent-l);
 		}
 
 		&:hover > &__wrapper {
+
 			&:before,
 			&:after,
 			span {
@@ -93,7 +98,7 @@
 		}
 	}
 
-	@media (max-width: 47.9375em) {
+	@media (max-width:47.9375em) {
 		display: none;
 	}
 }

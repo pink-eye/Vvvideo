@@ -189,7 +189,6 @@ const initDialogSB = _ => {
 
 	isRecording &&= false
 
-
 	const modal = new GraphModal({ isClose: onCloseModal })
 
 	dialogSbBtnSend.addEventListener('click', sendSegmentSB)

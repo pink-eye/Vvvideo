@@ -1,13 +1,10 @@
-const {
-	app,
-	BrowserWindow
-} = require('electron'),
+const { app, BrowserWindow } = require('electron'),
 	path = require('path'),
 	electron = require('electron'),
 	globalShortcut = electron.globalShortcut,
-	fs = require('fs');
+	fs = require('fs')
 
-if (require('electron-squirrel-startup')) app.quit();
+if (require('electron-squirrel-startup')) app.quit()
 
 let win = null
 
@@ -16,9 +13,15 @@ const ICONS_PATH = `assets\\icons`
 
 let icon = null
 switch (process.platform) {
-	case 'win32': icon = path.resolve(__dirname, ICONS_PATH, 'icon.ico'); break;
-	case 'darwin': icon = path.resolve(__dirname, ICONS_PATH, 'icon.icns'); break;
-	case 'linux': icon = path.resolve(__dirname, ICONS_PATH, 'icon.png'); break;
+	case 'win32':
+		icon = path.resolve(__dirname, ICONS_PATH, 'icon.ico')
+		break
+	case 'darwin':
+		icon = path.resolve(__dirname, ICONS_PATH, 'icon.icns')
+		break
+	case 'linux':
+		icon = path.resolve(__dirname, ICONS_PATH, 'icon.png')
+		break
 }
 
 const createWindow = _ => {
@@ -35,24 +38,22 @@ const createWindow = _ => {
 			preload: `${__dirname}\\preload.js`,
 			show: false,
 			devTools: true,
-		}
-	});
-	win.loadFile(path.join(__dirname, 'index.html'));
+		},
+	})
+	win.loadFile(path.join(__dirname, 'index.html'))
 
 	win.once('ready-to-show', _ => {
 		win.show()
-	});
+	})
 
-	globalShortcut.register("CmdOrCtrl + Alt + Y", _ => {
-		win.isMinimized()
-			? win.show()
-			: win.minimize()
-	});
+	globalShortcut.register('CmdOrCtrl + Alt + Y', _ => {
+		win.isMinimized() ? win.show() : win.minimize()
+	})
 
 	win.on('close', _ => {
 		win.destroy()
-	});
-};
+	})
+}
 
 const checkProxy = _ => {
 	try {
@@ -63,9 +64,11 @@ const checkProxy = _ => {
 			let proxy = storage.settings.proxy
 			app.commandLine.appendSwitch('proxy-server', `${proxy.protocol}://${proxy.host}:${proxy.port}`)
 		}
-	} catch(error) { console.log(error) }
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 app.on('will-finish-launching', checkProxy)
 
-app.on('ready', createWindow);
+app.on('ready', createWindow)

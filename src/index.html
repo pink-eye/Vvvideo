@@ -1,104 +1,78 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="css/preloader.css" />
+		<script>
+			const handleLoadWindow = _ => {
+				let preloader = document.querySelector('.preloader')
 
-<head>
-	<link rel="stylesheet" href="css/preloader.css">
-	<script>
-		const handleLoadWindow = _ => {
-			let preloader = document.querySelector('.preloader');
+				preloader.classList.add('_hidden')
 
-			preloader.classList.add('_hidden');
-
-			const removePreloader = _ => {
-				preloader.remove();
-				preloader = null
+				const removePreloader = _ => {
+					preloader.remove()
+					preloader = null
+				}
+				setTimeout(removePreloader, 300)
 			}
-			setTimeout(removePreloader, 300)
-		}
 
-		window.addEventListener('load', handleLoadWindow);
-	</script>
+			window.addEventListener('load', handleLoadWindow)
+		</script>
 
-	<meta charset='utf-8'>
-	<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-	<link rel='stylesheet' href='css/vendor.css'>
-	<link rel='stylesheet' href='css/global.css'>
-	<link rel="stylesheet" href="css/index.css">
+		<link rel="stylesheet" href="css/vendor.css" />
+		<link rel="stylesheet" href="css/global.css" />
+		<link rel="stylesheet" href="css/index.css" />
 
-	<title>Vvvideo</title>
-</head>
+		<title>Vvvideo</title>
+	</head>
 
-<body>
+	<body>
+		@include('html/indicator.html')
 
-	@include('html/indicator.html')
-
-	<div class="preloader">
-		<div class="preloader__el"></div>
-	</div>
-
-	@include('html/overlay.html')
-
-	@include('html/header.html')
-
-	@include('html/sidebar.html')
-
-	<main class="main">
-		<div class="main__outter-container">
-			<div class="main__content">
-				<section class="latest outter-container _active win _anim-win">
-					<h2 class="win__title title">Latest</h2>
-					<div class="main__grid grid default">
-						@include('html/video-grid.html')
-					</div>
-				</section>
-
-				<section class="trending outter-container win">
-					<h2 class="win__title title">Trending</h2>
-					<div class="main__grid grid column">
-						@include('html/video-grid.html')
-					</div>
-				</section>
-
-				<section class="subscriptions outter-container win">
-					<h2 class="win__title title">Subs</h2>
-					<div class="main__grid grid">
-						@include('html/author-card-grid.html')
-					</div>
-				</section>
-
-				<section class="search-results outter-container win">
-					<h2 class="win__title title">Search results</h2>
-					<div class="main__grid grid column">
-						@include('html/rich-grid.html')
-					</div>
-				</section>
-
-				<section class="history outter-container win">
-					<h2 class="win__title title">History</h2>
-					<div class="main__grid grid">
-						@include('html/video-grid.html')
-					</div>
-				</section>
-
-				@include('html/win-channel.html')
-
-				@include('html/win-video.html')
-
-				@include('html/win-playlist.html')
-
-				@include('html/win-settings.html')
-			</div>
+		<div class="preloader">
+			<div class="preloader__el"></div>
 		</div>
-	</main>
-	@include('html/footer.html')
 
-	@include('html/toast.html')
+		@include('html/overlay.html') @include('html/header.html') @include('html/sidebar.html')
 
-	@include('html/graph-modal.html')
+		<main class="main">
+			<div class="main__outter-container">
+				<div class="main__content">
+					<section class="latest outter-container _active win _anim-win">
+						<h2 class="win__title title">Latest</h2>
+						<div class="main__grid grid default">@include('html/video-grid.html')</div>
+					</section>
 
-	<script src="js/vendor.js"></script>
-	<script src='js/main.js'></script>
-</body>
+					<section class="trending outter-container win">
+						<h2 class="win__title title">Trending</h2>
+						<div class="main__grid grid column">@include('html/video-grid.html')</div>
+					</section>
 
+					<section class="subscriptions outter-container win">
+						<h2 class="win__title title">Subs</h2>
+						<div class="main__grid grid">@include('html/author-card-grid.html')</div>
+					</section>
+
+					<section class="search-results outter-container win">
+						<h2 class="win__title title">Search results</h2>
+						<div class="main__grid grid column">@include('html/rich-grid.html')</div>
+					</section>
+
+					<section class="history outter-container win">
+						<h2 class="win__title title">History</h2>
+						<div class="main__grid grid">@include('html/video-grid.html')</div>
+					</section>
+
+					@include('html/win-channel.html') @include('html/win-video.html') @include('html/win-playlist.html')
+					@include('html/win-settings.html')
+				</div>
+			</div>
+		</main>
+		@include('html/footer.html') @include('html/toast.html') @include('html/graph-modal.html')
+
+		<script src="js/vendor.js"></script>
+		<script src="js/main.js"></script>
+	</body>
 </html>

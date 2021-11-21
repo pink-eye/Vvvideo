@@ -1,10 +1,6 @@
 {
 	"plugins": ["stylelint-color-format", "stylelint-declaration-block-no-ignored-properties"],
-	"extends": [
-		"stylelint-config-recommended-scss",
-		"stylelint-prettier/recommended",
-		"stylelint-config-rational-order-mod"
-	],
+	"extends": ["stylelint-config-recommended-scss", "stylelint-config-rational-order-mod"],
 	"rules": {
 		"plugin/rational-order": [
 			true,
@@ -118,15 +114,77 @@
 
 		"declaration-no-important": null,
 		"declaration-empty-line-before": null,
-
-		"selector-class-pattern": null,
-
-		"scss/no-global-function-names": null,
+		"declaration-block-semicolon-newline-after": "always-multi-line",
+		"declaration-block-semicolon-newline-before": "never-multi-line",
+		"declaration-block-semicolon-space-after": "always-single-line",
+		"declaration-block-semicolon-space-before": "always-single-line",
+		"declaration-block-trailing-semicolon": "always",
+		"declaration-colon-newline-after": "always-multi-line",
+		"declaration-colon-space-after": "always",
+		"declaration-colon-space-before": "never",
 
 		"no-descending-specificity": null,
 
 		"string-quotes": "single",
 
-		"value-no-vendor-prefix": null
+		"value-no-vendor-prefix": null,
+		"value-list-comma-newline-after": "always-multi-line",
+		"value-list-comma-newline-before": "never-multi-line",
+		"value-list-comma-space-after": "always-single-line",
+		"value-list-comma-space-before": "never",
+
+		"selector-class-pattern": null,
+		"selector-list-comma-newline-after": "always",
+		"selector-list-comma-newline-before": "never-multi-line",
+		"selector-list-comma-space-after": "always-single-line",
+		"selector-list-comma-space-before": "never",
+		"selector-combinator-space-after": "always",
+		"selector-combinator-space-before": "always",
+
+		"at-rule-semicolon-newline-after": "always",
+		"at-rule-semicolon-space-before": "never",
+		"at-rule-name-space-after": "always-single-line",
+		"at-rule-name-newline-after": null,
+
+		"block-opening-brace-newline-after": "always",
+		"block-closing-brace-newline-before": "always",
+		"block-closing-brace-empty-line-before": "never",
+		"block-closing-brace-newline-after": [
+			"always",
+			{
+				"ignoreAtRules": ["if", "else"]
+			}
+		],
+		"block-closing-brace-space-after": "always-single-line",
+		"block-closing-brace-space-before": "always-single-line",
+		"block-no-empty": [
+			true,
+			{
+				"severity": "warning"
+			}
+		],
+		"block-opening-brace-newline-before": "never-single-line",
+		"block-opening-brace-space-after": "always-single-line",
+		"block-opening-brace-space-before": "always",
+
+		"comment-empty-line-before": "always",
+
+		"at-rule-empty-line-before": [
+			"always",
+			{
+				"except": ["first-nested"]
+			}
+		],
+		"custom-property-empty-line-before": [
+			"always",
+			{
+				"except": ["after-custom-property", "first-nested"]
+			}
+		],
+		"rule-empty-line-before": ["always-multi-line"],
+
+		"scss/at-import-partial-extension": null,
+		"scss/declaration-nested-properties-no-divided-groups": null,
+		"scss/no-global-function-names": null
 	}
 }

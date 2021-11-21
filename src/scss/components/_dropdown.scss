@@ -3,6 +3,7 @@
 	z-index: 10;
 
 	&:not(._active) {
+
 		.dropdown__list {
 			--gap: 15px;
 
@@ -20,6 +21,7 @@
 	}
 
 	&._active {
+
 		.dropdown__list {
 			--gap: 5px;
 			visibility: visible;
@@ -36,6 +38,7 @@
 		}
 
 		.arrow {
+
 			&:before {
 				transform: rotate(-45deg);
 			}
@@ -71,16 +74,20 @@
 		border-radius: var(--brs-m);
 		overflow-y: auto;
 
+		overscroll-behavior: contain;
+
 		white-space: nowrap;
 		text-align: right;
 
 		background-color: var(--color-bg-form);
 		box-shadow: var(--box-shadow-m);
 
-		transition: opacity var(--trns), visibility var(--trns), background-color var(--trns), box-shadow var(--trns),
-			bottom var(--trns), top var(--trns);
-
-		overscroll-behavior: contain;
+		transition: opacity var(--trns),
+			visibility var(--trns),
+			background-color var(--trns),
+			box-shadow var(--trns),
+			bottom var(--trns),
+			top var(--trns);
 
 		&::-webkit-scrollbar {
 			width: 0;
@@ -114,6 +121,7 @@
 			background-color: var(--color-accent-s);
 
 			@media (hover: hover) and (pointer: fine) {
+
 				&:focus-visible {
 					border: 3px solid var(--color-accent-m);
 				}
@@ -121,6 +129,7 @@
 		}
 
 		@media (hover: hover) and (pointer: fine) {
+
 			&:not(._current):hover {
 				color: var(--color-title);
 
@@ -130,8 +139,11 @@
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:hover {
+
 			.arrow {
+
 				&:before,
 				&:after {
 					transform: rotate(0deg);

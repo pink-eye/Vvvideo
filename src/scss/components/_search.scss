@@ -33,14 +33,14 @@
 		flex-direction: column;
 		width: 100%;
 
+		padding-block: 20px;
+		padding-inline: 11px;
+
 		border-radius: var(--brs-m);
 
 		background-color: var(--color-bg-field);
 
 		box-shadow: var(--box-shadow-xl);
-
-		padding-block: 20px;
-		padding-inline: 11px;
 
 		&:empty {
 			transform: scale(0.5);
@@ -53,7 +53,8 @@
 			visibility: visible;
 			opacity: 1;
 
-			transition: opacity 0.15s var(--ease-out-back), visibility 0.15s var(--ease-out-back),
+			transition: opacity 0.15s var(--ease-out-back),
+				visibility 0.15s var(--ease-out-back),
 				transform 0.15s var(--ease-out-back);
 		}
 	}
@@ -98,6 +99,7 @@
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:not(._selected):not(:focus-visible):hover {
 			background-color: var(--color-bg-suggest-hover);
 		}

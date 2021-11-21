@@ -1,6 +1,6 @@
-let increment       = null
-let page            = null
-let itemArray       = []
+let increment = null
+let page = null
+let itemArray = []
 let hasContinuation = null
 
 const disablePages = parent => {
@@ -76,9 +76,9 @@ const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
 	}
 
 	if (page * 20 > itemArray.length - 1) {
-		let givenBtnNextPage          = btnNextPage
-		    givenBtnNextPage.disabled = true
-		    givenBtnNextPage          = null
+		let givenBtnNextPage = btnNextPage
+		givenBtnNextPage.disabled = true
+		givenBtnNextPage = null
 	}
 }
 
@@ -174,10 +174,10 @@ const recycleDOM = async (cardAll, typeCard) => {
 					const { avatar, name, channelId } = nextItem
 
 					let authorParams = {
-						parent   : card,
+						parent: card,
 						avatarSrc: avatar,
-						name     : name,
-						id       : channelId,
+						name: name,
+						id: channelId,
 					}
 
 					fillAuthorCard(authorParams)
@@ -189,7 +189,7 @@ const recycleDOM = async (cardAll, typeCard) => {
 	}
 }
 
-const updateCount = (parent) => {
+const updateCount = parent => {
 	let gridCount = parent.querySelector('.grid__count')
 
 	gridCount && (gridCount.textContent = page)

@@ -1,10 +1,10 @@
-const { src, dest }   = require('gulp')
-const del             = require('del')
-const image           = require('gulp-image')
-const cleanCSS        = require('gulp-clean-css')
-const sass            = require('gulp-sass')(require('node-sass'))
-const uglify          = require('gulp-uglify-es').default
-const notify          = require('gulp-notify')
+const { src, dest } = require('gulp')
+const del = require('del')
+const image = require('gulp-image')
+const cleanCSS = require('gulp-clean-css')
+const sass = require('gulp-sass')(require('node-sass'))
+const uglify = require('gulp-uglify-es').default
+const notify = require('gulp-notify')
 
 const clean = () => del(['bundle/*'])
 

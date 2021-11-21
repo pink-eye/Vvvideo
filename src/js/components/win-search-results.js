@@ -55,4 +55,3 @@ const openWinSearchResults = async _ => {
 		cardAll = null
 	}
 }
-

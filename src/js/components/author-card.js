@@ -1,11 +1,11 @@
 const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
-	let givenParent    = parent
-	let authorAvatar   = givenParent.querySelector('.author__avatar img')
-	let authorInfo     = givenParent.querySelector('.author__info')
-	let authorName     = authorInfo.querySelector('.author__name span')
-	let authorSubs     = authorInfo.querySelector('.author__subs span')
+	let givenParent = parent
+	let authorAvatar = givenParent.querySelector('.author__avatar img')
+	let authorInfo = givenParent.querySelector('.author__info')
+	let authorName = authorInfo.querySelector('.author__name span')
+	let authorSubs = authorInfo.querySelector('.author__subs span')
 	let avatarSkeleton = givenParent.querySelector('.avatar-skeleton')
-	let skeletonAll    = authorInfo.querySelectorAll('.skeleton')
+	let skeletonAll = authorInfo.querySelectorAll('.skeleton')
 
 	givenParent.disabled &&= false
 
@@ -15,7 +15,7 @@ const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 		const onLoadImage = _ => {
 			removeSkeleton(avatarSkeleton)
 
-			authorAvatar   = null
+			authorAvatar = null
 			avatarSkeleton = null
 		}
 
@@ -40,20 +40,20 @@ const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 
 	givenParent.dataset.id = id
 
-	authorInfo  = null
-	authorName  = null
-	authorSubs  = null
+	authorInfo = null
+	authorName = null
+	authorSubs = null
 	skeletonAll = null
 	givenParent = null
 }
 
 const resetAuthorCard = parent => {
-	let givenParent  = parent
+	let givenParent = parent
 	let authorAvatar = givenParent.querySelector('.author__avatar img')
-	let authorInfo   = givenParent.querySelector('.author__info')
-	let authorName   = authorInfo.querySelector('.author__name span')
-	let authorSubs   = authorInfo.querySelector('.author__subs span')
-	let skeletonAll  = givenParent.querySelectorAll('.skeleton')
+	let authorInfo = givenParent.querySelector('.author__info')
+	let authorName = authorInfo.querySelector('.author__name span')
+	let authorSubs = authorInfo.querySelector('.author__subs span')
+	let skeletonAll = givenParent.querySelectorAll('.skeleton')
 
 	if (skeletonAll.length > 0) {
 		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
@@ -72,10 +72,10 @@ const resetAuthorCard = parent => {
 
 	givenParent.hidden &&= false
 
-	givenParent  = null
-	skeletonAll  = null
+	givenParent = null
+	skeletonAll = null
 	authorAvatar = null
-	authorInfo   = null
-	authorName   = null
-	authorSubs   = null
+	authorInfo = null
+	authorName = null
+	authorSubs = null
 }

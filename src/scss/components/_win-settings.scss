@@ -1,4 +1,5 @@
 .settings {
+
 	&__list {
 		width: 100%;
 		max-width: 900px;
@@ -17,6 +18,7 @@
 	}
 
 	&__item {
+
 		&:not(:first-child) {
 			margin-top: 30px;
 		}
@@ -107,12 +109,14 @@
 		}
 
 		&:first-child {
+
 			&:before {
 				height: 1.5px;
 			}
 		}
 
 		&:last-child {
+
 			&:after {
 				height: 2px;
 			}
@@ -146,9 +150,8 @@
 	}
 
 	label {
-		padding-block: 15px;
-
 		gap: 15px;
+		padding-block: 15px;
 	}
 
 	&__title {
@@ -176,7 +179,9 @@
 }
 
 .imp-exp {
+
 	&._invalid {
+
 		.imp-exp__wrapper {
 			border: 3px dashed var(--color-error);
 		}
@@ -187,6 +192,7 @@
 	}
 
 	&._valid {
+
 		.imp-exp__wrapper {
 			border: 3px dashed var(--color-good);
 		}
@@ -201,6 +207,8 @@
 
 		display: grid;
 		place-items: center;
+
+		aspect-ratio: 3 / 1.5;
 		width: 100%;
 		height: 100%;
 
@@ -210,21 +218,19 @@
 		background-color: var(--color-bg);
 
 		transition: background-color var(--trns), border-color var(--trns);
-
-		aspect-ratio: 3 / 1.5;
 	}
 
 	&__tip {
 		position: absolute;
 
 		margin: 0;
+		padding-inline: 15px;
 
 		color: var(--color-descr);
 		line-height: 26px / 18px * 100%;
 		text-align: center;
 
 		transition: color var(--trns);
-		padding-inline: 15px;
 
 		@media (min-width: 36em) {
 			font-size: 1.125rem;

@@ -3,3 +3,4 @@ bundle
 node_modules
 out
 **/*.js
+**/*.html

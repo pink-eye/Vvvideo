@@ -1,21 +1,21 @@
-const { src, dest,  watch }   = require('gulp')
-const eslint                  = require('gulp-eslint-new')
-const del                     = require('del')
-const sourcemaps              = require('gulp-sourcemaps')
-const concat                  = require('gulp-concat')
-const chalk                   = require('chalk')
-const columnify               = require('columnify')
+const { src, dest, watch } = require('gulp')
+const eslint = require('gulp-eslint-new')
+const del = require('del')
+const sourcemaps = require('gulp-sourcemaps')
+const concat = require('gulp-concat')
+const chalk = require('chalk')
+const columnify = require('columnify')
 
 // CHALKS
 
-const error         = chalk.redBright
-const errorBright   = chalk.hex('#ff6666')
-const warning       = chalk.yellowBright
+const error = chalk.redBright
+const errorBright = chalk.hex('#ff6666')
+const warning = chalk.yellowBright
 const warningBright = chalk.hex('#e6ff8a')
-const path          = chalk.whiteBright.bgHex('#3c5cec')
-const info          = chalk.hex('#3c5cec')
-const secondary     = chalk.hex('#818c98')
-const resultChalk   = chalk.cyanBright
+const path = chalk.whiteBright.bgHex('#3c5cec')
+const info = chalk.hex('#3c5cec')
+const secondary = chalk.hex('#818c98')
+const resultChalk = chalk.cyanBright
 
 const cleanScripts = () => del(['bundle/js/*'])
 

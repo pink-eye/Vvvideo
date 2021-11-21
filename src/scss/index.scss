@@ -1,25 +1,47 @@
 @import './components/header';
+
 @import './components/footer';
+
 @import './components/search';
+
 @import './components/grid';
+
 @import './components/card';
+
 @import './components/sidebar';
+
 @import './components/win-channel';
+
 @import './components/win-video';
+
 @import './components/indicator';
+
 @import './components/win-playlist';
+
 @import './components/author-card';
+
 @import './components/win-subscriptions';
+
 @import './components/toast';
+
 @import './components/radio';
+
 @import './components/dialog-sb';
+
 @import './components/dropdown';
+
 @import './components/win-settings';
+
 @import './components/burger';
+
 @import './components/switch';
+
 @import './components/skeleton';
+
 @import './components/spinner';
+
 @import './components/overlay';
+
 @import './components/subscribe';
 
 .main {
@@ -65,6 +87,7 @@
 }
 
 .win {
+
 	&:not(._active) {
 		display: none;
 	}
@@ -75,7 +98,8 @@
 		opacity: 0;
 
 		transition: transform 0s var(--ease-out-sine) var(--trns-time-default),
-			opacity var(--trns-time-fast) var(--ease-out-sine), visibility var(--trns-time-fast) var(--ease-out-sine);
+			opacity var(--trns-time-fast) var(--ease-out-sine),
+			visibility var(--trns-time-fast) var(--ease-out-sine);
 	}
 
 	&._active {

@@ -12,6 +12,7 @@
 
 	&::after {
 		position: absolute;
+		inset: 0;
 
 		border-radius: var(--brs-xl);
 
@@ -20,16 +21,17 @@
 		transition: transform var(--trns), background-color var(--trns);
 
 		content: '';
-		inset: 0;
 	}
 
 	&:not(._subscribed) {
+
 		&::after {
 			background-color: var(--color-accent-s);
 		}
 	}
 
 	&._subscribed {
+
 		&::after {
 			background-color: var(--color-bg-unsubscribe);
 		}
@@ -53,7 +55,9 @@
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:hover {
+
 			&::after,
 			&::before {
 				transform: scale(1.1);

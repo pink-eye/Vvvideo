@@ -1,12 +1,12 @@
 .skeleton {
 	position: absolute;
+	inset: 0;
 	z-index: 11;
 
 	border-radius: var(--brs-s);
 	overflow: hidden;
 
 	background-color: var(--color-bg-skeleton);
-	inset: 0;
 
 	&:after {
 		position: absolute;
@@ -39,6 +39,7 @@
 }
 
 @keyframes shimmer {
+
 	0% {
 		left: calc(0% - 32px);
 	}

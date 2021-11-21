@@ -4,7 +4,6 @@ const createToastItemHTML = (type, text) =>
 const isExistSimilarToast = text => _io_q('.toast__list').textContent.includes(text)
 
 const showToast = (type, text) => {
-	
 	if (!isExistSimilarToast(text)) {
 		let toastList = _io_q('.toast__list')
 

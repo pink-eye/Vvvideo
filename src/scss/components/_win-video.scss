@@ -1,9 +1,11 @@
 .video {
+
 	.video-skeleton {
 		border-radius: 0;
 	}
 
 	&._live {
+
 		.controls__speed,
 		.time__duration,
 		.time__separator {
@@ -18,24 +20,24 @@
 		position: relative;
 
 		display: grid;
+		place-items: center;
+
+		aspect-ratio: 16 / 9;
 		margin: auto;
 		overflow: hidden;
 
 		background-color: var(--color-bg);
 		box-shadow: var(--box-shadow-s);
-		place-items: center;
-
-		aspect-ratio: 16 / 9;
 
 		video {
 			position: absolute;
+			inset: 0;
 
 			width: 100%;
 			height: 100%;
 			object-fit: contain;
 
 			background-color: hsl(0, 0%, 0%);
-			inset: 0;
 		}
 
 		@media (min-width: 78.1875em) {
@@ -48,7 +50,9 @@
 		}
 
 		@media (hover: hover) and (pointer: fine) {
+
 			&:hover {
+
 				.video__poster img {
 					transform: scale(1.05);
 				}
@@ -89,6 +93,7 @@
 		}
 
 		&:not(._hidden) {
+
 			img {
 				transform: scale(1);
 				visibility: visible;
@@ -97,6 +102,7 @@
 		}
 
 		&._hidden {
+
 			img {
 				transform: scale(3);
 				visibility: hidden;
@@ -266,6 +272,7 @@
 	line-height: 22px;
 
 	&._opened {
+
 		.desc-video-info__shell {
 			max-height: var(--height-content);
 		}
@@ -275,6 +282,7 @@
 		}
 
 		.arrow {
+
 			&::before {
 				transform: rotate(-45deg);
 			}
@@ -308,9 +316,9 @@
 		transition: var(--trns);
 
 		@media (min-width: 48em) {
+			padding-block: 25px;
 			padding-right: 25px;
 			padding-left: 50px;
-			padding-block: 25px;
 
 			&::before {
 				position: absolute;
@@ -360,8 +368,11 @@
 		}
 
 		@media (hover: hover) and (pointer: fine) {
+
 			&:not(._active):hover {
+
 				.arrow {
+
 					&::before,
 					&::after {
 						transform: rotate(0deg);
@@ -399,6 +410,7 @@
 
 	button:not(.dropdown__btn) {
 		@media (hover: hover) and (pointer: fine) {
+
 			&:focus {
 				background-color: var(--color-accent-s);
 			}
@@ -412,12 +424,12 @@
 		z-index: 10;
 
 		width: 100%;
+		padding-inline: 10px;
 
 		background-color: transparent;
 		cursor: unset;
 
 		transition: transform var(--trns-slow) var(--trns-time-default);
-		padding-inline: 10px;
 
 		&:not(._opened) {
 			transform: translateY(100%);
@@ -499,6 +511,7 @@
 		}
 
 		@media (max-width: 31.25em) {
+
 			svg {
 				width: 14px;
 				height: 13px;
@@ -506,6 +519,7 @@
 		}
 
 		@media (hover: hover) and (pointer: fine) {
+
 			&:hover {
 				background-color: var(--color-accent-s);
 			}
@@ -531,6 +545,7 @@
 
 	&__sponsorblock {
 		position: relative;
+
 		margin-inline: 10px;
 		padding-inline: 10px;
 
@@ -543,6 +558,7 @@
 		}
 
 		@media (hover: hover) and (pointer: fine) {
+
 			&:not(._record):hover {
 				background-color: var(--color-accent-s);
 			}
@@ -592,12 +608,12 @@
 
 	&__sponsorblock {
 		position: absolute;
+		inset: 0;
 
 		width: 100%;
 		height: 100%;
 		border-radius: var(--brs-m);
 		overflow: hidden;
-		inset: 0;
 	}
 
 	&__bar {
@@ -674,12 +690,12 @@
 .seek,
 .bar {
 	position: absolute;
+	inset: 0;
 
 	width: 100%;
 	height: 100%;
 	border-radius: var(--brs-m);
 	overflow: hidden;
-	inset: 0;
 }
 
 .seek {
@@ -769,6 +785,7 @@
 	}
 
 	&:hover {
+
 		.volume__range {
 			width: 100px;
 
@@ -791,6 +808,7 @@
 	}
 
 	&__bar {
+
 		&::-webkit-progress-value {
 			border: 0;
 
@@ -808,6 +826,7 @@
 }
 
 .sponsorblock {
+
 	&__item {
 		--width: 0;
 		--left: 0;
@@ -843,6 +862,7 @@
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:hover {
 			color: var(--color-bg-btn);
 
@@ -932,7 +952,7 @@
 	}
 
 	&__title {
-		display: box;
+		display: -webkit-box;
 		overflow: hidden;
 
 		color: hsl(0, 0%, 100%);

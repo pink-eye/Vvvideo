@@ -1,5 +1,7 @@
 @import './global/vars';
+
 @import './global/fonts';
+
 @import './global/settings';
 
 .outter-container {
@@ -53,6 +55,7 @@ img {
 	transition: background-color var(--trns), border-color var(--trns), transform var(--trns-fast), color var(--trns);
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:not(:focus-visible):hover {
 			border: 3px solid var(--color-accent-m);
 		}
@@ -60,6 +63,7 @@ img {
 		&:focus-visible {
 			border: 3px solid var(--color-descr);
 		}
+
 		&:hover {
 			color: var(--color-accent-s);
 
@@ -78,9 +82,11 @@ img {
 	transition: background-color var(--trns), color var(--trns), transform var(--trns-fast), border-color var(--trns);
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:focus {
 			outline: 0;
 		}
+
 		&:hover {
 			color: var(--color-text);
 			text-decoration: none;
@@ -116,7 +122,9 @@ img {
 	}
 
 	@media (hover: hover) and (pointer: fine) {
+
 		&:not([disabled]) {
+
 			&:hover {
 				background-color: var(--color-title);
 
@@ -130,6 +138,7 @@ img {
 }
 
 .onclick-effect {
+
 	&:active {
 		transform: scale(0.97);
 	}

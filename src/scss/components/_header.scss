@@ -40,19 +40,20 @@
 	}
 
 	&__btn {
+		padding-inline: 30px;
+
 		background-color: transparent;
 
 		transition: background-color var(--trns), border-color var(--trns);
-		padding-inline: 30px;
 
 		svg {
-
 			transition: fill var(--trns);
 
 			fill: var(--color-title) !important;
 		}
 
 		@media (hover: hover) and (pointer: fine) {
+
 			&:hover {
 				background-color: var(--color-accent-l);
 

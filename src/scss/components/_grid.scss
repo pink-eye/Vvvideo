@@ -9,10 +9,12 @@
 		@media (min-width: 48em) {
 			grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
 		}
+
 		@media (max-width: 47.9375em) and (min-width: 36em) {
 			grid-template-columns: 1fr 1fr;
 			justify-content: space-between;
 		}
+
 		@media (max-width: 35.9375em) {
 			grid-template-columns: 1fr;
 			justify-content: center;
@@ -23,7 +25,9 @@
 
 	&__item {
 		@media (hover: hover) and (pointer: fine) {
+
 			&:not(:hover) {
+
 				.card {
 					box-shadow: transparent 0 8px 24px;
 					transform: translateY(0);
@@ -35,6 +39,7 @@
 			}
 
 			&:hover {
+
 				.card:not([disabled]) {
 					box-shadow: var(--box-shadow-m);
 					transform: translateY(-5px);
@@ -51,7 +56,9 @@
 				}
 			}
 		}
+
 		@media (max-width: 28.0625em) {
+
 			.author {
 				border-radius: 0;
 			}
@@ -75,6 +82,7 @@
 }
 
 .btns {
+
 	button {
 		padding: 10px 35px;
 
@@ -85,6 +93,7 @@
 	}
 
 	&__prev {
+
 		svg {
 			transform: scale(-1);
 		}
@@ -92,10 +101,12 @@
 }
 
 .column {
+
 	.grid__wrapper {
 		@media (min-width: 36em) {
 			grid-template-columns: 1fr;
 		}
+
 		@media (min-width: 62em) {
 			max-width: 85vw;
 			margin-inline: auto;
@@ -109,11 +120,13 @@
 
 			column-gap: 20px;
 		}
+
 		@media (max-width: 47.9375em) and (min-width: 36em) {
 			grid-template-columns: 56% auto;
 
 			column-gap: 15px;
 		}
+
 		@media (max-width: 35.9375em) {
 			grid-template-rows: auto 1fr;
 		}
@@ -123,6 +136,7 @@
 		@media (min-width: 48em) {
 			font-size: 1.375rem;
 		}
+
 		@media (min-width: 36em) {
 			margin: 0;
 		}
@@ -133,7 +147,6 @@
 	}
 
 	.card__bottom {
-
 		gap: 13px;
 		justify-content: space-between;
 	}

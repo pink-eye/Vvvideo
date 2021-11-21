@@ -1,4 +1,5 @@
 .dialog-sb {
+
 	&__title {
 		margin-bottom: 10px;
 
@@ -16,6 +17,7 @@
 	}
 
 	&__time {
+
 		label {
 			display: block;
 
@@ -32,6 +34,7 @@
 				border: var(--width-line) solid var(--color-error);
 
 				@media (hover: hover) and (pointer: fine) {
+
 					&:hover {
 						border: var(--width-line) solid var(--color-error);
 					}
@@ -53,6 +56,7 @@
 	}
 
 	&__btn {
+
 		&:last-child {
 			margin-top: 10px;
 		}

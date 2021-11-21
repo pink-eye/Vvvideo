@@ -276,6 +276,5 @@ const getPreferedQuality = formats => {
 		: formats.find(el => el.qualityLabel.includes(defaultQuality))
 }
 
-
 const filterSearchResults = arr =>
 	arr.filter(el => el.type === 'video' || el.type === 'playlist' || el.type === 'channel')
