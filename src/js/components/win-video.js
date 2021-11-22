@@ -1,120 +1,12 @@
-let hls = null
-let videoFormatAll = null
+const getVideoData = id =>
+	storage.settings.enableProxy ? API.scrapeVideoProxy(id, getProxyOptions()) : API.scrapeVideo(id)
 
-const createQualityItemHTML = quality => `<li class="dropdown__item">
-											<button class="dropdown__btn btn-reset">${quality}</button>
-										</li>`
-
-const createStoryboardHTML = _ => `<div class="progress__storyboard"></div>`
-
-const insertQualityList = videoFormatAll => {
-	let controls = _io_q('.controls')
-	let quality = controls.querySelector('.controls__quality')
-	let qualityList = quality.querySelector('.dropdown__list')
-
-	if (videoFormatAll.length > 0) {
-		for (let index = 0, { length } = videoFormatAll; index < length; index += 1) {
-			const videoFormat = videoFormatAll[index]
-			qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(videoFormat.qualityLabel))
-		}
-	}
-
-	controls = null
-	quality = null
-	qualityList = null
-}
-
-const disableAudio = _ => {
-	let audio = _io_q('audio')
-
-	if (audio) {
-		resetMediaEl(audio)
-		audio.remove()
-	}
-
-	audio = null
-}
-
-const prepareVideoLive = formats => {
-	let video = _io_q('video')
-	let qualityCurrent = _io_q('.video').querySelector('.dropdown__head')
-
-	videoFormatAll = filterHLS(formats)
-
-	disableAudio()
-
-	hls = new Hls()
-
-	let currentQuality = getPreferedQuality(videoFormatAll) ?? videoFormatAll[0]
-
-	hls.loadSource(currentQuality.url)
-	qualityCurrent.textContent = currentQuality.qualityLabel
-
-	hls.attachMedia(video)
-
-	const handleError = (event, { fatal, type }) => {
-		if (fatal) {
-			switch (type) {
-				case Hls.ErrorTypes.NETWORK_ERROR:
-					showToast('error', 'Fatal network error encountered, try to recover...')
-					hls.startLoad()
-					break
-				case Hls.ErrorTypes.MEDIA_ERROR:
-					showToast('error', 'Fatal media error encountered, try to recover...')
-					hls.recoverMediaError()
-					break
-				default:
-					showToast('error', 'Fatal error was occured. Cannot recover :(')
-					hls.destroy()
-					break
-			}
-		}
-	}
-
-	hls.on(Hls.Events.ERROR, handleError)
-
-	video = null
-	qualityCurrent = null
-}
-
-const prepareVideoOnly = formats => {
-	videoFormatAll = filterVideoAndAudio(formats)
-
-	disableAudio()
-}
-
-const prepareVideoAndAudio = (audio, formats) => {
-	const ss = storage.settings
-
-	switch (ss.defaltVideoFormat) {
-		case 'mp4':
-			videoFormatAll = filterVideoMP4NoAudio(formats)
-			break
-		case 'webm':
-			videoFormatAll = filterVideoWebm(formats)
-			break
-	}
-
-	let givenAudio = audio
-	const { url } = getHighestAudio(formats)
-	givenAudio.src = url
-
-	if (videoFormatAll.length === 0) prepareVideoOnly(formats)
-
-	givenAudio = null
-}
-
-const openWinVideo = async id => {
+const openWinVideo = data => {
 	let video = _io_q('.video')
-	let videoInstance = video.querySelector('video')
-	let audioInstance = video.querySelector('audio')
 	let videoPoster = video.querySelector('.video__poster img')
-	let videoSkeleton = video.querySelector('.video-skeleton')
 	let topBarTitle = video.querySelector('.top-bar__title')
 	let topBarAuthor = video.querySelector('.top-bar__author')
 	let controls = _io_q('.controls')
-	let quality = controls.querySelector('.controls__quality')
-	let qualityCurrent = quality.querySelector('.dropdown__head')
 	let progressStoryboard = controls.querySelector('.progress__storyboard')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
@@ -137,118 +29,81 @@ const openWinVideo = async id => {
 
 	// FILL WIN
 
-	if (API.isYTVideoURL(`https://www.youtube.com/watch?v=${id}`)) {
-		try {
-			let data = ss.enableProxy ? await API.scrapeVideoProxy(id, getProxyOptions()) : await API.scrapeVideo(id)
+	const { videoDetails } = data
 
-			const { formats, videoDetails } = data
+	if (videoDetails.isLive) video.classList.add('_live')
 
-			console.log(videoDetails?.chapters)
+	if (video.classList.contains('_active')) {
+		video.dataset.id = videoDetails.videoId
 
-			if (videoDetails.isLive) video.classList.add('_live')
+		prepareSubscribeBtn(subscribeBtn, videoDetails.author.id, videoDetails.author.name)
 
-			if (video.classList.contains('_active')) {
-				video.dataset.id = id
+		// FILL VIDEO INFO
 
-				prepareSubscribeBtn(subscribeBtn, videoDetails.author.id, videoDetails.author.name)
+		if (ss.disableStoryboard || videoDetails.storyboards.length === 0) progressStoryboard.remove()
 
-				const onLoadedData = _ => {
-					if (videoSkeleton) removeSkeleton(videoSkeleton)
+		if (progressStoryboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
+			progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
 
-					videoInstance = null
-				}
+		if (videoDetails.title !== videoTitle.textContent) videoTitle.textContent = videoDetails.title
+		topBarTitle.textContent = videoDetails.title
 
-				// FILL MEDIA
-				if (formats.length > 0) {
-					if (videoDetails.isLive) prepareVideoLive(formats)
-					else {
-						ss.disableSeparatedStreams
-							? prepareVideoOnly(formats)
-							: prepareVideoAndAudio(audioInstance, formats)
+		removeSkeleton(titleSkeleton)
 
-						let currentQuality = getPreferedQuality(videoFormatAll) ?? videoFormatAll.at(-1)
+		if (videoDetails.thumbnails) videoPoster.src = videoDetails.thumbnails.at(-1).url
 
-						videoInstance.src = currentQuality.url
-						qualityCurrent.textContent = currentQuality.qualityLabel
-					}
+		if (videoViews.textContent === '...') videoViews.textContent = normalizeCount(videoDetails.viewCount)
 
-					videoInstance.addEventListener('loadedmetadata', onLoadedData, { once: true })
+		if (videoDate.textContent === '...') videoDate.textContent = formatDate(videoDetails.publishDate)
 
-					insertQualityList(videoFormatAll)
-				} else onLoadedData()
-
-				// FILL VIDEO INFO
-
-				if (ss.disableStoryboard || videoDetails.storyboards.length === 0) progressStoryboard.remove()
-
-				if (progressStoryboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
-					progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
-
-				if (videoDetails.title !== videoTitle.textContent) videoTitle.textContent = videoDetails.title
-				topBarTitle.textContent = videoDetails.title
-
-				removeSkeleton(titleSkeleton)
-
-				if (videoDetails.thumbnails) videoPoster.src = videoDetails.thumbnails.at(-1).url
-
-				if (videoViews.textContent === '...') videoViews.textContent = normalizeCount(videoDetails.viewCount)
-
-				if (videoDate.textContent === '...') videoDate.textContent = formatDate(videoDetails.publishDate)
-
-				if (videoDate.textContent === 'Premiere') {
-					videoDate.textContent = data.player_response.playabilityStatus.reason
-					controls.hidden = true
-				}
-
-				videoDislikes.textContent = normalizeCount(videoDetails.dislikes)
-				videoLikes.textContent = normalizeCount(videoDetails.likes)
-
-				if (partSkeletonAll.length > 0) {
-					for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
-						const partSkeleton = partSkeletonAll[index]
-						removeSkeleton(partSkeleton)
-					}
-				}
-
-				topBarAuthor.textContent = videoDetails.author.name
-
-				let authorParams = {
-					parent: authorCard,
-					name: videoDetails.author.name,
-					subs: `${normalizeCount(videoDetails.author.subscriber_count)} subscribers`,
-					id: videoDetails.author.id,
-					avatarSrc: videoDetails.author.thumbnails ? videoDetails.author.thumbnails.at(-1).url : '',
-				}
-
-				fillAuthorCard(authorParams)
-
-				authorParams = null
-
-				videoDesc.innerHTML = normalizeDesc(videoDetails.description)
-
-				saveVideoInHistory(scrapeVideoInfoFromData, data)
-			}
-		} catch (error) {
-			showToast('error', error.message)
-		} finally {
-			subscribeBtn = null
-			videoInfo = null
-			quality = null
-			qualityCurrent = null
-			videoViews = null
-			videoDate = null
-			controls = null
-			videoDesc = null
-			videoLikes = null
-			topBarTitle = null
-			topBarAuthor = null
-			videoDislikes = null
-			progressStoryboard = null
-			partSkeletonAll = null
-			titleSkeleton = null
-			authorCard = null
+		if (videoDate.textContent === 'Premiere') {
+			videoDate.textContent = data.player_response.playabilityStatus.reason
+			controls.hidden = true
 		}
+
+		videoDislikes.textContent = normalizeCount(videoDetails.dislikes)
+		videoLikes.textContent = normalizeCount(videoDetails.likes)
+
+		if (partSkeletonAll.length > 0) {
+			for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
+				const partSkeleton = partSkeletonAll[index]
+				removeSkeleton(partSkeleton)
+			}
+		}
+
+		topBarAuthor.textContent = videoDetails.author.name
+
+		let authorParams = {
+			parent: authorCard,
+			name: videoDetails.author.name,
+			subs: `${normalizeCount(videoDetails.author.subscriber_count)} subscribers`,
+			id: videoDetails.author.id,
+			avatarSrc: videoDetails.author.thumbnails ? videoDetails.author.thumbnails.at(-1).url : '',
+		}
+
+		fillAuthorCard(authorParams)
+
+		authorParams = null
+
+		videoDesc.innerHTML = normalizeDesc(videoDetails.description)
+
+		saveVideoInHistory(scrapeVideoInfoFromData, data)
 	}
+
+	subscribeBtn = null
+	videoInfo = null
+	videoViews = null
+	videoDate = null
+	controls = null
+	videoDesc = null
+	videoLikes = null
+	topBarTitle = null
+	topBarAuthor = null
+	videoDislikes = null
+	progressStoryboard = null
+	partSkeletonAll = null
+	titleSkeleton = null
+	authorCard = null
 }
 
 const resetVideo = _ => {
@@ -285,8 +140,6 @@ const resetVideo = _ => {
 			resetSkeleton(skeleton)
 		}
 	}
-
-	if (videoFormatAll) videoFormatAll.length = 0
 
 	let spoiler = videoInfo.querySelector('.spoiler')
 	destroySpoiler(spoiler)
@@ -350,7 +203,7 @@ const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', aut
 	authorCard = null
 }
 
-const prepareVideoWin = (btnWin, id) => {
+const prepareVideoWin = async (btnWin, id) => {
 	let params = {}
 
 	if (btnWin) {
@@ -365,9 +218,20 @@ const prepareVideoWin = (btnWin, id) => {
 
 	fillSomeInfoVideo(params)
 
-	openWinVideo(id).then(initVideoPlayer)
+	if (!API.isYTVideoURL(`https://www.youtube.com/watch?v=${id}`)) return
 
-	getSegmentsSB(id)
+	let data = null
+
+	try {
+		data = await getVideoData(id)
+	} catch ({ message }) {
+		showToast('error', message)
+		return
+	}
+
+	openWinVideo(data)
+
+	initVideoPlayer(data)
 
 	saveVideoInHistory(scrapeVideoInfoFromCard, btnWin)
 }

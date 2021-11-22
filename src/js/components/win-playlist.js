@@ -1,4 +1,7 @@
-const openWinPlaylist = async id => {
+const getPlaylistData = id =>
+	storage.settings.enableProxy ? API.scrapePlaylistVideosProxy(id, getProxyOptions()) : API.scrapePlaylistVideos(id)
+
+const openWinPlaylist = data => {
 	let playlist = _io_q('.playlist')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let playlistViews = playlist.querySelector('.playlist__views')
@@ -9,79 +12,70 @@ const openWinPlaylist = async id => {
 	let partSkeletonAll = playlist.querySelectorAll('.part-skeleton')
 	let authorCard = playlist.querySelector('.author')
 
-	try {
-		const data = storage.settings.enableProxy
-			? await API.scrapePlaylistVideosProxy(id, getProxyOptions())
-			: await API.scrapePlaylistVideos(id)
+	const { title, estimatedItemCount, views, lastUpdated, items, author, continuation } = data
 
-		const { title, estimatedItemCount, views, lastUpdated, items, author, continuation } = data
+	if (playlistName.textContent !== title) playlistName.textContent = title
 
-		if (playlistName.textContent !== title) playlistName.textContent = title
+	removeSkeleton(titleSkeleton)
 
-		removeSkeleton(titleSkeleton)
+	playlistVideoCount.textContent = `${items.length} / ${estimatedItemCount} available videos`
+	playlistViews.textContent = normalizeCount(views)
 
-		playlistVideoCount.textContent = `${items.length} / ${estimatedItemCount} available videos`
-		playlistViews.textContent = normalizeCount(views)
+	playlistLastUpdated.textContent = lastUpdated
 
-		playlistLastUpdated.textContent = lastUpdated
+	let duration = 0
 
-		let duration = 0
-
-		for (let index = 0, { length } = items; index < length; index += 1) {
-			const video = items[index]
-			duration += video.durationSec
-		}
-
-		playlistDuration.textContent = convertSecondsToDuration(duration)
-
-		if (partSkeletonAll.length > 0) {
-			for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
-				const partSkeleton = partSkeletonAll[index]
-				removeSkeleton(partSkeleton)
-			}
-		}
-
-		let authorParams = {
-			parent: authorCard,
-			name: author.name,
-			avatarSrc: author.bestAvatar.url,
-			id: author.channelID,
-		}
-
-		fillAuthorCard(authorParams)
-
-		authorParams = null
-
-		let videoAll = playlist.querySelectorAll('.card')
-
-		items.length > videoAll.length
-			? initPages(playlist, items, videoAll, 'video', continuation)
-			: disablePages(playlist)
-
-		for (let index = 0, { length } = videoAll; index < length; index += 1) {
-			let video = videoAll[index]
-
-			video.classList.add('_playlist-video')
-
-			items[index] ? fillVideoCard(video, index, items) : (video.hidden = true)
-
-			video = null
-		}
-
-		videoAll = null
-	} catch (error) {
-		showToast('error', error.message)
-	} finally {
-		playlist = null
-		playlistViews = null
-		playlistVideoCount = null
-		playlistDuration = null
-		partSkeletonAll = null
-		playlistName = null
-		playlistLastUpdated = null
-		titleSkeleton = null
-		authorCard = null
+	for (let index = 0, { length } = items; index < length; index += 1) {
+		const video = items[index]
+		duration += video.durationSec
 	}
+
+	playlistDuration.textContent = convertSecondsToDuration(duration)
+
+	if (partSkeletonAll.length > 0) {
+		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
+			const partSkeleton = partSkeletonAll[index]
+			removeSkeleton(partSkeleton)
+		}
+	}
+
+	let authorParams = {
+		parent: authorCard,
+		name: author.name,
+		avatarSrc: author.bestAvatar.url,
+		id: author.channelID,
+	}
+
+	fillAuthorCard(authorParams)
+
+	authorParams = null
+
+	let videoAll = playlist.querySelectorAll('.card')
+
+	items.length > videoAll.length
+		? initPages(playlist, items, videoAll, 'video', continuation)
+		: disablePages(playlist)
+
+	for (let index = 0, { length } = videoAll; index < length; index += 1) {
+		let video = videoAll[index]
+
+		video.classList.add('_playlist-video')
+
+		items[index] ? fillVideoCard(video, index, items) : (video.hidden = true)
+
+		video = null
+	}
+
+	videoAll = null
+	playlist = null
+	playlistViews = null
+	playlistVideoCount = null
+	playlistDuration = null
+	partSkeletonAll = null
+	playlistName = null
+	playlistLastUpdated = null
+	titleSkeleton = null
+	authorCard = null
 }
 
 const resetPlaylist = _ => {
@@ -149,7 +143,7 @@ const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
 	authorParams = null
 }
 
-const preparePlaylistWin = (btnWin, id) => {
+const preparePlaylistWin = async (btnWin, id) => {
 	let params = {}
 
 	if (btnWin) {
@@ -162,5 +156,14 @@ const preparePlaylistWin = (btnWin, id) => {
 
 	fillSomeInfoPlaylist(params)
 
-	openWinPlaylist(id)
+	let data = null
+
+	try {
+		data = await getPlaylistData(id)
+	} catch ({ message }) {
+		showToast('error', message)
+		return
+	}
+
+	openWinPlaylist(data)
 }

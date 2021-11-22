@@ -14,8 +14,6 @@ const fillVideoCard = (video, index, data) => {
 
 	const info = data[index]
 
-	console.log(info)
-
 	videoCard.dataset.id = info?.videoId ?? info.id
 
 	const thumbnail =

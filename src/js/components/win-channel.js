@@ -1,4 +1,6 @@
-const openWinChannel = async id => {
+const getChannelData = id => API.scrapeChannelInfo(id)
+
+const openWinChannel = data => {
 	let channel = _io_q('.channel')
 	let channelBannerImg = channel.querySelector('.channel__banner img')
 	let channelBanner = channel.querySelector('.channel__banner')
@@ -16,73 +18,66 @@ const openWinChannel = async id => {
 
 	channel.dataset.id = id
 
-	try {
-		const data = await API.scrapeChannelInfo(id)
+	if (data.author !== channelAuthor.textContent) channelAuthor.textContent = data.author
 
-		if (data.author !== channelAuthor.textContent) channelAuthor.textContent = data.author
+	removeSkeleton(titleSkeleton)
 
-		removeSkeleton(titleSkeleton)
+	prepareSubscribeBtn(subscribeBtn, id, data.author)
 
-		prepareSubscribeBtn(subscribeBtn, id, data.author)
+	if (data.authorThumbnails) {
+		channelAvatar.src = data.authorThumbnails.at(-1).url
 
-		if (data.authorThumbnails) {
-			channelAvatar.src = data.authorThumbnails.at(-1).url
+		const onLoadAvatar = _ => {
+			removeSkeleton(avatarSkeleton)
 
-			const onLoadAvatar = _ => {
-				removeSkeleton(avatarSkeleton)
-
-				channelAvatar = null
-				avatarSkeleton = null
-			}
-
-			channelAvatar.addEventListener('load', onLoadAvatar, { once: true })
+			channelAvatar = null
+			avatarSkeleton = null
 		}
 
-		if (data.authorBanners) {
-			channelBannerImg.src = data.authorBanners.at(-1).url
-
-			const onLoadBanner = _ => {
-				removeSkeleton(bannerSkeleton)
-
-				channelBannerImg = null
-				bannerSkeleton = null
-			}
-
-			channelBannerImg.addEventListener('load', onLoadBanner, { once: true })
-		} else if (data.authorThumbnails) {
-			channelBanner.style.setProperty('--bg-image', `url(${data.authorThumbnails.at(-1).url})`)
-			removeSkeleton(bannerSkeleton)
-
-			channelBannerImg = null
-			bannerSkeleton = null
-		} else {
-			channelBanner.style.setProperty('--bg-image', '#fff')
-			removeSkeleton(bannerSkeleton)
-
-			channelBannerImg = null
-			bannerSkeleton = null
-		}
-
-		channelFollowers.textContent = `${normalizeCount(data.subscriberCount)} subscribers`
-		removeSkeleton(followersSkeleton)
-
-		if (data.description) channelDescription.innerHTML = `${normalizeDesc(data.description)}`
-
-		hideLastTab()
-		initTabs(0)
-	} catch (error) {
-		showToast('error', error.message)
-		resetIndicator()
-	} finally {
-		channel = null
-		channelBanner = null
-		channelFollowers = null
-		channelDescription = null
-		subscribeBtn = null
-		channelAuthor = null
-		titleSkeleton = null
-		followersSkeleton = null
+		channelAvatar.addEventListener('load', onLoadAvatar, { once: true })
 	}
+
+	if (data.authorBanners) {
+		channelBannerImg.src = data.authorBanners.at(-1).url
+
+		const onLoadBanner = _ => {
+			removeSkeleton(bannerSkeleton)
+
+			channelBannerImg = null
+			bannerSkeleton = null
+		}
+
+		channelBannerImg.addEventListener('load', onLoadBanner, { once: true })
+	} else if (data.authorThumbnails) {
+		channelBanner.style.setProperty('--bg-image', `url(${data.authorThumbnails.at(-1).url})`)
+		removeSkeleton(bannerSkeleton)
+
+		channelBannerImg = null
+		bannerSkeleton = null
+	} else {
+		channelBanner.style.setProperty('--bg-image', '#fff')
+		removeSkeleton(bannerSkeleton)
+
+		channelBannerImg = null
+		bannerSkeleton = null
+	}
+
+	channelFollowers.textContent = data.subscriberText
+	removeSkeleton(followersSkeleton)
+
+	if (data.description) channelDescription.innerHTML = `${normalizeDesc(data.description)}`
+
+	hideLastTab()
+	initTabs(0)
+
+	channel = null
+	channelBanner = null
+	channelFollowers = null
+	channelDescription = null
+	subscribeBtn = null
+	channelAuthor = null
+	titleSkeleton = null
+	followersSkeleton = null
 }
 
 const resetChannel = _ => {
@@ -152,10 +147,19 @@ const fillSomeInfoChannel = ({ name = '', id = '' }) => {
 	titleSkeleton = null
 }
 
-const prepareChannelWin = (btnWin, id) => {
+const prepareChannelWin = async (btnWin, id) => {
 	const params = btnWin.dataset || {}
 
 	fillSomeInfoChannel(params)
 
-	openWinChannel(id)
+	let data = null
+
+	try {
+		data = await getChannelData(id)
+	} catch ({ message }) {
+		showToast('error', message)
+		return
+	}
+
+	openWinChannel(data)
 }

@@ -2,6 +2,8 @@ let hasListeners = false
 let isFirstPlay = true
 let isSync = false
 let doesSkipSegments = true
+let hls = null
+let segmentsSB = []
 
 const resetMediaEl = el => {
 	el.pause()
@@ -14,6 +16,153 @@ const getMedia = () => {
 	const video = _io_q('video')
 
 	return { video, audio }
+}
+
+const createQualityItemHTML = quality => `<li class="dropdown__item">
+											<button class="dropdown__btn btn-reset">${quality}</button>
+										</li>`
+
+const createStoryboardHTML = _ => `<div class="progress__storyboard"></div>`
+
+const insertQualityList = videoFormats => {
+	let controls = _io_q('.controls')
+	let quality = controls.querySelector('.controls__quality')
+	let qualityList = quality.querySelector('.dropdown__list')
+
+	if (videoFormats.length > 0) {
+		for (let index = 0, { length } = videoFormats; index < length; index += 1) {
+			const videoFormat = videoFormats[index]
+			qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(videoFormat.qualityLabel))
+		}
+	}
+
+	controls = null
+	quality = null
+	qualityList = null
+}
+
+const disableAudio = _ => {
+	let audio = _io_q('audio')
+
+	if (audio) {
+		resetMediaEl(audio)
+		audio.remove()
+	}
+
+	audio = null
+}
+
+const startVideoLive = url => {
+	let video = _io_q('video')
+
+	hls = new Hls()
+	hls.loadSource(url)
+	hls.attachMedia(video)
+
+	const handleError = (event, { fatal, type }) => {
+		if (fatal) {
+			switch (type) {
+				case Hls.ErrorTypes.NETWORK_ERROR:
+					showToast('error', 'Fatal network error encountered, try to recover...')
+					hls.startLoad()
+					break
+				case Hls.ErrorTypes.MEDIA_ERROR:
+					showToast('error', 'Fatal media error encountered, try to recover...')
+					hls.recoverMediaError()
+					break
+				default:
+					showToast('error', 'Fatal error was occured. Cannot recover :(')
+					hls.destroy()
+					break
+			}
+		}
+	}
+
+	hls.on(Hls.Events.ERROR, handleError)
+
+	video = null
+}
+
+const prepareVideoLive = formats => {
+	disableAudio()
+
+	return filterHLS(formats)
+}
+
+const prepareVideoOnly = formats => {
+	disableAudio()
+
+	return filterVideoAndAudio(formats)
+}
+
+const prepareVideoAndAudio = formats => {
+	let audio = _io_q('.video').querySelector('audio')
+	let videoFormats = null
+
+	switch (storage.settings.defaltVideoFormat) {
+		case 'mp4':
+			videoFormats = filterVideoMP4NoAudio(formats)
+			break
+		case 'webm':
+			videoFormats = filterVideoWebm(formats)
+			break
+	}
+
+	const { url } = getHighestAudio(formats)
+	audio.src = url
+
+	if (videoFormats.length === 0) videoFormats = prepareVideoOnly(formats)
+
+	audio = null
+
+	return videoFormats
+}
+
+const prepareVideoPlayer = data => {
+	const { formats, videoDetails } = data
+
+	let video = _io_q('.video')
+	let videoSkeleton = video.querySelector('.video-skeleton')
+	let videoInstance = video.querySelector('video')
+	let quality = _io_q('.controls').querySelector('.controls__quality')
+	let qualityCurrent = quality.querySelector('.dropdown__head')
+	let videoFormats = null
+	let currentQuality = null
+
+	const onLoadedData = _ => {
+		if (videoSkeleton) removeSkeleton(videoSkeleton)
+
+		videoInstance = null
+	}
+
+	if (!formats || formats.length === 0) {
+		onLoadedData()
+		return undefined
+	}
+
+	if (videoDetails.isLive) {
+		videoFormats = prepareVideoLive(formats)
+		currentQuality = getPreferedQuality(videoFormats) ?? videoFormats[0]
+		startVideoLive(currentQuality.url)
+	} else {
+		videoFormats = storage.settings.disableSeparatedStreams
+			? prepareVideoOnly(formats)
+			: prepareVideoAndAudio(formats)
+
+		currentQuality = getPreferedQuality(videoFormats) ?? videoFormats.at(-1)
+		videoInstance.src = currentQuality.url
+	}
+
+	qualityCurrent.textContent = currentQuality.qualityLabel
+
+	videoInstance.addEventListener('loadedmetadata', onLoadedData, { once: true })
+
+	insertQualityList(videoFormats)
+
+	quality = null
+	qualityCurrent = null
+
+	return videoFormats
 }
 
 const initSponsorblockSegments = data => {
@@ -462,7 +611,7 @@ const skipSegmentSB = _ => {
 
 	let video = _io_q('video')
 
-	if (isPlaying(video)) {
+	if (isPlaying(video) && segmentsSB.length > 0) {
 		for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
 			const segmentSB = segmentsSB[index]
 			if (video.currentTime >= segmentSB.startTime && video.currentTime <= segmentSB.endTime) {
@@ -632,7 +781,30 @@ const backwardTime = _ => {
 	isSync = false
 }
 
-const initVideoPlayer = _ => {
+const fillSegmentsSB = segmentsSB => {
+	const { disableSponsorblock } = storage.settings
+
+	toggleSponsorblock(disableSponsorblock)
+
+	if (disableSponsorblock) return
+
+	let video = _io_q('.video')
+	let controlsProgess = video.querySelector('.controls__progress')
+	let progressSponsorblock = controlsProgess.querySelector('.sponsorblock')
+	let sponsorblockItemHTML = createSponsorblockItemHTML()
+
+	if (segmentsSB.length > 0) {
+		for (let index = 0, { length } = segmentsSB; index < length; index += 1)
+			progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML)
+	}
+
+	video = null
+	controlsProgess = null
+	progressSponsorblock = null
+	sponsorblockItemHTML = null
+}
+
+const initVideoPlayer = data => {
 	const controls = _io_q('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
 	const controlsSwitch = controls.querySelector('.controls__switch')
@@ -649,6 +821,17 @@ const initVideoPlayer = _ => {
 	const audio = videoWrapper.querySelector('audio')
 
 	const { autoplay } = storage.settings
+
+	try {
+		segmentsSB = getSegmentsSB(data.videoDetails.videoId)
+		fillSegmentsSB(segmentsSB)
+	} catch (error) {
+		showToast('info', `Sponsorblock doesn't have segments for this video`)
+	}
+
+	const videoFormats = prepareVideoPlayer(data)
+
+	if (!videoFormats) return
 
 	const initVideo = _ => {
 		const videoDuration = ~~video.duration
@@ -729,8 +912,8 @@ const initVideoPlayer = _ => {
 	const controlsQuality = controls.querySelector('.controls__quality')
 
 	initDropdown(controlsQuality, btn => {
-		for (let index = 0, { length } = videoFormatAll; index < length; index += 1) {
-			const videoFormat = videoFormatAll[index]
+		for (let index = 0, { length } = videoFormats; index < length; index += 1) {
+			const videoFormat = videoFormats[index]
 
 			if (videoFormat.qualityLabel === btn.textContent) chooseQuality(videoFormat.url)
 		}
