@@ -2,6 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npm test
-npm run stylelint
-npm run format
-git add .
+# npm run stylelint
+# npm run format
+# git add .
