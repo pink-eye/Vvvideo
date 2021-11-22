@@ -16,16 +16,18 @@ const openWinChannel = data => {
 
 	// FILL WIN
 
-	channel.dataset.id = id
+	const { author, authorId, authorThumbnails, authorBanners, subscriberText, description } = data
 
-	if (data.author !== channelAuthor.textContent) channelAuthor.textContent = data.author
+	channel.dataset.id = authorId
+
+	if (author !== channelAuthor.textContent) channelAuthor.textContent = author
 
 	removeSkeleton(titleSkeleton)
 
-	prepareSubscribeBtn(subscribeBtn, id, data.author)
+	prepareSubscribeBtn(subscribeBtn, authorId, author)
 
-	if (data.authorThumbnails) {
-		channelAvatar.src = data.authorThumbnails.at(-1).url
+	if (authorThumbnails) {
+		channelAvatar.src = authorThumbnails.at(-1).url
 
 		const onLoadAvatar = _ => {
 			removeSkeleton(avatarSkeleton)
@@ -37,8 +39,8 @@ const openWinChannel = data => {
 		channelAvatar.addEventListener('load', onLoadAvatar, { once: true })
 	}
 
-	if (data.authorBanners) {
-		channelBannerImg.src = data.authorBanners.at(-1).url
+	if (authorBanners) {
+		channelBannerImg.src = authorBanners.at(-1).url
 
 		const onLoadBanner = _ => {
 			removeSkeleton(bannerSkeleton)
@@ -48,8 +50,8 @@ const openWinChannel = data => {
 		}
 
 		channelBannerImg.addEventListener('load', onLoadBanner, { once: true })
-	} else if (data.authorThumbnails) {
-		channelBanner.style.setProperty('--bg-image', `url(${data.authorThumbnails.at(-1).url})`)
+	} else if (authorThumbnails) {
+		channelBanner.style.setProperty('--bg-image', `url(${authorThumbnails.at(-1).url})`)
 		removeSkeleton(bannerSkeleton)
 
 		channelBannerImg = null
@@ -62,10 +64,10 @@ const openWinChannel = data => {
 		bannerSkeleton = null
 	}
 
-	channelFollowers.textContent = data.subscriberText
+	channelFollowers.textContent = subscriberText
 	removeSkeleton(followersSkeleton)
 
-	if (data.description) channelDescription.innerHTML = `${normalizeDesc(data.description)}`
+	if (description) channelDescription.innerHTML = `${normalizeDesc(description)}`
 
 	hideLastTab()
 	initTabs(0)
