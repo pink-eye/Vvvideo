@@ -118,7 +118,7 @@ const concatScripts = () => {
 }
 
 const launchTasksScripts = done => {
-	lintScripts()
+	// lintScripts()
 	concatScripts()
 	done()
 }
