@@ -1,10 +1,12 @@
 const { src, dest, watch } = require('gulp')
 const eslint = require('gulp-eslint-new')
 const del = require('del')
-const sourcemaps = require('gulp-sourcemaps')
 const concat = require('gulp-concat')
 const chalk = require('chalk')
 const columnify = require('columnify')
+const webpack = require('webpack')
+const webpackStream = require('webpack-stream')
+const webpackConfig = require('../webpack.config.js')
 
 // CHALKS
 
@@ -111,20 +113,12 @@ const lintScripts = () =>
 const concatScripts = () => {
 	src('./src/js/vendor/**.js').pipe(concat('vendor.js')).pipe(dest('./bundle/js/'))
 	return src(['./src/js/global.js', './src/js/components/**.js', './src/js/main.js'])
-		.pipe(sourcemaps.init())
-		.pipe(concat('main.js'))
-		.pipe(sourcemaps.write('.'))
+		.pipe(webpackStream(webpackConfig), webpack)
 		.pipe(dest('./bundle/js'))
 }
 
-const launchTasksScripts = done => {
-	// lintScripts()
-	concatScripts()
-	done()
-}
-
 const watchScripts = () => {
-	watch('./src/js/**/*.js', launchTasksScripts)
+	watch('./src/js/**/*.js', concatScripts)
 }
 
-module.exports = { cleanScripts, launchTasksScripts, watchScripts }
+module.exports = { cleanScripts, concatScripts, watchScripts }
