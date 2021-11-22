@@ -1,3 +1,5 @@
+
+
 const hideLastTab = _ => {
 	let channel = _io_q('.channel')
 	let tabContentActive = channel.querySelector('.tab-content._active')
@@ -112,3 +114,5 @@ const destroyTabs = _ => {
 
 	tabAll = null
 }
+
+export { initTabs, destroyTabs, hideLastTab }

@@ -1,3 +1,13 @@
+import { resetGrid } from './grid'
+import {
+	isResourceIsChannel,
+	isResourceIsPlaylist,
+	getDurationTimeout,
+	getPlaylistId,
+	getChannelIdOrUser,
+} from '../global'
+import { activateSidebarBtn, deactivateLastSidebarBtn } from './sidebar'
+
 const resetWin = win => {
 	if (
 		win.classList.contains('search-results') ||
@@ -95,7 +105,7 @@ const hideWin = win => {
 	}
 }
 
-const manageWin = async event => {
+export const manageWin = async event => {
 	let btnWin = event.target.dataset.win ? event.target : event.target.closest('[data-win]')
 
 	if (btnWin && !btnWin.disabled) {

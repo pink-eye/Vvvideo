@@ -1,3 +1,5 @@
+import { _io_q } from '../global'
+
 const openWinSettings = _ => {
 	const settings = _io_q('.settings')
 
@@ -203,7 +205,7 @@ const buildStorage = data => {
 	}
 }
 
-const fillWinSettings = async _ => {
+const fillWinSettings = storage => {
 	const ss = storage.settings
 	const settings = _io_q('.settings')
 
@@ -302,6 +304,7 @@ const handleInputField = event => {
 			storage.settings.maxHistoryLength = isEmpty(input.value) ? 30 : +input.value
 			break
 	}
+
 	API.writeStorage(storage)
 }
 
@@ -335,3 +338,5 @@ const handleChangeCheckbox = event => {
 
 	API.writeStorage(storage)
 }
+
+export { fillWinSettings, setTheme }

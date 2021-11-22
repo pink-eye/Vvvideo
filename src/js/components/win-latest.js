@@ -1,26 +1,27 @@
-let storage = {}
+import { startIndicator, resetIndicator } from './indicator'
+import { calculatePublishedDate, _io_q } from '../global'
+import { showToast } from './toast'
+import { fillVideoCard } from './card'
+
 let latestArray = null
 
 const getChannelVideosLocalScraper = channelId =>
-	new Promise(async (resolve, reject) => {
-		try {
-			const data = await API.scrapeChannelVideos(channelId)
-			let { items } = data
+	new Promise((resolve, reject) => {
+		API.scrapeChannelVideos(channelId)
+			.then(data => {
+				let { items } = data
 
-			startIndicator()
+				for (let index = 0, { length } = items; index < length; index += 1) {
+					const video = items[index]
 
-			for (let index = 0, { length } = items; index < length; index += 1) {
-				const video = items[index]
+					video.publishedDate = video.liveNow
+						? new Date().getTime()
+						: calculatePublishedDate(video.publishedText)
+				}
 
-				video.publishedDate = video.liveNow ? new Date().getTime() : calculatePublishedDate(video.publishedText)
-			}
-
-			resolve(items)
-		} catch (error) {
-			showToast('error', error.message)
-			resetIndicator()
-			reject(error)
-		}
+				resolve(items)
+			})
+			.catch(reject)
 	})
 
 const openWinLatest = async _ => {
@@ -47,13 +48,14 @@ const openWinLatest = async _ => {
 		btnLatest = null
 
 		try {
+			startIndicator()
 			latestArray = await Promise.all(promises)
 			latestArray = latestArray.flat()
 			latestArray = latestArray.sort((a, b) => b.publishedDate - a.publishedDate)
 
 			showToast('good', 'Latest uploads is got successfully')
-		} catch (error) {
-			showToast('error', error.message)
+		} catch ({ message }) {
+			showToast('error', message)
 		}
 
 		promises.length = 0
@@ -72,3 +74,5 @@ const openWinLatest = async _ => {
 	videoAll = null
 	latest = null
 }
+
+export { openWinLatest }

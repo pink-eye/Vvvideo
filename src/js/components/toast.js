@@ -35,3 +35,5 @@ const showToast = (type, text) => {
 		setTimeout(beforeRemoveToast, 5000)
 	}
 }
+
+export { showToast }

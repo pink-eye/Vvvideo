@@ -1,3 +1,6 @@
+import { convertDurationToSeconds } from "../global"
+import { showToast } from "./toast"
+
 const handleInputDialogField = event => {
 	let dialogSbField = event.target
 	dialogSbField.value = formatDuration(dialogSbField.value)
@@ -181,7 +184,7 @@ const onCloseModal = _ => {
 	resetDialogSB()
 }
 
-const initDialogSB = _ => {
+export const initDialogSB = _ => {
 	const dialogSb = _io_q('.dialog-sb')
 	const dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send')
 	const dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel')
@@ -199,3 +202,4 @@ const initDialogSB = _ => {
 
 	controlsSponsorblock.addEventListener('click', recordSegmentSB)
 }
+

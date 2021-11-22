@@ -1,3 +1,7 @@
+import { resetSkeleton, removeSkeleton } from './skeleton'
+import { normalizeCount, convertSecondsToDuration } from '../global'
+import { calculateWatchedProgress } from './win-history'
+
 const fillVideoCard = (video, index, data) => {
 	let videoCard = video
 	let videoImage = videoCard.querySelector('.card__image img')
@@ -305,4 +309,14 @@ const resetPlaylistCard = card => {
 	playlistCard = null
 	playlistChannel = null
 	playlistCount = null
+}
+
+export {
+	fillVideoCard,
+	fillPlaylistCard,
+	fillChannelCard,
+	resetCard,
+	resetVideoCard,
+	resetChannelCard,
+	resetPlaylistCard,
 }

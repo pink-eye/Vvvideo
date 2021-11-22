@@ -1,3 +1,6 @@
+import { showToast } from './toast'
+import { fillVideoCard } from './card'
+
 const openWinHistory = _ => {
 	if (storage.settings.disableHistory) return
 
@@ -155,3 +158,5 @@ const calculateWatchedProgress = videoId => {
 
 	return `${convertToProc(requiredItem.watchedTime, lengthSeconds)}%`
 }
+
+export { calculateWatchedProgress, getWatchedtTime, rememberWatchedTime, disableHistory, saveVideoInHistory }

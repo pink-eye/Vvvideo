@@ -11,3 +11,5 @@ const deactivateLastSidebarBtn = _ => {
 
 	lastActiveSidebarBtn = null
 }
+
+export { activateSidebarBtn, deactivateLastSidebarBtn }

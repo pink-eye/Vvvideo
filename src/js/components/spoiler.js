@@ -32,3 +32,5 @@ const destroySpoiler = spoiler => {
 
 	spoilerHead = null
 }
+
+export { initSpoiler, destroySpoiler }

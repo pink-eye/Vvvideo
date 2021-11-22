@@ -1,6 +1,8 @@
+import { getDurationTimeout } from '../global'
+
 const isLargeScreen = _ => (innerWidth - 1600) / 2 > 226
 
-const toggleMenu = _ => {
+export const toggleMenu = _ => {
 	let burger = _io_q('.header').querySelector('.burger')
 	let sidebar = _io_q('.sidebar')
 	let sidebarBtn = sidebar.querySelector('.sidebar__btn')

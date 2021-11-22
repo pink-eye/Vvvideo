@@ -1,3 +1,13 @@
+import { _io_q, hideOnScroll, isEmpty } from './global'
+import { openWinLatest } from './components/win-latest'
+import { fillWinSettings, setTheme } from './components/win-settings'
+import { initSuggests, hideSuggest, resetSelected, chooseSuggest } from './components/suggest'
+import { showOverlay, hideOverlay } from './components/overlay'
+import { manageWin } from './components/win-manager'
+import { initDropdown, hideLastDropdown } from './components/dropdown'
+
+let storage = {}
+
 document.addEventListener('DOMContentLoaded', async _ => {
 	// MAIN SELECTORS
 
@@ -12,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const onReadStorage = async data => {
 		Object.assign(storage, JSON.parse(data))
 
-		fillWinSettings()
+		fillWinSettings(storage)
 
 		openWinLatest()
 

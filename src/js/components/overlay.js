@@ -23,3 +23,5 @@ const hideOverlay = _ => {
 
 	overlayAll = null
 }
+
+export { showOverlay, hideOverlay }

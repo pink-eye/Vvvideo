@@ -149,7 +149,7 @@ const fillSomeInfoChannel = ({ name = '', id = '' }) => {
 	titleSkeleton = null
 }
 
-const prepareChannelWin = async (btnWin, id) => {
+const prepareWinChannel = async (btnWin, id) => {
 	const params = btnWin.dataset || {}
 
 	fillSomeInfoChannel(params)
@@ -165,3 +165,5 @@ const prepareChannelWin = async (btnWin, id) => {
 
 	openWinChannel(data)
 }
+
+export { prepareWinChannel }

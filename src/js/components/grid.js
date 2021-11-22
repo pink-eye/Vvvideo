@@ -1,3 +1,6 @@
+import { resetAuthorCard } from './author-card'
+import { resetCard } from './card'
+
 const resetGridAuthorCard = _ => {
 	let subscriptions = _io_q('.subscriptions')
 	let authorCardAll = subscriptions.querySelectorAll('.author')
@@ -23,3 +26,5 @@ const resetGrid = parent => {
 		}
 	}
 }
+
+export { resetGrid, resetGridAuthorCard }

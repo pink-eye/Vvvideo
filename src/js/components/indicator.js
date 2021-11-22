@@ -17,3 +17,5 @@ const startIndicator = _ => {
 
 	indicator = null
 }
+
+export { startIndicator, resetIndicator }

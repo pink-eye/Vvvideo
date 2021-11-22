@@ -90,3 +90,5 @@ document.addEventListener('DOMContentLoaded', _ => {
 		}
 	}
 })
+
+export { initDropdown, hideLastDropdown }

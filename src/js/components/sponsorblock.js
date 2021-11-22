@@ -1,3 +1,5 @@
+import { uuidv4 } from "../global"
+
 const createSponsorblockItemHTML = _ => '<li class="sponsorblock__item"></li>'
 
 const getSegmentsSB = id => API.getSponsorblockInfo(id, uuidv4())
@@ -11,3 +13,5 @@ const toggleSponsorblock = option => {
 	video = null
 	sponsorblockBtn = null
 }
+
+export { createSponsorblockItemHTML, getSegmentsSB, toggleSponsorblock }

@@ -1,3 +1,6 @@
+import { showToast } from './toast'
+import { getProxyOptions } from '../global'
+
 let lastSearchResult = null
 
 const openWinSearchResults = async _ => {
@@ -55,3 +58,5 @@ const openWinSearchResults = async _ => {
 		cardAll = null
 	}
 }
+
+export { openWinSearchResults }
