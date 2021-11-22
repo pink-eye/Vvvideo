@@ -87,7 +87,7 @@ const openWinVideo = data => {
 
 		videoDesc.innerHTML = normalizeDesc(videoDetails.description)
 
-		saveVideoInHistory(scrapeVideoInfoFromData, data)
+		saveVideoInHistory(data)
 	}
 
 	subscribeBtn = null
@@ -232,6 +232,4 @@ const prepareVideoWin = async (btnWin, id) => {
 	openWinVideo(data)
 
 	initVideoPlayer(data)
-
-	saveVideoInHistory(scrapeVideoInfoFromCard, btnWin)
 }

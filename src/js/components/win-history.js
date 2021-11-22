@@ -39,17 +39,6 @@ const keepHistoryArray = _ => {
 	}
 }
 
-const scrapeVideoInfoFromCard = card => ({
-	id: card.dataset.id,
-	title: card.querySelector('.card__title span').textContent,
-	author: card.querySelector('.card__channel').textContent,
-	authorId: card.querySelector('.card__channel').dataset.id,
-	bestThumbnail: {
-		url: card.querySelector('.card__image img').src,
-	},
-	lengthSeconds: card.querySelector('.card__duration').textContent,
-})
-
 const scrapeVideoInfoFromData = data => {
 	const { videoDetails } = data
 
@@ -65,12 +54,11 @@ const scrapeVideoInfoFromData = data => {
 	}
 }
 
-const saveVideoInHistory = (methodToScrapeInfo, arg) => {
+const saveVideoInHistory = data => {
 	if (storage.settings.disableHistory) return
 
-	if (arg) {
-		const newItem = methodToScrapeInfo(arg)
-
+	if (data) {
+		const newItem = scrapeVideoInfoFromData(data)
 		if (!isThisRecentHistoryItem(newItem)) {
 			const sameItem = getSameHistoryItem(newItem)
 

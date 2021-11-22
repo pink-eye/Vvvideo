@@ -121,9 +121,9 @@ const prepareVideoAndAudio = formats => {
 const prepareVideoPlayer = data => {
 	const { formats, videoDetails } = data
 
-	let video = _io_q('.video')
-	let videoSkeleton = video.querySelector('.video-skeleton')
-	let videoInstance = video.querySelector('video')
+	let videoParent = _io_q('.video')
+	let videoSkeleton = videoParent.querySelector('.video-skeleton')
+	let video = videoParent.querySelector('video')
 	let quality = _io_q('.controls').querySelector('.controls__quality')
 	let qualityCurrent = quality.querySelector('.dropdown__head')
 	let videoFormats = null
@@ -132,7 +132,7 @@ const prepareVideoPlayer = data => {
 	const onLoadedData = _ => {
 		if (videoSkeleton) removeSkeleton(videoSkeleton)
 
-		videoInstance = null
+		video = null
 	}
 
 	if (!formats || formats.length === 0) {
@@ -150,12 +150,12 @@ const prepareVideoPlayer = data => {
 			: prepareVideoAndAudio(formats)
 
 		currentQuality = getPreferedQuality(videoFormats) ?? videoFormats.at(-1)
-		videoInstance.src = currentQuality.url
+		video.src = currentQuality.url
 	}
 
 	qualityCurrent.textContent = currentQuality.qualityLabel
 
-	videoInstance.addEventListener('loadedmetadata', onLoadedData, { once: true })
+	video.addEventListener('loadedmetadata', onLoadedData, { once: true })
 
 	insertQualityList(videoFormats)
 
