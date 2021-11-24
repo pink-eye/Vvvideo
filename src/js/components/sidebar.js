@@ -1,3 +1,5 @@
+import { getSelector } from '../global'
+
 const activateSidebarBtn = btn => {
 	let givenBtn = btn
 	givenBtn.classList.add('_active')
@@ -5,7 +7,7 @@ const activateSidebarBtn = btn => {
 }
 
 const deactivateLastSidebarBtn = _ => {
-	let lastActiveSidebarBtn = _io_q('.sidebar').querySelector('.sidebar__btn._active')
+	let lastActiveSidebarBtn = getSelector('.sidebar').querySelector('.sidebar__btn._active')
 
 	lastActiveSidebarBtn && lastActiveSidebarBtn.classList.remove('_active')
 

@@ -1,41 +1,11 @@
+import { getSelector } from '../global'
+
 const chooseDropdownItem = (dropdown, dropdownBtn) => {
 	let dropdownHead = dropdown.querySelector('.dropdown__head')
 
 	if (dropdownHead) dropdownHead.childNodes[0].data = dropdownBtn.textContent
 
 	dropdownHead = null
-}
-
-const initDropdown = (dropdown, callback) => {
-	const dropdownBtnAll = dropdown.querySelectorAll('.dropdown__btn')
-
-	if (dropdownBtnAll.length > 0) {
-		const handleClickBtn = event => {
-			let { currentTarget } = event
-
-			chooseDropdownItem(dropdown, currentTarget)
-			focusCurrentChoice(dropdown)
-			callback(currentTarget)
-
-			currentTarget = null
-		}
-
-		for (let index = 0, { length } = dropdownBtnAll; index < length; index += 1) {
-			const dropdownBtn = dropdownBtnAll[index]
-
-			dropdownBtn.addEventListener('click', handleClickBtn)
-		}
-	}
-}
-
-const hideLastDropdown = (currentDropdown = null) => {
-	let winActive = _io_q('.main__content').querySelector('.win._active')
-	let dropdownActive = winActive.querySelector('.dropdown._active')
-
-	if (dropdownActive && dropdownActive !== currentDropdown) toggleDropdown(dropdownActive)
-
-	winActive = null
-	dropdownActive = null
 }
 
 const focusCurrentChoice = dropdown => {
@@ -72,7 +42,43 @@ const toggleDropdown = dropdown => {
 	}
 }
 
-document.addEventListener('DOMContentLoaded', _ => {
+export const hideLastDropdown = (currentDropdown = null) => {
+	let winActive = getSelector('.main__content').querySelector('.win._active')
+
+	if (winActive) {
+		let dropdownActive = winActive.querySelector('.dropdown._active')
+
+		if (dropdownActive && dropdownActive !== currentDropdown) toggleDropdown(dropdownActive)
+
+		dropdownActive = null
+	}
+
+	winActive = null
+}
+
+export const initDropdown = (dropdown, callback) => {
+	const dropdownBtnAll = dropdown.querySelectorAll('.dropdown__btn')
+
+	if (dropdownBtnAll.length > 0) {
+		const handleClickBtn = event => {
+			let { currentTarget } = event
+
+			chooseDropdownItem(dropdown, currentTarget)
+			focusCurrentChoice(dropdown)
+			callback(currentTarget)
+
+			currentTarget = null
+		}
+
+		for (let index = 0, { length } = dropdownBtnAll; index < length; index += 1) {
+			const dropdownBtn = dropdownBtnAll[index]
+
+			dropdownBtn.addEventListener('click', handleClickBtn)
+		}
+	}
+}
+
+export const startDropdowns = _ => {
 	const dropdownAll = document.querySelectorAll('.dropdown')
 
 	if (dropdownAll.length > 0) {
@@ -89,6 +95,4 @@ document.addEventListener('DOMContentLoaded', _ => {
 			}
 		}
 	}
-})
-
-export { initDropdown, hideLastDropdown }
+}

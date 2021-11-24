@@ -1,11 +1,11 @@
-import { uuidv4 } from "../global"
+import { getSelector, uuidv4 } from '../global'
 
 const createSponsorblockItemHTML = _ => '<li class="sponsorblock__item"></li>'
 
 const getSegmentsSB = id => API.getSponsorblockInfo(id, uuidv4())
 
 const toggleSponsorblock = option => {
-	let video = _io_q('.video')
+	let video = getSelector('.video')
 	let sponsorblockBtn = video.querySelector('.controls__sponsorblock')
 
 	sponsorblockBtn.hidden = option

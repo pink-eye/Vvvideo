@@ -1,8 +1,13 @@
 import { resetSkeleton, removeSkeleton } from './skeleton'
 import { normalizeCount, convertSecondsToDuration } from '../global'
-import { calculateWatchedProgress } from './win-history'
+import { calculateWatchedProgress, getWatchedtTime } from './win-history'
+import { showToast } from './toast'
 
-const fillVideoCard = (video, index, data) => {
+const onErrorImage = _ => {
+	showToast('error', 'Could not load images :(')
+}
+
+export const fillVideoCard = (video, index, data) => {
 	let videoCard = video
 	let videoImage = videoCard.querySelector('.card__image img')
 	let imageSkeleton = videoCard.querySelector('.image-skeleton')
@@ -31,10 +36,6 @@ const fillVideoCard = (video, index, data) => {
 		removeSkeleton(imageSkeleton)
 
 		videoImage = null
-	}
-
-	const onErrorImage = _ => {
-		showToast('error', 'Could not load images :(')
 	}
 
 	videoImage.addEventListener('load', onLoadImage, { once: true })
@@ -94,7 +95,7 @@ const fillVideoCard = (video, index, data) => {
 	bottomSkeleton = null
 }
 
-const fillPlaylistCard = (playlist, index, data) => {
+export const fillPlaylistCard = (playlist, index, data) => {
 	let playlistCard = playlist
 	let playlistImage = playlistCard.querySelector('.card__image img')
 	let imageSkeleton = playlistCard.querySelector('.image-skeleton')
@@ -118,10 +119,6 @@ const fillPlaylistCard = (playlist, index, data) => {
 		removeSkeleton(imageSkeleton)
 
 		playlistImage = null
-	}
-
-	const onErrorImage = _ => {
-		showToast('error', 'Could not load images :(')
 	}
 
 	playlistImage.addEventListener('load', onLoadImage, { once: true })
@@ -148,7 +145,7 @@ const fillPlaylistCard = (playlist, index, data) => {
 	bottomSkeleton = null
 }
 
-const fillChannelCard = (channel, index, data) => {
+export const fillChannelCard = (channel, index, data) => {
 	let channelCard = channel
 	let channelImage = channelCard.querySelector('.card__image img')
 	let imageSkeleton = channelCard.querySelector('.image-skeleton')
@@ -174,10 +171,6 @@ const fillChannelCard = (channel, index, data) => {
 		channelImage = null
 	}
 
-	const onErrorImage = _ => {
-		showToast('error', 'Could not load images :(')
-	}
-
 	channelImage.addEventListener('load', onLoadImage, { once: true })
 	channelImage.addEventListener('error', onErrorImage, { once: true })
 
@@ -199,7 +192,65 @@ const fillChannelCard = (channel, index, data) => {
 	bottomSkeleton = null
 }
 
-const resetCard = card => {
+export const resetVideoCard = card => {
+	let videoCard = card
+	let videoViews = videoCard.querySelector('.card__views')
+	let videoDate = videoCard.querySelector('.card__date')
+	let videoChannel = videoCard.querySelector('.card__channel')
+	let videoDuration = videoCard.querySelector('.card__duration')
+	let videoImg = videoCard.querySelector('.card__image')
+
+	if (videoCard.classList.contains('_live')) videoCard.classList.remove('_live')
+
+	if (videoImg.hasAttribute('style')) videoImg.removeAttribute('style')
+
+	videoViews.textContent = ''
+	videoDate.textContent = ''
+	videoChannel.textContent = ''
+	videoDuration.textContent = ''
+	videoChannel.removeAttribute('data-id')
+	videoChannel.removeAttribute('data-name')
+
+	videoCard = null
+	videoViews = null
+	videoDate = null
+	videoChannel = null
+	videoDuration = null
+	videoImg = null
+}
+
+export const resetChannelCard = card => {
+	let channelCard = card
+	let channelDescr = channelCard.querySelector('.card__channel-descr')
+	let channelSubs = channelCard.querySelector('.card__subs')
+	let channelVideoCount = channelCard.querySelector('.card__video-count')
+
+	channelDescr.textContent = ''
+	channelSubs.textContent = ''
+	channelVideoCount.textContent = ''
+
+	channelCard = null
+	channelDescr = null
+	channelSubs = null
+	channelVideoCount = null
+}
+
+export const resetPlaylistCard = card => {
+	let playlistCard = card
+	let playlistChannel = playlistCard.querySelector('.card__channel')
+	let playlistCount = playlistCard.querySelector('.card__count')
+
+	playlistChannel.textContent = ''
+	playlistCount.textContent = ''
+	playlistChannel.removeAttribute('data-id')
+	playlistChannel.removeAttribute('data-name')
+
+	playlistCard = null
+	playlistChannel = null
+	playlistCount = null
+}
+
+export const resetCard = card => {
 	let givenCard = card
 	let skeletonAll = givenCard.querySelectorAll('.skeleton')
 	let cardTitle = givenCard.querySelector('.card__title span')
@@ -251,72 +302,4 @@ const resetCard = card => {
 	recentWin = null
 	cardTitle = null
 	cardImg = null
-}
-
-const resetVideoCard = card => {
-	let videoCard = card
-	let videoViews = videoCard.querySelector('.card__views')
-	let videoDate = videoCard.querySelector('.card__date')
-	let videoChannel = videoCard.querySelector('.card__channel')
-	let videoDuration = videoCard.querySelector('.card__duration')
-	let videoImg = videoCard.querySelector('.card__image')
-
-	if (videoCard.classList.contains('_live')) videoCard.classList.remove('_live')
-
-	if (videoImg.hasAttribute('style')) videoImg.removeAttribute('style')
-
-	videoViews.textContent = ''
-	videoDate.textContent = ''
-	videoChannel.textContent = ''
-	videoDuration.textContent = ''
-	videoChannel.removeAttribute('data-id')
-	videoChannel.removeAttribute('data-name')
-
-	videoCard = null
-	videoViews = null
-	videoDate = null
-	videoChannel = null
-	videoDuration = null
-	videoImg = null
-}
-
-const resetChannelCard = card => {
-	let channelCard = card
-	let channelDescr = channelCard.querySelector('.card__channel-descr')
-	let channelSubs = channelCard.querySelector('.card__subs')
-	let channelVideoCount = channelCard.querySelector('.card__video-count')
-
-	channelDescr.textContent = ''
-	channelSubs.textContent = ''
-	channelVideoCount.textContent = ''
-
-	channelCard = null
-	channelDescr = null
-	channelSubs = null
-	channelVideoCount = null
-}
-
-const resetPlaylistCard = card => {
-	let playlistCard = card
-	let playlistChannel = playlistCard.querySelector('.card__channel')
-	let playlistCount = playlistCard.querySelector('.card__count')
-
-	playlistChannel.textContent = ''
-	playlistCount.textContent = ''
-	playlistChannel.removeAttribute('data-id')
-	playlistChannel.removeAttribute('data-name')
-
-	playlistCard = null
-	playlistChannel = null
-	playlistCount = null
-}
-
-export {
-	fillVideoCard,
-	fillPlaylistCard,
-	fillChannelCard,
-	resetCard,
-	resetVideoCard,
-	resetChannelCard,
-	resetPlaylistCard,
 }

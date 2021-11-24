@@ -1,48 +1,52 @@
 'use strict'
 
-const cache = (key, value) => {
-	if (typeof value === 'undefined') return cache[key]
+import { AppStorage } from './components/app-storage'
 
-	cache[key] = value
+export const cacheSelector = (key, value) => {
+	if (typeof value === 'undefined') return cacheSelector[key]
+
+	cacheSelector[key] = value
 }
 
-const _io_q = selector => {
-	if (!cache(selector)) cache(selector, document.querySelector(selector))
+export const getSelector = selector => {
+	if (!cacheSelector(selector)) cacheSelector(selector, document.querySelector(selector))
 
-	return cache(selector)
+	return cacheSelector(selector)
 }
 
-const reloadApp = _ => {
-	location.reload()
+export const reloadApp = _ => {
+	window.location.reload()
 }
 
-const closeApp = _ => {
+export const closeApp = _ => {
 	window.close()
 }
 
-const scrollToTop = _ => {
+export const scrollToTop = _ => {
 	window.scrollTo(0, 0)
 }
 
-const scrollToElem = y => {
-	let header = _io_q('.header')
+export const scrollToElem = y => {
+	let header = getSelector('.header')
 
 	header && window.scrollTo(0, y - header.offsetHeight - 20)
 
 	header = null
 }
 
-const getCoordY = el => el.getBoundingClientRect().top + pageYOffset
+export const getCoordY = el => el.getBoundingClientRect().top + window.pageYOffset
 
-const hideOnScroll = (selector, mq) => {
-	const sidebar = _io_q('.sidebar')
-	const header = _io_q('.header')
+export const hasFocus = el => document.activeElement === el
+
+export const hideOnScroll = (selector, mq) => {
+	const sidebar = getSelector('.sidebar')
+	const header = getSelector('.header')
 	const searchBar = header.querySelector('.search__bar')
 
 	let lastScrollValue = 0
 
 	const handleScroll = _ => {
-		if (innerWidth <= mq || mq === 0) {
+		if (window.innerWidth <= mq || mq === 0) {
 			let scrollDistance = window.scrollY
 
 			if (sidebar.classList.contains('_active')) return
@@ -60,7 +64,9 @@ const hideOnScroll = (selector, mq) => {
 	window.addEventListener('scroll', handleScroll)
 }
 
-const normalizeCount = count => {
+export const isEmpty = el => el === null || el === undefined || el === '' || el === 'undefined' || el === 'null'
+
+export const normalizeCount = count => {
 	if (isEmpty(count)) return null
 
 	if (typeof count === 'string') return count.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
@@ -68,7 +74,7 @@ const normalizeCount = count => {
 	if (Number.isNaN(count)) return 0
 }
 
-const convertSecondsToDuration = lengthSeconds => {
+export const convertSecondsToDuration = lengthSeconds => {
 	if (isEmpty(lengthSeconds)) return null
 
 	if (typeof lengthSeconds === 'string' && lengthSeconds.includes(':')) return lengthSeconds
@@ -92,7 +98,7 @@ const convertSecondsToDuration = lengthSeconds => {
 	return `${minutes}:${seconds}`
 }
 
-const convertDurationToSeconds = duration => {
+export const convertDurationToSeconds = duration => {
 	if (isEmpty(duration)) return null
 
 	if (!duration.includes(':')) return null
@@ -106,14 +112,14 @@ const convertDurationToSeconds = duration => {
 	}
 }
 
-const uuidv4 = _ =>
+export const uuidv4 = _ =>
 	'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
 		let r = (Math.random() * 16) | 0,
 			v = c === 'x' ? r : (r & 0x3) | 0x8
 		return v.toString(16)
 	})
 
-const normalizeDesc = text => {
+export const normalizeDesc = text => {
 	if (typeof text === 'string') {
 		let patternHashtag = /#[A-ZА-ЯЁ]*[0-9]*[-\.]?[A-ZА-ЯЁ]*[0-9]*/gim
 		let patternTimecodeMSS = /^[0-9]:[0-5][0-9]/gim
@@ -133,19 +139,17 @@ const normalizeDesc = text => {
 	}
 }
 
-const isEmpty = el => el === null || el === undefined || el === '' || el === 'undefined' || el === 'null'
+export const formatDuration = str => str.replace(/[^0-9:]/gim, '')
 
-const formatDuration = str => str.replace(/[^0-9:]/gim, '')
+export const formatDate = str => str.split('-').reverse().join('.')
 
-const formatDate = str => str.split('-').reverse().join('.')
+export const formatIP = str => str.replace(/[^0-9.]/gim, '')
 
-const formatIP = str => str.replace(/[^0-9.]/gim, '')
+export const formatPort = str => str.replace(/[^0-9]/gim, '')
 
-const formatPort = str => str.replace(/[^0-9]/gim, '')
+export const convertToProc = (firstNum, secondNum) => (firstNum * 100) / secondNum
 
-const convertToProc = (firstNum, secondNum) => (firstNum * 100) / secondNum
-
-const calculatePublishedDate = publishedText => {
+export const calculatePublishedDate = publishedText => {
 	const date = new Date()
 
 	if (publishedText === 'Live') return publishedText
@@ -177,17 +181,17 @@ const calculatePublishedDate = publishedText => {
 	return date.getTime() - timeSpan
 }
 
-const isValidURLYT = url => {
+export const isValidURLYT = url => {
 	const regExp = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/
 	return url.match(regExp) && url.match(regExp).length > 0
 }
 
-const isResourceIsChannel = url =>
+export const isResourceIsChannel = url =>
 	isValidURLYT(url) && (url.includes('/user/') || url.includes('/channel/') || url.includes('/c/'))
 
-const isResourceIsPlaylist = url => isValidURLYT(url) && url.includes('playlist?list=')
+export const isResourceIsPlaylist = url => isValidURLYT(url) && url.includes('playlist?list=')
 
-const getChannelIdOrUser = url => {
+export const getChannelIdOrUser = url => {
 	const regExpUser = /(channel|user|c)\/([a-zA-Z0-9\-_]*.)/.exec(url)
 
 	if (regExpUser)
@@ -196,8 +200,8 @@ const getChannelIdOrUser = url => {
 	return null
 }
 
-const getPlaylistId = url => {
-	const regExp = new RegExp('[&?]list=([a-z0-9_]+)', 'i')
+export const getPlaylistId = url => {
+	const regExp = /[&?]list=([a-z0-9_]+)/i
 	const match = regExp.exec(url)
 
 	if (match && match[1].length > 0) return match[1]
@@ -205,15 +209,16 @@ const getPlaylistId = url => {
 	return null
 }
 
-const getProxyOptions = _ => storage.settings.proxy
+export const getProxyOptions = _ => new AppStorage().getStorage().settings.proxy
 
-const getDurationTimeout = (timeout = 300) => (storage.settings.disableTransition ? 0 : timeout)
+export const getDurationTimeout = (timeout = 300) =>
+	new AppStorage().getStorage().settings.disableTransition ? 0 : timeout
 
-const getMin = (a, b) => (a > b ? b : a)
+export const getMin = (a, b) => (a > b ? b : a)
 
-const round = (n, d) => Number(~~(n + 'e' + d) + 'e-' + d)
+export const round = (n, d) => Number(~~(n + 'e' + d) + 'e-' + d)
 
-const getPosStroryboard = (videoDuration, currentTime, count) => {
+export const getPosStroryboard = (videoDuration, currentTime, count) => {
 	const interval = round(videoDuration / count, 2)
 	const currentFrame = Math.floor(currentTime / interval)
 
@@ -236,39 +241,39 @@ const getPosStroryboard = (videoDuration, currentTime, count) => {
 	return { posX, posY }
 }
 
-const handleClickLink = event => {
+export const handleClickLink = event => {
 	event.preventDefault()
 	API.openExternalLink(event.target.href)
 }
 
-const hasFocus = el => document.activeElement === el
+export const getHighestVideo = formats => API.YTDLChooseFormat(formats, 'highestvideo')
 
-const getHighestVideo = formats => API.YTDLChooseFormat(formats, 'highestvideo')
+export const getHighestAudio = formats => API.YTDLChooseFormat(formats, 'highestaudio')
 
-const getHighestAudio = formats => API.YTDLChooseFormat(formats, 'highestaudio')
+export const filterFormats = (formats, fn) => Object.values(formats).filter(fn)
 
-const filterFormats = (formats, fn) => Object.values(formats).filter(fn)
-
-const filterVideoWebm = formats =>
+export const filterVideoWebm = formats =>
 	filterFormats(
 		formats,
 		format => format.container === 'webm' && format.hasVideo && !format.isDashMPD && !format?.type
 	)
 
-const filterVideoMP4NoAudio = formats =>
+export const filterVideoMP4NoAudio = formats =>
 	filterFormats(
 		formats,
 		format =>
 			format.container === 'mp4' && format.hasVideo && !format.hasAudio && !format.isDashMPD && !format?.type
 	)
 
-const filterVideoAndAudio = formats => filterFormats(formats, format => format.hasAudio && format.hasVideo)
+export const filterVideoAndAudio = formats => filterFormats(formats, format => format.hasAudio && format.hasVideo)
 
-const filterHLS = formats => filterFormats(formats, format => format.isHLS && format.hasAudio && format.hasVideo)
+export const filterHLS = formats => filterFormats(formats, format => format.isHLS && format.hasAudio && format.hasVideo)
 
-const getPreferedQuality = formats => {
+export const getPreferedQuality = formats => {
 	if (formats.length === 0) return null
 
+	const appStorage = new AppStorage()
+	const storage = appStorage.getStorage()
 	const { defaultQuality } = storage.settings
 
 	return defaultQuality === 'highest'
@@ -276,49 +281,5 @@ const getPreferedQuality = formats => {
 		: formats.find(el => el.qualityLabel.includes(defaultQuality))
 }
 
-const filterSearchResults = arr =>
+export const filterSearchResults = arr =>
 	arr.filter(el => el.type === 'video' || el.type === 'playlist' || el.type === 'channel')
-
-export {
-	cache,
-	_io_q,
-	reloadApp,
-	closeApp,
-	scrollToTop,
-	scrollToElem,
-	getCoordY,
-	hideOnScroll,
-	normalizeCount,
-	convertSecondsToDuration,
-	convertDurationToSeconds,
-	uuidv4,
-	normalizeDesc,
-	isEmpty,
-	formatDuration,
-	formatDate,
-	formatIP,
-	formatPort,
-	convertToProc,
-	calculatePublishedDate,
-	isValidURLYT,
-	isResourceIsChannel,
-	isResourceIsPlaylist,
-	getChannelIdOrUser,
-	getPlaylistId,
-	getProxyOptions,
-	getDurationTimeout,
-	getMin,
-	round,
-	getPosStroryboard,
-	handleClickLink,
-	hasFocus,
-	getHighestVideo,
-	getHighestAudio,
-	filterFormats,
-	filterVideoWebm,
-	filterVideoMP4NoAudio,
-	filterVideoAndAudio,
-	filterHLS,
-	getPreferedQuality,
-	filterSearchResults,
-}

@@ -1,8 +1,9 @@
 import { resetAuthorCard } from './author-card'
 import { resetCard } from './card'
+import { getSelector } from '../global'
 
 const resetGridAuthorCard = _ => {
-	let subscriptions = _io_q('.subscriptions')
+	let subscriptions = getSelector('.subscriptions')
 	let authorCardAll = subscriptions.querySelectorAll('.author')
 
 	if (authorCardAll.length > 0) {

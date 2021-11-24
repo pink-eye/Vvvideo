@@ -16,13 +16,13 @@ const toggleSpoiler = event => {
 	spoiler = null
 }
 
-const initSpoiler = spoiler => {
+export const initSpoiler = spoiler => {
 	const spoilerHead = spoiler.querySelector('.spoiler__head')
 
 	spoilerHead.addEventListener('click', toggleSpoiler)
 }
 
-const destroySpoiler = spoiler => {
+export const destroySpoiler = spoiler => {
 	let spoilerHead = spoiler.querySelector('.spoiler__head')
 
 	spoiler.removeAttribute('style')
@@ -32,5 +32,3 @@ const destroySpoiler = spoiler => {
 
 	spoilerHead = null
 }
-
-export { initSpoiler, destroySpoiler }

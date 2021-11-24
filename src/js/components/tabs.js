@@ -1,7 +1,11 @@
+import { getSelector } from '../global'
+import { resetGrid } from './grid'
+import { fillVideoCard, fillPlaylistCard } from './card'
+import { showToast } from './toast'
+import { initPages, disablePages } from './pages'
 
-
-const hideLastTab = _ => {
-	let channel = _io_q('.channel')
+export const hideLastTab = _ => {
+	let channel = getSelector('.channel')
 	let tabContentActive = channel.querySelector('.tab-content._active')
 
 	if (tabContentActive && tabContentActive.classList.contains('_active')) {
@@ -22,7 +26,7 @@ const hideLastTab = _ => {
 
 const showRequiredTab = async tab => {
 	const channelTab = tab.dataset.tab
-	let channel = _io_q('.channel')
+	let channel = getSelector('.channel')
 
 	if (tab && !tab.classList.contains('_active')) tab.classList.add('_active')
 
@@ -84,8 +88,8 @@ const handleClickTab = async event => {
 	tab = null
 }
 
-const initTabs = primary => {
-	const tabAll = _io_q('.channel').querySelectorAll('.body-channel__tab')
+export const initTabs = primary => {
+	const tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
 	let primaryTab = tabAll[primary]
 
 	showRequiredTab(primaryTab)
@@ -101,8 +105,8 @@ const initTabs = primary => {
 	primaryTab = null
 }
 
-const destroyTabs = _ => {
-	let tabAll = _io_q('.channel').querySelectorAll('.body-channel__tab')
+export const destroyTabs = _ => {
+	let tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
 
 	if (tabAll.length > 0) {
 		for (let index = 0, { length } = tabAll; index < length; index += 1) {
@@ -114,5 +118,3 @@ const destroyTabs = _ => {
 
 	tabAll = null
 }
-
-export { initTabs, destroyTabs, hideLastTab }

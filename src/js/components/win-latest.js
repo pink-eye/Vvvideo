@@ -1,7 +1,9 @@
 import { startIndicator, resetIndicator } from './indicator'
-import { calculatePublishedDate, _io_q } from '../global'
+import { calculatePublishedDate, getSelector } from '../global'
 import { showToast } from './toast'
 import { fillVideoCard } from './card'
+import { AppStorage } from './app-storage'
+import { initPages, disablePages } from './pages'
 
 let latestArray = null
 
@@ -25,11 +27,12 @@ const getChannelVideosLocalScraper = channelId =>
 	})
 
 const openWinLatest = async _ => {
-	let latest = _io_q('.latest')
+	let latest = getSelector('.latest')
 	let promises = []
 	let videoAll = latest.querySelectorAll('.card')
 
-	const { subscriptions } = storage
+	const appStorage = new AppStorage()
+	const { subscriptions } = appStorage.getStorage()
 
 	if (subscriptions.length > 0) {
 		let btnLatest = document.querySelector('button[data-win="latest"]')

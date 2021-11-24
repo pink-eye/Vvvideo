@@ -1,17 +1,13 @@
+import { resetGrid, resetGridAuthorCard } from './grid'
+import { scrollToElem, getCoordY, filterSearchResults } from '../global'
+import { showToast } from './toast'
+import { fillVideoCard, fillPlaylistCard, fillChannelCard } from './card'
+import { fillAuthorCard } from './author-card'
+
 let increment = null
 let page = null
 let itemArray = []
 let hasContinuation = null
-
-const disablePages = parent => {
-	resetPages(parent)
-
-	let btns = parent.querySelector('.btns')
-
-	btns && (btns.hidden ||= true)
-
-	btns = null
-}
 
 const enablePages = parent => {
 	let btns = parent.querySelector('.btns')
@@ -21,124 +17,12 @@ const enablePages = parent => {
 	btns = null
 }
 
-const createPages = _ => `<div class="grid__btns btns" hidden>
-							<button disabled class="btns__prev btn-secondary onclick-effect btn-reset">
-								<svg width="28px" height="28px">
-									<use xlink:href='img/svg/nav.svg#arrow'></use>
-								</svg>
-								previous page
-							</button>
-							<span class="grid__count">1</span>
-							<button class="btns__next btn-secondary onclick-effect btn-reset">
-								<svg width="28px" height="28px">
-									<use xlink:href='img/svg/nav.svg#arrow'></use>
-								</svg>
-								next page
-							</button>
-						</div>`
+const updateCount = parent => {
+	let gridCount = parent.querySelector('.grid__count')
 
-const resetPages = parent => {
-	let grid = parent.querySelector('.grid')
-	let btns = grid.querySelector('.btns')
+	gridCount && (gridCount.textContent = page)
 
-	if (btns) {
-		btns.remove()
-		grid.insertAdjacentHTML('beforeEnd', createPages())
-	}
-
-	itemArray.length = 0
-
-	btns = null
-	grid = null
-}
-
-const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
-	typeCard !== 'author' ? resetGrid(parent) : resetGridAuthorCard()
-
-	if (increment < itemArray.length - 1) {
-		let firstCard = cardAll[0]
-		firstCard.focus()
-
-		increment += 20
-		page += 1
-
-		getDataMore(typeCard)
-		recycleDOM(cardAll, typeCard)
-		scrollToElem(getCoordY(firstCard))
-		updateCount(parent)
-
-		let givenBtnPrevPage = btnPrevPage
-
-		givenBtnPrevPage.disabled &&= false
-
-		firstCard = null
-		givenBtnPrevPage = null
-	}
-
-	if (page * 20 > itemArray.length - 1) {
-		let givenBtnNextPage = btnNextPage
-		givenBtnNextPage.disabled = true
-		givenBtnNextPage = null
-	}
-}
-
-const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
-	typeCard !== 'author' ? resetGrid(parent) : resetGridAuthorCard()
-
-	if (page === 2) {
-		let givenBtnPrevPage = btnPrevPage
-		givenBtnPrevPage.disabled = true
-		givenBtnPrevPage = null
-	}
-
-	if (page > 1) {
-		let firstCard = cardAll[0]
-		firstCard.focus()
-
-		increment -= 20
-		page -= 1
-
-		recycleDOM(cardAll, typeCard)
-		scrollToElem(getCoordY(firstCard))
-		updateCount(parent)
-
-		let givenBtnNextPage = btnNextPage
-
-		givenBtnNextPage.disabled &&= false
-
-		firstCard = null
-		givenBtnNextPage = null
-	}
-}
-
-const getDataMore = async typeCard => {
-	if (!hasContinuation) return
-
-	let dataMore = null
-
-	try {
-		switch (typeCard) {
-			case 'video':
-				dataMore = await API.scrapeVideosMore(hasContinuation)
-				break
-
-			case 'playlist':
-				dataMore = await API.scrapePlaylistsMore(hasContinuation)
-				break
-
-			case 'rich':
-				dataMore = await API.scrapeSearchResultsMore(hasContinuation)
-				dataMore.items = filterSearchResults(dataMore.items)
-				break
-		}
-	} catch (error) {
-		showToast('error', error.message)
-	}
-
-	if (dataMore) {
-		itemArray.push(...dataMore.items)
-		hasContinuation = dataMore.continuation
-	}
+	gridCount = null
 }
 
 const recycleDOM = async (cardAll, typeCard) => {
@@ -189,12 +73,124 @@ const recycleDOM = async (cardAll, typeCard) => {
 	}
 }
 
-const updateCount = parent => {
-	let gridCount = parent.querySelector('.grid__count')
+const createPages = _ => `<div class="grid__btns btns" hidden>
+							<button disabled class="btns__prev btn-secondary onclick-effect btn-reset">
+								<svg width="28px" height="28px">
+									<use xlink:href='img/svg/nav.svg#arrow'></use>
+								</svg>
+								previous page
+							</button>
+							<span class="grid__count">1</span>
+							<button class="btns__next btn-secondary onclick-effect btn-reset">
+								<svg width="28px" height="28px">
+									<use xlink:href='img/svg/nav.svg#arrow'></use>
+								</svg>
+								next page
+							</button>
+						</div>`
 
-	gridCount && (gridCount.textContent = page)
+const resetPages = parent => {
+	let grid = parent.querySelector('.grid')
+	let btns = grid.querySelector('.btns')
 
-	gridCount = null
+	if (btns) {
+		btns.remove()
+		grid.insertAdjacentHTML('beforeEnd', createPages())
+	}
+
+	itemArray.length = 0
+
+	btns = null
+	grid = null
+}
+
+const getDataMore = async typeCard => {
+	if (!hasContinuation) return
+
+	let dataMore = null
+
+	try {
+		switch (typeCard) {
+			case 'video':
+				dataMore = await API.scrapeVideosMore(hasContinuation)
+				break
+
+			case 'playlist':
+				dataMore = await API.scrapePlaylistsMore(hasContinuation)
+				break
+
+			case 'rich':
+				dataMore = await API.scrapeSearchResultsMore(hasContinuation)
+				dataMore.items = filterSearchResults(dataMore.items)
+				break
+		}
+	} catch (error) {
+		showToast('error', error.message)
+	}
+
+	if (dataMore) {
+		itemArray.push(...dataMore.items)
+		hasContinuation = dataMore.continuation
+	}
+}
+
+export const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
+	typeCard !== 'author' ? resetGrid(parent) : resetGridAuthorCard()
+
+	if (increment < itemArray.length - 1) {
+		let firstCard = cardAll[0]
+		firstCard.focus()
+
+		increment += 20
+		page += 1
+
+		getDataMore(typeCard)
+		recycleDOM(cardAll, typeCard)
+		scrollToElem(getCoordY(firstCard))
+		updateCount(parent)
+
+		let givenBtnPrevPage = btnPrevPage
+
+		givenBtnPrevPage.disabled &&= false
+
+		firstCard = null
+		givenBtnPrevPage = null
+	}
+
+	if (page * 20 > itemArray.length - 1) {
+		let givenBtnNextPage = btnNextPage
+		givenBtnNextPage.disabled = true
+		givenBtnNextPage = null
+	}
+}
+
+export const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
+	typeCard !== 'author' ? resetGrid(parent) : resetGridAuthorCard()
+
+	if (page === 2) {
+		let givenBtnPrevPage = btnPrevPage
+		givenBtnPrevPage.disabled = true
+		givenBtnPrevPage = null
+	}
+
+	if (page > 1) {
+		let firstCard = cardAll[0]
+		firstCard.focus()
+
+		increment -= 20
+		page -= 1
+
+		recycleDOM(cardAll, typeCard)
+		scrollToElem(getCoordY(firstCard))
+		updateCount(parent)
+
+		let givenBtnNextPage = btnNextPage
+
+		givenBtnNextPage.disabled &&= false
+
+		firstCard = null
+		givenBtnNextPage = null
+	}
 }
 
 const resetCount = parent => {
@@ -216,7 +212,7 @@ const resetBtns = (btnNextPage, btnPrevPage) => {
 	givenBtnPrevPage = null
 }
 
-const initPages = (parent, data, cardAll, typeCard, continuation = null) => {
+export const initPages = (parent, data, cardAll, typeCard, continuation = null) => {
 	resetPages(parent)
 
 	increment = 0
@@ -244,7 +240,17 @@ const initPages = (parent, data, cardAll, typeCard, continuation = null) => {
 	getDataMore(typeCard)
 }
 
-const scrapeInfoToSwitchPage = winActive => {
+export const disablePages = parent => {
+	resetPages(parent)
+
+	let btns = parent.querySelector('.btns')
+
+	btns && (btns.hidden ||= true)
+
+	btns = null
+}
+
+export const scrapeInfoToSwitchPage = winActive => {
 	let cardAll = null
 	let btnNextPage = null
 	let btnPrevPage = null

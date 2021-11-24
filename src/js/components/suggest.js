@@ -1,4 +1,6 @@
 import { isEmpty, hasFocus, getProxyOptions } from '../global'
+import { AppStorage } from './app-storage'
+import { showToast } from './toast'
 import { showOverlay, hideOverlay } from './overlay'
 
 let lastSelected = null
@@ -87,7 +89,8 @@ const chooseSuggest = (parent, direction) => {
 const initSuggests = parent => {
 	let searchBar = parent.querySelector('.search__bar')
 
-	const { disableSearchSuggestions, enableProxy } = storage.settings
+	const appStorage = new AppStorage()
+	const { disableSearchSuggestions, enableProxy } = appStorage.getStorage().settings
 
 	if (disableSearchSuggestions) return
 

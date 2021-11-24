@@ -1,15 +1,21 @@
 import { showToast } from './toast'
-import { getProxyOptions } from '../global'
+import { getProxyOptions, getSelector, filterSearchResults } from '../global'
+import { initPages, disablePages } from './pages'
+import { fillVideoCard, fillChannelCard, fillPlaylistCard } from './card'
+import { AppStorage } from './app-storage'
 
 let lastSearchResult = null
 
-const openWinSearchResults = async _ => {
-	let searchResults = _io_q('.search-results')
-	let searchBar = _io_q('.header').querySelector('.search__bar')
+export const openWinSearchResults = async _ => {
+	let searchResults = getSelector('.search-results')
+	let searchBar = getSelector('.header').querySelector('.search__bar')
 	let cardAll = searchResults.querySelectorAll('.card')
 
 	try {
 		let data = null
+
+		const appStorage = new AppStorage()
+		const storage = appStorage.getStorage()
 
 		if (lastSearchResult?.originalQuery !== searchBar.value) {
 			data = storage.settings.enableProxy
@@ -21,7 +27,8 @@ const openWinSearchResults = async _ => {
 
 		data ||= lastSearchResult
 
-		let { items, continuation } = data
+		let { items } = data
+		const { continuation } = data
 
 		items = filterSearchResults(items)
 
@@ -58,5 +65,3 @@ const openWinSearchResults = async _ => {
 		cardAll = null
 	}
 }
-
-export { openWinSearchResults }
