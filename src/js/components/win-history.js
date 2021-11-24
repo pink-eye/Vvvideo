@@ -63,7 +63,7 @@ const scrapeVideoInfoFromData = data => {
 	}
 }
 
-const saveVideoInHistory = data => {
+export const saveVideoInHistory = data => {
 	if (storage.settings.disableHistory) return
 
 	if (data) {

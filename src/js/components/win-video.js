@@ -1,6 +1,6 @@
 import { getSelector, normalizeCount, normalizeDesc, formatDate, isEmpty, getProxyOptions } from '../global'
 import { fillAuthorCard, resetAuthorCard } from './author-card'
-import { saveVideoInHistory, scrapeVideoInfoFromData } from './win-history'
+import { saveVideoInHistory } from './win-history'
 import { initSpoiler, destroySpoiler } from './spoiler'
 import { showToast } from './toast'
 import { resetSkeleton, removeSkeleton } from './skeleton'

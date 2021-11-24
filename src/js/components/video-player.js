@@ -149,9 +149,9 @@ const prepareVideoAndAudio = formats => {
 const prepareVideoPlayer = data => {
 	const { formats, videoDetails } = data
 
-	let video = getSelector('.video')
-	let videoSkeleton = video.querySelector('.video-skeleton')
-	let videoInstance = video.querySelector('video')
+	let videoParent = getSelector('.video')
+	let videoSkeleton = videoParent.querySelector('.video-skeleton')
+	let video = videoParent.querySelector('video')
 	let quality = getSelector('.controls').querySelector('.controls__quality')
 	let qualityCurrent = quality.querySelector('.dropdown__head')
 	let videoFormats = null
@@ -161,6 +161,8 @@ const prepareVideoPlayer = data => {
 		if (videoSkeleton) removeSkeleton(videoSkeleton)
 
 		video = null
+		videoSkeleton = null
+		videoParent = null
 	}
 
 	if (!formats || formats.length === 0) {

@@ -1,7 +1,7 @@
 import { getSelector, isEmpty, getChannelIdOrUser, formatIP, formatPort, reloadApp } from '../global'
 import { AppStorage } from './app-storage'
 import { showToast } from './toast'
-import { disableHistory, keepHistoryArray } from './win-history'
+import { clearHistory, disableHistory, keepHistoryArray } from './win-history'
 
 const appStorage = new AppStorage()
 let storage = appStorage.getStorage()
@@ -26,9 +26,9 @@ const buildStorage = data => {
 		const { subscriptions } = data
 
 		if (subscriptions.length > 0) {
-			const { channelId, name: firstName } = subscriptions[0]
+			const { channelId, name: author } = subscriptions[0]
 
-			if (channelId && firstName) {
+			if (channelId && author) {
 				storage.subscriptions.push(...subscriptions)
 			} else {
 				for (let index = 0, { length } = subscriptions; index < length; index += 1) {
@@ -272,6 +272,9 @@ export const setTheme = themeOption => {
 export const fillWinSettings = _ => {
 	const { settings: ss } = storage
 	const settings = getSelector('.settings')
+	const btnClearHistory = settings.querySelector('#clear-history')
+
+	btnClearHistory.addEventListener('click', clearHistory)
 
 	let themeDropdown = settings.querySelector('.option__theme')
 	let themeDropdownHead = themeDropdown.querySelector('.dropdown__head')
