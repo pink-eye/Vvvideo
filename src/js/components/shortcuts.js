@@ -1,11 +1,16 @@
-const handleKeyDown = event => {
+import { hideOverlay } from './overlay'
+import { toggleMenu } from './burger'
+import { getSelector, hasFocus } from '../global'
+import { scrapeInfoToSwitchPage, nextPage, prevPage } from './pages'
+
+export const handleKeyDown = event => {
 	// ESC
 	if (event.keyCode === 27) {
 		document.activeElement.blur()
 
 		hideOverlay()
 
-		let winActive = _io_q('.main__content').querySelector('.win._active')
+		let winActive = getSelector('.main__content').querySelector('.win._active')
 		let firstCard = winActive.querySelector('.card')
 
 		firstCard ? firstCard.focus() : document.activeElement.blur()
@@ -16,11 +21,11 @@ const handleKeyDown = event => {
 
 	// CTRL + F
 	if (event.ctrlKey && event.keyCode === 70) {
-		let header = _io_q('.header')
+		let header = getSelector('.header')
 
 		if (header.classList.contains('_hidden')) header.classList.remove('_hidden')
 
-		_io_q('.search__bar').focus()
+		getSelector('.search__bar').focus()
 
 		header = null
 	}
@@ -30,7 +35,7 @@ const handleKeyDown = event => {
 
 	// SHIFT
 	if (event.shiftKey) {
-		let winActive = _io_q('.main__content').querySelector('.win._active')
+		let winActive = getSelector('.main__content').querySelector('.win._active')
 
 		if (winActive && !winActive.classList.contains('settings') && !winActive.classList.contains('video')) {
 			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } = scrapeInfoToSwitchPage(winActive)
@@ -63,13 +68,11 @@ const handleKeyDown = event => {
 	}
 
 	// SPACE
-	if (event.keyCode === 32 && !hasFocus(_io_q('.search__bar'))) {
-		let winActive = _io_q('.main__content').querySelector('.win._active')
+	if (event.keyCode === 32 && !hasFocus(getSelector('.search__bar'))) {
+		let winActive = getSelector('.main__content').querySelector('.win._active')
 
 		if (winActive.classList.contains('video')) event.preventDefault()
 
 		winActive = null
 	}
 }
-
-document.addEventListener('keydown', handleKeyDown)

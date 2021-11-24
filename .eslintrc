@@ -8,11 +8,16 @@
 		"node": true
 	},
 	"rules": {
-		"no-undef": "off",
 		"unicorn/no-null": "off",
 		"unicorn/prevent-abbreviations": "off",
+		"import/prefer-default-export": "off",
 		"no-unused-expressions": [2, { "allowShortCircuit": true, "allowTernary": true }],
 		"no-unused-vars": ["error", { "argsIgnorePattern": "^_$" }]
 	},
-	"globals": {}
+	"globals": {
+		"API": "readonly",
+		"Hls": "readonly",
+		"theme": "readonly",
+		"GraphModal": "readonly"
+	}
 }

@@ -1,12 +1,25 @@
+import { getSelector, normalizeCount, normalizeDesc, formatDate, isEmpty, getProxyOptions } from '../global'
+import { fillAuthorCard, resetAuthorCard } from './author-card'
+import { saveVideoInHistory, scrapeVideoInfoFromData } from './win-history'
+import { initSpoiler, destroySpoiler } from './spoiler'
+import { showToast } from './toast'
+import { resetSkeleton, removeSkeleton } from './skeleton'
+import { prepareSubscribeBtn, destroySubscribeBtn } from './win-subscriptions'
+import { AppStorage } from './app-storage'
+import { initVideoPlayer } from './video-player'
+
+const appStorage = new AppStorage()
+const storage = appStorage.getStorage()
+
 const getVideoData = id =>
 	storage.settings.enableProxy ? API.scrapeVideoProxy(id, getProxyOptions()) : API.scrapeVideo(id)
 
 const openWinVideo = data => {
-	let video = _io_q('.video')
+	let video = getSelector('.video')
 	let videoPoster = video.querySelector('.video__poster img')
 	let topBarTitle = video.querySelector('.top-bar__title')
 	let topBarAuthor = video.querySelector('.top-bar__author')
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let progressStoryboard = controls.querySelector('.progress__storyboard')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
@@ -19,7 +32,7 @@ const openWinVideo = data => {
 	let videoDislikes = videoInfo.querySelector('.video-info__dislikes')
 	let authorCard = videoInfo.querySelector('.author')
 	let subscribeBtn = videoInfo.querySelector('.subscribe')
-	let ss = storage.settings
+	let { settings } = storage
 
 	// SPOILER
 
@@ -40,7 +53,7 @@ const openWinVideo = data => {
 
 		// FILL VIDEO INFO
 
-		if (ss.disableStoryboard || videoDetails.storyboards.length === 0) progressStoryboard.remove()
+		if (settings.disableStoryboard || videoDetails.storyboards.length === 0) progressStoryboard.remove()
 
 		if (progressStoryboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
 			progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
@@ -57,7 +70,8 @@ const openWinVideo = data => {
 		if (videoDate.textContent === '...') videoDate.textContent = formatDate(videoDetails.publishDate)
 
 		if (videoDate.textContent === 'Premiere') {
-			videoDate.textContent = data.player_response.playabilityStatus.reason
+			const { reason: datePremiere } = data.player_response.playabilityStatus
+			videoDate.textContent = datePremiere
 			controls.hidden = true
 		}
 
@@ -106,8 +120,8 @@ const openWinVideo = data => {
 	authorCard = null
 }
 
-const resetVideo = _ => {
-	let video = _io_q('.video')
+export const resetWinVideo = _ => {
+	let video = getSelector('.video')
 	let videoPoster = video.querySelector('.video__poster img')
 	let skeletonAll = video.querySelectorAll('.skeleton')
 	let videoInfo = video.querySelector('.video-info')
@@ -156,7 +170,7 @@ const resetVideo = _ => {
 }
 
 const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', authorId = '' }) => {
-	let video = _io_q('.video')
+	let video = getSelector('.video')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
 	let videoViews = videoInfo.querySelector('.video-info__views')
@@ -203,7 +217,7 @@ const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', aut
 	authorCard = null
 }
 
-const prepareVideoWin = async (btnWin, id) => {
+export const prepareWinVideo = async (btnWin, id) => {
 	let params = {}
 
 	if (btnWin) {

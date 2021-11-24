@@ -1,8 +1,19 @@
+import { getSelector, getProxyOptions, isEmpty, normalizeCount, convertSecondsToDuration } from '../global'
+import { fillAuthorCard, resetAuthorCard } from './author-card'
+import { resetGrid } from './grid'
+import { fillVideoCard } from './card'
+import { resetSkeleton, removeSkeleton } from './skeleton'
+import { initPages, disablePages } from './pages'
+import { showToast } from './toast'
+import { AppStorage } from './app-storage'
+
 const getPlaylistData = id =>
-	storage.settings.enableProxy ? API.scrapePlaylistVideosProxy(id, getProxyOptions()) : API.scrapePlaylistVideos(id)
+	new AppStorage().getStorage().settings.enableProxy
+		? API.scrapePlaylistVideosProxy(id, getProxyOptions())
+		: API.scrapePlaylistVideos(id)
 
 const openWinPlaylist = data => {
-	let playlist = _io_q('.playlist')
+	let playlist = getSelector('.playlist')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let playlistViews = playlist.querySelector('.playlist__views')
 	let playlistVideoCount = playlist.querySelector('.playlist__video-count')
@@ -78,8 +89,8 @@ const openWinPlaylist = data => {
 	authorCard = null
 }
 
-const resetPlaylist = _ => {
-	let playlist = _io_q('.playlist')
+export const resetWinPlaylist = _ => {
+	let playlist = getSelector('.playlist')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let playlistViews = playlist.querySelector('.playlist__views')
 	let playlistVideoCount = playlist.querySelector('.playlist__video-count')
@@ -116,7 +127,7 @@ const resetPlaylist = _ => {
 }
 
 const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
-	let playlist = _io_q('.playlist')
+	let playlist = getSelector('.playlist')
 	let authorCard = playlist.querySelector('.author')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let titleSkeleton = playlist.querySelector('.title-skeleton')
@@ -143,7 +154,7 @@ const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
 	authorParams = null
 }
 
-const preparePlaylistWin = async (btnWin, id) => {
+export const prepareWinPlaylist = async (btnWin, id) => {
 	let params = {}
 
 	if (btnWin) {

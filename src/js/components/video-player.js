@@ -1,9 +1,37 @@
+import {
+	getSelector,
+	filterHLS,
+	filterVideoAndAudio,
+	filterVideoMP4NoAudio,
+	filterVideoWebm,
+	getPreferedQuality,
+	convertToPercentage,
+	isEmpty,
+	convertSecondsToDuration,
+	getPosStroryboard,
+	scrollToTop,
+	getMin,
+	convertDurationToSeconds,
+	hasFocus,
+	getHighestAudio,
+} from '../global'
+import { toggleSponsorblock, createSponsorblockItemHTML, getSegmentsSB } from './sponsorblock'
+import { initDropdown } from './dropdown'
+import { removeSkeleton } from './skeleton'
+import { showToast } from './toast'
+import { getWatchedtTime } from './win-history'
+import { initDialogSB, recordSegmentSB } from './dialog-sb'
+import { AppStorage } from './app-storage'
+
 let hasListeners = false
 let isFirstPlay = true
 let isSync = false
 let doesSkipSegments = true
 let hls = null
 let segmentsSB = []
+
+const appStorage = new AppStorage()
+const storage = appStorage.getStorage()
 
 const resetMediaEl = el => {
 	el.pause()
@@ -12,8 +40,8 @@ const resetMediaEl = el => {
 }
 
 const getMedia = () => {
-	const audio = _io_q('.video').querySelector('audio')
-	const video = _io_q('video')
+	const audio = getSelector('.video').querySelector('audio')
+	const video = getSelector('video')
 
 	return { video, audio }
 }
@@ -25,7 +53,7 @@ const createQualityItemHTML = quality => `<li class="dropdown__item">
 const createStoryboardHTML = _ => `<div class="progress__storyboard"></div>`
 
 const insertQualityList = videoFormats => {
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let quality = controls.querySelector('.controls__quality')
 	let qualityList = quality.querySelector('.dropdown__list')
 
@@ -42,7 +70,7 @@ const insertQualityList = videoFormats => {
 }
 
 const disableAudio = _ => {
-	let audio = _io_q('audio')
+	let audio = getSelector('audio')
 
 	if (audio) {
 		resetMediaEl(audio)
@@ -53,7 +81,7 @@ const disableAudio = _ => {
 }
 
 const startVideoLive = url => {
-	let video = _io_q('video')
+	let video = getSelector('video')
 
 	hls = new Hls()
 	hls.loadSource(url)
@@ -96,7 +124,7 @@ const prepareVideoOnly = formats => {
 }
 
 const prepareVideoAndAudio = formats => {
-	let audio = _io_q('.video').querySelector('audio')
+	let audio = getSelector('.video').querySelector('audio')
 	let videoFormats = null
 
 	switch (storage.settings.defaltVideoFormat) {
@@ -121,10 +149,10 @@ const prepareVideoAndAudio = formats => {
 const prepareVideoPlayer = data => {
 	const { formats, videoDetails } = data
 
-	let videoParent = _io_q('.video')
-	let videoSkeleton = videoParent.querySelector('.video-skeleton')
-	let video = videoParent.querySelector('video')
-	let quality = _io_q('.controls').querySelector('.controls__quality')
+	let video = getSelector('.video')
+	let videoSkeleton = video.querySelector('.video-skeleton')
+	let videoInstance = video.querySelector('video')
+	let quality = getSelector('.controls').querySelector('.controls__quality')
 	let qualityCurrent = quality.querySelector('.dropdown__head')
 	let videoFormats = null
 	let currentQuality = null
@@ -166,8 +194,8 @@ const prepareVideoPlayer = data => {
 }
 
 const initSponsorblockSegments = data => {
-	let video = _io_q('video')
-	let progressSponsorblock = _io_q('.controls').querySelector('.progress__sponsorblock')
+	let video = getSelector('video')
+	let progressSponsorblock = getSelector('.controls').querySelector('.progress__sponsorblock')
 	let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item')
 
 	for (let index = 0, { length } = sponsorblockItemAll; index < length; index += 1) {
@@ -175,8 +203,8 @@ const initSponsorblockSegments = data => {
 		const { startTime, endTime, videoDuration } = data[index]
 		const segmentLength = endTime - startTime
 		const vDuration = videoDuration !== 0 ? videoDuration : ~~video.duration
-		const sponsorblockItemWidth = convertToProc(segmentLength, vDuration)
-		const sponsorblockItemLeft = convertToProc(startTime, vDuration)
+		const sponsorblockItemWidth = convertToPercentage(segmentLength, vDuration)
+		const sponsorblockItemLeft = convertToPercentage(startTime, vDuration)
 
 		sponsorblockItem.style.setProperty('--width', `${sponsorblockItemWidth}%`)
 		sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`)
@@ -188,7 +216,7 @@ const initSponsorblockSegments = data => {
 }
 
 const changeVideoSrc = (url, currentTime) => {
-	let video = _io_q('video')
+	let video = getSelector('video')
 
 	if (isEmpty(hls)) {
 		video.removeAttribute('src')
@@ -201,24 +229,8 @@ const changeVideoSrc = (url, currentTime) => {
 	video = null
 }
 
-const chooseQuality = url => {
-	let video = _io_q('video')
-
-	const { currentTime, paused } = video
-
-	if (!paused) {
-		pauseVideoPlayer()
-		changeVideoSrc(url, currentTime)
-		playVideoPlayer()
-	} else changeVideoSrc(url, currentTime)
-
-	isSync = false
-
-	video = null
-}
-
 const hideDecoration = action => {
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let icon = controls.querySelector(`#${action}`)
 
 	if (!icon.hidden) {
@@ -240,7 +252,7 @@ const hideDecoration = action => {
 }
 
 const showDecoration = (action, doHide) => {
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let icon = controls.querySelector(`#${action}`)
 
 	if (icon.hidden) {
@@ -271,7 +283,7 @@ const syncMedia = _ => {
 	video = null
 }
 
-const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2
+export const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2
 
 const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime > 0
 
@@ -290,8 +302,8 @@ const playEl = async el => {
 			try {
 				await playPromise
 
-				let audio = _io_q('.video').querySelector('audio')
-				let video = _io_q('video')
+				let audio = getSelector('.video').querySelector('audio')
+				let video = getSelector('video')
 
 				if (audio) {
 					if (isPlaying(video) && isPlaying(audio)) syncMedia()
@@ -307,16 +319,16 @@ const playEl = async el => {
 }
 
 const startVideoFromLastPoint = _ => {
-	const videoId = _io_q('.video').dataset.id
+	const videoId = getSelector('.video').dataset.id
 
 	if (isEmpty(videoId)) return
 
 	const videoWatchedTime = getWatchedtTime(videoId)
 
-	if (videoWatchedTime) _io_q('video').currentTime = videoWatchedTime
+	if (videoWatchedTime) getSelector('video').currentTime = videoWatchedTime
 }
 
-const playVideoPlayer = async _ => {
+export const playVideoPlayer = async _ => {
 	let { video, audio } = getMedia()
 
 	await playEl(video)
@@ -334,7 +346,7 @@ const playVideoPlayer = async _ => {
 	video = null
 }
 
-const pauseVideoPlayer = _ => {
+export const pauseVideoPlayer = _ => {
 	let { video, audio } = getMedia()
 
 	pauseEl(video)
@@ -344,6 +356,30 @@ const pauseVideoPlayer = _ => {
 
 	audio = null
 	video = null
+}
+
+const chooseQuality = url => {
+	let video = getSelector('video')
+
+	const { currentTime, paused } = video
+
+	if (!paused) {
+		pauseVideoPlayer()
+		changeVideoSrc(url, currentTime)
+		playVideoPlayer()
+	} else changeVideoSrc(url, currentTime)
+
+	isSync = false
+
+	video = null
+}
+
+const hidePoster = _ => {
+	let videoPoster = getSelector('.video').querySelector('.video__poster')
+
+	if (!videoPoster.classList.contains('_hidden')) videoPoster.classList.add('_hidden')
+
+	videoPoster = null
 }
 
 const togglePlay = _ => {
@@ -360,12 +396,8 @@ const togglePlay = _ => {
 	video = null
 }
 
-const toggleIconPlayPause = _ => {
-	_io_q('video').paused ? showIconPlay() : showIconPause()
-}
-
 const changeIcon = iconPath => {
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let controlsSwitchIcon = controls.querySelector('.controls__switch svg use')
 
 	controlsSwitchIcon.setAttribute('xlink:href', iconPath)
@@ -382,10 +414,15 @@ const showIconPause = _ => {
 	changeIcon('img/svg/controls.svg#pause')
 }
 
+const toggleIconPlayPause = _ => {
+	getSelector('video').paused ? showIconPlay() : showIconPause()
+}
+
 const updateTimeElapsed = _ => {
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let timeElapsed = controls.querySelector('.time__elapsed')
-	const time = convertSecondsToDuration(~~_io_q('video').currentTime)
+	const currentTime = ~~getSelector('video').currentTime
+	const time = convertSecondsToDuration(currentTime)
 
 	timeElapsed.textContent = time
 	timeElapsed.setAttribute('datetime', time)
@@ -395,7 +432,7 @@ const updateTimeElapsed = _ => {
 }
 
 const updateVolumeEl = el => {
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let volumeBar = controls.querySelector('.volume__bar')
 	let volumeSeek = controls.querySelector('.volume__seek')
 	let givenEl = el
@@ -412,10 +449,10 @@ const updateVolumeEl = el => {
 }
 
 const hideBars = _ => {
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let dropdownActive = controls.querySelector('.dropdown._active')
 	let controlsBar = controls.querySelector('.controls__bar')
-	let topBar = _io_q('.video').querySelector('.top-bar')
+	let topBar = getSelector('.video').querySelector('.top-bar')
 
 	if (!dropdownActive) {
 		controlsBar.classList.remove('_opened')
@@ -429,8 +466,8 @@ const hideBars = _ => {
 }
 
 const showBars = _ => {
-	let topBar = _io_q('.video').querySelector('.top-bar')
-	let controlsBar = _io_q('.controls').querySelector('.controls__bar')
+	let topBar = getSelector('.video').querySelector('.top-bar')
+	let controlsBar = getSelector('.controls').querySelector('.controls__bar')
 
 	controlsBar.classList.add('_opened')
 	topBar.classList.add('_opened')
@@ -439,16 +476,8 @@ const showBars = _ => {
 	topBar = null
 }
 
-const hidePoster = _ => {
-	let videoPoster = _io_q('.video').querySelector('.video__poster')
-
-	if (!videoPoster.classList.contains('_hidden')) videoPoster.classList.add('_hidden')
-
-	videoPoster = null
-}
-
-const toggleFullscreen = _ => {
-	let videoWrapper = _io_q('.video').querySelector('.video__wrapper')
+export const toggleFullscreen = _ => {
+	let videoWrapper = getSelector('.video').querySelector('.video__wrapper')
 
 	document.fullscreenElement ? document.exitFullscreen() : videoWrapper.requestFullscreen()
 
@@ -456,11 +485,11 @@ const toggleFullscreen = _ => {
 }
 
 const updateStoryboard = params => {
-	let progressStoryboard = _io_q('.controls').querySelector('.progress__storyboard')
+	let progressStoryboard = getSelector('.controls').querySelector('.progress__storyboard')
 
 	if (progressStoryboard && isEmpty(hls)) {
 		const { skipTo, widthProgressBar, posCursor } = params
-		const { posX, posY } = getPosStroryboard(_io_q('video').duration, skipTo, 100)
+		const { posX, posY } = getPosStroryboard(getSelector('video').duration, skipTo, 100)
 
 		progressStoryboard.style.setProperty('--posX', `-${posX}px`)
 		progressStoryboard.style.setProperty('--posY', `-${posY}px`)
@@ -482,12 +511,12 @@ const updateStoryboard = params => {
 }
 
 const updateProgress = _ => {
-	let progress = _io_q('.controls').querySelector('.progress')
+	let progress = getSelector('.controls').querySelector('.progress')
 	let progressSeek = progress.querySelector('.progress__seek')
-	let video = _io_q('video')
+	let video = getSelector('video')
 
 	progressSeek.value = Math.floor(video.currentTime)
-	progress.style.setProperty('--progress', `${convertToProc(Math.floor(video.currentTime), ~~video.duration)}%`)
+	progress.style.setProperty('--progress', `${convertToPercentage(Math.floor(video.currentTime), ~~video.duration)}%`)
 
 	progress = null
 	progressSeek = null
@@ -495,7 +524,7 @@ const updateProgress = _ => {
 }
 
 const updateSeekTooltip = params => {
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let progressSeek = controls.querySelector('.progress__seek')
 	let progressSeekTooltip = controls.querySelector('.progress__seek-tooltip')
 
@@ -525,7 +554,7 @@ const updateSeekTooltip = params => {
 }
 
 const updateBuffered = _ => {
-	let progress = _io_q('.controls').querySelector('.progress')
+	let progress = getSelector('.controls').querySelector('.progress')
 	let { video, audio } = getMedia()
 
 	if (isEmpty(hls)) {
@@ -534,7 +563,7 @@ const updateBuffered = _ => {
 			let audioLastBuffered =
 				audio && audio.buffered.length > 0 ? audio.buffered.end(audio.buffered.length - 1) : null
 			let minBuffered = audioLastBuffered ? getMin(videoLastBuffered, audioLastBuffered) : videoLastBuffered
-			progress.style.setProperty('--buffered', `${convertToProc(minBuffered, ~~video.duration)}%`)
+			progress.style.setProperty('--buffered', `${convertToPercentage(minBuffered, ~~video.duration)}%`)
 		}
 	}
 
@@ -544,13 +573,13 @@ const updateBuffered = _ => {
 }
 
 const skipAhead = event => {
-	let progress = _io_q('.controls').querySelector('.progress')
+	let progress = getSelector('.controls').querySelector('.progress')
 	let progressSeek = progress.querySelector('.progress__seek')
-	let video = _io_q('video')
+	let video = getSelector('video')
 	const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value
 
 	video.currentTime = skipTo
-	progress.style.setProperty('--progress', `${convertToProc(skipTo, ~~video.duration)}%`)
+	progress.style.setProperty('--progress', `${convertToPercentage(skipTo, ~~video.duration)}%`)
 	progressSeek.value = skipTo
 
 	isSync = false
@@ -563,7 +592,7 @@ const skipAhead = event => {
 }
 
 const toggleMuteEl = el => {
-	let volumeSeek = _io_q('.controls').querySelector('.volume__seek')
+	let volumeSeek = getSelector('.controls').querySelector('.volume__seek')
 	let givenEl = el
 
 	givenEl.muted = !givenEl.muted
@@ -609,7 +638,7 @@ const skipSegmentSB = _ => {
 
 	if (disableSponsorblock) return
 
-	let video = _io_q('video')
+	let video = getSelector('video')
 
 	if (isPlaying(video) && segmentsSB.length > 0) {
 		for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
@@ -618,6 +647,7 @@ const skipSegmentSB = _ => {
 				video.currentTime = segmentSB.endTime
 				isSync = false
 
+				const { notifySkipSegment } = storage.settings
 				if (notifySkipSegment) showToast('info', 'Segment is skipped!')
 			}
 		}
@@ -669,7 +699,7 @@ const handleTimeUpdate = _ => {
 
 const handleAbort = _ => {
 	let { video, audio } = getMedia()
-	let winActive = _io_q('.main__content').querySelector('.win._active')
+	let winActive = getSelector('.main__content').querySelector('.win._active')
 
 	if (winActive && winActive.classList.contains('video')) {
 		showToast('error', 'Video is aborted (')
@@ -697,7 +727,7 @@ const handleError = _ => {
 const handleClickTimecode = event => {
 	if (event.target.classList.contains('timecode')) {
 		let timecode = event.target
-		_io_q('video').currentTime = convertDurationToSeconds(timecode.textContent)
+		getSelector('video').currentTime = convertDurationToSeconds(timecode.textContent)
 		isSync = false
 		document.activeElement.blur()
 		scrollToTop()
@@ -724,7 +754,7 @@ const handleEnd = _ => {
 }
 
 const handleMouseMoveProgressSeek = event => {
-	let video = _io_q('video')
+	let video = getSelector('video')
 
 	const duration = isEmpty(hls) ? +event.target.getAttribute('max') : Math.floor(video.currentTime)
 	const skipTo = ~~((event.offsetX / event.target.clientWidth) * duration)
@@ -740,8 +770,18 @@ const handleMouseMoveProgressSeek = event => {
 	video = null
 }
 
+const forwardTime = _ => {
+	getSelector('video').currentTime += 10
+	isSync = false
+}
+
+const backwardTime = _ => {
+	getSelector('video').currentTime -= 10
+	isSync = false
+}
+
 const handleKeyDownWithinVideo = event => {
-	if (_io_q('.video').classList.contains('_active') && (hasFocus(_io_q('body')) || hasFocus(null))) {
+	if (getSelector('.video').classList.contains('_active') && (hasFocus(getSelector('body')) || hasFocus(null))) {
 		// ENTER || SPACE
 		if (event.keyCode === 13 || event.keyCode === 32) togglePlay()
 
@@ -758,6 +798,7 @@ const handleKeyDownWithinVideo = event => {
 		if (event.keyCode === 83) recordSegmentSB()
 
 		// V
+		const { disableSponsorblock } = storage.settings
 		if (event.keyCode === 86 && !disableSponsorblock) {
 			doesSkipSegments = !doesSkipSegments
 			showToast(
@@ -771,30 +812,20 @@ const handleKeyDownWithinVideo = event => {
 	}
 }
 
-const forwardTime = _ => {
-	_io_q('video').currentTime += 10
-	isSync = false
-}
-
-const backwardTime = _ => {
-	_io_q('video').currentTime -= 10
-	isSync = false
-}
-
-const fillSegmentsSB = segmentsSB => {
+const fillSegmentsSB = segments => {
 	const { disableSponsorblock } = storage.settings
 
 	toggleSponsorblock(disableSponsorblock)
 
 	if (disableSponsorblock) return
 
-	let video = _io_q('.video')
+	let video = getSelector('.video')
 	let controlsProgess = video.querySelector('.controls__progress')
 	let progressSponsorblock = controlsProgess.querySelector('.sponsorblock')
 	let sponsorblockItemHTML = createSponsorblockItemHTML()
 
-	if (segmentsSB.length > 0) {
-		for (let index = 0, { length } = segmentsSB; index < length; index += 1)
+	if (segments.length > 0) {
+		for (let index = 0, { length } = segments; index < length; index += 1)
 			progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML)
 	}
 
@@ -804,8 +835,8 @@ const fillSegmentsSB = segmentsSB => {
 	sponsorblockItemHTML = null
 }
 
-const initVideoPlayer = data => {
-	const controls = _io_q('.controls')
+export const initVideoPlayer = data => {
+	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
 	const controlsSwitch = controls.querySelector('.controls__switch')
 	const timeDuration = controls.querySelector('.time__duration')
@@ -814,7 +845,7 @@ const initVideoPlayer = data => {
 	const volumeSeek = controls.querySelector('.volume__seek')
 	const volumeBar = controls.querySelector('.volume__bar')
 	const controlsScreen = controls.querySelector('.controls__screen')
-	const videoParent = _io_q('.video')
+	const videoParent = getSelector('.video')
 	const videoWrapper = videoParent.querySelector('.video__wrapper')
 	const videoDesc = videoParent.querySelector('.desc-video-info__text')
 	const video = videoWrapper.querySelector('video')
@@ -952,12 +983,12 @@ const initVideoPlayer = data => {
 	}
 }
 
-const resetVideoPlayer = _ => {
-	let videoParent = _io_q('.video')
+export const resetVideoPlayer = _ => {
+	let videoParent = getSelector('.video')
 	let videoWrapper = videoParent.querySelector('.video__wrapper')
-	let video = _io_q('video')
+	let video = getSelector('video')
 	let audio = videoWrapper.querySelector('audio')
-	let controls = _io_q('.controls')
+	let controls = getSelector('.controls')
 	let controlsSwitchIcon = controls.querySelector('.controls__switch svg use')
 	let sponsorblock = controls.querySelector('.sponsorblock')
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock')

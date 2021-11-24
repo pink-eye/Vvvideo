@@ -1,5 +1,199 @@
-const openWinSettings = _ => {
-	const settings = _io_q('.settings')
+import { getSelector, isEmpty, getChannelIdOrUser, formatIP, formatPort, reloadApp } from '../global'
+import { AppStorage } from './app-storage'
+import { showToast } from './toast'
+import { disableHistory, keepHistoryArray } from './win-history'
+
+const appStorage = new AppStorage()
+let storage = appStorage.getStorage()
+
+const makeResultImport = (classResult, tip) => {
+	let settings = getSelector('.settings')
+	let impExpBody = settings.querySelector('.imp-exp')
+	let impExpTip = settings.querySelector('.imp-exp__tip')
+
+	if (!impExpBody.classList.contains(classResult)) {
+		impExpBody.classList.add(classResult)
+		impExpTip.textContent = tip
+	}
+
+	settings = null
+	impExpBody = null
+	impExpTip = null
+}
+
+const buildStorage = data => {
+	if (data?.subscriptions) {
+		const { subscriptions } = data
+
+		if (subscriptions.length > 0) {
+			const { channelId, name: firstName } = subscriptions[0]
+
+			if (channelId && firstName) {
+				storage.subscriptions.push(...subscriptions)
+			} else {
+				for (let index = 0, { length } = subscriptions; index < length; index += 1) {
+					const subscription = subscriptions[index]
+					const { url, name } = subscription
+
+					storage.subscriptions.push({
+						channelId: getChannelIdOrUser(url),
+						name,
+					})
+				}
+			}
+		}
+	}
+
+	if (data?.history) {
+		const { history } = data
+
+		if (history.length > 0) {
+			storage.history.push(...history)
+			keepHistoryArray()
+		}
+	}
+
+	if (data?.settings) {
+		storage.settings = {}
+		Object.assign(storage.settings, data.settings)
+	}
+}
+
+const readInputFile = _ => {
+	const validTip = 'Succesfully! Wait for refresh...'
+	const failTip = 'Fail... :('
+
+	let settings = getSelector('.settings')
+	let impExpField = settings.querySelector('.imp-exp__field')
+
+	const reader = new FileReader()
+	reader.readAsText(impExpField.files[0])
+
+	const onLoadReader = _ => {
+		const data = JSON.parse(reader.result)
+
+		if (!data?.subscriptions) makeResultImport('_invalid', failTip)
+		else {
+			buildStorage(data)
+			makeResultImport('_valid', validTip)
+			appStorage.updateStorage(storage)
+			setTimeout(reloadApp, 3000)
+		}
+	}
+
+	reader.addEventListener('load', onLoadReader, { once: true })
+
+	settings = null
+	impExpField = null
+}
+
+const handleClickImport = _ => {
+	const invalidTip = "I've not found a JSON file.\n Ensure you interacted this area"
+	let settings = getSelector('.settings')
+	let impExpField = settings.querySelector('.imp-exp__field')
+
+	impExpField.value === '' || /\.(json)$/i.test(impExpField.files[0].name) === false
+		? makeResultImport('_invalid', invalidTip)
+		: readInputFile()
+
+	settings = null
+	impExpField = null
+}
+
+const handleFile = _ => {
+	let settings = getSelector('.settings')
+	let impExpBody = settings.querySelector('.imp-exp')
+	let impExpTip = settings.querySelector('.imp-exp__tip')
+	let impExpField = settings.querySelector('.imp-exp__field')
+
+	impExpBody.classList.remove('_valid')
+	impExpBody.classList.remove('_invalid')
+	impExpTip.textContent = `I've got a '${impExpField.files[0].name}'. You can press 'Import' now`
+
+	settings = null
+	impExpBody = null
+	impExpTip = null
+	impExpField = null
+}
+
+const handleInputField = event => {
+	const input = event.currentTarget
+	const option = input.id
+
+	switch (option) {
+		case 'host':
+			input.value = formatIP(input.value)
+			storage.settings.proxy.host = isEmpty(input.value) ? '127.0.0.1' : input.value
+			break
+
+		case 'port':
+			input.value = formatPort(input.value)
+			storage.settings.proxy.port = isEmpty(input.value) ? 9050 : +input.value
+			break
+
+		case 'regionTrending':
+			storage.settings.regionTrending = isEmpty(input.value) ? 'US' : input.value
+			break
+
+		case 'maxHistoryLength':
+			storage.settings.maxHistoryLength = isEmpty(input.value) ? 30 : +input.value
+			break
+	}
+
+	appStorage.updateStorage(storage)
+}
+
+const toggleTransition = isDisabled => {
+	let modalContainer = document.querySelector('.modal__container')
+
+	if (isDisabled) {
+		document.documentElement.style.setProperty('--trns-time-default', '0')
+		document.documentElement.style.setProperty('--trns-time-fast', '0')
+		document.documentElement.style.setProperty('--trns-time-slow', '0')
+		modalContainer.dataset.graphSpeed = 0
+	} else {
+		document.documentElement.style.setProperty('--trns-time-default', '.3s')
+		document.documentElement.style.setProperty('--trns-time-fast', '.1s')
+		document.documentElement.style.setProperty('--trns-time-slow', '1s')
+		modalContainer.dataset.graphSpeed = 300
+	}
+
+	modalContainer = null
+}
+
+const handleChangeCheckbox = event => {
+	const checkbox = event.currentTarget
+	const option = checkbox.id
+
+	storage.settings[`${option}`] = checkbox.checked
+
+	switch (option) {
+		case 'disableTransition':
+			toggleTransition(checkbox.checked)
+			break
+
+		case 'enableProxy':
+			checkbox.checked
+				? showToast('info', 'Restart app after the fields is filled in')
+				: showToast('good', 'Restart app')
+			break
+
+		case 'notAdaptContent':
+			if (checkbox.checked) getSelector('.main__content').style.setProperty('--margin', '0')
+			break
+
+		case 'disableSearchSuggestions':
+		case 'disableStoryboard':
+		case 'disableHistory':
+			showToast('good', 'Refresh app')
+			break
+	}
+
+	appStorage.updateStorage(storage)
+}
+
+export const openWinSettings = _ => {
+	const settings = getSelector('.settings')
 
 	// IMPLEMENT IMPORT
 
@@ -31,8 +225,8 @@ const openWinSettings = _ => {
 	}
 }
 
-const resetWinSettings = _ => {
-	let settings = _io_q('.settings')
+export const resetWinSettings = _ => {
+	let settings = getSelector('.settings')
 
 	// RESET IMPORT
 
@@ -69,143 +263,15 @@ const resetWinSettings = _ => {
 	impExpField = null
 }
 
-const makeResultImport = (classResult, tip) => {
-	let settings = _io_q('.settings')
-	let impExpBody = settings.querySelector('.imp-exp')
-	let impExpTip = settings.querySelector('.imp-exp__tip')
-
-	if (!impExpBody.classList.contains(classResult)) {
-		impExpBody.classList.add(classResult)
-		impExpTip.textContent = tip
-	}
-
-	settings = null
-	impExpBody = null
-	impExpTip = null
-}
-
-const readInputFile = _ => {
-	const validTip = 'Succesfully! Wait for refresh...'
-	const failTip = 'Fail... :('
-
-	let settings = _io_q('.settings')
-	let impExpField = settings.querySelector('.imp-exp__field')
-
-	const reader = new FileReader()
-	reader.readAsText(impExpField.files[0])
-
-	const onLoadReader = async _ => {
-		const data = JSON.parse(reader.result)
-
-		if (!data?.subscriptions) makeResultImport('_invalid', failTip)
-		else {
-			buildStorage(data)
-			makeResultImport('_valid', validTip)
-			await API.writeStorage(storage)
-			setTimeout(reloadApp, 3000)
-		}
-	}
-
-	reader.addEventListener('load', onLoadReader, { once: true })
-
-	settings = null
-	impExpField = null
-}
-
-const handleClickImport = _ => {
-	const invalidTip = "I've not found a JSON file.\n Ensure you interacted this area"
-	let settings = _io_q('.settings')
-	let impExpField = settings.querySelector('.imp-exp__field')
-
-	impExpField.value === '' || /\.(json)$/i.test(impExpField.files[0].name) === false
-		? makeResultImport('_invalid', invalidTip)
-		: readInputFile()
-
-	settings = null
-	impExpField = null
-}
-
-const handleFile = _ => {
-	let settings = _io_q('.settings')
-	let impExpBody = settings.querySelector('.imp-exp')
-	let impExpTip = settings.querySelector('.imp-exp__tip')
-	let impExpField = settings.querySelector('.imp-exp__field')
-
-	impExpBody.classList.remove('_valid')
-	impExpBody.classList.remove('_invalid')
-	impExpTip.textContent = `I've got a '${impExpField.files[0].name}'. You can press 'Import' now`
-
-	settings = null
-	impExpBody = null
-	impExpTip = null
-	impExpField = null
-}
-
-const setTheme = themeOption => {
+export const setTheme = themeOption => {
 	if (themeOption === 'light') theme.setMode('light')
 	if (themeOption === 'dark') theme.setMode('dark')
 	if (themeOption === 'system') theme.setMode(theme.getSystemScheme())
 }
 
-const toggleTransition = isDisabled => {
-	let modalContainer = document.querySelector('.modal__container')
-
-	if (isDisabled) {
-		document.documentElement.style.setProperty('--trns-time-default', '0')
-		document.documentElement.style.setProperty('--trns-time-fast', '0')
-		document.documentElement.style.setProperty('--trns-time-slow', '0')
-		modalContainer.dataset.graphSpeed = 0
-	} else {
-		document.documentElement.style.setProperty('--trns-time-default', '.3s')
-		document.documentElement.style.setProperty('--trns-time-fast', '.1s')
-		document.documentElement.style.setProperty('--trns-time-slow', '1s')
-		modalContainer.dataset.graphSpeed = 300
-	}
-
-	modalContainer = null
-}
-
-const buildStorage = data => {
-	if (data?.subscriptions) {
-		const { subscriptions } = data
-
-		if (subscriptions.length > 0) {
-			const { channelId, name } = subscriptions[0]
-
-			if (channelId && name) {
-				storage.subscriptions.push(...subscriptions)
-			} else {
-				for (let index = 0, { length } = subscriptions; index < length; index += 1) {
-					const subscription = subscriptions[index]
-					const { url, name } = subscription
-
-					storage.subscriptions.push({
-						channelId: getChannelIdOrUser(url),
-						name,
-					})
-				}
-			}
-		}
-	}
-
-	if (data?.history) {
-		const { history } = data
-
-		if (history.length > 0) {
-			storage.history.push(...history)
-			keepHistoryArray()
-		}
-	}
-
-	if (data?.settings) {
-		storage.settings = {}
-		Object.assign(storage.settings, data.settings)
-	}
-}
-
-const fillWinSettings = async _ => {
-	const ss = storage.settings
-	const settings = _io_q('.settings')
+export const fillWinSettings = _ => {
+	const { settings: ss } = storage
+	const settings = getSelector('.settings')
 
 	let themeDropdown = settings.querySelector('.option__theme')
 	let themeDropdownHead = themeDropdown.querySelector('.dropdown__head')
@@ -277,61 +343,4 @@ const fillWinSettings = async _ => {
 
 	themeDropdown = null
 	themeDropdownHead = null
-}
-
-const handleInputField = event => {
-	const input = event.currentTarget
-	const option = input.id
-
-	switch (option) {
-		case 'host':
-			input.value = formatIP(input.value)
-			storage.settings.proxy.host = isEmpty(input.value) ? '127.0.0.1' : input.value
-			break
-
-		case 'port':
-			input.value = formatPort(input.value)
-			storage.settings.proxy.port = isEmpty(input.value) ? 9050 : +input.value
-			break
-
-		case 'regionTrending':
-			storage.settings.regionTrending = isEmpty(input.value) ? 'US' : input.value
-			break
-
-		case 'maxHistoryLength':
-			storage.settings.maxHistoryLength = isEmpty(input.value) ? 30 : +input.value
-			break
-	}
-	API.writeStorage(storage)
-}
-
-const handleChangeCheckbox = event => {
-	const checkbox = event.currentTarget
-	const option = checkbox.id
-
-	storage.settings[`${option}`] = checkbox.checked
-
-	switch (option) {
-		case 'disableTransition':
-			toggleTransition(checkbox.checked)
-			break
-
-		case 'enableProxy':
-			checkbox.checked
-				? showToast('info', 'Restart app after the fields is filled in')
-				: showToast('good', 'Restart app')
-			break
-
-		case 'notAdaptContent':
-			if (checkbox.checked) _io_q('.main__content').style.setProperty('--margin', '0')
-			break
-
-		case 'disableSearchSuggestions':
-		case 'disableStoryboard':
-		case 'disableHistory':
-			showToast('good', 'Refresh app')
-			break
-	}
-
-	API.writeStorage(storage)
 }

@@ -1,7 +1,14 @@
+import { getSelector, normalizeDesc, isEmpty } from '../global'
+import { showToast } from './toast'
+import { removeSkeleton, resetSkeleton } from './skeleton'
+import { resetGrid } from './grid'
+import { prepareSubscribeBtn, destroySubscribeBtn } from './win-subscriptions'
+import { initTabs, destroyTabs, hideLastTab } from './tabs'
+
 const getChannelData = id => API.scrapeChannelInfo(id)
 
 const openWinChannel = data => {
-	let channel = _io_q('.channel')
+	let channel = getSelector('.channel')
 	let channelBannerImg = channel.querySelector('.channel__banner img')
 	let channelBanner = channel.querySelector('.channel__banner')
 	let channelAvatar = channel.querySelector('.heading-channel__avatar img')
@@ -82,8 +89,8 @@ const openWinChannel = data => {
 	followersSkeleton = null
 }
 
-const resetChannel = _ => {
-	let channel = _io_q('.channel')
+export const resetWinChannel = _ => {
+	let channel = getSelector('.channel')
 	let channelBanner = channel.querySelector('.channel__banner')
 	let channelBannerImg = channel.querySelector('.channel__banner img')
 	let channelTabContentVideos = channel.querySelector('.videos')
@@ -131,7 +138,7 @@ const resetChannel = _ => {
 }
 
 const fillSomeInfoChannel = ({ name = '', id = '' }) => {
-	let channel = _io_q('.channel')
+	let channel = getSelector('.channel')
 	let channelName = channel.querySelector('.heading-channel__author span')
 	let subscribeBtn = channel.querySelector('.subscribe')
 	let titleSkeleton = channel.querySelector('.title-skeleton')
@@ -149,7 +156,7 @@ const fillSomeInfoChannel = ({ name = '', id = '' }) => {
 	titleSkeleton = null
 }
 
-const prepareChannelWin = async (btnWin, id) => {
+export const prepareWinChannel = async (btnWin, id) => {
 	const params = btnWin.dataset || {}
 
 	fillSomeInfoChannel(params)

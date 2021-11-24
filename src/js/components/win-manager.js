@@ -1,3 +1,26 @@
+import { resetGrid, resetGridAuthorCard } from './grid'
+import {
+	getSelector,
+	scrollToTop,
+	isResourceIsChannel,
+	isResourceIsPlaylist,
+	getDurationTimeout,
+	getPlaylistId,
+	getChannelIdOrUser,
+} from '../global'
+import { activateSidebarBtn, deactivateLastSidebarBtn } from './sidebar'
+import { openWinSettings, resetWinSettings } from './win-settings'
+import { openWinHistory, rememberWatchedTime } from './win-history'
+import { resetVideoPlayer } from './video-player'
+import { prepareWinPlaylist, resetWinPlaylist } from './win-playlist'
+import { prepareWinChannel,resetWinChannel } from './win-channel'
+import { openWinTrending } from './win-trending'
+import { openWinSubs } from './win-subscriptions'
+import { openWinSearchResults } from './win-search-results'
+import { openWinLatest } from './win-latest'
+import { prepareWinVideo, resetWinVideo } from './win-video'
+import { AppStorage } from './app-storage'
+
 const resetWin = win => {
 	if (
 		win.classList.contains('search-results') ||
@@ -11,17 +34,20 @@ const resetWin = win => {
 
 	if (win.classList.contains('video')) {
 		resetVideoPlayer()
-		resetVideo()
+		resetWinVideo()
 	}
 
-	if (win.classList.contains('playlist')) resetPlaylist()
+	if (win.classList.contains('playlist')) resetWinPlaylist()
 
-	if (win.classList.contains('channel')) resetChannel()
+	if (win.classList.contains('channel')) resetWinChannel()
 
 	if (win.classList.contains('settings')) resetWinSettings()
 }
 
 const startFillingWin = ({ win, btnWin, id }) => {
+	const appStorage = new AppStorage()
+	const storage = appStorage.getStorage()
+
 	switch (win) {
 		case 'trending':
 			openWinTrending(storage.settings.regionTrending)
@@ -36,17 +62,17 @@ const startFillingWin = ({ win, btnWin, id }) => {
 			break
 
 		case 'video':
-			prepareVideoWin(btnWin, id)
+			prepareWinVideo(btnWin, id)
 
 			break
 
 		case 'channel':
-			prepareChannelWin(btnWin, id)
+			prepareWinChannel(btnWin, id)
 
 			break
 
 		case 'playlist':
-			preparePlaylistWin(btnWin, id)
+			prepareWinPlaylist(btnWin, id)
 
 			break
 
@@ -95,33 +121,33 @@ const hideWin = win => {
 	}
 }
 
-const manageWin = async event => {
+export const manageWin = async event => {
 	let btnWin = event.target.dataset.win ? event.target : event.target.closest('[data-win]')
 
 	if (btnWin && !btnWin.disabled) {
 		let { win, id } = btnWin.dataset
-		let mainContent = _io_q('.main__content')
+		let mainContent = getSelector('.main__content')
 		let winSelector = mainContent.querySelector(`.${win}`)
 
 		if (win === 'search-results') {
-			let searchBar = _io_q('.search__bar')
+			let searchBar = getSelector('.search__bar')
 			const { value } = searchBar
 
 			if (API.isYTVideoURL(value)) {
 				win = 'video'
 				id = API.getVideoId(value)
-				winSelector = _io_q('.video')
+				winSelector = getSelector('.video')
 			}
 
 			if (isResourceIsPlaylist(value)) {
 				win = 'playlist'
-				winSelector = _io_q('.playlist')
+				winSelector = getSelector('.playlist')
 				id = getPlaylistId(value)
 			}
 
 			if (isResourceIsChannel(value)) {
 				win = 'channel'
-				winSelector = _io_q('.channel')
+				winSelector = getSelector('.channel')
 				id = getChannelIdOrUser(value)
 			}
 

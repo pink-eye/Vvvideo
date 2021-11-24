@@ -1,9 +1,18 @@
-const openWinHistory = _ => {
+import { showToast } from './toast'
+import { fillVideoCard } from './card'
+import { AppStorage } from './app-storage'
+import { getSelector, convertSecondsToDuration, convertDurationToSeconds, convertToPercentage } from '../global'
+import { initPages, disablePages } from './pages'
+
+const appStorage = new AppStorage()
+const storage = appStorage.getStorage()
+
+export const openWinHistory = _ => {
 	if (storage.settings.disableHistory) return
 
 	const { history } = storage
 
-	const historyWin = _io_q('.history')
+	const historyWin = getSelector('.history')
 	let videoAll = historyWin.querySelectorAll('.card')
 
 	history.length > videoAll.length ? initPages(historyWin, history, videoAll, 'video') : disablePages(historyWin)
@@ -31,7 +40,7 @@ const addNewHistoryItem = newItem => {
 	storage.history = [newItem, ...storage.history]
 }
 
-const keepHistoryArray = _ => {
+export const keepHistoryArray = _ => {
 	const numWasteItemAll = storage.history.length - storage.settings.maxHistoryLength
 
 	if (numWasteItemAll <= 0) {
@@ -70,24 +79,24 @@ const saveVideoInHistory = data => {
 			addNewHistoryItem(newItem)
 
 			keepHistoryArray()
-			API.writeStorage(storage)
+			appStorage.updateStorage(storage)
 		}
 	}
 }
 
-const clearHistory = async _ => {
+export const clearHistory = async _ => {
 	if (storage.history.length > 0) {
 		storage.history.length = 0
-		await API.writeStorage(storage)
+		appStorage.updateStorage(storage)
 
 		if (!storage.settings.disableHistory) showToast('good', "History's been cleaned")
 	} else if (!storage.settings.disableHistory) showToast('info', "History's empty")
 }
 
-const disableHistory = _ => {
+export const disableHistory = _ => {
 	clearHistory()
 
-	let history = _io_q('.history')
+	let history = getSelector('.history')
 	let sidebarBtnHistory = document.querySelector('[data-win="history"]')
 
 	history.remove()
@@ -97,12 +106,12 @@ const disableHistory = _ => {
 	sidebarBtnHistory = null
 }
 
-const rememberWatchedTime = _ => {
-	const { disableHistory, dontRememberWatchedTime } = storage.settings
+export const rememberWatchedTime = _ => {
+	const { disableHistory: isDisabledHistory, dontRememberWatchedTime } = storage.settings
 
-	if (disableHistory && dontRememberWatchedTime) return
+	if (isDisabledHistory && dontRememberWatchedTime) return
 
-	let videoParent = _io_q('.video')
+	let videoParent = getSelector('.video')
 	let video = videoParent.querySelector('video')
 
 	const watchedTime = video.currentTime
@@ -118,7 +127,7 @@ const rememberWatchedTime = _ => {
 		}
 	}
 
-	API.writeStorage(storage)
+	appStorage.updateStorage(storage)
 
 	videoParent = null
 	video = null
@@ -126,20 +135,20 @@ const rememberWatchedTime = _ => {
 
 const getItemWithWatchedTime = videoId => storage.history.find(item => item.id === videoId && item?.watchedTime)
 
-const getWatchedtTime = videoId => {
-	const { disableHistory, dontRememberWatchedTime } = storage.settings
+export const getWatchedtTime = videoId => {
+	const { disableHistory: isDisabledHistory, dontRememberWatchedTime } = storage.settings
 
-	if (disableHistory && dontRememberWatchedTime) return
+	if (isDisabledHistory && dontRememberWatchedTime) return
 
 	const requiredItem = getItemWithWatchedTime(videoId)
 
 	return requiredItem && requiredItem.watchedTime
 }
 
-const calculateWatchedProgress = videoId => {
+export const calculateWatchedProgress = videoId => {
 	const requiredItem = getItemWithWatchedTime(videoId)
 
 	const lengthSeconds = convertDurationToSeconds(requiredItem.lengthSeconds)
 
-	return `${convertToProc(requiredItem.watchedTime, lengthSeconds)}%`
+	return `${convertToPercentage(requiredItem.watchedTime, lengthSeconds)}%`
 }

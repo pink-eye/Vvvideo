@@ -1,10 +1,12 @@
 const { src, dest, watch } = require('gulp')
 const eslint = require('gulp-eslint-new')
 const del = require('del')
-const sourcemaps = require('gulp-sourcemaps')
 const concat = require('gulp-concat')
 const chalk = require('chalk')
 const columnify = require('columnify')
+const webpack = require('webpack')
+const webpackStream = require('webpack-stream')
+const webpackConfig = require('../webpack.config.js')
 
 // CHALKS
 
@@ -25,7 +27,7 @@ const logESLintResult = result => {
 	let { messages } = result
 
 	if (messages.length > 0) {
-		const unnecessaryPathLength = 47
+		const unnecessaryPathLength = 46
 		const pathLength = filePath.length
 		const slicedPath = filePath.slice(unnecessaryPathLength, pathLength)
 
@@ -108,23 +110,15 @@ const lintScripts = () =>
 		.pipe(eslint.result(logESLintResult))
 		.pipe(eslint.results(logESLintTotalResults))
 
-const concatScripts = () => {
+const bundleModules = () => {
 	src('./src/js/vendor/**.js').pipe(concat('vendor.js')).pipe(dest('./bundle/js/'))
 	return src(['./src/js/global.js', './src/js/components/**.js', './src/js/main.js'])
-		.pipe(sourcemaps.init())
-		.pipe(concat('main.js'))
-		.pipe(sourcemaps.write('.'))
+		.pipe(webpackStream(webpackConfig), webpack)
 		.pipe(dest('./bundle/js'))
 }
 
-const launchTasksScripts = done => {
-	// lintScripts()
-	concatScripts()
-	done()
-}
-
 const watchScripts = () => {
-	watch('./src/js/**/*.js', launchTasksScripts)
+	watch('./src/js/**/*.js', bundleModules)
 }
 
-module.exports = { cleanScripts, launchTasksScripts, watchScripts }
+module.exports = { cleanScripts, lintScripts, bundleModules, watchScripts }

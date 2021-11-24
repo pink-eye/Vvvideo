@@ -1,3 +1,7 @@
+import { isEmpty } from '../global'
+import { removeSkeleton, resetSkeleton } from './skeleton'
+import { showToast } from './toast'
+
 const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 	let givenParent = parent
 	let authorAvatar = givenParent.querySelector('.author__avatar img')
@@ -79,3 +83,5 @@ const resetAuthorCard = parent => {
 	authorName = null
 	authorSubs = null
 }
+
+export { fillAuthorCard, resetAuthorCard }

@@ -1,5 +1,10 @@
-const openWinTrending = async (geoLocation = 'US', page = 'default') => {
-	let trending = _io_q('.trending')
+import { initPages, disablePages } from './pages'
+import { fillVideoCard } from './card'
+import { showToast } from './toast'
+import { getSelector } from '../global'
+
+export const openWinTrending = async (geoLocation = 'US', page = 'default') => {
+	let trending = getSelector('.trending')
 	let videoAll = trending.querySelectorAll('.card')
 
 	let parameters = {

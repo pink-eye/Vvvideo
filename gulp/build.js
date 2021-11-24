@@ -5,6 +5,9 @@ const cleanCSS = require('gulp-clean-css')
 const sass = require('gulp-sass')(require('node-sass'))
 const uglify = require('gulp-uglify-es').default
 const notify = require('gulp-notify')
+const webpack = require('webpack')
+const webpackStream = require('webpack-stream')
+const webpackConfig = require('../webpack.config.js')
 
 const clean = () => del(['bundle/*'])
 
@@ -24,7 +27,7 @@ const uglifyScripts = () => {
 		.pipe(uglify().on('error', notify.onError()))
 		.pipe(dest('./bundle/js/'))
 	return src(['./src/js/global.js', './src/js/components/**.js', './src/js/main.js'])
-		.pipe(concat('main.js'))
+		.pipe(webpackStream(webpackConfig), webpack)
 		.pipe(uglify().on('error', notify.onError()))
 		.pipe(dest('./bundle/js'))
 }

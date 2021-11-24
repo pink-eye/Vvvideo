@@ -1,3 +1,5 @@
+import { getDurationTimeout } from '../global'
+
 const removeSkeleton = skeleton => {
 	let givenSkeleton = skeleton
 
@@ -18,3 +20,5 @@ const resetSkeleton = skeleton => {
 	givenSkeleton.hidden &&= false
 	givenSkeleton = null
 }
+
+export { removeSkeleton, resetSkeleton }

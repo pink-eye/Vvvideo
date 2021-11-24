@@ -1,20 +1,31 @@
+import { initPages, disablePages } from './pages'
+import { fillAuthorCard } from './author-card'
+import { showToast } from './toast'
+import { getSelector, isEmpty, getDurationTimeout } from '../global'
+import { AppStorage } from './app-storage'
+import { resetIndicator } from './indicator'
+
+const appStorage = new AppStorage()
+let storage = appStorage.getStorage()
+
 let isUpdated = false
 
-const openWinSubs = async _ => {
+export const openWinSubs = async _ => {
 	const promises = []
 	let channelInfoArray = null
-	let subscriptions = _io_q('.subscriptions')
+	let subscriptions = getSelector('.subscriptions')
 	let authorCardAll = subscriptions.querySelectorAll('.author')
 	let btnSubscriptions = document.querySelector('button[data-win="subscriptions"]')
-	const ss = storage.subscriptions
 
-	ss.length > authorCardAll.length
-		? initPages(subscriptions, ss, authorCardAll, 'author')
+	let { subscriptions: subs } = storage
+
+	subs.length > authorCardAll.length
+		? initPages(subscriptions, subs, authorCardAll, 'author')
 		: disablePages(subscriptions)
 
 	for (let index = 0, { length } = authorCardAll; index < length; index += 1) {
 		const authorCard = authorCardAll[index]
-		const sub = ss[index]
+		const sub = subs[index]
 
 		if (sub) {
 			const { name, channelId, avatar = '' } = sub
@@ -33,8 +44,8 @@ const openWinSubs = async _ => {
 	}
 
 	if (!isUpdated) {
-		for (let index = 0, { length } = ss; index < length; index += 1) {
-			const subscription = ss[index]
+		for (let index = 0, { length } = subs; index < length; index += 1) {
+			const subscription = subs[index]
 
 			if (btnSubscriptions.classList.contains('_active'))
 				promises.push(API.scrapeChannelInfo(subscription.channelId))
@@ -50,17 +61,17 @@ const openWinSubs = async _ => {
 		}
 
 		if (channelInfoArray && channelInfoArray.length > 0) {
-			for (let index = 0, { length } = ss; index < length; index += 1) {
-				const subscription = storage.subscriptions[index]
+			for (let index = 0, { length } = subs; index < length; index += 1) {
+				const sub = subs[index]
 				const channelInfo = channelInfoArray[index]
 
 				if (btnSubscriptions.classList.contains('_active')) {
-					subscription.avatar = channelInfo.authorThumbnails.at(-1).url
-					subscription.name = channelInfo.author
+					sub.avatar = channelInfo.authorThumbnails.at(-1).url
+					sub.name = channelInfo.author
 				} else return
 			}
 
-			API.writeStorage(storage)
+			appStorage.updateStorage(storage)
 
 			isUpdated = true
 		}
@@ -92,37 +103,14 @@ const hasSubscription = (channelId, name) => {
 
 const addSubscription = async obj => {
 	storage.subscriptions.push(obj)
-	await API.writeStorage(storage)
+	appStorage.updateStorage(storage)
 }
 
 const removeSubscription = async obj => {
 	storage.subscriptions = storage.subscriptions.filter(
 		item => item.channelId !== obj.channelId || item.name !== obj.name
 	)
-	await API.writeStorage(storage)
-}
-
-const handleClickSubscribeBtn = event => {
-	let btn = event.currentTarget
-
-	let btnText = btn.querySelector('.subscribe__text')
-
-	const { channelId, name } = btn.dataset
-
-	if (!isEmpty(channelId) && !isEmpty(name)) {
-		const isSubscribed = hasSubscription(channelId, name)
-		const subObj = { channelId, name }
-
-		transformBtn(btn, btnText, isSubscribed)
-
-		isSubscribed ? removeSubscription(subObj) : addSubscription(subObj)
-	} else {
-		showToast('error', 'Did not get data about the channel')
-		btn.removeEventListener('click', handleClickSubscribeBtn)
-	}
-
-	btn = null
-	btnText = null
+	appStorage.updateStorage(storage)
 }
 
 const transformBtn = (btn, btnText, isSubscribed) => {
@@ -148,7 +136,30 @@ const transformBtn = (btn, btnText, isSubscribed) => {
 	setTimeout(onChangeState, getDurationTimeout(200))
 }
 
-const prepareSubscribeBtn = (btn, channelId, name) => {
+const handleClickSubscribeBtn = event => {
+	let btn = event.currentTarget
+
+	let btnText = btn.querySelector('.subscribe__text')
+
+	const { channelId, name } = btn.dataset
+
+	if (!isEmpty(channelId) && !isEmpty(name)) {
+		const isSubscribed = hasSubscription(channelId, name)
+		const subObj = { channelId, name }
+
+		transformBtn(btn, btnText, isSubscribed)
+
+		isSubscribed ? removeSubscription(subObj) : addSubscription(subObj)
+	} else {
+		showToast('error', 'Did not get data about the channel')
+		btn.removeEventListener('click', handleClickSubscribeBtn)
+	}
+
+	btn = null
+	btnText = null
+}
+
+export const prepareSubscribeBtn = (btn, channelId, name) => {
 	let givenBtn = btn
 	let btnText = givenBtn.querySelector('.subscribe__text')
 
@@ -165,7 +176,7 @@ const prepareSubscribeBtn = (btn, channelId, name) => {
 	btnText = null
 }
 
-const destroySubscribeBtn = btn => {
+export const destroySubscribeBtn = btn => {
 	let givenBtn = btn
 	let btnText = btn.querySelector('.subscribe__text')
 
