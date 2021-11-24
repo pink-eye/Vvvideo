@@ -2,6 +2,7 @@ module.exports = {
 	output: {
 		filename: 'main.js',
 	},
+	devtool: 'eval-source-map',
 	module: {
 		rules: [
 			{
@@ -11,7 +12,7 @@ module.exports = {
 				options: {
 					presets: [
 						[
-							'@babel/preset-env',
+							'@babel/env',
 							{
 								targets: {
 									esmodules: true,
