@@ -27,7 +27,7 @@ const logESLintResult = result => {
 	let { messages } = result
 
 	if (messages.length > 0) {
-		const unnecessaryPathLength = 47
+		const unnecessaryPathLength = 46
 		const pathLength = filePath.length
 		const slicedPath = filePath.slice(unnecessaryPathLength, pathLength)
 
@@ -110,7 +110,7 @@ const lintScripts = () =>
 		.pipe(eslint.result(logESLintResult))
 		.pipe(eslint.results(logESLintTotalResults))
 
-const concatScripts = () => {
+const bundleModules = () => {
 	src('./src/js/vendor/**.js').pipe(concat('vendor.js')).pipe(dest('./bundle/js/'))
 	return src(['./src/js/global.js', './src/js/components/**.js', './src/js/main.js'])
 		.pipe(webpackStream(webpackConfig), webpack)
@@ -118,7 +118,7 @@ const concatScripts = () => {
 }
 
 const watchScripts = () => {
-	watch('./src/js/**/*.js', concatScripts)
+	watch('./src/js/**/*.js', bundleModules)
 }
 
-module.exports = { cleanScripts, concatScripts, watchScripts }
+module.exports = { cleanScripts, lintScripts, bundleModules, watchScripts }
