@@ -5,7 +5,7 @@ import {
 	filterVideoMP4NoAudio,
 	filterVideoWebm,
 	getPreferedQuality,
-	convertToProc,
+	convertToPercentage,
 	isEmpty,
 	convertSecondsToDuration,
 	getPosStroryboard,
@@ -203,8 +203,8 @@ const initSponsorblockSegments = data => {
 		const { startTime, endTime, videoDuration } = data[index]
 		const segmentLength = endTime - startTime
 		const vDuration = videoDuration !== 0 ? videoDuration : ~~video.duration
-		const sponsorblockItemWidth = convertToProc(segmentLength, vDuration)
-		const sponsorblockItemLeft = convertToProc(startTime, vDuration)
+		const sponsorblockItemWidth = convertToPercentage(segmentLength, vDuration)
+		const sponsorblockItemLeft = convertToPercentage(startTime, vDuration)
 
 		sponsorblockItem.style.setProperty('--width', `${sponsorblockItemWidth}%`)
 		sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`)
@@ -516,7 +516,7 @@ const updateProgress = _ => {
 	let video = getSelector('video')
 
 	progressSeek.value = Math.floor(video.currentTime)
-	progress.style.setProperty('--progress', `${convertToProc(Math.floor(video.currentTime), ~~video.duration)}%`)
+	progress.style.setProperty('--progress', `${convertToPercentage(Math.floor(video.currentTime), ~~video.duration)}%`)
 
 	progress = null
 	progressSeek = null
@@ -563,7 +563,7 @@ const updateBuffered = _ => {
 			let audioLastBuffered =
 				audio && audio.buffered.length > 0 ? audio.buffered.end(audio.buffered.length - 1) : null
 			let minBuffered = audioLastBuffered ? getMin(videoLastBuffered, audioLastBuffered) : videoLastBuffered
-			progress.style.setProperty('--buffered', `${convertToProc(minBuffered, ~~video.duration)}%`)
+			progress.style.setProperty('--buffered', `${convertToPercentage(minBuffered, ~~video.duration)}%`)
 		}
 	}
 
@@ -579,7 +579,7 @@ const skipAhead = event => {
 	const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value
 
 	video.currentTime = skipTo
-	progress.style.setProperty('--progress', `${convertToProc(skipTo, ~~video.duration)}%`)
+	progress.style.setProperty('--progress', `${convertToPercentage(skipTo, ~~video.duration)}%`)
 	progressSeek.value = skipTo
 
 	isSync = false

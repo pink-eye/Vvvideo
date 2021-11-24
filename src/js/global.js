@@ -147,7 +147,7 @@ export const formatIP = str => str.replace(/[^0-9.]/gim, '')
 
 export const formatPort = str => str.replace(/[^0-9]/gim, '')
 
-export const convertToProc = (firstNum, secondNum) => (firstNum * 100) / secondNum
+export const convertToPercentage = (firstNum, secondNum) => (firstNum * 100) / secondNum
 
 export const calculatePublishedDate = publishedText => {
 	const date = new Date()

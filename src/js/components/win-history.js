@@ -1,7 +1,7 @@
 import { showToast } from './toast'
 import { fillVideoCard } from './card'
 import { AppStorage } from './app-storage'
-import { getSelector, convertSecondsToDuration, convertDurationToSeconds, convertToProc } from '../global'
+import { getSelector, convertSecondsToDuration, convertDurationToSeconds, convertToPercentage } from '../global'
 import { initPages, disablePages } from './pages'
 
 const appStorage = new AppStorage()
@@ -162,5 +162,5 @@ export const calculateWatchedProgress = videoId => {
 
 	const lengthSeconds = convertDurationToSeconds(requiredItem.lengthSeconds)
 
-	return `${convertToProc(requiredItem.watchedTime, lengthSeconds)}%`
+	return `${convertToPercentage(requiredItem.watchedTime, lengthSeconds)}%`
 }
