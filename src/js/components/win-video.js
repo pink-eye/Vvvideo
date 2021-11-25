@@ -25,7 +25,7 @@ const openWinVideo = data => {
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
 	let videoViews = videoInfo.querySelector('.video-info__views')
 	let videoDate = videoInfo.querySelector('.video-info__date')
-	let videoDesc = videoInfo.querySelector('.desc-video-info__text')
+	let spoilerContent = videoInfo.querySelector('.spoiler__content')
 	let titleSkeleton = videoInfo.querySelector('.title-skeleton')
 	let partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton')
 	let videoLikes = videoInfo.querySelector('.video-info__likes')
@@ -99,7 +99,7 @@ const openWinVideo = data => {
 
 		authorParams = null
 
-		videoDesc.innerHTML = normalizeDesc(videoDetails.description)
+		spoilerContent.innerHTML = normalizeDesc(videoDetails.description)
 
 		saveVideoInHistory(data)
 	}
@@ -109,7 +109,7 @@ const openWinVideo = data => {
 	videoViews = null
 	videoDate = null
 	controls = null
-	videoDesc = null
+	spoilerContent = null
 	videoLikes = null
 	topBarTitle = null
 	topBarAuthor = null
@@ -128,7 +128,7 @@ export const resetWinVideo = _ => {
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
 	let videoLikes = videoInfo.querySelector('.video-info__likes')
 	let videoDislikes = videoInfo.querySelector('.video-info__dislikes')
-	let videoDesc = videoInfo.querySelector('.desc-video-info__text')
+	let spoilerContent = videoInfo.querySelector('.spoiler__content')
 	let videoViews = videoInfo.querySelector('.video-info__views')
 	let videoDate = videoInfo.querySelector('.video-info__date')
 
@@ -146,7 +146,7 @@ export const resetWinVideo = _ => {
 	videoDislikes.textContent = '...'
 	videoViews.textContent = '...'
 	videoDate.textContent = '...'
-	videoDesc.textContent = '...'
+	spoilerContent.textContent = '...'
 
 	if (skeletonAll.length > 0) {
 		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
@@ -163,7 +163,7 @@ export const resetWinVideo = _ => {
 	videoLikes = null
 	skeletonAll = null
 	videoDislikes = null
-	videoDesc = null
+	spoilerContent = null
 	videoViews = null
 	videoDate = null
 	subscribeBtn = null

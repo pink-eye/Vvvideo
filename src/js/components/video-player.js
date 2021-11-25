@@ -849,7 +849,7 @@ export const initVideoPlayer = data => {
 	const controlsScreen = controls.querySelector('.controls__screen')
 	const videoParent = getSelector('.video')
 	const videoWrapper = videoParent.querySelector('.video__wrapper')
-	const videoDesc = videoParent.querySelector('.desc-video-info__text')
+	const spoilerContent = videoParent.querySelector('.spoiler__content')
 	const video = videoWrapper.querySelector('video')
 	const audio = videoWrapper.querySelector('audio')
 
@@ -928,7 +928,7 @@ export const initVideoPlayer = data => {
 
 	volumeSeek.addEventListener('input', handleInputVolumeSeek)
 
-	videoDesc.addEventListener('click', handleClickTimecode)
+	spoilerContent.addEventListener('click', handleClickTimecode)
 
 	progressSeek.addEventListener('input', skipAhead)
 
@@ -1007,7 +1007,7 @@ export const resetVideoPlayer = _ => {
 	let timeElapsed = controls.querySelector('.time__elapsed')
 	let speed = controls.querySelector('.controls__speed')
 	let speedCurrent = speed.querySelector('.dropdown__head')
-	let videoDesc = videoParent.querySelector('.desc-video-info__text')
+	let spoilerContent = videoParent.querySelector('.spoiler__content')
 
 	isFirstPlay ||= true
 	isSync &&= false
@@ -1071,7 +1071,7 @@ export const resetVideoPlayer = _ => {
 
 	volumeSeek.removeEventListener('input', handleInputVolumeSeek)
 
-	videoDesc.removeEventListener('click', handleClickTimecode)
+	spoilerContent.removeEventListener('click', handleClickTimecode)
 
 	progressSeek.removeEventListener('input', skipAhead)
 
@@ -1124,5 +1124,5 @@ export const resetVideoPlayer = _ => {
 	timeElapsed = null
 	speed = null
 	speedCurrent = null
-	videoDesc = null
+	spoilerContent = null
 }
