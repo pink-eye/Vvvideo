@@ -19,4 +19,8 @@ export class AppStorage {
 		await API.writeStorage(data)
 		this.setStorage(data)
 	}
+
+	clearLocalStorage() {
+		localStorage.removeItem(this.KEY_STORAGE)
+	}
 }

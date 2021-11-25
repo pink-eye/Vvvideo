@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const appStorage = new AppStorage()
 
 	const onReadStorage = async data => {
+		appStorage.clearLocalStorage()
 		Object.assign(storage, JSON.parse(data))
 		appStorage.setStorage(storage)
 
