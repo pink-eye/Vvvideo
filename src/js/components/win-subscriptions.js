@@ -47,9 +47,9 @@ export const openWinSubs = async _ => {
 		for (let index = 0, { length } = subs; index < length; index += 1) {
 			const subscription = subs[index]
 
-			if (btnSubscriptions.classList.contains('_active'))
-				promises.push(API.scrapeChannelInfo(subscription.channelId))
-			else return
+			if (!btnSubscriptions.classList.contains('_active')) return
+
+			promises.push(API.scrapeChannelInfo(subscription.channelId))
 		}
 
 		try {
@@ -65,10 +65,10 @@ export const openWinSubs = async _ => {
 				const sub = subs[index]
 				const channelInfo = channelInfoArray[index]
 
-				if (btnSubscriptions.classList.contains('_active')) {
-					sub.avatar = channelInfo.authorThumbnails.at(-1).url
-					sub.name = channelInfo.author
-				} else return
+				if (!btnSubscriptions.classList.contains('_active')) return
+
+				sub.avatar = channelInfo.authorThumbnails.at(-1).url
+				sub.name = channelInfo.author
 			}
 
 			appStorage.updateStorage(storage)

@@ -13,7 +13,7 @@ import { openWinSettings, resetWinSettings } from './win-settings'
 import { openWinHistory, rememberWatchedTime } from './win-history'
 import { resetVideoPlayer } from './video-player'
 import { prepareWinPlaylist, resetWinPlaylist } from './win-playlist'
-import { prepareWinChannel,resetWinChannel } from './win-channel'
+import { prepareWinChannel, resetWinChannel } from './win-channel'
 import { openWinTrending } from './win-trending'
 import { openWinSubs } from './win-subscriptions'
 import { openWinSearchResults } from './win-search-results'
@@ -46,11 +46,11 @@ const resetWin = win => {
 
 const startFillingWin = ({ win, btnWin, id }) => {
 	const appStorage = new AppStorage()
-	const storage = appStorage.getStorage()
+	const { settings } = appStorage.getStorage()
 
 	switch (win) {
 		case 'trending':
-			openWinTrending(storage.settings.regionTrending)
+			openWinTrending(settings.regionTrending)
 			break
 
 		case 'latest':
