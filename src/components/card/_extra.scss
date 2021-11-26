@@ -1,0 +1,21 @@
+.card {
+
+	&._history-video,
+	&._playlist-video {
+
+		.card__details {
+			display: none;
+		}
+
+		.card__channel {
+			margin-top: 0;
+		}
+	}
+
+	&._playlist-video {
+
+		.card__channel {
+			display: none;
+		}
+	}
+}

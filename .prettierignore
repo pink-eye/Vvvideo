@@ -1,4 +1,4 @@
 bundle
 node_modules
-src/scss
+**/*.scss
 src/js/vendor

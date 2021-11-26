@@ -1,0 +1,30 @@
+.btns {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	max-width: 310px;
+	margin-inline: auto;
+	margin-top: 40px;
+
+	button {
+		padding: 10px 35px;
+
+		&[disabled] {
+			visibility: hidden;
+			opacity: 0;
+		}
+	}
+
+	&__count {
+		color: var(--color-title);
+		font-size: 1.25rem;
+	}
+
+	&__prev {
+
+		svg {
+			transform: scale(-1);
+		}
+	}
+}

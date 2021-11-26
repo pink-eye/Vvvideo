@@ -1,0 +1,22 @@
+.card {
+
+	&._playlist {
+
+		.card__duration,
+		.card__channel-descr {
+			display: none;
+		}
+
+		.card__video-count,
+		.card__details {
+			@media (min-width:36em) {
+				visibility: hidden;
+				opacity: 0;
+			}
+
+			@media (max-width:35.9375em) {
+				display: none;
+			}
+		}
+	}
+}

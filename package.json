@@ -11,7 +11,7 @@
 		"publish": "electron-forge publish",
 		"format": "prettier src/ gulp/ gulpfile.js --write",
 		"test": "jest",
-		"stylelint": "stylelint src/scss/**/*.scss --fix",
+		"stylelint": "stylelint src/**/*.scss --fix",
 		"prepare": "husky install"
 	},
 	"keywords": [],

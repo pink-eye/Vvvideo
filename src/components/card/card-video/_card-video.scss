@@ -1,0 +1,32 @@
+.card {
+
+	&._video {
+
+		.card__channel-descr,
+		.card__edge,
+		.card__video-count,
+		.card__subs {
+			display: none;
+		}
+
+		&._live {
+
+			.card__part:last-child > svg,
+			.card__duration {
+				display: none;
+			}
+
+			.card__date {
+				display: inline-block;
+				padding: 2px 10px;
+				border-radius: var(--brs-s);
+
+				color: hsl(0,0%,100%);
+				font-weight: 500;
+				text-transform: uppercase;
+
+				background-color: var(--color-error);
+			}
+		}
+	}
+}

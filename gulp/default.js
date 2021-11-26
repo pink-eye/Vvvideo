@@ -15,9 +15,10 @@ const transformHTML = () =>
 			fileInclude({
 				prefix: '@',
 				basepath: '@file',
+				indent: true
 			})
 		)
-		.pipe(dest('./bundle'))
+		.pipe(dest('bundle'))
 
 const minifyHTML = () =>
 	src('bundle/**/*.html')

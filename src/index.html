@@ -29,48 +29,41 @@
 	</head>
 
 	<body>
+
 		@include('html/indicator.html')
-
-		<div class="preloader">
-			<div class="preloader__el"></div>
-		</div>
-
-		@include('html/overlay.html') @include('html/header.html') @include('html/sidebar.html')
+		@include('html/preloader.html')
+		@include('html/overlay.html')
+		@include('html/header.html')
+		@include('html/sidebar.html')
 
 		<main class="main">
 			<div class="main__outter-container">
 				<div class="main__content">
-					<section class="latest outter-container _active win _anim-win">
-						<h2 class="win__title title">Latest</h2>
-						<div class="main__grid grid default">@include('html/video-grid.html')</div>
-					</section>
-
-					<section class="trending outter-container win">
-						<h2 class="win__title title">Trending</h2>
-						<div class="main__grid grid column">@include('html/video-grid.html')</div>
-					</section>
-
-					<section class="subscriptions outter-container win">
-						<h2 class="win__title title">Subs</h2>
-						<div class="main__grid grid">@include('html/author-card-grid.html')</div>
-					</section>
-
-					<section class="search-results outter-container win">
-						<h2 class="win__title title">Search results</h2>
-						<div class="main__grid grid column">@include('html/rich-grid.html')</div>
-					</section>
-
-					<section class="history outter-container win">
-						<h2 class="win__title title">History</h2>
-						<div class="main__grid grid">@include('html/video-grid.html')</div>
-					</section>
-
-					@include('html/win-channel.html') @include('html/win-video.html') @include('html/win-playlist.html')
+					@include('html/win-channel.html')
+					@include('html/win-latest.html')
+					@include('html/win-history.html')
+					@include('html/win-subscriptions.html')
+					@include('html/win-search-results.html')
+					@include('html/win-video.html')
+					@include('html/win-playlist.html')
 					@include('html/win-settings.html')
 				</div>
 			</div>
 		</main>
-		@include('html/footer.html') @include('html/toast.html') @include('html/graph-modal.html')
+
+		@include('html/footer.html')
+		@include('html/toast.html')
+
+		<div class="modal">
+			<div
+				class="modal__container"
+				data-graph-speed="300"
+				role="dialog"
+				aria-modal="true"
+				data-graph-target="dialog-sb">
+				<div class="modal-content">@include('dialog-sb.html')</div>
+			</div>
+		</div>
 
 		<script src="js/vendor.js"></script>
 		<script src="js/main.js"></script>

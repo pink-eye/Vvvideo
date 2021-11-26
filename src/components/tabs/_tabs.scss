@@ -1,0 +1,166 @@
+.body-channel {
+	display: flex;
+	justify-content: space-between;
+
+	// .body-channel__left
+
+	&__left {
+		width: 100%;
+	}
+
+	// .body-channel__nav
+
+	&__nav {
+		position: relative;
+
+		display: flex;
+		padding-block: 10px;
+
+		background-color: var(--color-bg-form);
+
+		.search {
+			max-width: 450px;
+			margin-top: 15px;
+		}
+
+		@media (max-width: 29.375em) {
+
+			.search {
+				width: 95%;
+			}
+		}
+	}
+
+	// .body-channel__list
+
+	&__list {
+		position: relative;
+
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		margin: auto;
+	}
+
+	// .body-channel__item
+
+	&__item {
+		position: relative;
+
+		display: flex;
+		align-items: center;
+
+		&:not(:first-child) {
+			margin-left: 10px;
+		}
+
+		&:not(:last-child) {
+			margin-right: 10px;
+		}
+	}
+
+	// .body-channel__tab
+
+	&__tab {
+		position: relative;
+		z-index: 1;
+
+		padding: 10px 25px;
+		border-radius: var(--brs-m);
+
+		font-size: 1.25rem;
+		line-height: 23px / 18px * 100%;
+
+		background-color: transparent;
+
+		transition: color var(--trns), border-color var(--trns);
+
+		&:not(._active) {
+			color: var(--color-icon);
+
+			&::before,
+			&::after {
+				width: 0%;
+			}
+		}
+
+		&::after,
+		&::before {
+			position: absolute;
+			bottom: 0;
+
+			height: 3px;
+			border-radius: var(--brs-s);
+
+			background-color: var(--color-accent-s);
+
+			transition: width var(--trns);
+
+			content: '';
+		}
+
+		&::after {
+			left: 50%;
+
+			transform: translateX(-50%);
+		}
+
+		&::before {
+			right: 50%;
+
+			transform: translateX(50%);
+		}
+
+		&._active {
+			color: var(--color-accent-s);
+
+			&::before,
+			&::after {
+				width: 100%;
+			}
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+
+			&:hover {
+				color: var(--color-accent-s);
+			}
+		}
+	}
+
+	@media (min-width: 48em) {
+		margin-top: 20px;
+	}
+
+	@media (max-width: 47.9375em) {
+		margin-top: 30px;
+	}
+}
+
+.tab-content:not(._active) {
+	display: none;
+}
+
+.tab-content._active {
+	display: block;
+}
+
+.about {
+	padding: 30px 20px;
+
+	background-color: var(--color-bg-form);
+
+	&__description {
+		width: 100%;
+		max-width: 85ch;
+		margin: 0;
+		padding-left: 15px;
+		border-left: 3px solid;
+
+		color: var(--color-text);
+	}
+
+	@media (min-width: 28.125em) {
+		border-radius: var(--brs-m);
+	}
+}
