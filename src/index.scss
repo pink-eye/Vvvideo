@@ -1,50 +1,66 @@
-@import './components/header';
+@import './components/header/header';
 
-@import './components/footer';
+@import './components/footer/footer';
 
-@import './components/search';
+@import './components/search/search';
 
-@import './components/grid';
+@import './components/suggestions/suggestions';
 
-@import './components/card';
+@import './components/grid/grid';
 
-@import './components/sidebar';
+@import './components/grid-btns/grid-btns';
 
-@import './components/win-channel';
+@import './components/card/card';
 
-@import './components/win-video';
+@import './components/card/card-author/card-author';
 
-@import './components/indicator';
+@import './components/card/card-playlist/card-playlist';
 
-@import './components/win-playlist';
+@import './components/card/card-video/card-video';
 
-@import './components/author-card';
+@import './components/card/card-rich/card-channel';
 
-@import './components/win-subscriptions';
+@import './components/sidebar/sidebar';
 
-@import './components/toast';
+@import './components/indicator/indicator';
 
-@import './components/radio';
+@import './components/toast/toast';
 
-@import './components/dialog-sb';
+@import './components/radio/radio';
 
-@import './components/dropdown';
+@import './components/dialog-sb/dialog-sb';
 
-@import './components/win-settings';
+@import './components/dropdown/dropdown';
 
-@import './components/burger';
+@import './components/burger/burger';
 
-@import './components/switch';
+@import './components/switch/switch';
 
-@import './components/skeleton';
+@import './components/tabs/tabs';
 
-@import './components/spinner';
+@import './components/skeleton/skeleton';
 
-@import './components/spoiler';
+@import './components/spinner/spinner';
 
-@import './components/overlay';
+@import './components/spoiler/spoiler';
 
-@import './components/subscribe';
+@import './components/overlay/overlay';
+
+@import './components/subscribe/subscribe';
+
+@import './layouts/win-channel/win-channel';
+
+@import './layouts/win-video/win-video';
+
+@import './layouts/win-video/video-info/video-info';
+
+@import './layouts/win-video/video-controls/video-controls';
+
+@import './layouts/win-playlist/win-playlist';
+
+@import './layouts/win-subscriptions/win-subscriptions';
+
+@import './layouts/win-settings/win-settings';
 
 .main {
 	--middle-val-pt: calc(84px + (114 - 84) * ((100vw - 320px) / (1200 - 320)));

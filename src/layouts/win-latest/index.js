@@ -1,9 +1,10 @@
-import { startIndicator, resetIndicator } from './indicator'
-import { calculatePublishedDate, getSelector } from '../../js/global'
-import { showToast } from './toast'
-import { fillVideoCard } from '../../js/components/card'
-import { AppStorage } from '../../js/components/app-storage'
-import { initPages, disablePages } from '../../js/components/pages'
+import { getSelector } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
+import { showToast } from 'Components/toast'
+import { fillVideoCard } from 'Components/card/card-video'
+import { initPages, disablePages } from 'Components/grid-btns'
+import { calculatePublishedDate } from 'Layouts/win-latest/helper'
+import { startIndicator, resetIndicator } from 'Components/indicator'
 
 let latestArray = null
 

@@ -1,7 +1,9 @@
-import { getSelector, isEmpty, getChannelIdOrUser, formatIP, formatPort, reloadApp } from '../../js/global'
-import { AppStorage } from '../../js/components/app-storage'
-import { showToast } from './toast'
-import { clearHistory, disableHistory, keepHistoryArray } from '../win-history/win-history'
+import { getSelector, isEmpty, reloadApp } from 'Global/utils'
+import { YoutubeHelper } from 'Global/youtube-helper'
+import { formatIP, formatPort } from 'Layouts/win-settings/helper'
+import { AppStorage } from 'Global/app-storage'
+import { showToast } from 'Components/toast'
+import { clearHistory, disableHistory, keepHistoryArray } from 'Layouts/win-history/helper'
 
 const appStorage = new AppStorage()
 let storage = appStorage.getStorage()
@@ -31,12 +33,14 @@ const buildStorage = data => {
 			if (channelId && author) {
 				storage.subscriptions.push(...subscriptions)
 			} else {
+				const yh = new YoutubeHelper()
+
 				for (let index = 0, { length } = subscriptions; index < length; index += 1) {
 					const subscription = subscriptions[index]
 					const { url, name } = subscription
 
 					storage.subscriptions.push({
-						channelId: getChannelIdOrUser(url),
+						channelId: yh.getChannelId(url),
 						name,
 					})
 				}

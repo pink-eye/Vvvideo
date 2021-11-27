@@ -1,11 +1,7 @@
-import { isEmpty } from '../utils'
-
 export class AppStorage {
 	KEY_STORAGE = 'storage'
 
 	setStorage(data) {
-		if (isEmpty(data)) return
-
 		const dataJSON = JSON.stringify(data)
 		localStorage.setItem(this.KEY_STORAGE, dataJSON)
 	}

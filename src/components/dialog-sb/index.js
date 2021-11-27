@@ -1,9 +1,12 @@
-import { getSelector, convertDurationToSeconds, formatDuration, uuidv4, convertSecondsToDuration } from '../global'
-import { isPlaying, toggleFullscreen, playVideoPlayer, pauseVideoPlayer } from './video-player'
-import { showToast } from './toast'
-import { AppStorage } from './app-storage'
+import { getSelector, convertDurationToSeconds, convertSecondsToDuration } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
+import { showToast } from 'Components/toast'
+import { formatDuration } from 'Components/dialog-sb/helper'
+import { uuidv4 } from 'Layouts/win-video/video-controls/sponsorblock'
 
 let isRecording = false
+
+let modal = null
 
 const hideInvalidUI = _ => {
 	let dialogSb = getSelector('.dialog-sb')
@@ -33,9 +36,14 @@ const handleInputDialogField = event => {
 }
 
 const showDialogSB = _ => {
-	if (document.fullscreenElement) toggleFullscreen()
+	if (document.fullscreenElement) document.exitFullscreen()
 
-	pauseVideoPlayer()
+	let video = getSelector('video')
+	let audio = getSelector('audio')
+
+	video.pause()
+	audio && audio.pause()
+
 	hideInvalidUI()
 
 	const dialogSb = getSelector('.dialog-sb')
@@ -45,8 +53,10 @@ const showDialogSB = _ => {
 	dialogSbStart.addEventListener('input', handleInputDialogField)
 	dialogSbEnd.addEventListener('input', handleInputDialogField)
 
-	const modal = new GraphModal()
 	modal.open('dialog-sb')
+
+	video = null
+	audio = null
 }
 
 export const recordSegmentSB = _ => {
@@ -61,7 +71,7 @@ export const recordSegmentSB = _ => {
 
 	let dialogSb = getSelector('.dialog-sb')
 
-	if (isPlaying(video)) {
+	if (!video.paused || !video.ended) {
 		if (!isRecording) {
 			let dialogSbStart = dialogSb.querySelector('input#start')
 			dialogSbStart.value = convertSecondsToDuration(video.currentTime)
@@ -164,7 +174,6 @@ const sendSegmentSB = async _ => {
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
 	let dialogSbCategory = dialogSb.querySelector('input[name="category"]:checked')
-	const modal = new GraphModal()
 
 	if (isValidFields()) {
 		let startTime = convertDurationToSeconds(dialogSbStart.value)
@@ -188,8 +197,13 @@ const sendSegmentSB = async _ => {
 }
 
 const onCloseModal = _ => {
-	playVideoPlayer()
+	let video = getSelector('.video')
+
+	video.play()
+
 	resetDialogSB()
+
+	video = null
 }
 
 export const initDialogSB = _ => {
@@ -200,7 +214,7 @@ export const initDialogSB = _ => {
 
 	isRecording &&= false
 
-	const modal = new GraphModal({ isClose: onCloseModal })
+	modal = new GraphModal({ isClose: onCloseModal })
 
 	dialogSbBtnSend.addEventListener('click', sendSegmentSB)
 

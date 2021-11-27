@@ -1,3 +1,10 @@
+import { AppStorage } from 'Global/app-storage'
+import { getDurationTimeout, isEmpty } from 'Global/utils'
+import { showToast } from 'Components/toast';
+
+const appStorage = new AppStorage()
+let storage = appStorage.getStorage()
+
 const hasSubscription = (channelId, name) => {
 	let isSubscribed = false
 

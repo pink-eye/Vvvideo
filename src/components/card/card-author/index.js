@@ -1,8 +1,8 @@
-import { isEmpty } from '../../js/global'
-import { removeSkeleton, resetSkeleton } from '../../js/components/skeleton'
-import { showToast } from './toast'
+import { isEmpty } from 'Global/utils'
+import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
+import { onErrorImage } from 'Components/card/helper'
 
-const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
+export const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 	let givenParent = parent
 	let authorAvatar = givenParent.querySelector('.author__avatar img')
 	let authorInfo = givenParent.querySelector('.author__info')
@@ -21,10 +21,6 @@ const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 
 			authorAvatar = null
 			avatarSkeleton = null
-		}
-
-		const onErrorImage = _ => {
-			showToast('error', 'Could not load images :(')
 		}
 
 		authorAvatar.addEventListener('load', onLoadImage, { once: true })
@@ -51,7 +47,7 @@ const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 	givenParent = null
 }
 
-const resetAuthorCard = parent => {
+export const resetAuthorCard = parent => {
 	let givenParent = parent
 	let authorAvatar = givenParent.querySelector('.author__avatar img')
 	let authorInfo = givenParent.querySelector('.author__info')
@@ -83,5 +79,3 @@ const resetAuthorCard = parent => {
 	authorName = null
 	authorSubs = null
 }
-
-export { fillAuthorCard, resetAuthorCard }

@@ -5,23 +5,23 @@ const htmlmin = require('gulp-htmlmin')
 
 const cleanDefault = () => del(['bundle/*', '!bundle/css', '!bundle/js'])
 
-const moveResources = () => src('./src/res/**').pipe(dest('./bundle'))
+const moveResources = () => src('src/res/**').pipe(dest('bundle'))
 
-const moveImages = () => src(['./src/img/**']).pipe(dest('./bundle/img'))
+const moveImages = () => src('src/img/**').pipe(dest('bundle/img'))
 
 const transformHTML = () =>
-	src(['./src/*.html'])
+	src('src/**/*.html')
 		.pipe(
 			fileInclude({
 				prefix: '@',
 				basepath: '@file',
-				indent: true
+				indent: true,
 			})
 		)
 		.pipe(dest('bundle'))
 
 const minifyHTML = () =>
-	src('bundle/**/*.html')
+	src('bundle/*.html')
 		.pipe(
 			htmlmin({
 				collapseWhitespace: true,
@@ -30,10 +30,9 @@ const minifyHTML = () =>
 		.pipe(dest('bundle'))
 
 const watchFiles = () => {
-	watch('./src/html/*.html', transformHTML)
-	watch('./src/*.html', transformHTML)
-	watch('./src/res/**', moveResources)
-	watch('./src/img/**', moveImages)
+	watch('src/**/*.html', transformHTML)
+	watch('src/res/**', moveResources)
+	watch('src/img/**', moveImages)
 }
 
 module.exports = {

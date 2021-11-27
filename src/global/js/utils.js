@@ -1,3 +1,6 @@
+import { AppStorage } from 'Global/app-storage'
+import { showToast } from 'Components/toast'
+
 export const cacheSelector = (key, value) => {
 	if (typeof value === 'undefined') return cacheSelector[key]
 
@@ -65,15 +68,17 @@ export const hideOnScroll = (selector, mq) => {
 }
 
 export const normalizeCount = count => {
-	if (isEmpty(count)) return null
-
 	if (typeof count === 'string') return count.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+
 	if (typeof count === 'number' && !Number.isNaN(count)) return count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+
 	if (Number.isNaN(count)) return 0
+
+	return undefined
 }
 
 export const convertSecondsToDuration = lengthSeconds => {
-	if (isEmpty(lengthSeconds)) return null
+	if (isEmpty(lengthSeconds)) return undefined
 
 	if (typeof lengthSeconds === 'string' && lengthSeconds.includes(':')) return lengthSeconds
 
@@ -114,32 +119,27 @@ export const convertDurationToSeconds = duration => {
 	return undefined
 }
 
-export const normalizeDesc = text => {
-	if (typeof text === 'string') {
-		let patternHashtag = /#[A-ZА-ЯЁ]*[0-9]*[-\.]?[A-ZА-ЯЁ]*[0-9]*/gim
-		let patternTimecodeMSS = /^[0-9]:[0-5][0-9]/gim
-		let patternTimecodeMMSS = /^[0-5][0-9]:[0-5][0-9]/gim
-		let patternTimecodeHMMSS = /^[0-9]:[0-5][0-9]:[0-5][0-9]/gim
-		let patternTimecodeHHMMSS = /^[0-2][0-9]:[0-5][0-9]:[0-5][0-9]/gim
-		let patternURL = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/gi
-
-		return text
-			.replace(patternHashtag, '')
-			.replace(patternURL, link => `<a href='${link}' onclick='handleClickLink(event)'>${link}</a>`)
-			.replace(patternTimecodeHHMMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
-			.replace(patternTimecodeHMMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
-			.replace(patternTimecodeMMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
-			.replace(patternTimecodeMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
-			.replace(/\n/gi, '<br>')
-	}
-}
-
-export const getProxyOptions = _ => new AppStorage().getStorage().settings.proxy
-
 export const getDurationTimeout = (timeout = 300) =>
 	new AppStorage().getStorage().settings.disableTransition ? 0 : timeout
 
 export const handleClickLink = event => {
 	event.preventDefault()
-	API.openExternalLink(event.target.href)
+
+	let element = event.target
+	let reference = element?.href
+
+	if (!reference) return
+
+	navigator.clipboard.writeText(reference).then(
+		() => {
+			showToast('info', `'${reference}' was copied to clipboard`)
+		},
+		() => {
+			showToast('error', `Fail! '${reference}' wasn't copied to clipboard`)
+		}
+	)
+
+	API.openExternalLink(reference)
+
+	element = null
 }

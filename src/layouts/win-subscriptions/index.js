@@ -1,9 +1,9 @@
-import { initPages, disablePages } from '../../js/components/pages'
-import { fillAuthorCard } from '../card-author/author-card'
-import { showToast } from './toast'
-import { getSelector, isEmpty, getDurationTimeout } from '../../js/global'
-import { AppStorage } from '../../js/components/app-storage'
-import { resetIndicator } from './indicator'
+import { getSelector } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
+import { initPages, disablePages } from 'Components/grid-btns'
+import { fillAuthorCard } from 'Components/card/card-author'
+import { showToast } from 'Components/toast'
+import { resetIndicator } from 'Components/indicator'
 
 const appStorage = new AppStorage()
 let storage = appStorage.getStorage()
@@ -54,15 +54,15 @@ export const openWinSubs = async _ => {
 
 		try {
 			channelInfoArray = [].concat.apply([], await Promise.all(promises))
-		} catch (error) {
-			showToast('error', error.message)
+		} catch ({ message }) {
+			showToast('error', message)
 		} finally {
 			resetIndicator()
 		}
 
 		if (channelInfoArray && channelInfoArray.length > 0) {
 			for (let index = 0, { length } = subs; index < length; index += 1) {
-				const sub = subs[index]
+				const sub = storage.subscriptions[index]
 				const channelInfo = channelInfoArray[index]
 
 				if (!btnSubscriptions.classList.contains('_active')) return

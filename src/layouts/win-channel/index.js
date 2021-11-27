@@ -1,9 +1,10 @@
-import { getSelector, normalizeDesc, isEmpty } from '../../js/global'
-import { showToast } from './toast'
-import { removeSkeleton, resetSkeleton } from './skeleton'
-import { resetGrid } from '../../js/components/grid'
-import { prepareSubscribeBtn, destroySubscribeBtn } from '../win-subscriptions/win-subscriptions'
-import { initTabs, destroyTabs, hideLastTab } from '../../components/tabs/tabs'
+import { getSelector, isEmpty, handleClickLink } from 'Global/utils'
+import { showToast } from 'Components/toast'
+import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
+import { resetGrid } from 'Components/grid'
+import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
+import { initTabs, destroyTabs, hideLastTab } from 'Components/tabs'
+import { normalizeAbout } from 'Layouts/win-channel/helper'
 
 const getChannelData = id => API.scrapeChannelInfo(id)
 
@@ -74,7 +75,9 @@ const openWinChannel = data => {
 	channelFollowers.textContent = subscriberText
 	removeSkeleton(followersSkeleton)
 
-	if (description) channelDescription.innerHTML = `${normalizeDesc(description)}`
+	channelDescription.innerHTML = !isEmpty(description) ? `${normalizeAbout(description)}` : 'No information...'
+
+	channelDescription.addEventListener('click', handleClickLink)
 
 	hideLastTab()
 	initTabs(0)
@@ -108,7 +111,7 @@ export const resetWinChannel = _ => {
 
 	channelBanner.style.setProperty('--bg-image', 'none center')
 	channelBannerImg.removeAttribute('src')
-	channelFollowers.textContent = '...'
+	channelFollowers.textContent = 'subscribers'
 	channelAuthor.textContent = '...'
 
 	if (skeletonAll.length > 0) {
@@ -124,6 +127,8 @@ export const resetWinChannel = _ => {
 	destroyTabs()
 
 	channelDescription.textContent = null
+
+	channelDescription.removeEventListener('click', handleClickLink)
 
 	channel = null
 	subscribeBtn = null

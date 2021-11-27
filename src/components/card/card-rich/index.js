@@ -1,3 +1,6 @@
+import { removeSkeleton } from 'Components/skeleton'
+import { onErrorImage } from 'Components/card/helper'
+
 export const fillChannelCard = (channel, index, data) => {
 	let channelCard = channel
 	let channelImage = channelCard.querySelector('.card__image img')

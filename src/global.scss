@@ -1,8 +1,8 @@
-@import './global/vars';
+@import './global/scss/vars';
 
-@import './global/fonts';
+@import './global/scss/fonts';
 
-@import './global/settings';
+@import './global/scss/settings';
 
 .outter-container {
 	width: clamp(320px, 100%, 1600px);

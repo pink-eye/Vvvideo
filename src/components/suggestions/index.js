@@ -1,7 +1,7 @@
-import { isEmpty, hasFocus, getProxyOptions } from '../../js/global'
-import { AppStorage } from '../../js/components/app-storage'
-import { showToast } from './toast'
-import { showOverlay, hideOverlay } from '../overlay/overlay'
+import { isEmpty, hasFocus } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
+import { showToast } from 'Components/toast'
+import { showOverlay, hideOverlay } from 'Components/overlay'
 
 let lastSelected = null
 
@@ -90,7 +90,7 @@ const initSuggests = parent => {
 	let searchBar = parent.querySelector('.search__bar')
 
 	const appStorage = new AppStorage()
-	const { disableSearchSuggestions, enableProxy } = appStorage.getStorage().settings
+	const { disableSearchSuggestions, enableProxy, proxy } = appStorage.getStorage().settings
 
 	if (disableSearchSuggestions) return
 
@@ -104,7 +104,7 @@ const initSuggests = parent => {
 			if (query.length > 0) {
 				try {
 					let data = enableProxy
-						? await API.scrapeSuggestsProxy(query, getProxyOptions())
+						? await API.scrapeSuggestsProxy(query, proxy)
 						: await API.scrapeSuggests(query)
 
 					resetSelected(parent)

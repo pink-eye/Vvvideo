@@ -1,8 +1,11 @@
-import { showToast } from './toast'
-import { getProxyOptions, getSelector, filterSearchResults } from '../../js/global'
-import { initPages, disablePages } from '../../js/components/pages'
-import { fillVideoCard, fillChannelCard, fillPlaylistCard } from '../../js/components/card'
-import { AppStorage } from '../../js/components/app-storage'
+import { getSelector } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
+import { filterSearchResults } from 'Layouts/win-search-results/helper'
+import { initPages, disablePages } from 'Components/grid-btns'
+import { showToast } from 'Components/toast'
+import { fillVideoCard } from 'Components/card/card-video'
+import { fillPlaylistCard } from 'Components/card/card-playlist'
+import { fillChannelCard } from 'Components/card/card-rich'
 
 let lastSearchResult = null
 
@@ -15,11 +18,11 @@ export const openWinSearchResults = async _ => {
 		let data = null
 
 		const appStorage = new AppStorage()
-		const storage = appStorage.getStorage()
+		const { enableProxy, proxy } = appStorage.getStorage().settings
 
 		if (lastSearchResult?.originalQuery !== searchBar.value) {
-			data = storage.settings.enableProxy
-				? await API.scrapeSearchResultsProxy(searchBar.value, getProxyOptions())
+			data = enableProxy
+				? await API.scrapeSearchResultsProxy(searchBar.value, proxy)
 				: await API.scrapeSearchResults(searchBar.value)
 
 			lastSearchResult = data

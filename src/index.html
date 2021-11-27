@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<link rel="stylesheet" href="css/preloader.css" />
+		<link rel="stylesheet" href="css/components/preloader/preloader.css" />
 		<script>
 			const handleLoadWindow = _ => {
 				let preloader = document.querySelector('.preloader')
@@ -30,29 +30,29 @@
 
 	<body>
 
-		@include('html/indicator.html')
-		@include('html/preloader.html')
-		@include('html/overlay.html')
-		@include('html/header.html')
-		@include('html/sidebar.html')
+		@include('./components/indicator/indicator.html')
+		@include('./components/preloader/preloader.html')
+		@include('./components/overlay/overlay.html')
+		@include('./components/header/header.html')
+		@include('./components/sidebar/sidebar.html')
 
 		<main class="main">
 			<div class="main__outter-container">
 				<div class="main__content">
-					@include('html/win-channel.html')
-					@include('html/win-latest.html')
-					@include('html/win-history.html')
-					@include('html/win-subscriptions.html')
-					@include('html/win-search-results.html')
-					@include('html/win-video.html')
-					@include('html/win-playlist.html')
-					@include('html/win-settings.html')
+					@include('./layouts/win-channel/win-channel.html')
+					@include('./layouts/win-latest/win-latest.html')
+					@include('./layouts/win-history/win-history.html')
+					@include('./layouts/win-subscriptions/win-subscriptions.html')
+					@include('./layouts/win-search-results/win-search-results.html')
+					@include('./layouts/win-video/win-video.html')
+					@include('./layouts/win-playlist/win-playlist.html')
+					@include('./layouts/win-settings/win-settings.html')
 				</div>
 			</div>
 		</main>
 
-		@include('html/footer.html')
-		@include('html/toast.html')
+		@include('./components/footer/footer.html')
+		@include('./components/toast/toast.html')
 
 		<div class="modal">
 			<div
@@ -61,7 +61,7 @@
 				role="dialog"
 				aria-modal="true"
 				data-graph-target="dialog-sb">
-				<div class="modal-content">@include('dialog-sb.html')</div>
+				<div class="modal-content">@include('./components/dialog-sb/dialog-sb.html')</div>
 			</div>
 		</div>
 

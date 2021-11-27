@@ -36,10 +36,13 @@
 				</aside>
 			</div>
 			<div class="video-info__about">
-				@include('author-card.html')
-				<div class="video-info__wrapper">@include('subscribe.html')</div>
+				@include('../../../components/card/card-author/card-author.html')
+				<div class="video-info__wrapper">@include('../../../components/subscribe/subscribe.html')</div>
 			</div>
 		</div>
-		@include('spoiler.html')
+		@include('../../../components/spoiler/spoiler.html', {
+			"title": "Description",
+			"text": "Description will be here..."
+		})
 	</div>
 </section>

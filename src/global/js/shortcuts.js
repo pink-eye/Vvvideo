@@ -1,7 +1,7 @@
-import { hideOverlay } from '../../components/overlay/overlay'
-import { toggleMenu } from './burger'
-import { getSelector, hasFocus } from './utils'
-import { scrapeInfoToSwitchPage, nextPage, prevPage } from './pages'
+import { hideOverlay } from 'Components/overlay'
+import { toggleMenu } from 'Components/burger'
+import { getSelector, hasFocus } from 'Global/utils'
+import { scrapeInfoToSwitchPage, nextPage, prevPage } from 'Components/grid-btns'
 
 export const handleKeyDown = event => {
 	// ESC
@@ -34,7 +34,7 @@ export const handleKeyDown = event => {
 	if (event.ctrlKey && event.keyCode === 66) toggleMenu()
 
 	// SHIFT
-	if (event.shiftKey) {
+	if (event.shiftKey && (event.keyCode === 75 || event.keyCode === 74)) {
 		let winActive = getSelector('.main__content').querySelector('.win._active')
 
 		if (winActive && !winActive.classList.contains('settings') && !winActive.classList.contains('video')) {
@@ -46,8 +46,8 @@ export const handleKeyDown = event => {
 
 			if (btns && btns.hidden) return
 
+			// K
 			if (event.keyCode === 75) {
-				// K
 				if (btnNextPage && !btnNextPage.disabled)
 					nextPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
 			}

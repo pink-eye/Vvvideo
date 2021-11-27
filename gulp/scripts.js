@@ -27,13 +27,9 @@ const logESLintResult = result => {
 	let { messages } = result
 
 	if (messages.length > 0) {
-		const unnecessaryPathLength = 46
-		const pathLength = filePath.length
-		const slicedPath = filePath.slice(unnecessaryPathLength, pathLength)
-
 		console.log('')
 		console.log('')
-		console.log(`[${chalk.blue('ESLint')}]: ${path(slicedPath)}`)
+		console.log(`[${chalk.blue('ESLint')}]: ${path(filePath)}`)
 		console.log('')
 
 		messages.forEach(msg => {
@@ -105,20 +101,20 @@ const logESLintTotalResults = results => {
 }
 
 const lintScripts = () =>
-	src(['./src/js/global.js', './src/js/components/**.js', './src/js/main.js'])
+	src(['./src/components/**/*.js', './src/layouts/**/*.js', './src/global/**/*.js', './src/main.js'])
 		.pipe(eslint({ fix: true }))
 		.pipe(eslint.result(logESLintResult))
 		.pipe(eslint.results(logESLintTotalResults))
 
 const bundleModules = () => {
-	src('./src/js/vendor/**.js').pipe(concat('vendor.js')).pipe(dest('./bundle/js/'))
-	return src(['./src/js/global.js', './src/js/components/**.js', './src/js/main.js'])
+	src('./src/lib/scripts/*.js').pipe(concat('vendor.js')).pipe(dest('./bundle/js/'))
+	return src(['./src/components/**/*.js', './src/layouts/**/*.js', './src/global/**/*.js', './src/main.js'])
 		.pipe(webpackStream(webpackConfig), webpack)
 		.pipe(dest('./bundle/js'))
 }
 
 const watchScripts = () => {
-	watch('./src/js/**/*.js', bundleModules)
+	watch(['./src/components/**/*.js', './src/layouts/**/*.js', './src/global/**/*.js', './src/main.js'], bundleModules)
 }
 
 module.exports = { cleanScripts, lintScripts, bundleModules, watchScripts }

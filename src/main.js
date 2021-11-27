@@ -1,19 +1,17 @@
-import { getSelector, hideOnScroll, isEmpty, reloadApp } from '../js/global'
-import { openWinLatest } from './layouts/win-latest/win-latest'
-import { fillWinSettings, setTheme } from '../components/win-settings/win-settings'
-import { initSuggests, hideSuggest, resetSelected, chooseSuggest } from './components/suggestions/suggestions'
-import { showOverlay, hideOverlay } from './components/overlay/overlay'
-import { manageWin } from './components/win-manager'
-import { initDropdown, hideLastDropdown, startDropdowns } from './components/dropdown'
-import { AppStorage } from './components/app-storage'
-import { handleKeyDown } from './components/shortcuts'
-import { toggleMenu } from './components/burger'
-
+import { getSelector, hideOnScroll, isEmpty, reloadApp, closeApp } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
+import { manageWin } from 'Global/win-manager'
+import { handleKeyDown } from 'Global/shortcuts'
+import { openWinLatest } from 'Layouts/win-latest'
+import { fillWinSettings, setTheme } from 'Layouts/win-settings'
+import { initSuggests, hideSuggest, resetSelected, chooseSuggest } from 'Components/suggestions'
+import { showOverlay, hideOverlay } from 'Components/overlay'
+import { initDropdown, hideLastDropdown, startDropdowns } from 'Components/dropdown'
+import { toggleMenu } from 'Components/burger'
 
 document.addEventListener('DOMContentLoaded', startDropdowns)
 
 document.addEventListener('DOMContentLoaded', async _ => {
-
 	// MAIN SELECTORS
 	const header = getSelector('.header')
 	const sidebar = getSelector('.sidebar')
@@ -132,6 +130,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	burger.addEventListener('click', toggleMenu)
 
 	// INIT RELOAD ON CLICK
-	const headerReload = header.querySelector('.header__btn');
-	headerReload.addEventListener('click', reloadApp);
+	const headerReload = header.querySelector('.header__btn')
+	headerReload.addEventListener('click', reloadApp)
+
+	const btnExit = sidebar.querySelector('.btn-exit')
+	btnExit.addEventListener('click', closeApp)
 })

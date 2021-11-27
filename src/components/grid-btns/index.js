@@ -1,8 +1,11 @@
-import { resetGrid, resetGridAuthorCard } from './grid'
-import { scrollToElem, getCoordY, filterSearchResults } from '../global'
-import { showToast } from './toast'
-import { fillVideoCard, fillPlaylistCard, fillChannelCard } from './card'
-import { fillAuthorCard } from '../../components/card-author/author-card'
+import { scrollToElem, getCoordY } from 'Global/utils'
+import { filterSearchResults } from 'Layouts/win-search-results/helper'
+import { resetGrid, resetGridAuthorCard } from 'Components/grid'
+import { showToast } from 'Components/toast'
+import { fillAuthorCard } from 'Components/card/card-author'
+import { fillVideoCard } from 'Components/card/card-video'
+import { fillPlaylistCard } from 'Components/card/card-playlist'
+import { fillChannelCard } from 'Components/card/card-rich'
 
 let increment = null
 let page = null

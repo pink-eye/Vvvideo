@@ -1,15 +1,15 @@
-class YoutubeHelper {
+export class YoutubeHelper {
 	hasBaseDomain(url) {
 		const regExp = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/
 		return url.match(regExp) && url.match(regExp).length > 0
 	}
 
 	isChannel(url) {
-		return hasBaseDomain(url) && (url.includes('/user/') || url.includes('/channel/') || url.includes('/c/'))
+		return this.hasBaseDomain(url) && (url.includes('/user/') || url.includes('/channel/') || url.includes('/c/'))
 	}
 
 	isPlaylist(url) {
-		return hasBaseDomain(url) && url.includes('playlist?list=')
+		return this.hasBaseDomain(url) && url.includes('playlist?list=')
 	}
 
 	getChannelId(url) {

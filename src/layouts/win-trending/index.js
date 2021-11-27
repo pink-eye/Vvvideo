@@ -1,7 +1,7 @@
-import { initPages, disablePages } from '../../js/components/pages'
-import { fillVideoCard } from '../../js/components/card'
-import { showToast } from './toast'
-import { getSelector } from '../../js/global'
+import { getSelector } from 'Global/utils'
+import { initPages, disablePages } from 'Components/grid-btns'
+import { fillVideoCard } from 'Components/card/card-video'
+import { showToast } from 'Components/toast'
 
 export const openWinTrending = async (geoLocation = 'US', page = 'default') => {
 	let trending = getSelector('.trending')

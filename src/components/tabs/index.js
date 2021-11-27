@@ -1,8 +1,9 @@
-import { getSelector } from '../../js/global'
-import { resetGrid } from '../../js/components/grid'
-import { fillVideoCard, fillPlaylistCard } from '../../js/components/card'
-import { showToast } from './toast'
-import { initPages, disablePages } from '../../js/components/pages'
+import { getSelector } from 'Global/utils'
+import { resetGrid } from 'Components/grid'
+import { fillVideoCard } from 'Components/card/card-video'
+import { fillPlaylistCard } from 'Components/card/card-playlist'
+import { showToast } from 'Components/toast'
+import { initPages, disablePages } from 'Components/grid-btns'
 
 export const hideLastTab = _ => {
 	let channel = getSelector('.channel')
@@ -47,8 +48,8 @@ const showRequiredTab = async tab => {
 				data = await API.scrapeChannelPlaylists(channelId)
 				break
 		}
-	} catch (error) {
-		showToast('error', error.message)
+	} catch ({ message }) {
+		showToast('error', message)
 	}
 
 	if (data && channelTab !== 'About') {

@@ -1,4 +1,4 @@
-import { getSelector } from '../global'
+import { getSelector } from 'Global/utils'
 
 const createToastItemHTML = (type, text) =>
 	`<li class="toast__item _${type}"><div class="toast__icon"></div>${text}</li>`
@@ -25,7 +25,7 @@ const showToast = (type, text) => {
 			toastList = null
 			firstToastItem = null
 		}
-		
+
 		const beforeRemoveToast = _ => {
 			firstToastItem.classList.remove('_visible')
 

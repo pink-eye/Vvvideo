@@ -1,4 +1,4 @@
-import { getDurationTimeout } from '../global'
+import { getDurationTimeout } from 'Global/utils'
 
 const removeSkeleton = skeleton => {
 	let givenSkeleton = skeleton

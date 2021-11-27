@@ -1,6 +1,6 @@
-import { resetAuthorCard } from '../../components/card-author/author-card'
-import { resetCard } from './card'
-import { getSelector } from '../global'
+import { getSelector } from 'Global/utils'
+import { resetCard } from 'Components/card'
+import { resetAuthorCard } from 'Components/card/card-author'
 
 const resetGridAuthorCard = _ => {
 	let subscriptions = getSelector('.subscriptions')

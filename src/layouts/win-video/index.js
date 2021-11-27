@@ -1,18 +1,22 @@
-import { getSelector, normalizeCount, normalizeDesc, formatDate, isEmpty, getProxyOptions } from '../../js/global'
-import { fillAuthorCard, resetAuthorCard } from '../card-author/author-card'
-import { saveVideoInHistory } from '../win-history/win-history'
-import { initSpoiler, destroySpoiler } from '../spoiler/spoiler'
-import { showToast } from './toast'
-import { resetSkeleton, removeSkeleton } from './skeleton'
-import { prepareSubscribeBtn, destroySubscribeBtn } from '../win-subscriptions/win-subscriptions'
-import { AppStorage } from '../../js/components/app-storage'
-import { initVideoPlayer } from '../../js/components/video-player'
+import { getSelector, normalizeCount, isEmpty } from 'Global/utils'
+import { formatDate } from 'Layouts/win-video/helper'
+import { fillAuthorCard, resetAuthorCard } from 'Components/card/card-author'
+import { saveVideoInHistory } from 'Layouts/win-history/helper'
+import { initSpoiler, destroySpoiler } from 'Components/spoiler'
+import { showToast } from 'Components/toast'
+import { resetSkeleton, removeSkeleton } from 'Components/skeleton'
+import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
+import { AppStorage } from 'Global/app-storage'
+import { initVideoPlayer } from 'Layouts/win-video/video-controls'
+import { normalizeVideoDescription } from 'Layouts/win-video/helper'
 
 const appStorage = new AppStorage()
 const storage = appStorage.getStorage()
 
-const getVideoData = id =>
-	storage.settings.enableProxy ? API.scrapeVideoProxy(id, getProxyOptions()) : API.scrapeVideo(id)
+const getVideoData = id => {
+	const { enableProxy, proxy } = storage.settings
+	return enableProxy ? API.scrapeVideoProxy(id, proxy) : API.scrapeVideo(id)
+}
 
 const openWinVideo = data => {
 	let video = getSelector('.video')
@@ -99,7 +103,7 @@ const openWinVideo = data => {
 
 		authorParams = null
 
-		spoilerContent.innerHTML = normalizeDesc(videoDetails.description)
+		spoilerContent.innerHTML = normalizeVideoDescription(videoDetails.description)
 
 		saveVideoInHistory(data)
 	}

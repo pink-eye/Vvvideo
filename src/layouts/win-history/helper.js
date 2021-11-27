@@ -1,32 +1,9 @@
-import { showToast } from './toast'
-import { fillVideoCard } from '../../js/components/card'
-import { AppStorage } from '../../js/components/app-storage'
-import { getSelector, convertSecondsToDuration, convertDurationToSeconds, convertToPercentage } from '../../js/global'
-import { initPages, disablePages } from '../../js/components/pages'
+import { AppStorage } from 'Global/app-storage'
+import { showToast } from 'Components/toast'
+import { getSelector, convertSecondsToDuration, convertDurationToSeconds, convertToPercentage } from 'Global/utils'
 
 const appStorage = new AppStorage()
 const storage = appStorage.getStorage()
-
-export const openWinHistory = _ => {
-	if (storage.settings.disableHistory) return
-
-	const { history } = storage
-
-	const historyWin = getSelector('.history')
-	let videoAll = historyWin.querySelectorAll('.card')
-
-	history.length > videoAll.length ? initPages(historyWin, history, videoAll, 'video') : disablePages(historyWin)
-
-	for (let index = 0, { length } = videoAll; index < length; index += 1) {
-		const video = videoAll[index]
-
-		video.classList.add('_history-video')
-
-		history[index] ? fillVideoCard(video, index, history) : (video.hidden = true)
-	}
-
-	videoAll = null
-}
 
 const isThisRecentHistoryItem = newItem => storage.history.length > 0 && newItem.id === storage.history[0].id
 

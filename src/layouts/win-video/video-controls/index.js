@@ -1,27 +1,34 @@
 import {
 	getSelector,
+	convertToPercentage,
+	isEmpty,
+	convertSecondsToDuration,
+	scrollToTop,
+	convertDurationToSeconds,
+	hasFocus,
+	handleClickLink,
+} from 'Global/utils'
+import {
+	getMin,
+	getPosStroryboard,
 	filterHLS,
 	filterVideoAndAudio,
 	filterVideoMP4NoAudio,
 	filterVideoWebm,
 	getPreferedQuality,
-	convertToPercentage,
-	isEmpty,
-	convertSecondsToDuration,
-	getPosStroryboard,
-	scrollToTop,
-	getMin,
-	convertDurationToSeconds,
-	hasFocus,
 	getHighestAudio,
-} from '../global'
-import { toggleSponsorblock, createSponsorblockItemHTML, getSegmentsSB } from './sponsorblock'
-import { initDropdown } from './dropdown'
-import { removeSkeleton } from './skeleton'
-import { showToast } from './toast'
-import { getWatchedtTime } from '../../components/win-history/win-history'
-import { initDialogSB, recordSegmentSB } from './dialog-sb'
-import { AppStorage } from './app-storage'
+} from 'Layouts/win-video/video-controls/helper'
+import {
+	toggleSponsorblock,
+	createSponsorblockItemHTML,
+	getSegmentsSB,
+} from 'Layouts/win-video/video-controls/sponsorblock'
+import { initDropdown } from 'Components/dropdown'
+import { removeSkeleton } from 'Components/skeleton'
+import { showToast } from 'Components/toast'
+import { getWatchedtTime } from 'Layouts/win-history/helper'
+import { initDialogSB, recordSegmentSB } from 'Components/dialog-sb'
+import { AppStorage } from 'Global/app-storage'
 
 let hasListeners = false
 let isFirstPlay = true
@@ -727,13 +734,18 @@ const handleError = _ => {
 }
 
 const handleClickTimecode = event => {
-	if (event.target.classList.contains('timecode')) {
-		let timecode = event.target
-		getSelector('video').currentTime = convertDurationToSeconds(timecode.textContent)
-		isSync = false
-		document.activeElement.blur()
-		scrollToTop()
-	}
+	if (!event.target.classList.contains('timecode')) return
+
+	let timecode = event.target
+	getSelector('video').currentTime = convertDurationToSeconds(timecode.textContent)
+	isSync = false
+	document.activeElement.blur()
+	scrollToTop()
+}
+
+const handleClickContent = event => {
+	handleClickLink(event)
+	handleClickTimecode(event)
 }
 
 const handleInputVolumeSeek = _ => {
@@ -928,7 +940,7 @@ export const initVideoPlayer = data => {
 
 	volumeSeek.addEventListener('input', handleInputVolumeSeek)
 
-	spoilerContent.addEventListener('click', handleClickTimecode)
+	spoilerContent.addEventListener('click', handleClickContent)
 
 	progressSeek.addEventListener('input', skipAhead)
 
@@ -1071,7 +1083,7 @@ export const resetVideoPlayer = _ => {
 
 	volumeSeek.removeEventListener('input', handleInputVolumeSeek)
 
-	spoilerContent.removeEventListener('click', handleClickTimecode)
+	spoilerContent.removeEventListener('click', handleClickContent)
 
 	progressSeek.removeEventListener('input', skipAhead)
 

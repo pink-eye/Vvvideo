@@ -1,4 +1,4 @@
-import { getSelector } from '../global'
+import { getSelector } from 'Global/utils'
 
 const resetIndicator = _ => {
 	let indicator = getSelector('.indicator')

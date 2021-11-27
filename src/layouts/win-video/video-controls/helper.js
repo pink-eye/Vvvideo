@@ -1,3 +1,5 @@
+import { AppStorage } from 'Global/app-storage'
+
 export const getMin = (a, b) => (a > b ? b : a)
 
 export const round = (n, d) => Number(~~(n + 'e' + d) + 'e-' + d)

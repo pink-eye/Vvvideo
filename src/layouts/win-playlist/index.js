@@ -1,16 +1,18 @@
-import { getSelector, getProxyOptions, isEmpty, normalizeCount, convertSecondsToDuration } from '../../js/global'
-import { fillAuthorCard, resetAuthorCard } from '../card-author/author-card'
-import { resetGrid } from '../../js/components/grid'
-import { fillVideoCard } from '../../js/components/card'
-import { resetSkeleton, removeSkeleton } from './skeleton'
-import { initPages, disablePages } from '../../js/components/pages'
-import { showToast } from './toast'
-import { AppStorage } from '../../js/components/app-storage'
+import { getSelector, isEmpty, normalizeCount, convertSecondsToDuration } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
+import { resetGrid } from 'Components/grid'
+import { showToast } from 'Components/toast'
+import { fillVideoCard } from 'Components/card/card-video'
+import { initPages, disablePages } from 'Components/grid-btns'
+import { resetSkeleton, removeSkeleton } from 'Components/skeleton'
+import { fillAuthorCard, resetAuthorCard } from 'Components/card/card-author'
 
-const getPlaylistData = id =>
-	new AppStorage().getStorage().settings.enableProxy
-		? API.scrapePlaylistVideosProxy(id, getProxyOptions())
-		: API.scrapePlaylistVideos(id)
+const getPlaylistData = id => {
+	const appStorage = new AppStorage()
+	const { proxy, enableProxy } = appStorage.getStorage().settings
+
+	return enableProxy ? API.scrapePlaylistVideosProxy(id, proxy) : API.scrapePlaylistVideos(id)
+}
 
 const openWinPlaylist = data => {
 	let playlist = getSelector('.playlist')

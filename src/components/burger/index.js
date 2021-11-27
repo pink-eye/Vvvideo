@@ -1,6 +1,5 @@
-import { getDurationTimeout } from '../global'
-import { AppStorage } from './app-storage'
-import { getSelector } from '../global'
+import { getDurationTimeout, getSelector } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
 
 const isLargeScreen = _ => (window.innerWidth - 1600) / 2 > 226
 

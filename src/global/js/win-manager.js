@@ -1,25 +1,19 @@
-import { resetGrid, resetGridAuthorCard } from './grid'
-import {
-	getSelector,
-	scrollToTop,
-	isResourceIsChannel,
-	isResourceIsPlaylist,
-	getDurationTimeout,
-	getPlaylistId,
-	getChannelIdOrUser,
-} from './utils'
-import { activateSidebarBtn, deactivateLastSidebarBtn } from './sidebar'
-import { openWinSettings, resetWinSettings } from '../../components/win-settings/win-settings'
-import { openWinHistory, rememberWatchedTime } from '../../components/win-history/win-history'
-import { resetVideoPlayer } from './video-player'
-import { prepareWinPlaylist, resetWinPlaylist } from '../../components/win-playlist/win-playlist'
-import { prepareWinChannel, resetWinChannel } from '../../layouts/win-channel/win-channel'
-import { openWinTrending } from '../../layouts/win-trending/win-trending'
-import { openWinSubs } from '../../components/win-subscriptions/win-subscriptions'
-import { openWinSearchResults } from '../../layouts/win-search-results/win-search-results'
-import { openWinLatest } from '../../layouts/win-latest/win-latest'
-import { prepareWinVideo, resetWinVideo } from '../../components/win-video/win-video'
-import { AppStorage } from './app-storage'
+import { getSelector, scrollToTop, getDurationTimeout } from 'Global/utils'
+import { AppStorage } from 'Global/app-storage'
+import { YoutubeHelper } from 'Global/youtube-helper'
+import { resetGrid, resetGridAuthorCard } from 'Components/grid'
+import { activateSidebarBtn, deactivateLastSidebarBtn } from 'Components/sidebar'
+import { openWinSettings, resetWinSettings } from 'Layouts/win-settings'
+import { openWinHistory } from 'Layouts/win-history'
+import { rememberWatchedTime } from 'Layouts/win-history/helper'
+import { openWinSubs } from 'Layouts/win-subscriptions'
+import { prepareWinVideo, resetWinVideo } from 'Layouts/win-video'
+import { prepareWinPlaylist, resetWinPlaylist } from 'Layouts/win-playlist'
+import { resetVideoPlayer } from 'Layouts/win-video/video-controls'
+import { prepareWinChannel, resetWinChannel } from 'Layouts/win-channel'
+import { openWinTrending } from 'Layouts/win-trending'
+import { openWinSearchResults } from 'Layouts/win-search-results'
+import { openWinLatest } from 'Layouts/win-latest'
 
 const resetWin = win => {
 	if (
@@ -132,6 +126,7 @@ export const manageWin = async event => {
 		if (win === 'search-results') {
 			let searchBar = getSelector('.search__bar')
 			const { value } = searchBar
+			const yh = new YoutubeHelper()
 
 			if (API.isYTVideoURL(value)) {
 				win = 'video'
@@ -139,16 +134,16 @@ export const manageWin = async event => {
 				winSelector = getSelector('.video')
 			}
 
-			if (isResourceIsPlaylist(value)) {
+			if (yh.isPlaylist(value)) {
 				win = 'playlist'
 				winSelector = getSelector('.playlist')
-				id = getPlaylistId(value)
+				id = yh.getPlaylistId(value)
 			}
 
-			if (isResourceIsChannel(value)) {
+			if (yh.isChannel(value)) {
 				win = 'channel'
 				winSelector = getSelector('.channel')
-				id = getChannelIdOrUser(value)
+				id = yh.getChannelId(value)
 			}
 
 			btnWin = null

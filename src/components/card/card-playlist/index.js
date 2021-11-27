@@ -1,3 +1,6 @@
+import { removeSkeleton } from 'Components/skeleton'
+import { onErrorImage } from 'Components/card/helper'
+
 export const fillPlaylistCard = (playlist, index, data) => {
 	let playlistCard = playlist
 	let playlistImage = playlistCard.querySelector('.card__image img')

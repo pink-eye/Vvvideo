@@ -1,3 +1,8 @@
+import { normalizeCount, convertSecondsToDuration } from 'Global/utils'
+import { removeSkeleton } from 'Components/skeleton'
+import { onErrorImage } from 'Components/card/helper'
+import { calculateWatchedProgress, getWatchedtTime } from 'Layouts/win-history/helper'
+
 export const fillVideoCard = (video, index, data) => {
 	let videoCard = video
 	let videoImage = videoCard.querySelector('.card__image img')
