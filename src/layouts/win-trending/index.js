@@ -22,8 +22,8 @@ export const openWinTrending = async (geoLocation = 'US', page = 'default') => {
 			const video = videoAll[index]
 			fillVideoCard(video, index, data)
 		}
-	} catch (error) {
-		showToast('error', error.message)
+	} catch ({ message }) {
+		showToast('error', message)
 	} finally {
 		parameters = null
 		videoAll = null
