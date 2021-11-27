@@ -21,11 +21,11 @@ const enablePages = parent => {
 }
 
 const updateCount = parent => {
-	let gridCount = parent.querySelector('.grid__count')
+	let count = parent.querySelector('.btns__count')
 
-	gridCount && (gridCount.textContent = page)
+	count && (count.textContent = page)
 
-	gridCount = null
+	count = null
 }
 
 const recycleDOM = async (cardAll, typeCard) => {
@@ -76,14 +76,14 @@ const recycleDOM = async (cardAll, typeCard) => {
 	}
 }
 
-const createPages = _ => `<div class="grid__btns btns" hidden>
+const createPages = _ => `<div class="btns" hidden>
 							<button disabled class="btns__prev btn-secondary onclick-effect btn-reset">
 								<svg width="28px" height="28px">
 									<use xlink:href='img/svg/nav.svg#arrow'></use>
 								</svg>
 								previous page
 							</button>
-							<span class="grid__count">1</span>
+							<span class="btns__count">1</span>
 							<button class="btns__next btn-secondary onclick-effect btn-reset">
 								<svg width="28px" height="28px">
 									<use xlink:href='img/svg/nav.svg#arrow'></use>
@@ -198,11 +198,11 @@ export const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) =>
 }
 
 const resetCount = parent => {
-	let gridCount = parent.querySelector('.grid__count')
+	let count = parent.querySelector('.btns__count')
 
-	if (gridCount && +gridCount.textContent !== 1) gridCount.textContent = 1
+	if (count && +count.textContent !== 1) count.textContent = 1
 
-	gridCount = null
+	count = null
 }
 
 const resetBtns = (btnNextPage, btnPrevPage) => {
