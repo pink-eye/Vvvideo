@@ -31,10 +31,10 @@ const buildStorage = data => {
 			const { channelId, name: author } = subscriptions[0]
 
 			if (channelId && author) {
-				storage.subscriptions.push(...subscriptions)
+				storage.subscriptions = subscriptions
 			} else {
 				const yh = new YoutubeHelper()
-
+				
 				for (let index = 0, { length } = subscriptions; index < length; index += 1) {
 					const subscription = subscriptions[index]
 					const { url, name } = subscription
@@ -52,7 +52,7 @@ const buildStorage = data => {
 		const { history } = data
 
 		if (history.length > 0) {
-			storage.history.push(...history)
+			storage.history = history
 			keepHistoryArray()
 		}
 	}
