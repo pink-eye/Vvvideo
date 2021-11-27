@@ -10,7 +10,7 @@ const moveResources = () => src('src/res/**').pipe(dest('bundle'))
 const moveImages = () => src('src/img/**').pipe(dest('bundle/img'))
 
 const transformHTML = () =>
-	src('src/**/*.html')
+	src('src/*.html')
 		.pipe(
 			fileInclude({
 				prefix: '@',
