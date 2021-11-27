@@ -8,7 +8,7 @@ import { resetSkeleton, removeSkeleton } from 'Components/skeleton'
 import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
 import { AppStorage } from 'Global/app-storage'
 import { initVideoPlayer } from 'Layouts/win-video/video-controls'
-import { normalizeVideoDescription } from 'Layouts/win-video/helper'
+import { normalizeVideoDescription, roundNum } from 'Layouts/win-video/helper'
 
 const appStorage = new AppStorage()
 const storage = appStorage.getStorage()
@@ -94,7 +94,7 @@ const openWinVideo = data => {
 		let authorParams = {
 			parent: authorCard,
 			name: videoDetails.author.name,
-			subs: `${normalizeCount(videoDetails.author.subscriber_count)} subscribers`,
+			subs: `${roundNum(videoDetails.author.subscriber_count)} subscribers`,
 			id: videoDetails.author.id,
 			avatarSrc: videoDetails.author.thumbnails ? videoDetails.author.thumbnails.at(-1).url : '',
 		}

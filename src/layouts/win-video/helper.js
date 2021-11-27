@@ -4,7 +4,7 @@ export const normalizeVideoDescription = text => {
 	if (typeof text !== 'string' || text.length == 0) return undefined
 
 	let patternHashtag = /#[A-ZА-ЯЁ]*[0-9]*[-\.]?[A-ZА-ЯЁ]*[0-9]*/gim
-	let patternEmail = /[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/igm
+	let patternEmail = /[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/gim
 	let patternTimecodeMSS = /^[0-9]:[0-5][0-9]/gim
 	let patternTimecodeMMSS = /^[0-5][0-9]:[0-5][0-9]/gim
 	let patternTimecodeHMMSS = /^[0-9]:[0-5][0-9]:[0-5][0-9]/gim
@@ -20,4 +20,27 @@ export const normalizeVideoDescription = text => {
 		.replace(patternTimecodeMMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
 		.replace(patternTimecodeMSS, timecode => `<button class='timecode btn-reset'>${timecode}</button>`)
 		.replace(/\n/gi, '<br>')
+}
+
+export const roundNum = num => {
+	let numStr = num.toString().replace(/[^0-9.]/g, '')
+
+	if (numStr < 1000) return numStr
+
+	let si = [
+		{ v: 1e3, s: 'K' },
+		{ v: 1e6, s: 'M' },
+		{ v: 1e9, s: 'B' },
+		{ v: 1e12, s: 'T' },
+		{ v: 1e15, s: 'P' },
+		{ v: 1e18, s: 'E' },
+	]
+
+	let index
+
+	for (index = si.length - 1; index > 0; index--) {
+		if (numStr >= si[index].v) break
+	}
+
+	return (numStr / si[index].v).toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, '$1') + si[index].s
 }
