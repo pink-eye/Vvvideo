@@ -26,7 +26,7 @@ import {
 import { initDropdown } from 'Components/dropdown'
 import { removeSkeleton } from 'Components/skeleton'
 import { showToast } from 'Components/toast'
-import { getWatchedtTime } from 'Layouts/win-history/helper'
+import { getWatchedtTime, rememberWatchedTime } from 'Layouts/win-history/helper'
 import { initDialogSB, recordSegmentSB } from 'Components/dialog-sb'
 import { AppStorage } from 'Global/app-storage'
 
@@ -38,7 +38,7 @@ let hls = null
 let segmentsSB = []
 
 const appStorage = new AppStorage()
-const storage = appStorage.getStorage()
+let storage = null
 
 const resetMediaEl = el => {
 	el.pause()
@@ -203,6 +203,8 @@ const prepareVideoPlayer = data => {
 }
 
 const initSponsorblockSegments = data => {
+	if (data.length === 0) return
+
 	let video = getSelector('video')
 	let progressSponsorblock = getSelector('.controls').querySelector('.progress__sponsorblock')
 	let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item')
@@ -831,16 +833,15 @@ const fillSegmentsSB = segments => {
 
 	toggleSponsorblock(disableSponsorblock)
 
-	if (disableSponsorblock) return
+	if (disableSponsorblock || segments.length === 0) return
 
 	let video = getSelector('.video')
 	let controlsProgess = video.querySelector('.controls__progress')
 	let progressSponsorblock = controlsProgess.querySelector('.sponsorblock')
 	let sponsorblockItemHTML = createSponsorblockItemHTML()
 
-	if (segments.length > 0) {
-		for (let index = 0, { length } = segments; index < length; index += 1)
-			progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML)
+	for (let index = 0, { length } = segments; index < length; index += 1) {
+		progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML)
 	}
 
 	video = null
@@ -849,7 +850,7 @@ const fillSegmentsSB = segments => {
 	sponsorblockItemHTML = null
 }
 
-export const initVideoPlayer = data => {
+export const initVideoPlayer = async data => {
 	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
 	const controlsSwitch = controls.querySelector('.controls__switch')
@@ -865,14 +866,17 @@ export const initVideoPlayer = data => {
 	const video = videoWrapper.querySelector('video')
 	const audio = videoWrapper.querySelector('audio')
 
+	storage = appStorage.getStorage()
+
 	const { autoplay } = storage.settings
 
 	try {
-		segmentsSB = getSegmentsSB(data.videoDetails.videoId)
-		fillSegmentsSB(segmentsSB)
+		segmentsSB = await getSegmentsSB(data.videoDetails.videoId)
 	} catch (error) {
 		showToast('info', `Sponsorblock doesn't have segments for this video`)
 	}
+	console.log(segmentsSB)
+	fillSegmentsSB(segmentsSB)
 
 	const videoFormats = prepareVideoPlayer(data)
 
@@ -964,6 +968,8 @@ export const initVideoPlayer = data => {
 		}
 	})
 
+	window.addEventListener('unload', rememberWatchedTime, { once: true })
+
 	// HOT KEYS
 
 	document.addEventListener('keydown', handleKeyDownWithinVideo)
@@ -1021,9 +1027,14 @@ export const resetVideoPlayer = _ => {
 	let speedCurrent = speed.querySelector('.dropdown__head')
 	let spoilerContent = videoParent.querySelector('.spoiler__content')
 
+	rememberWatchedTime()
+
+	window.removeEventListener('unload', rememberWatchedTime)
+
 	isFirstPlay ||= true
 	isSync &&= false
 	doesSkipSegments ||= true
+	segmentsSB.length = 0
 
 	while (sponsorblock.firstChild) sponsorblock.firstChild.remove()
 
