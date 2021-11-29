@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
 	output: {
@@ -9,14 +9,14 @@ module.exports = {
 		alias: {
 			Global: path.resolve(__dirname, 'src', 'global', 'js'),
 			Components: path.resolve(__dirname, 'src', 'components'),
-			Layouts: path.resolve(__dirname, 'src', 'layouts')
-		}
+			Layouts: path.resolve(__dirname, 'src', 'layouts'),
+		},
 	},
 	module: {
 		rules: [
 			{
 				test: /\.(js|jsx)$/,
-				exclude: /(node_modules)/,
+				exclude: [/(node_modules)/, /\.test.js/],
 				loader: 'babel-loader',
 				options: {
 					presets: [
