@@ -129,10 +129,11 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const burger = header.querySelector('.burger')
 	burger.addEventListener('click', toggleMenu)
 
-	// INIT RELOAD ON CLICK
+	// INIT BTN TO RELOAD APP
 	const headerReload = header.querySelector('.header__btn')
 	headerReload.addEventListener('click', reloadApp)
 
+	// INIT BTN TO CLOSE APP
 	const btnExit = sidebar.querySelector('.btn-exit')
 	btnExit.addEventListener('click', closeApp)
 })

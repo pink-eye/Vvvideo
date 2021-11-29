@@ -3,21 +3,21 @@ import { showToast } from 'Components/toast'
 import { getSelector, convertSecondsToDuration, convertDurationToSeconds, convertToPercentage } from 'Global/utils'
 
 const appStorage = new AppStorage()
-const storage = appStorage.getStorage()
+let storage = null
 
-const isThisRecentHistoryItem = newItem => storage.history.length > 0 && newItem.id === storage.history[0].id
+const isRecent = newItem => storage.history.length > 0 && newItem.id === storage.history[0].id
 
-const getSameHistoryItem = newItem => storage.history.find(item => item.id === newItem.id)
+const isExist = id => storage.history.find(item => item.id === id)
 
-const removeSameHistoryItem = newItem => {
-	storage.history = storage.history.filter(item => item.id !== newItem.id)
+const removeHistoryItem = id => {
+	storage.history = storage.history.filter(item => item.id !== id)
 }
 
-const addNewHistoryItem = newItem => {
+const addHistoryItem = newItem => {
 	storage.history = [newItem, ...storage.history]
 }
 
-export const keepHistoryArray = _ => {
+export const restrainHistoryLength = _ => {
 	const numWasteItemAll = storage.history.length - storage.settings.maxHistoryLength
 
 	if (numWasteItemAll <= 0) {
@@ -41,27 +41,32 @@ const scrapeVideoInfoFromData = data => {
 }
 
 export const saveVideoInHistory = data => {
+	storage = appStorage.getStorage()
+
 	if (storage.settings.disableHistory) return
 
 	if (data) {
 		const newItem = scrapeVideoInfoFromData(data)
-		if (!isThisRecentHistoryItem(newItem)) {
-			const sameItem = getSameHistoryItem(newItem)
+		if (!isRecent(newItem)) {
+			const { id } = newItem
+			const sameItem = isExist(id)
 
 			if (sameItem && sameItem?.watchedTime) {
 				newItem.watchedTime = sameItem.watchedTime
-				removeSameHistoryItem(newItem)
+				removeHistoryItem(id)
 			}
 
-			addNewHistoryItem(newItem)
+			addHistoryItem(newItem)
 
-			keepHistoryArray()
+			restrainHistoryLength()
 			appStorage.updateStorage(storage)
 		}
 	}
 }
 
 export const clearHistory = async _ => {
+	storage = appStorage.getStorage()
+
 	if (storage.history.length > 0) {
 		storage.history.length = 0
 		appStorage.updateStorage(storage)
@@ -84,6 +89,7 @@ export const disableHistory = _ => {
 }
 
 export const rememberWatchedTime = _ => {
+	storage = appStorage.getStorage()
 	const { disableHistory: isDisabledHistory, dontRememberWatchedTime } = storage.settings
 
 	if (isDisabledHistory && dontRememberWatchedTime) return
@@ -113,6 +119,7 @@ export const rememberWatchedTime = _ => {
 const getItemWithWatchedTime = videoId => storage.history.find(item => item.id === videoId && item?.watchedTime)
 
 export const getWatchedtTime = videoId => {
+	storage = appStorage.getStorage()
 	const { disableHistory: isDisabledHistory, dontRememberWatchedTime } = storage.settings
 
 	if (isDisabledHistory && dontRememberWatchedTime) return

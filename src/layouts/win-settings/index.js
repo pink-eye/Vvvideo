@@ -6,7 +6,7 @@ import { showToast } from 'Components/toast'
 import { clearHistory, disableHistory, keepHistoryArray } from 'Layouts/win-history/helper'
 
 const appStorage = new AppStorage()
-let storage = appStorage.getStorage()
+let storage = null
 
 const makeResultImport = (classResult, tip) => {
 	let settings = getSelector('.settings')
@@ -34,7 +34,7 @@ const buildStorage = data => {
 				storage.subscriptions = subscriptions
 			} else {
 				const yh = new YoutubeHelper()
-				
+
 				for (let index = 0, { length } = subscriptions; index < length; index += 1) {
 					const subscription = subscriptions[index]
 					const { url, name } = subscription
@@ -274,6 +274,7 @@ export const setTheme = themeOption => {
 }
 
 export const fillWinSettings = _ => {
+	storage = appStorage.getStorage()
 	const { settings: ss } = storage
 	const settings = getSelector('.settings')
 	const btnClearHistory = settings.querySelector('#clear-history')

@@ -11,9 +11,11 @@ import { initVideoPlayer } from 'Layouts/win-video/video-controls'
 import { normalizeVideoDescription, roundNum } from 'Layouts/win-video/helper'
 
 const appStorage = new AppStorage()
-const storage = appStorage.getStorage()
+let storage = null
 
 const getVideoData = id => {
+	storage = appStorage.getStorage()
+
 	const { enableProxy, proxy } = storage.settings
 	return enableProxy ? API.scrapeVideoProxy(id, proxy) : API.scrapeVideo(id)
 }

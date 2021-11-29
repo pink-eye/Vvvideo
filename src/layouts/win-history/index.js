@@ -3,10 +3,10 @@ import { getSelector } from 'Global/utils'
 import { fillVideoCard } from 'Components/card/card-video'
 import { initPages, disablePages } from 'Components/grid-btns'
 
-const appStorage = new AppStorage()
-const storage = appStorage.getStorage()
-
 export const openWinHistory = _ => {
+	const appStorage = new AppStorage()
+	const storage = appStorage.getStorage()
+
 	if (storage.settings.disableHistory) return
 
 	const { history } = storage

@@ -5,7 +5,6 @@ import { resetGrid, resetGridAuthorCard } from 'Components/grid'
 import { activateSidebarBtn, deactivateLastSidebarBtn } from 'Components/sidebar'
 import { openWinSettings, resetWinSettings } from 'Layouts/win-settings'
 import { openWinHistory } from 'Layouts/win-history'
-import { rememberWatchedTime } from 'Layouts/win-history/helper'
 import { openWinSubs } from 'Layouts/win-subscriptions'
 import { prepareWinVideo, resetWinVideo } from 'Layouts/win-video'
 import { prepareWinPlaylist, resetWinPlaylist } from 'Layouts/win-playlist'
@@ -98,8 +97,6 @@ const showWin = win => {
 const hideWin = win => {
 	if (win) {
 		win.classList.remove('_anim-win')
-
-		if (win.classList.contains('video')) rememberWatchedTime()
 
 		const onHideLastWin = _ => {
 			win.classList.remove('_active')

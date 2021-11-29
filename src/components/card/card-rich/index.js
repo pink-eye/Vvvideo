@@ -34,7 +34,7 @@ export const fillChannelCard = (channel, index, data) => {
 	removeSkeleton(titleSkeleton)
 
 	channelDescr.textContent = info.descriptionShort
-	channelSubs.textContent = info.subscribers
+	channelSubs.textContent = `${info.subscribers} •`
 	channelVideoCount.textContent = `${info.videos} video`
 
 	removeSkeleton(bottomSkeleton)
