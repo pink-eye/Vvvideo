@@ -5,7 +5,7 @@
 
 	color: var(--color-descr);
 	font-size: 1rem;
-	line-height: 22px;
+	line-height: 23px;
 
 	&._opened {
 
@@ -33,7 +33,7 @@
 		max-height: 0;
 		overflow: hidden;
 
-		background-color: var(--color-bg-form);
+		background-color: var(--color-bg-secondary);
 
 		transition: max-height var(--trns);
 	}
@@ -42,7 +42,7 @@
 		position: relative;
 
 		width: 100%;
-		max-width: 65ch;
+		max-width: 70ch;
 		margin: 0;
 
 		font-family: var(--ff);
@@ -52,19 +52,18 @@
 		transition: var(--trns);
 
 		@media (min-width: 48em) {
-			padding-block: 25px;
-			padding-right: 25px;
-			padding-left: 50px;
+			padding-block: 40px;
+			padding-left: 60px;
 
 			&::before {
 				position: absolute;
-				top: 25px;
-				left: 25px;
+				top: 30px;
+				left: 20px;
 
-				width: 3px;
-				height: calc(100% - 50px);
+				width: 2px;
+				height: calc(100% - 60px);
 
-				background-color: var(--color-bg-field);
+				background-color: var(--color-text);
 
 				content: '';
 			}
@@ -79,13 +78,11 @@
 		display: flex;
 		width: 100%;
 		padding: 10px 20px;
-		border-top: 3px solid var(--color-bg-field);
-		border-bottom: 3px solid var(--color-bg-field);
 
 		color: var(--color-descr);
 		font-size: 1rem;
 
-		background-color: transparent;
+		background-color: var(--color-bg-third);
 
 		transition: color var(--trns), border-color var(--trns), background-color var(--trns);
 

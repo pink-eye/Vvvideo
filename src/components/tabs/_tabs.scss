@@ -16,7 +16,7 @@
 		display: flex;
 		padding-block: 10px;
 
-		background-color: var(--color-bg-form);
+		background-color: var(--color-bg-third);
 
 		.search {
 			max-width: 450px;
@@ -155,12 +155,15 @@
 		max-width: 85ch;
 		margin: 0;
 		padding-block: 15px;
-		padding-left: 30px;
-		border-left: 2px solid;
-
+		
 		color: var(--color-text);
+		
+		@media (min-width: 48rem) {
+			padding-left: 30px;
+			border-left: 2px solid;
+		}
 	}
-
+	
 	@media (min-width: 28.125em) {
 		border-radius: var(--brs-m);
 	}
