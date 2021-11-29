@@ -14,6 +14,14 @@
 		"stylelint": "stylelint src/**/*.scss --fix",
 		"prepare": "husky install"
 	},
+	"jest": {
+		"moduleFileExtensions": ["js"],
+		"moduleNameMapper": {
+			"^Global/(.*)$": "<rootDir>/src/global/js/$1",
+			"^Components/(.*)$": "<rootDir>/src/components/$1",
+			"^Layouts/(.*)$": "<rootDir>/src/layouts/$1"
+		}
+	},
 	"keywords": [],
 	"author": {
 		"name": "pink-eye"
@@ -63,6 +71,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.16.0",
+		"@babel/plugin-transform-modules-commonjs": "^7.16.0",
 		"@babel/preset-env": "^7.16.0",
 		"@electron-forge/cli": "^6.0.0-beta.61",
 		"@electron-forge/maker-deb": "^6.0.0-beta.61",
