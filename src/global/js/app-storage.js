@@ -3,11 +3,11 @@ export class AppStorage {
 
 	setStorage(data) {
 		const dataJSON = JSON.stringify(data)
-		localStorage.setItem(this.KEY_STORAGE, dataJSON)
+		sessionStorage.setItem(this.KEY_STORAGE, dataJSON)
 	}
 
 	getStorage() {
-		const dataJSON = localStorage.getItem(this.KEY_STORAGE)
+		const dataJSON = sessionStorage.getItem(this.KEY_STORAGE)
 		return JSON.parse(dataJSON)
 	}
 
@@ -17,6 +17,6 @@ export class AppStorage {
 	}
 
 	clearLocalStorage() {
-		localStorage.removeItem(this.KEY_STORAGE)
+		sessionStorage.removeItem(this.KEY_STORAGE)
 	}
 }

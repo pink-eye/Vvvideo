@@ -4,10 +4,34 @@ import { manageWin } from 'Global/win-manager'
 import { handleKeyDown } from 'Global/shortcuts'
 import { openWinLatest } from 'Layouts/win-latest'
 import { fillWinSettings, setTheme } from 'Layouts/win-settings'
-import { initSuggests, hideSuggest, resetSelected, chooseSuggest } from 'Components/suggestions'
+import {
+	initSuggestions,
+	hideSuggestions,
+	resetSelected,
+	chooseSuggestion,
+	showRecentQueries,
+} from 'Components/suggestions'
 import { showOverlay, hideOverlay } from 'Components/overlay'
 import { initDropdown, hideLastDropdown, startDropdowns } from 'Components/dropdown'
 import { toggleMenu } from 'Components/burger'
+
+const handleFocus = () => {
+	hideSuggestions()
+	showOverlay()
+	showRecentQueries()
+}
+
+const handleClickWindow = event => {
+	const { target } = event
+
+	if (!target.closest('.dropdown')) {
+		hideLastDropdown()
+	}
+	if (!target.closest('.search')) {
+		hideSuggestions()
+		hideOverlay()
+	}
+}
 
 document.addEventListener('DOMContentLoaded', startDropdowns)
 
@@ -17,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const sidebar = getSelector('.sidebar')
 	const mainContent = getSelector('.main__content')
 
-	const headerSearch = header.querySelector('.search')
+	const headerSearch = getSelector('.search')
 	const searchBar = headerSearch.querySelector('.search__bar')
 	const searchBtn = headerSearch.querySelector('.search__btn')
 
@@ -33,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 		openWinLatest()
 
-		initSuggests(headerSearch)
+		initSuggestions()
 
 		if (storage.settings.disableSearchSuggestions) {
 			searchBar.addEventListener('blur', hideOverlay)
@@ -59,20 +83,22 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	searchBtn.addEventListener('click', handleClickSearch)
 
-	searchBar.addEventListener('focus', showOverlay)
+	searchBar.addEventListener('focus', handleFocus)
 
 	// HOT KEYS ON SEARCH
 
 	const handleKeyDownSearch = event => {
+		const { keyCode } = event
+
 		// ARROWS
-		if (event.keyCode === 40 || event.keyCode === 38) {
-			resetSelected(headerSearch)
-			chooseSuggest(headerSearch, event.keyCode)
+		if (keyCode === 40 || keyCode === 38) {
+			resetSelected()
+			chooseSuggestion(keyCode)
 		}
 
 		// ENTER
-		if (event.keyCode === 13) {
-			hideSuggest(headerSearch)
+		if (keyCode === 13) {
+			hideSuggestions()
 			hideOverlay()
 
 			if (!isEmpty(searchBar.value)) manageWin(event)
@@ -80,16 +106,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	}
 
 	searchBar.addEventListener('keydown', handleKeyDownSearch)
-
-	const handleClickWindow = event => {
-		if (!event.target.closest('.dropdown')) {
-			hideLastDropdown()
-		}
-		if (!event.target.closest('.search')) {
-			hideSuggest(headerSearch)
-			hideOverlay()
-		}
-	}
 
 	window.addEventListener('click', handleClickWindow)
 

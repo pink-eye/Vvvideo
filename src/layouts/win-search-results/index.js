@@ -8,6 +8,44 @@ import { fillPlaylistCard } from 'Components/card/card-playlist'
 import { fillChannelCard } from 'Components/card/card-rich'
 
 let lastSearchResult = null
+const appStorage = new AppStorage()
+
+export const clearRecentQueries = () => {
+	let storage = appStorage.getStorage()
+
+	if (storage.recentQueries.length === 0) return
+
+	storage.recentQueries.length = 0
+	appStorage.updateStorage(storage)
+}
+
+const restrainRecentQueriesLength = _ => {
+	let storage = appStorage.getStorage()
+	const { disableRecentQueries, maxRecentQueriesLength } = storage.settings
+
+	if (disableRecentQueries) return
+
+	const { recentQueries } = storage
+
+	if (recentQueries.length > maxRecentQueriesLength) storage.recentQueries.length = maxRecentQueriesLength
+
+	appStorage.updateStorage(storage)
+}
+
+const saveSearchQuery = query => {
+	let storage = appStorage.getStorage()
+	const { disableRecentQueries } = storage.settings
+
+	if (disableRecentQueries) return
+
+	let { recentQueries } = storage
+
+	if (recentQueries.includes(query)) recentQueries = recentQueries.filter(item => item !== query)
+
+	storage.recentQueries = [query, ...recentQueries]
+
+	appStorage.updateStorage(storage)
+}
 
 export const openWinSearchResults = async _ => {
 	let searchResults = getSelector('.search-results')
@@ -17,13 +55,14 @@ export const openWinSearchResults = async _ => {
 	try {
 		let data = null
 
-		const appStorage = new AppStorage()
 		const { enableProxy, proxy } = appStorage.getStorage().settings
+		const query = searchBar.value
 
-		if (lastSearchResult?.originalQuery !== searchBar.value) {
-			data = enableProxy
-				? await API.scrapeSearchResultsProxy(searchBar.value, proxy)
-				: await API.scrapeSearchResults(searchBar.value)
+		if (lastSearchResult?.originalQuery !== query) {
+			saveSearchQuery(query)
+			setTimeout(restrainRecentQueriesLength, 30)
+
+			data = enableProxy ? await API.scrapeSearchResultsProxy(query, proxy) : await API.scrapeSearchResults(query)
 
 			lastSearchResult = data
 		}

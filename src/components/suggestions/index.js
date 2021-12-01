@@ -1,153 +1,203 @@
-import { isEmpty, hasFocus } from 'Global/utils'
+import { isEmpty, hasFocus, getSelector } from 'Global/utils'
 import { AppStorage } from 'Global/app-storage'
 import { showToast } from 'Components/toast'
 import { showOverlay, hideOverlay } from 'Components/overlay'
 
 let lastSelected = null
+let suggestionListLength = 0
+const appStorage = new AppStorage()
 
-const createSuggestHTML = textContent => `<button class="search__suggest suggest">
-											<aside class="suggest__icon">
+const createSuggestionHTML = textContent => `<button class="suggestion">
+											<aside class="suggestion__icon">
 												<svg width="27px" height="27px">
 													<use xlink:href='img/svg/actions.svg#search'></use>
 												</svg>
 											</aside>
-											<span class="suggest__text">${textContent}</span>
+											<span class="suggestion__text">${textContent}</span>
 										</button>`
 
-const addSuggest = (parent, data) => {
-	let searchDropdown = parent.querySelector('.search__dropdown')
-	let searchBar = parent.querySelector('.search__bar')
+const createRecentQueryHTML = textContent => `<button class="suggestion">
+											<aside class="suggestion__icon">
+												<svg width="24px" height="24px">
+													<use xlink:href='img/svg/actions.svg#date'></use>
+												</svg>
+											</aside>
+											<span class="suggestion__text">${textContent}</span>
+										</button>`
 
-	if (!searchDropdown.firstChild) {
-		for (let index = 0; index < 10; index += 1) {
-			const query = searchBar.value.trim()
+const addSuggestion = (data, isRecent) => {
+	let headerSearch = getSelector('.search')
+	let suggestionList = headerSearch.querySelector('.suggestion__list')
+	let searchBar = headerSearch.querySelector('.search__bar')
 
-			if (!isEmpty(data[index]) && query.length > 0 && hasFocus(searchBar))
-				searchDropdown.insertAdjacentHTML('beforeEnd', createSuggestHTML(data[index]))
-			else break
-		}
+	for (let index = 0; index < 10; index += 1) {
+		const query = searchBar.value.trim()
+
+		if (suggestionListLength > 9) return
+
+		if (!isEmpty(data[index]) && hasFocus(searchBar)) {
+			let newItem = null
+
+			if (query.length === 0) {
+				if (isRecent) newItem = createRecentQueryHTML(data[index])
+				else break
+			} else {
+				newItem = isRecent ? createRecentQueryHTML(data[index]) : createSuggestionHTML(data[index])
+			}
+
+			suggestionListLength += 1
+			suggestionList.insertAdjacentHTML('beforeEnd', newItem)
+		} else break
 	}
 
-	searchDropdown = null
+	suggestionList = null
 	searchBar = null
+	headerSearch = null
 }
 
-const hideSuggest = parent => {
-	let searchDropdown = parent.querySelector('.search__dropdown')
+const resetSelected = _ => {
+	let headerSearch = getSelector('.search')
+	let selectedSuggestion = headerSearch.querySelector('._selected')
 
-	while (searchDropdown.firstChild) searchDropdown.firstChild.remove()
+	if (selectedSuggestion) selectedSuggestion.classList.remove('_selected')
 
-	searchDropdown = null
+	selectedSuggestion = null
+	headerSearch = null
 }
 
-const resetSelected = parent => {
-	let selectedSuggest = parent.querySelector('._selected')
+const hideSuggestions = _ => {
+	resetSelected()
 
-	if (selectedSuggest) selectedSuggest.classList.remove('_selected')
+	let headerSearch = getSelector('.search')
 
-	selectedSuggest = null
+	let suggestionList = headerSearch.querySelector('.suggestion__list')
+
+	suggestionListLength = 0
+
+	while (suggestionList.firstChild) suggestionList.firstChild.remove()
+
+	suggestionList = null
+	headerSearch = null
 }
 
-const insertSelectedSuggest = (parent, suggest) => {
-	let searchBar = parent.querySelector('.search__bar')
-	let suggestText = suggest.querySelector('.suggest__text')
+const insertSelectedSuggestion = suggestion => {
+	let headerSearch = getSelector('.search')
+	let searchBar = headerSearch.querySelector('.search__bar')
+	let suggestionText = suggestion.querySelector('.suggestion__text')
 
-	if (searchBar) searchBar.value = suggestText.textContent
+	if (searchBar) searchBar.value = suggestionText.textContent
 
 	searchBar = null
-	suggestText = null
+	suggestionText = null
+	headerSearch = null
 }
 
-const chooseSuggest = (parent, direction) => {
-	let suggestAll = parent.querySelectorAll('.search__suggest')
+const chooseSuggestion = direction => {
+	let headerSearch = getSelector('.search')
+	let suggestionAll = headerSearch.querySelectorAll('.suggestion')
 
-	if (suggestAll.length > 0) {
+	if (suggestionAll.length > 0) {
 		if (lastSelected !== null) {
 			const index = direction === 40 ? lastSelected + 1 : lastSelected - 1
-			const sparedIndex = direction === 40 ? 0 : suggestAll.length - 1
-			let nextSelect = suggestAll[index] ?? suggestAll[sparedIndex]
+			const sparedIndex = direction === 40 ? 0 : suggestionAll.length - 1
+			let nextSelect = suggestionAll[index] ?? suggestionAll[sparedIndex]
 
 			nextSelect.classList.add('_selected')
-			lastSelected = suggestAll[index] ? index : sparedIndex
+			lastSelected = suggestionAll[index] ? index : sparedIndex
 
 			nextSelect = null
 		} else {
-			suggestAll[0].classList.add('_selected')
+			suggestionAll[0].classList.add('_selected')
 			lastSelected = 0
 		}
 
-		let selectedSuggest = parent.querySelector('._selected')
+		let selectedSuggest = headerSearch.querySelector('._selected')
 
-		if (selectedSuggest) insertSelectedSuggest(parent, selectedSuggest)
+		if (selectedSuggest) insertSelectedSuggestion(selectedSuggest)
 
 		selectedSuggest = null
 	}
 
-	suggestAll = null
+	suggestionAll = null
+	headerSearch = null
 }
 
-const initSuggests = parent => {
-	let searchBar = parent.querySelector('.search__bar')
+const getRelevantRecentQueries = query => {
+	let { recentQueries } = appStorage.getStorage()
 
-	const appStorage = new AppStorage()
-	const { disableSearchSuggestions, enableProxy, proxy } = appStorage.getStorage().settings
+	if (recentQueries.length === 0) return undefined
+
+	return recentQueries.filter(item => item.includes(query))
+}
+
+const showRecentQueries = _ => {
+	let { recentQueries } = appStorage.getStorage()
+
+	if (recentQueries.length === 0) return
+
+	addSuggestion(recentQueries, true)
+}
+
+const initSuggestions = _ => {
+	let headerSearch = getSelector('.search')
+	let searchBar = headerSearch.querySelector('.search__bar')
+	let suggestionList = headerSearch.querySelector('.suggestion__list')
+
+	const { disableSearchSuggestions, enableProxy, proxy, disableRecentQueries } = appStorage.getStorage().settings
 
 	if (disableSearchSuggestions) return
 
-	if (searchBar) {
-		const handleInpt = async _ => {
-			showOverlay()
+	const handleClickSuggestion = event => {
+		let { target } = event
+		let el = target.classList.contains('suggestion') ? target : target.closest('.suggestion')
 
-			lastSelected = null
-			let query = searchBar.value.trim()
+		if (!el) return
 
-			if (query.length > 0) {
-				try {
-					let data = enableProxy
-						? await API.scrapeSuggestsProxy(query, proxy)
-						: await API.scrapeSuggests(query)
+		insertSelectedSuggestion(el)
+		resetSelected()
+		searchBar.focus()
 
-					resetSelected(parent)
-					hideSuggest(parent)
+		target = null
+		el = null
+		lastSelected = null
+	}
 
-					if (data.length > 0) addSuggest(parent, data)
+	suggestionList.addEventListener('click', handleClickSuggestion)
 
-					let suggestAll = parent.querySelectorAll('.search__suggest')
+	const handleInpt = async _ => {
+		showOverlay()
 
-					const handleClickSuggest = event => {
-						let { currentTarget } = event
-						insertSelectedSuggest(parent, currentTarget)
-						resetSelected(parent)
-						lastSelected = null
-						currentTarget = null
-						searchBar.focus()
-					}
+		suggestionListLength = 0
+		lastSelected = null
+		let query = searchBar.value.trim()
 
-					for (let index = 0, { length } = suggestAll; index < length; index += 1) {
-						const suggest = suggestAll[index]
+		if (query.length > 0) {
+			hideSuggestions()
 
-						suggest.addEventListener('click', handleClickSuggest)
-					}
-				} catch ({ message }) {
-					showToast('error', message)
-				} finally {
-					query = null
-				}
-			} else {
-				hideSuggest(parent)
-				hideOverlay()
+			if (!disableRecentQueries) {
+				const relevantRecentQueries = getRelevantRecentQueries(query)
+
+				if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
 			}
-		}
+			
+			let suggestions = null
 
-		searchBar.addEventListener('input', handleInpt)
+			try {
+				suggestions = enableProxy
+					? await API.scrapeSuggestsProxy(query, proxy)
+					: await API.scrapeSuggests(query)
+			} catch ({ message }) {
+				showToast('error', message)
+			}
 
-		const handleBlur = _ => {
-			hideSuggest(parent)
+			if (suggestions.length > 0) addSuggestion(suggestions, false)
+		} else {
+			hideSuggestions()
 			hideOverlay()
 		}
+	}
 
-		searchBar.addEventListener('blur', handleBlur)
-	} else searchBar = null
+	searchBar.addEventListener('input', handleInpt)
 }
 
-export { initSuggests, chooseSuggest, hideSuggest, resetSelected }
+export { initSuggestions, chooseSuggestion, hideSuggestions, resetSelected, showRecentQueries }

@@ -3,7 +3,8 @@ import { YoutubeHelper } from 'Global/youtube-helper'
 import { formatIP, formatPort } from 'Layouts/win-settings/helper'
 import { AppStorage } from 'Global/app-storage'
 import { showToast } from 'Components/toast'
-import { clearHistory, disableHistory, keepHistoryArray } from 'Layouts/win-history/helper'
+import { clearHistory, disableHistory } from 'Layouts/win-history/helper'
+import { clearRecentQueries } from 'Layouts/win-search-results'
 
 const appStorage = new AppStorage()
 let storage = null
@@ -51,10 +52,15 @@ const buildStorage = data => {
 	if (data?.history) {
 		const { history } = data
 
-		if (history.length > 0) {
+		if (history.length > 0)
 			storage.history = history
-			keepHistoryArray()
-		}
+	}
+
+	if (data?.recentQueries) {
+		const { recentQueries } = data
+
+		if (recentQueries.length > 0)
+			storage.recentQueries = recentQueries
 	}
 
 	if (data?.settings) {
@@ -142,6 +148,10 @@ const handleInputField = event => {
 		case 'maxHistoryLength':
 			storage.settings.maxHistoryLength = isEmpty(input.value) ? 30 : +input.value
 			break
+
+		case 'maxRecentQueriesLength':
+			storage.settings.maxRecentQueriesLength = isEmpty(input.value) ? 10 : +input.value
+			break
 	}
 
 	appStorage.updateStorage(storage)
@@ -174,6 +184,11 @@ const handleChangeCheckbox = event => {
 	switch (option) {
 		case 'disableTransition':
 			toggleTransition(checkbox.checked)
+			break
+
+		case 'disableRecentQueries':
+			clearRecentQueries()
+			showToast('good', 'Restart app')
 			break
 
 		case 'enableProxy':

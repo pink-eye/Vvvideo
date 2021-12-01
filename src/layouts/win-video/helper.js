@@ -34,7 +34,7 @@ export const roundNum = num => {
 
 	let index
 
-	for (index = si.length - 1; index > 0; index--) {
+	for (index = si.length - 1; index > 0; index -= 1) {
 		if (numStr >= si[index].v) break
 	}
 

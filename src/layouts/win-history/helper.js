@@ -17,12 +17,12 @@ const addHistoryItem = newItem => {
 	storage.history = [newItem, ...storage.history]
 }
 
-export const restrainHistoryLength = _ => {
-	const numWasteItemAll = storage.history.length - storage.settings.maxHistoryLength
+const restrainHistoryLength = _ => {
+	const { maxHistoryLength } = storage.settings
+	const { history } = storage
 
-	if (numWasteItemAll <= 0) {
-		for (let index = 0; index < numWasteItemAll; index += 1) storage.history.pop()
-	}
+	if (history.length > maxHistoryLength) storage.history.length = maxHistoryLength
+
 }
 
 const scrapeVideoInfoFromData = data => {

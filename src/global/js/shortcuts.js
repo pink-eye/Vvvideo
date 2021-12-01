@@ -2,6 +2,7 @@ import { hideOverlay } from 'Components/overlay'
 import { toggleMenu } from 'Components/burger'
 import { getSelector, hasFocus } from 'Global/utils'
 import { scrapeInfoToSwitchPage, nextPage, prevPage } from 'Components/grid-btns'
+import { hideSuggestions } from 'Components/suggestions';
 
 export const handleKeyDown = event => {
 	// ESC
@@ -9,6 +10,7 @@ export const handleKeyDown = event => {
 		document.activeElement.blur()
 
 		hideOverlay()
+		hideSuggestions()
 
 		let winActive = getSelector('.main__content').querySelector('.win._active')
 		let firstCard = winActive.querySelector('.card')

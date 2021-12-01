@@ -1,4 +1,33 @@
-.suggest {
+.suggestion__list {
+	position: absolute;
+	top: calc(100% + 5px);
+	left: 0;
+
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	padding-block: 20px;
+	padding-inline: 11px;
+
+	border-radius: var(--brs-m);
+
+	background-color: var(--color-bg-field);
+
+	box-shadow: var(--box-shadow-xl);
+
+	&:empty {
+		visibility: hidden;
+		opacity: 0;
+	}
+
+	&:not(:empty) {
+		visibility: visible;
+		opacity: 1;
+	}
+}
+
+.suggestion {
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -29,7 +58,8 @@
 	}
 
 	&__icon {
-		margin-right: 7px;
+		display: grid;
+		margin-right: 17px;
 	}
 
 	@media (hover: hover) and (pointer: fine) {

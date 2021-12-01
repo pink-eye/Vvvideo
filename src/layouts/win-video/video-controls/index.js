@@ -875,7 +875,6 @@ export const initVideoPlayer = async data => {
 	} catch (error) {
 		showToast('info', `Sponsorblock doesn't have segments for this video`)
 	}
-	console.log(segmentsSB)
 	fillSegmentsSB(segmentsSB)
 
 	const videoFormats = prepareVideoPlayer(data)

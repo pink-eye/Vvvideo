@@ -1,4 +1,5 @@
 {
+	"recentQueries": [],
 	"subscriptions": [],
 	"history": [],
 	"settings": {
@@ -22,6 +23,8 @@
 		"defaltVideoFormat": "webm",
 		"disableSearchSuggestions": false,
 		"regionTrending": "US",
-		"notAdaptContent": false
+		"notAdaptContent": false,
+		"disableRecentQueries": false,
+		"maxRecentQueriesLength": 10
 	}
 }
