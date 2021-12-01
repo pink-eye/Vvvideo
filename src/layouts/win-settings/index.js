@@ -202,6 +202,7 @@ const handleChangeCheckbox = event => {
 			break
 
 		case 'disableSearchSuggestions':
+		case 'dontShowRecentQueriesOnTyping':
 		case 'disableStoryboard':
 		case 'disableHistory':
 			showToast('good', 'Refresh app')

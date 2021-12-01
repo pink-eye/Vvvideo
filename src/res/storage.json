@@ -25,6 +25,7 @@
 		"regionTrending": "US",
 		"notAdaptContent": false,
 		"disableRecentQueries": false,
+		"dontShowRecentQueriesOnTyping": true,
 		"maxRecentQueriesLength": 10
 	}
 }

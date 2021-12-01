@@ -143,7 +143,8 @@ const initSuggestions = _ => {
 	let searchBar = headerSearch.querySelector('.search__bar')
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
 
-	const { disableSearchSuggestions, enableProxy, proxy, disableRecentQueries } = appStorage.getStorage().settings
+	const { disableSearchSuggestions, enableProxy, proxy, disableRecentQueries, dontShowRecentQueriesOnTyping } =
+		appStorage.getStorage().settings
 
 	if (disableSearchSuggestions) return
 
@@ -172,22 +173,22 @@ const initSuggestions = _ => {
 		let query = searchBar.value.trim()
 
 		if (query.length > 0) {
-			hideSuggestions()
-
-			if (!disableRecentQueries) {
-				const relevantRecentQueries = getRelevantRecentQueries(query)
-
-				if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
-			}
-			
 			let suggestions = null
 
 			try {
 				suggestions = enableProxy
-					? await API.scrapeSuggestsProxy(query, proxy)
-					: await API.scrapeSuggests(query)
+				? await API.scrapeSuggestsProxy(query, proxy)
+				: await API.scrapeSuggests(query)
 			} catch ({ message }) {
 				showToast('error', message)
+			}
+
+			hideSuggestions()
+
+			if (!dontShowRecentQueriesOnTyping) {
+				const relevantRecentQueries = getRelevantRecentQueries(query)
+
+				if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
 			}
 
 			if (suggestions.length > 0) addSuggestion(suggestions, false)
