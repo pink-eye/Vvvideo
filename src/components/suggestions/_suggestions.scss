@@ -17,13 +17,20 @@
 	box-shadow: var(--box-shadow-xl);
 
 	&:empty {
+		transform: scale(0.8);
 		visibility: hidden;
 		opacity: 0;
 	}
 
 	&:not(:empty) {
+		transform: scale(1);
 		visibility: visible;
 		opacity: 1;
+
+		transition:
+			opacity var(--trns-time-default) var(--ease-out-back),
+			visibility var(--trns-time-default) var(--ease-out-back),
+			transform var(--trns-time-default) var(--ease-out-back);
 	}
 }
 
