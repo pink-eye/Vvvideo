@@ -57,25 +57,25 @@ export const hideLastDropdown = (currentDropdown = null) => {
 }
 
 export const initDropdown = (dropdown, callback) => {
-	const dropdownBtnAll = dropdown.querySelectorAll('.dropdown__btn')
+	const dropdownList = dropdown.querySelector('.dropdown__list')
 
-	if (dropdownBtnAll.length > 0) {
-		const handleClickBtn = event => {
-			let { currentTarget } = event
+	if (!dropdownList) return
 
-			chooseDropdownItem(dropdown, currentTarget)
-			focusCurrentChoice(dropdown)
-			callback(currentTarget)
+	const handleClickBtn = event => {
+		let { target } = event
 
-			currentTarget = null
-		}
+		let dropdownBtn = target.classList.contains('dropdown__btn') ? target : target.closest('.dropdown__btn')
 
-		for (let index = 0, { length } = dropdownBtnAll; index < length; index += 1) {
-			const dropdownBtn = dropdownBtnAll[index]
+		if (!dropdownBtn) return
 
-			dropdownBtn.addEventListener('click', handleClickBtn)
-		}
+		chooseDropdownItem(dropdown, dropdownBtn)
+		focusCurrentChoice(dropdown)
+		callback(dropdownBtn)
+
+		dropdownBtn = null
 	}
+
+	dropdownList.addEventListener('click', handleClickBtn)
 }
 
 export const startDropdowns = _ => {
