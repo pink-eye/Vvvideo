@@ -38,6 +38,10 @@
 			object-fit: contain;
 
 			background-color: hsl(0, 0%, 0%);
+
+			&::cue {
+				font-family: var(--ff);
+			}
 		}
 
 		@media (min-width: 78.1875em) {
