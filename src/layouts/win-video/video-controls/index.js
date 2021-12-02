@@ -1027,30 +1027,6 @@ export const initVideoPlayer = async data => {
 
 	progressSeek.addEventListener('mousemove', handleMouseMoveProgressSeek)
 
-	const controlsQuality = controls.querySelector('.controls__quality')
-
-	initDropdown(controlsQuality, btn => {
-		for (let index = 0, { length } = videoFormats; index < length; index += 1) {
-			const videoFormat = videoFormats[index]
-
-			if (videoFormat.qualityLabel === btn.textContent) chooseQuality(videoFormat.url)
-		}
-	})
-
-	let controlsCaptions = controls.querySelector('.controls__captions')
-
-	if (hasCaptions) {
-		initDropdown(controlsCaptions, btn => {
-			const { label, src, srclang } = btn.dataset
-
-			removeTracks()
-			video.insertAdjacentHTML('afterBegin', createTrackHTML({ label, srclang, src }))
-		})
-	} else {
-		controlsCaptions.hidden = true
-		controlsCaptions = null
-	}
-
 	window.addEventListener('unload', rememberWatchedTime, { once: true })
 
 	// HOT KEYS
@@ -1061,6 +1037,38 @@ export const initVideoPlayer = async data => {
 		hasListeners = true
 
 		initDialogSB()
+
+		const controlsQuality = controls.querySelector('.controls__quality')
+
+		initDropdown(controlsQuality, btn => {
+			for (let index = 0, { length } = videoFormats; index < length; index += 1) {
+				const videoFormat = videoFormats[index]
+
+				if (videoFormat.qualityLabel === btn.textContent) chooseQuality(videoFormat.url)
+			}
+		})
+
+		let controlsCaptions = controls.querySelector('.controls__captions')
+
+		if (hasCaptions) {
+			initDropdown(
+				controlsCaptions,
+				btn => {
+					if (btn.dataset.src) {
+						const { label, src, srclang } = btn.dataset
+
+						removeTracks()
+						video.insertAdjacentHTML('afterBegin', createTrackHTML({ label, srclang, src }))
+					} else {
+						video.textTracks.mode = 'hidden'
+					}
+				},
+				{ changeHead: true }
+			)
+		} else {
+			controlsCaptions.hidden = true
+			controlsCaptions = null
+		}
 
 		if (isEmpty(hls)) {
 			const controlsSpeed = controls.querySelector('.controls__speed')

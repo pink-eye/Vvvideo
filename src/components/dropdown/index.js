@@ -1,6 +1,6 @@
 import { getSelector } from 'Global/utils'
 
-const chooseDropdownItem = (dropdown, dropdownBtn) => {
+const changeHeadContent = (dropdown, dropdownBtn) => {
 	let dropdownHead = dropdown.querySelector('.dropdown__head')
 
 	if (dropdownHead) dropdownHead.childNodes[0].data = dropdownBtn.textContent
@@ -56,7 +56,7 @@ export const hideLastDropdown = (currentDropdown = null) => {
 	winActive = null
 }
 
-export const initDropdown = (dropdown, callback) => {
+export const initDropdown = (dropdown, callback, options = null) => {
 	const dropdownList = dropdown.querySelector('.dropdown__list')
 
 	if (!dropdownList) return
@@ -68,7 +68,8 @@ export const initDropdown = (dropdown, callback) => {
 
 		if (!dropdownBtn) return
 
-		chooseDropdownItem(dropdown, dropdownBtn)
+		if (!options?.changeHead) changeHeadContent(dropdown, dropdownBtn)
+
 		focusCurrentChoice(dropdown)
 		callback(dropdownBtn)
 
