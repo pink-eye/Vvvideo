@@ -10,8 +10,10 @@ const SocksProxyAgent = require('socks-proxy-agent')
 const HttpProxyAgent = require('http-proxy-agent')
 const HttpsProxyAgent = require('https-proxy-agent')
 const fs = require('fs')
+const path = require('path')
+const https = require('https')
 
-const STORAGE_PATH = `${__dirname}\\storage.json`
+const STORAGE_PATH = path.resolve(__dirname, 'storage.json')
 
 const makeAgent = obj => {
 	let agent = null
@@ -119,5 +121,37 @@ contextBridge.exposeInMainWorld('API', {
 
 	openExternalLink: url => {
 		shell.openExternal(url)
+	},
+
+	getCaption: async (info, requiredLanguage) => {
+		const format = 'vtt'
+		const tracks = info.player_response.captions.playerCaptionsTracklistRenderer.captionTracks
+
+		if (tracks && tracks.length) {
+			const track = tracks.find(item => item.languageCode === requiredLanguage)
+
+			const outputFolder = 'temp'
+			const outputFile = `${info.videoDetails.videoId}.${track.languageCode}.${format}`
+
+			return new Promise(resolve =>
+				https.get(`${track.baseUrl}&fmt=${format}`, res => {
+					resolve(res.pipe(fs.createWriteStream(path.resolve(__dirname, outputFolder, outputFile))))
+				})
+			)
+		}
+	},
+
+	clearTempFolder: _ => {
+		const folder = 'bundle\\temp'
+
+		fs.readdir(folder, (err, files) => {
+			if (err) throw err
+
+			for (const file of files) {
+				fs.unlink(path.join(folder, file), err => {
+					if (err) throw err
+				})
+			}
+		})
 	},
 })
