@@ -57,11 +57,17 @@ const createQualityItemHTML = quality => `<li class="dropdown__item">
 											<button class="dropdown__btn btn-reset">${quality}</button>
 										</li>`
 
-const createCaptionItemHTML = simpleText => `<li class="dropdown__item">
-												<button class="dropdown__btn btn-reset">${simpleText}</button>
+const createCaptionItemHTML = (simpleText, srclang, src) => `<li class="dropdown__item">
+												<button
+												class="dropdown__btn btn-reset"
+												data-label="${simpleText}"
+												data-srclang="${srclang}"
+												data-src="${src}">
+													${simpleText}
+												</button>
 											</li>`
 
-const createTrackHTML = (label, srclang, src) =>
+const createTrackHTML = ({ label, srclang, src }) =>
 	`<track kind="subtitles" label="${label}" srclang="${srclang}" src="${src}" default></track>`
 
 const createStoryboardHTML = _ => `<div class="progress__storyboard"></div>`
@@ -83,21 +89,44 @@ const insertQualityList = videoFormats => {
 	qualityList = null
 }
 
-const insertCaptionList = tracks => {
+const createCaptionItemDefault = _ => `<li class="dropdown__item">
+											<button class="dropdown__btn btn-reset">No captions</button>
+										</li>`
+
+const insertCaptionList = data => {
 	let controls = getSelector('.controls')
 	let captions = controls.querySelector('.controls__captions')
 	let captionList = captions.querySelector('.dropdown__list')
 
-	if (tracks.length > 0) {
-		for (let index = 0, { length } = tracks; index < length; index += 1) {
-			const track = tracks[index]
-			captionList.insertAdjacentHTML('afterBegin', createCaptionItemHTML(track.name.simpleText))
+	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+	const folder = 'temp'
+
+	if (captionTracks?.length > 0) {
+		for (let index = 0, { length } = captionTracks; index < length; index += 1) {
+			const { name, languageCode } = captionTracks[index]
+			const file = `${data.videoDetails.videoId}.${languageCode}.vtt`
+			const path = `${folder}/${file}`
+
+			captionList.insertAdjacentHTML('afterBegin', createCaptionItemHTML(name.simpleText, languageCode, path))
 		}
 	}
+
+	captionList.insertAdjacentHTML('afterBegin', createCaptionItemDefault())
 
 	controls = null
 	captions = null
 	captionList = null
+}
+
+const loadEachCaption = data => {
+	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+
+	if (captionTracks?.length > 0) {
+		for (let index = 0, { length } = captionTracks; index < length; index++) {
+			const { languageCode } = captionTracks[index]
+			API.getCaption(data, languageCode)
+		}
+	}
 }
 
 const removeTracks = () => {
@@ -194,6 +223,7 @@ const prepareVideoPlayer = data => {
 	let quality = getSelector('.controls').querySelector('.controls__quality')
 	let qualityCurrent = quality.querySelector('.dropdown__head')
 	let videoFormats = null
+	let hasCaptions = false
 	let currentQuality = null
 
 	const onLoadedData = _ => {
@@ -228,14 +258,17 @@ const prepareVideoPlayer = data => {
 
 	insertQualityList(videoFormats)
 
-	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+	if (data.player_response.captions) {
+		hasCaptions = true
 
-	insertCaptionList(captionTracks)
+		loadEachCaption(data)
+		insertCaptionList(data)
+	}
 
 	quality = null
 	qualityCurrent = null
 
-	return videoFormats
+	return { videoFormats, hasCaptions }
 }
 
 const initSponsorblockSegments = data => {
@@ -911,9 +944,10 @@ export const initVideoPlayer = async data => {
 	} catch (error) {
 		showToast('info', `Sponsorblock doesn't have segments for this video`)
 	}
+
 	fillSegmentsSB(segmentsSB)
 
-	const videoFormats = prepareVideoPlayer(data)
+	const { videoFormats, hasCaptions } = prepareVideoPlayer(data)
 
 	if (!videoFormats) return
 
@@ -1003,32 +1037,19 @@ export const initVideoPlayer = async data => {
 		}
 	})
 
-	const controlsCaptions = controls.querySelector('.controls__captions')
+	let controlsCaptions = controls.querySelector('.controls__captions')
 
-	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+	if (hasCaptions) {
+		initDropdown(controlsCaptions, btn => {
+			const { label, src, srclang } = btn.dataset
 
-	initDropdown(controlsCaptions, async btn => {
-		for (let index = 0, { length } = captionTracks; index < length; index += 1) {
-			const captionTrack = captionTracks[index]
-			const { name, languageCode } = captionTrack
-
-			if (name.simpleText === btn.textContent) {
-
-				try {
-					await API.getCaption(data, languageCode)
-				} catch (error) {
-					showToast('info', 'Try one more time...')
-				}
-
-				const folder = 'temp'
-				const file = `${data.videoDetails.videoId}.${languageCode}.vtt`
-				const path = `${folder}/${file}`
-
-				removeTracks()
-				video.insertAdjacentHTML('afterBegin', createTrackHTML(name.simpleText, languageCode, path))
-			}
-		}
-	})
+			removeTracks()
+			video.insertAdjacentHTML('afterBegin', createTrackHTML({ label, srclang, src }))
+		})
+	} else {
+		controlsCaptions.hidden = true
+		controlsCaptions = null
+	}
 
 	window.addEventListener('unload', rememberWatchedTime, { once: true })
 
@@ -1081,6 +1102,7 @@ export const resetVideoPlayer = _ => {
 	let progressSeek = progress.querySelector('.progress__seek')
 	let qualityList = quality.querySelector('.dropdown__list')
 	let captions = controls.querySelector('.controls__captions')
+	let captionHead = controls.querySelector('.dropdown__head')
 	let captionList = captions.querySelector('.dropdown__list')
 	let volumeSeek = controls.querySelector('.volume__seek')
 	let controlDecorations = controls.querySelector('.controls__decorations')
@@ -1100,6 +1122,8 @@ export const resetVideoPlayer = _ => {
 	doesSkipSegments ||= true
 	segmentsSB.length = 0
 
+	captions.hidden &&= false
+
 	while (sponsorblock.firstChild) sponsorblock.firstChild.remove()
 
 	if (sponsorblockBtn.classList.contains('_record')) sponsorblockBtn.classList.remove('_record')
@@ -1110,6 +1134,7 @@ export const resetVideoPlayer = _ => {
 	removeTracks()
 
 	speedCurrent.textContent = 'x1'
+	captionHead.textContent = 'CC'
 
 	if (!isEmpty(hls)) {
 		hls.detachMedia()
@@ -1122,6 +1147,8 @@ export const resetVideoPlayer = _ => {
 	timeDuration.removeAttribute('datetime')
 	timeElapsed.removeAttribute('datetime')
 	progress.removeAttribute('style')
+
+	storage = appStorage.getStorage()
 
 	const { disableStoryboard } = storage.settings
 
