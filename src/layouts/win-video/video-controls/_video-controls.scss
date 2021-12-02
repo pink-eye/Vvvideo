@@ -24,6 +24,12 @@
 		}
 	}
 
+	.dropdown {
+		margin-left: 10px;
+
+		color: hsl(0, 0%, 100%);
+	}
+
 	&__bar {
 		position: absolute;
 		bottom: 0;
@@ -43,6 +49,10 @@
 
 			transition: transform var(--trns-slow) var(--trns-time-default);
 
+			.progress {
+				height: 4px;
+			}
+
 			.controls__wrapper {
 				visibility: hidden;
 				opacity: 0;
@@ -55,6 +65,10 @@
 			transform: translateY(0);
 
 			transition: transform var(--trns);
+
+			.progress {
+				height: 7px;
+			}
 
 			.controls__wrapper {
 				visibility: visible;
@@ -106,8 +120,7 @@
 	&__switch,
 	&__volume,
 	&__screen,
-	&__quality,
-	&__speed {
+	.dropdown, {
 		display: flex;
 		border-radius: var(--brs-s);
 
@@ -135,13 +148,6 @@
 
 	&__screen {
 		margin-left: 10px;
-	}
-
-	&__quality,
-	&__speed {
-		margin-left: 10px;
-
-		color: hsl(0, 0%, 100%);
 	}
 
 	&__speed {
@@ -190,7 +196,6 @@
 	left: 50%;
 
 	width: calc(100% - 40px);
-	height: 7px;
 	border: 0;
 	border-radius: var(--brs-s);
 
@@ -201,7 +206,7 @@
 	transition: height var(--trns);
 
 	&:hover {
-		height: 30px;
+		height: 30px !important;
 
 		.progress__seek-tooltip,
 		.progress__storyboard {
