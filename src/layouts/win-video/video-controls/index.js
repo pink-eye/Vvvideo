@@ -57,6 +57,13 @@ const createQualityItemHTML = quality => `<li class="dropdown__item">
 											<button class="dropdown__btn btn-reset">${quality}</button>
 										</li>`
 
+const createCaptionItemHTML = simpleText => `<li class="dropdown__item">
+												<button class="dropdown__btn btn-reset">${simpleText}</button>
+											</li>`
+
+const createTrackHTML = (label, srclang, src) =>
+	`<track kind="subtitles" label="${label}" srclang="${srclang}" src="${src}" default></track>`
+
 const createStoryboardHTML = _ => `<div class="progress__storyboard"></div>`
 
 const insertQualityList = videoFormats => {
@@ -74,6 +81,31 @@ const insertQualityList = videoFormats => {
 	controls = null
 	quality = null
 	qualityList = null
+}
+
+const insertCaptionList = tracks => {
+	let controls = getSelector('.controls')
+	let captions = controls.querySelector('.controls__captions')
+	let captionList = captions.querySelector('.dropdown__list')
+
+	if (tracks.length > 0) {
+		for (let index = 0, { length } = tracks; index < length; index += 1) {
+			const track = tracks[index]
+			captionList.insertAdjacentHTML('afterBegin', createCaptionItemHTML(track.name.simpleText))
+		}
+	}
+
+	controls = null
+	captions = null
+	captionList = null
+}
+
+const removeTracks = () => {
+	let video = getSelector('video')
+
+	while (video.firstChild) video.firstChild.remove()
+
+	video = null
 }
 
 const disableAudio = _ => {
@@ -195,6 +227,10 @@ const prepareVideoPlayer = data => {
 	video.addEventListener('loadedmetadata', onLoadedData, { once: true })
 
 	insertQualityList(videoFormats)
+
+	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+
+	insertCaptionList(captionTracks)
 
 	quality = null
 	qualityCurrent = null
@@ -967,6 +1003,33 @@ export const initVideoPlayer = async data => {
 		}
 	})
 
+	const controlsCaptions = controls.querySelector('.controls__captions')
+
+	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+
+	initDropdown(controlsCaptions, async btn => {
+		for (let index = 0, { length } = captionTracks; index < length; index += 1) {
+			const captionTrack = captionTracks[index]
+			const { name, languageCode } = captionTrack
+
+			if (name.simpleText === btn.textContent) {
+
+				try {
+					await API.getCaption(data, languageCode)
+				} catch (error) {
+					showToast('info', 'Try one more time...')
+				}
+
+				const folder = 'temp'
+				const file = `${data.videoDetails.videoId}.${languageCode}.vtt`
+				const path = `${folder}/${file}`
+
+				removeTracks()
+				video.insertAdjacentHTML('afterBegin', createTrackHTML(name.simpleText, languageCode, path))
+			}
+		}
+	})
+
 	window.addEventListener('unload', rememberWatchedTime, { once: true })
 
 	// HOT KEYS
@@ -1017,6 +1080,8 @@ export const resetVideoPlayer = _ => {
 	let quality = controls.querySelector('.controls__quality')
 	let progressSeek = progress.querySelector('.progress__seek')
 	let qualityList = quality.querySelector('.dropdown__list')
+	let captions = controls.querySelector('.controls__captions')
+	let captionList = captions.querySelector('.dropdown__list')
 	let volumeSeek = controls.querySelector('.volume__seek')
 	let controlDecorations = controls.querySelector('.controls__decorations')
 	let controlsSwitch = controls.querySelector('.controls__switch')
@@ -1040,6 +1105,9 @@ export const resetVideoPlayer = _ => {
 	if (sponsorblockBtn.classList.contains('_record')) sponsorblockBtn.classList.remove('_record')
 
 	while (qualityList.firstChild) qualityList.firstChild.remove()
+	while (captionList.firstChild) captionList.firstChild.remove()
+
+	removeTracks()
 
 	speedCurrent.textContent = 'x1'
 
@@ -1125,6 +1193,8 @@ export const resetVideoPlayer = _ => {
 
 	controls.hidden &&= false
 
+	API.clearTempFolder()
+
 	videoParent = null
 	videoWrapper = null
 	video = null
@@ -1137,6 +1207,8 @@ export const resetVideoPlayer = _ => {
 	progressStoryboard = null
 	timeDuration = null
 	quality = null
+	captionList = null
+	captions = null
 	progressSeek = null
 	qualityList = null
 	volumeSeek = null
