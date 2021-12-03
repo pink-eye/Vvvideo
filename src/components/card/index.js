@@ -1,7 +1,7 @@
-import { resetVideoCard } from "Components/card/card-video"
-import { resetChannelCard } from "Components/card/card-rich"
-import { resetPlaylistCard } from "Components/card/card-playlist"
-import { resetSkeleton } from 'Components/skeleton';
+import { resetVideoCard } from 'Components/card/card-video'
+import { resetChannelCard } from 'Components/card/card-rich'
+import { resetPlaylistCard } from 'Components/card/card-playlist'
+import { resetSkeleton } from 'Components/skeleton'
 
 export const resetCard = card => {
 	let givenCard = card

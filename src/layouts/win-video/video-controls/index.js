@@ -714,7 +714,7 @@ const startDecorationLoad = _ => {
 }
 
 const skipSegmentSB = _ => {
-	const { disableSponsorblock } = storage.settings
+	const { disableSponsorblock, notifySkipSegment } = storage.settings
 
 	if (disableSponsorblock) return
 
@@ -722,12 +722,11 @@ const skipSegmentSB = _ => {
 
 	if (isPlaying(video) && segmentsSB.length > 0) {
 		for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
-			const segmentSB = segmentsSB[index]
-			if (video.currentTime >= segmentSB.startTime && video.currentTime <= segmentSB.endTime) {
-				video.currentTime = segmentSB.endTime
+			const { startTime, endTime } = segmentsSB[index]
+			if (video.currentTime >= startTime && video.currentTime <= endTime) {
+				video.currentTime = endTime
 				isSync = false
 
-				const { notifySkipSegment } = storage.settings
 				if (notifySkipSegment) showToast('info', 'Segment is skipped!')
 			}
 		}
