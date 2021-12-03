@@ -6,7 +6,7 @@ const chalk = require('chalk')
 const columnify = require('columnify')
 const webpack = require('webpack')
 const webpackStream = require('webpack-stream')
-const webpackConfig = require('../webpack.config.js')
+const webpackDev = require('../webpack.dev.js')
 
 // CHALKS
 
@@ -101,20 +101,20 @@ const logESLintTotalResults = results => {
 }
 
 const lintScripts = () =>
-	src(['./src/components/**/*.js', './src/layouts/**/*.js', './src/global/**/*.js', './src/main.js'])
+	src(['src/components/**/*.js', 'src/layouts/**/*.js', 'src/global/**/*.js', 'src/main.js'])
 		.pipe(eslint({ fix: true }))
 		.pipe(eslint.result(logESLintResult))
 		.pipe(eslint.results(logESLintTotalResults))
 
 const bundleModules = () => {
-	src('./src/lib/scripts/*.js').pipe(concat('vendor.js')).pipe(dest('./bundle/js/'))
-	return src(['./src/components/**/*.js', './src/layouts/**/*.js', './src/global/**/*.js', './src/main.js'])
-		.pipe(webpackStream(webpackConfig), webpack)
-		.pipe(dest('./bundle/js'))
+	src('src/lib/scripts/*.js').pipe(concat('vendor.js')).pipe(dest('bundle/js/'))
+	return src(['src/components/**/*.js', 'src/layouts/**/*.js', 'src/global/**/*.js', 'src/main.js'])
+		.pipe(webpackStream(webpackDev), webpack)
+		.pipe(dest('bundle/js'))
 }
 
 const watchScripts = () => {
-	watch(['./src/components/**/*.js', './src/layouts/**/*.js', './src/global/**/*.js', './src/main.js'], bundleModules)
+	watch(['src/components/**/*.js', 'src/layouts/**/*.js', 'src/global/**/*.js', 'src/main.js'], bundleModules)
 }
 
 module.exports = { cleanScripts, lintScripts, bundleModules, watchScripts }

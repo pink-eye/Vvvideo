@@ -5,34 +5,35 @@ const cleanCSS = require('gulp-clean-css')
 const sass = require('gulp-sass')(require('node-sass'))
 const uglify = require('gulp-uglify-es').default
 const notify = require('gulp-notify')
+const concat = require('gulp-concat')
 const webpack = require('webpack')
 const webpackStream = require('webpack-stream')
-const webpackConfig = require('../webpack.config.js')
+const webpackProd = require('../webpack.prod.js')
 
 const clean = () => del(['bundle/*'])
 
 const minifyStyles = () =>
-	src('./src/scss/**/*')
+	src('src/**/*.scss')
 		.pipe(sass().on('error', notify.onError()))
 		.pipe(
 			cleanCSS({
 				level: 2,
 			})
 		)
-		.pipe(dest('./bundle/css/'))
+		.pipe(dest('bundle/css/'))
 
 const uglifyScripts = () => {
-	src('./src/js/vendor/**.js')
+	src('src/lib/scripts/*.js')
 		.pipe(concat('vendor.js'))
 		.pipe(uglify().on('error', notify.onError()))
-		.pipe(dest('./bundle/js/'))
-	return src(['./src/js/global.js', './src/js/components/**.js', './src/js/main.js'])
-		.pipe(webpackStream(webpackConfig), webpack)
+		.pipe(dest('bundle/js'))
+	return src(['src/components/**/*.js', 'src/layouts/**/*.js', 'src/global/**/*.js', 'src/main.js'])
 		.pipe(uglify().on('error', notify.onError()))
-		.pipe(dest('./bundle/js'))
+		.pipe(webpackStream(webpackProd), webpack)
+		.pipe(dest('bundle/js'))
 }
 
 const compressImages = () =>
-	src(['./src/img/**.{jpg,png,jpeg,svg}', './src/img/**/*.{jpg,png,jpeg}']).pipe(image()).pipe(dest('./bundle/img'))
+	src(['src/img/**.{jpg,png,jpeg,svg}', 'src/img/**/*.{jpg,png,jpeg}']).pipe(image()).pipe(dest('bundle/img'))
 
 module.exports = { clean, minifyStyles, uglifyScripts, compressImages }
