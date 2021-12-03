@@ -1,26 +1,25 @@
-const { app, BrowserWindow } = require('electron'),
-	path = require('path'),
-	electron = require('electron'),
-	globalShortcut = electron.globalShortcut,
-	fs = require('fs')
+const { app, BrowserWindow } = require('electron')
+const path = require('path')
+const electron = require('electron')
+const globalShortcut = electron.globalShortcut
+const fs = require('fs')
 
-if (require('electron-squirrel-startup')) app.quit()
+if (require('electron-squirrel-startup')) return app.quit()
 
 let win = null
-
-const STORAGE_PATH = `${__dirname}\\storage.json`
-const ICONS_PATH = `assets\\icons`
-
 let icon = null
+
+const STORAGE_PATH = path.resolve(__dirname, 'storage.json')
+
 switch (process.platform) {
 	case 'win32':
-		icon = path.resolve(__dirname, ICONS_PATH, 'icon.ico')
+		icon = path.resolve(__dirname, 'assets', 'icons', 'icon.ico')
 		break
 	case 'darwin':
-		icon = path.resolve(__dirname, ICONS_PATH, 'icon.icns')
+		icon = path.resolve(__dirname, 'assets', 'icons', 'icon.icns')
 		break
 	case 'linux':
-		icon = path.resolve(__dirname, ICONS_PATH, 'icon.png')
+		icon = path.resolve(__dirname, 'assets', 'icons', 'icon.png')
 		break
 }
 
@@ -30,16 +29,13 @@ const createWindow = _ => {
 		frame: false,
 		fullscreen: true,
 		offscreen: false,
-		contextIsolation: true,
-		enableRemoteModule: false,
-		backgroundColor: '#d0257a',
+		backgroundColor: '#16161d',
 		minWidth: 320,
 		webPreferences: {
-			preload: `${__dirname}\\preload.js`,
-			show: false,
-			devTools: true,
+			preload: path.join(__dirname, 'preload.js'),
 		},
 	})
+	
 	win.loadFile(path.join(__dirname, 'index.html'))
 
 	win.once('ready-to-show', _ => {
@@ -58,11 +54,11 @@ const createWindow = _ => {
 const checkProxy = _ => {
 	try {
 		let data = fs.readFileSync(STORAGE_PATH, 'utf-8')
-		let storage = JSON.parse(data)
+		let { enableProxy, proxy } = JSON.parse(data).settings
 
-		if (storage.settings.enableProxy) {
-			let proxy = storage.settings.proxy
-			app.commandLine.appendSwitch('proxy-server', `${proxy.protocol}://${proxy.host}:${proxy.port}`)
+		if (enableProxy) {
+			let { protocol, host, port } = proxy
+			app.commandLine.appendSwitch('proxy-server', `${protocol}://${host}:${port}`)
 		}
 	} catch (error) {
 		console.log(error)
