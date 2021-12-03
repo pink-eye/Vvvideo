@@ -4,7 +4,6 @@ module.exports = {
 	output: {
 		filename: 'main.js',
 	},
-	devtool: 'eval-source-map',
 	resolve: {
 		alias: {
 			Global: path.resolve(__dirname, 'src', 'global', 'js'),

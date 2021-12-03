@@ -15,7 +15,9 @@
 		"prepare": "husky install"
 	},
 	"jest": {
-		"moduleFileExtensions": ["js"],
+		"moduleFileExtensions": [
+			"js"
+		],
 		"moduleNameMapper": {
 			"^Global/(.*)$": "<rootDir>/src/global/js/$1",
 			"^Components/(.*)$": "<rootDir>/src/components/$1",
@@ -85,7 +87,7 @@
 		"chalk": "^4.1.2",
 		"columnify": "^1.5.4",
 		"del": "^6.0.0",
-		"electron": "15.3.0",
+		"electron": "15.3.3",
 		"eslint": "8.2.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-prettier": "^8.3.0",
@@ -124,6 +126,7 @@
 		"stylelint-prettier": "^2.0.0",
 		"stylelint-scss": "^4.0.0",
 		"webpack": "^5.64.2",
+		"webpack-merge": "^5.8.0",
 		"webpack-stream": "^7.0.0"
 	}
 }
