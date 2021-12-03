@@ -56,6 +56,30 @@
 * Import and export subscriptions
 * Hot keys
 
+## 🛠️ Building
+
+1. Clone this repo
+```
+git clone https://github.com/pink-eye/Vvvideo
+```
+2. Install dependencies
+```
+npm i / yarn add
+```
+3. Make a bundle
+```
+gulp build
+```
+4. Building
+* Make a package
+```
+npm run package
+```
+* Make an installer
+```
+npm run make
+```
+
 ## 🙏 Issues
 Feel free to open an issue for suggestions or any unexpected behavior encountered.
 
