@@ -138,7 +138,7 @@ const removeTracks = () => {
 }
 
 const disableAudio = _ => {
-	let audio = getSelector('audio')
+	let audio = getSelector('.video').querySelector('audio')
 
 	if (audio) {
 		resetMediaEl(audio)

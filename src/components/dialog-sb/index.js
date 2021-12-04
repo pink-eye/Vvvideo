@@ -39,7 +39,7 @@ const showDialogSB = _ => {
 	if (document.fullscreenElement) document.exitFullscreen()
 
 	let video = getSelector('video')
-	let audio = getSelector('audio')
+	let audio = getSelector('.video').querySelector('audio')
 
 	video.pause()
 	audio && audio.pause()
