@@ -1,6 +1,5 @@
 const { src, dest } = require('gulp')
 const del = require('del')
-const image = require('gulp-image')
 const cleanCSS = require('gulp-clean-css')
 const sass = require('gulp-sass')(require('node-sass'))
 const uglify = require('gulp-uglify-es').default
@@ -33,7 +32,12 @@ const uglifyScripts = () => {
 		.pipe(dest('bundle/js'))
 }
 
-const compressImages = () =>
-	src(['src/img/**.{jpg,png,jpeg,svg}', 'src/img/**/*.{jpg,png,jpeg}']).pipe(image()).pipe(dest('bundle/img'))
+const compressImages = async () => {
+	const image = await import('gulp-image')
+
+	return src(['src/img/**.{jpg,png,jpeg,svg}', 'src/img/**/*.{jpg,png,jpeg}'])
+		.pipe(image.default())
+		.pipe(dest('bundle/img'))
+}
 
 module.exports = { clean, minifyStyles, uglifyScripts, compressImages }
