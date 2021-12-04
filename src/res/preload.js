@@ -142,7 +142,7 @@ contextBridge.exposeInMainWorld('API', {
 	},
 
 	clearTempFolder: _ => {
-		const folder = 'bundle\\temp'
+		const folder = path.resolve(__dirname, 'temp')
 
 		fs.readdir(folder, (err, files) => {
 			if (err) throw err
