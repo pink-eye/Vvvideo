@@ -12,33 +12,17 @@
 
 ## 📷 Screenshots
 
-<h3>Latest</h3>
 
-![Screenshot-Latest](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(6).png)
+![Screenshot-Latest](./src/res/assets/screenshots/screenshot(2).png)
 
-<h3>Video</h3>
+![Screenshot-Video](./src/res/assets/screenshots/screenshot(3).png)
 
-![Screenshot-Video](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(7).png)
+![Screenshot-Channel](./src/res/assets/screenshots/screenshot(4).png)
 
-<h3>Channel</h3>
+![Screenshot-Trending](./src/res/assets/screenshots/screenshot(1).png)
 
-![Screenshot-Channel](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(1).png)
+![Screenshot-Settings](./src/res/assets/screenshots/screenshot(5).png)
 
-<h3>Trending</h3>
-
-![Screenshot-Trending](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(2).png)
-
-<h3>Settings</h3>
-
-![Screenshot-Settings](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(3).png)
-
-<h3>Search results</h3>
-
-![Screenshot-Search](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(4).png)
-
-<h3>Video description</h3>
-
-![Screenshot-Video-Descr](https://github.com/pink-eye/Vvvideo/blob/main/src/res/assets/screenshots/screenshot%20(5).png)
 
 ## 💥 Features
 * Watch videos without ads
@@ -47,6 +31,7 @@
 * Subscribe to channels and get their latest uploads
 * Display general info about videos, channels and playlists
 * Search videos, channels and playlists
+* Saves search queries (you can disable this if you want)
 * History of watched videos (you can disable this if you want)
 * Remember time point of watched video (you can disable this if you want)
 * Responsive layout (it means the app looks good on the each device)
@@ -58,26 +43,21 @@
 
 ## 🛠️ Building
 
-1. Clone this repo
 ```
+# Clone this repo
 git clone https://github.com/pink-eye/Vvvideo
-```
-2. Install dependencies
-```
-npm i / yarn add
-```
-3. Make a bundle
-```
+
+# Install dependencies
+yarn add
+
+# Make a bundle
 gulp build
-```
-4. Building
-* Make a package
-```
-npm run package
-```
-* Make an installer
-```
-npm run make
+
+# Create a package
+yarn run package
+
+# or create a package and an installer at once
+yarn run make
 ```
 
 ## 🙏 Issues
