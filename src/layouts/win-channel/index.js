@@ -175,5 +175,9 @@ export const prepareWinChannel = async (btnWin, id) => {
 		return
 	}
 
-	openWinChannel(data)
+	let channel = getSelector('.channel')
+
+	if (channel.classList.contains('_active')) openWinChannel(data)
+
+	channel = null
 }

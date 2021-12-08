@@ -47,25 +47,34 @@ const saveSearchQuery = query => {
 	appStorage.updateStorage(storage)
 }
 
+const getSearchResultsData = query => {
+	const { enableProxy, proxy } = appStorage.getStorage().settings
+	return enableProxy ? API.scrapeSearchResultsProxy(query, proxy) : API.scrapeSearchResults(query)
+}
+
 export const openWinSearchResults = async _ => {
-	let searchResults = getSelector('.search-results')
 	let searchBar = getSelector('.header').querySelector('.search__bar')
-	let cardAll = searchResults.querySelectorAll('.card')
+	let data = null
+
+	const query = searchBar.value
 
 	try {
-		let data = null
-
-		const { enableProxy, proxy } = appStorage.getStorage().settings
-		const query = searchBar.value
-
 		if (lastSearchResult?.originalQuery !== query) {
 			saveSearchQuery(query)
 			setTimeout(restrainRecentQueriesLength, 30)
 
-			data = enableProxy ? await API.scrapeSearchResultsProxy(query, proxy) : await API.scrapeSearchResults(query)
+			data = await getSearchResultsData(query)
 
 			lastSearchResult = data
 		}
+	} catch ({ message }) {
+		showToast('error', message)
+	}
+
+	let searchResults = getSelector('.search-results')
+
+	if (searchResults.classList.contains('_active')) {
+		let cardAll = searchResults.querySelectorAll('.card')
 
 		data ||= lastSearchResult
 
@@ -99,11 +108,10 @@ export const openWinSearchResults = async _ => {
 					break
 			}
 		}
-	} catch (error) {
-		showToast('error', error.message)
-	} finally {
-		searchResults = null
-		searchBar = null
+		
 		cardAll = null
 	}
+
+	searchResults = null
+	searchBar = null
 }

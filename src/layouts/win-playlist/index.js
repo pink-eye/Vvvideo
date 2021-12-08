@@ -178,5 +178,9 @@ export const prepareWinPlaylist = async (btnWin, id) => {
 		return
 	}
 
-	openWinPlaylist(data)
+	let playlist = getSelector('.playlist')
+
+	if (playlist.classList.contains('_active')) openWinPlaylist(data)
+
+	playlist = null
 }

@@ -247,7 +247,13 @@ export const prepareWinVideo = async (btnWin, id) => {
 		return
 	}
 
-	openWinVideo(data)
+	let videoParent = getSelector('.video')
 
-	initVideoPlayer(data)
+	if (videoParent.classList.contains('_active')) {
+		openWinVideo(data)
+
+		initVideoPlayer(data)
+	}
+
+	videoParent = null
 }
