@@ -936,12 +936,12 @@ export const initVideoPlayer = async data => {
 
 	storage = appStorage.getStorage()
 
-	const { autoplay } = storage.settings
+	const { autoplay, notifySkipSegment } = storage.settings
 
 	try {
 		segmentsSB = await getSegmentsSB(data.videoDetails.videoId)
 	} catch (error) {
-		showToast('info', `Sponsorblock doesn't have segments for this video`)
+		if (notifySkipSegment) showToast('info', `Sponsorblock doesn't have segments for this video`)
 	}
 
 	fillSegmentsSB(segmentsSB)

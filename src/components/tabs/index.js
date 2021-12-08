@@ -52,7 +52,7 @@ const showRequiredTab = async tab => {
 		showToast('error', message)
 	}
 
-	if (data && channelTab !== 'About') {
+	if (data && channelTab !== 'About' && reqTabContent.classList.contains('_active')) {
 		const { items, continuation } = data
 		let cardAll = reqTabContent.querySelectorAll('.card')
 		const typeCard = channelTab === 'Videos' ? 'video' : 'playlist'

@@ -52,63 +52,61 @@ const openWinVideo = data => {
 
 	if (videoDetails.isLive) video.classList.add('_live')
 
-	if (video.classList.contains('_active')) {
-		video.dataset.id = videoDetails.videoId
+	video.dataset.id = videoDetails.videoId
 
-		prepareSubscribeBtn(subscribeBtn, videoDetails.author.id, videoDetails.author.name)
+	prepareSubscribeBtn(subscribeBtn, videoDetails.author.id, videoDetails.author.name)
 
-		// FILL VIDEO INFO
+	// FILL VIDEO INFO
 
-		if (settings.disableStoryboard || videoDetails.storyboards.length === 0) progressStoryboard.remove()
+	if (settings.disableStoryboard || videoDetails.storyboards.length === 0) progressStoryboard.remove()
 
-		if (progressStoryboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
-			progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
+	if (progressStoryboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
+		progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
 
-		if (videoDetails.title !== videoTitle.textContent) videoTitle.textContent = videoDetails.title
-		topBarTitle.textContent = videoDetails.title
+	if (videoDetails.title !== videoTitle.textContent) videoTitle.textContent = videoDetails.title
+	topBarTitle.textContent = videoDetails.title
 
-		removeSkeleton(titleSkeleton)
+	removeSkeleton(titleSkeleton)
 
-		if (videoDetails.thumbnails) videoPoster.src = videoDetails.thumbnails.at(-1).url
+	if (videoDetails.thumbnails) videoPoster.src = videoDetails.thumbnails.at(-1).url
 
-		if (videoViews.textContent === '...') videoViews.textContent = normalizeCount(videoDetails.viewCount)
+	if (videoViews.textContent === '...') videoViews.textContent = normalizeCount(videoDetails.viewCount)
 
-		if (videoDate.textContent === '...') videoDate.textContent = formatDate(videoDetails.publishDate)
+	if (videoDate.textContent === '...') videoDate.textContent = formatDate(videoDetails.publishDate)
 
-		if (videoDate.textContent === 'Premiere') {
-			const { reason: datePremiere } = data.player_response.playabilityStatus
-			videoDate.textContent = datePremiere
-			controls.hidden = true
-		}
-
-		videoDislikes.textContent = normalizeCount(videoDetails.dislikes)
-		videoLikes.textContent = normalizeCount(videoDetails.likes)
-
-		if (partSkeletonAll.length > 0) {
-			for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
-				const partSkeleton = partSkeletonAll[index]
-				removeSkeleton(partSkeleton)
-			}
-		}
-
-		topBarAuthor.textContent = videoDetails.author.name
-
-		let authorParams = {
-			parent: authorCard,
-			name: videoDetails.author.name,
-			subs: `${roundNum(videoDetails.author.subscriber_count)} subscribers`,
-			id: videoDetails.author.id,
-			avatarSrc: videoDetails.author.thumbnails ? videoDetails.author.thumbnails.at(-1).url : '',
-		}
-
-		fillAuthorCard(authorParams)
-
-		authorParams = null
-
-		spoilerContent.innerHTML = normalizeVideoDescription(videoDetails.description)
-
-		saveVideoInHistory(data)
+	if (videoDate.textContent === 'Premiere') {
+		const { reason: datePremiere } = data.player_response.playabilityStatus
+		videoDate.textContent = datePremiere
+		controls.hidden = true
 	}
+
+	videoDislikes.textContent = normalizeCount(videoDetails.dislikes)
+	videoLikes.textContent = normalizeCount(videoDetails.likes)
+
+	if (partSkeletonAll.length > 0) {
+		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
+			const partSkeleton = partSkeletonAll[index]
+			removeSkeleton(partSkeleton)
+		}
+	}
+
+	topBarAuthor.textContent = videoDetails.author.name
+
+	let authorParams = {
+		parent: authorCard,
+		name: videoDetails.author.name,
+		subs: `${roundNum(videoDetails.author.subscriber_count)} subscribers`,
+		id: videoDetails.author.id,
+		avatarSrc: videoDetails.author.thumbnails ? videoDetails.author.thumbnails.at(-1).url : '',
+	}
+
+	fillAuthorCard(authorParams)
+
+	authorParams = null
+
+	spoilerContent.innerHTML = normalizeVideoDescription(videoDetails.description)
+
+	saveVideoInHistory(data)
 
 	subscribeBtn = null
 	videoInfo = null
