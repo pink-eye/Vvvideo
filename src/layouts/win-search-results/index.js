@@ -49,7 +49,7 @@ const saveSearchQuery = query => {
 
 const getSearchResultsData = query => {
 	const { enableProxy, proxy } = appStorage.getStorage().settings
-	return enableProxy ? API.scrapeSearchResultsProxy(query, proxy) : API.scrapeSearchResults(query)
+	return enableProxy ? API.scrapeSearchResultsProxy(query, proxy) : API.scrapeSearchResults(query, { pages: 2 })
 }
 
 export const openWinSearchResults = async _ => {
