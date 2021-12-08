@@ -37,10 +37,11 @@
 			height: 100%;
 			object-fit: contain;
 
-			background-color: hsl(0, 0%, 0%);
+			background-color: var(--color-bg-duration);
 
 			&::cue {
 				font-family: var(--ff);
+				line-height: 1.5;
 			}
 		}
 
