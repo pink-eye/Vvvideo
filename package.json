@@ -33,7 +33,15 @@
 		"forge": {
 			"packagerConfig": {
 				"name": "Vvvideo",
-				"icon": "./bundle/assets/icons/icon.ico"
+				"icon": "./bundle/assets/icons/icon.ico",
+				"ignore": [
+					"^(/__tests__$)",
+					"^(/.husky$)",
+					"^(/gulp$)",
+					"^(/src$)",
+					"webpack\\.\\w+\\.js",
+					"gulpfile.js"
+				]
 			},
 			"makers": [
 				{
