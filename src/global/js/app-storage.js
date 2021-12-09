@@ -3,20 +3,20 @@ export class AppStorage {
 
 	setStorage(data) {
 		const dataJSON = JSON.stringify(data)
-		sessionStorage.setItem(this.KEY_STORAGE, dataJSON)
+		localStorage.setItem(this.KEY_STORAGE, dataJSON)
 	}
 
 	getStorage() {
-		const dataJSON = sessionStorage.getItem(this.KEY_STORAGE)
+		const dataJSON = localStorage.getItem(this.KEY_STORAGE)
 		return JSON.parse(dataJSON)
 	}
 
 	async updateStorage(data) {
-		await API.writeStorage(data)
 		this.setStorage(data)
+		await API.writeStorage(data)
 	}
 
 	clearLocalStorage() {
-		sessionStorage.removeItem(this.KEY_STORAGE)
+		localStorage.removeItem(this.KEY_STORAGE)
 	}
 }
