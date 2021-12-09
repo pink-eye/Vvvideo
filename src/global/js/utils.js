@@ -1,5 +1,4 @@
 import { AppStorage } from 'Global/app-storage'
-import { showToast } from 'Components/toast'
 
 export const cacheSelector = (key, value) => {
 	if (typeof value === 'undefined') return cacheSelector[key]
@@ -130,14 +129,7 @@ export const handleClickLink = event => {
 
 	if (!reference) return
 
-	navigator.clipboard.writeText(reference).then(
-		() => {
-			showToast('info', `'${reference}' was copied to clipboard`)
-		},
-		() => {
-			showToast('error', `Fail! '${reference}' wasn't copied to clipboard`)
-		}
-	)
+	navigator.clipboard.writeText(reference)
 
 	API.openExternalLink(reference)
 
