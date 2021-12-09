@@ -34,6 +34,10 @@
 		"GraphModal": "readonly"
 	},
 	"settings": {
-		"import/resolver": "webpack"
+		"import/resolver": {
+			"webpack": {
+				"config": "webpack.dev.js"
+			}
+		}
 	}
 }

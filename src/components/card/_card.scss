@@ -1,4 +1,5 @@
 .card {
+	.card {
 	display: grid;
 	grid-template-rows: auto 1fr;
 	width: 100%;
@@ -38,7 +39,7 @@
 			z-index: 1;
 
 			width: var(--watched-progress);
-			height: 2px;
+			height: 4px;
 			border-radius: var(--brs-s);
 
 			background-color: var(--color-accent-s);

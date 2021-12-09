@@ -39,6 +39,10 @@
 
 			background-color: var(--color-bg-duration);
 
+			&::-webkit-media-text-track-display {
+				text-align: center !important;
+			}
+
 			&::cue {
 				font-family: var(--ff);
 				line-height: 1.5;
