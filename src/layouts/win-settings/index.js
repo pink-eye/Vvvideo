@@ -188,13 +188,13 @@ const handleChangeCheckbox = event => {
 
 		case 'disableRecentQueries':
 			clearRecentQueries()
-			showToast('good', 'Restart app')
+			showToast('info', 'Restart app')
 			break
 
 		case 'enableProxy':
 			checkbox.checked
 				? showToast('info', 'Restart app after the fields is filled in')
-				: showToast('good', 'Restart app')
+				: showToast('info', 'Restart app')
 			break
 
 		case 'notAdaptContent':
@@ -205,7 +205,7 @@ const handleChangeCheckbox = event => {
 		case 'dontShowRecentQueriesOnTyping':
 		case 'disableStoryboard':
 		case 'disableHistory':
-			showToast('good', 'Refresh app')
+			showToast('info', 'Refresh app')
 			break
 	}
 

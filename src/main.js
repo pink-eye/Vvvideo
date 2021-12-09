@@ -47,24 +47,25 @@ document.addEventListener('DOMContentLoaded', async _ => {
 
 	let storage = {}
 	const appStorage = new AppStorage()
+	storage = appStorage.getStorage()
 
-	const onReadStorage = async data => {
-		appStorage.clearLocalStorage()
-		Object.assign(storage, JSON.parse(data))
-		appStorage.setStorage(storage)
-
-		fillWinSettings()
-
-		openWinLatest()
-
-		initSuggestions()
-
-		if (storage.settings.disableSearchSuggestions) {
-			searchBar.addEventListener('blur', hideOverlay)
+	if (!storage) {
+		const onReadStorage = data => {
+			storage = {}
+			Object.assign(storage, JSON.parse(data))
+			appStorage.setStorage(storage)
 		}
+
+		API.readStorage(onReadStorage)
 	}
 
-	await API.readStorage(onReadStorage)
+	fillWinSettings()
+	openWinLatest()
+	initSuggestions()
+
+	if (storage.settings.disableSearchSuggestions) {
+		searchBar.addEventListener('blur', hideOverlay)
+	}
 
 	// HIDE ON SCROLL
 

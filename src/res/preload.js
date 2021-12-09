@@ -135,7 +135,11 @@ contextBridge.exposeInMainWorld('API', {
 
 			return new Promise(resolve =>
 				https.get(`${track.baseUrl}&fmt=${format}`, res => {
-					resolve(res.pipe(fs.createWriteStream(path.resolve(__dirname, outputFolder, outputFile))))
+					res.pipe(fs.createWriteStream(path.resolve(__dirname, outputFolder, outputFile)))
+
+					res.on('end', _ => {
+						resolve()
+					})
 				})
 			)
 		}

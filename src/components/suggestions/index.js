@@ -143,7 +143,7 @@ const initSuggestions = _ => {
 	let searchBar = headerSearch.querySelector('.search__bar')
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
 
-	const { disableSearchSuggestions, enableProxy, proxy, disableRecentQueries, dontShowRecentQueriesOnTyping } =
+	const { disableSearchSuggestions, enableProxy, proxy, dontShowRecentQueriesOnTyping } =
 		appStorage.getStorage().settings
 
 	if (disableSearchSuggestions) return

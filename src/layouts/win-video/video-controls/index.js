@@ -122,7 +122,7 @@ const loadEachCaption = data => {
 	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
 
 	if (captionTracks?.length > 0) {
-		for (let index = 0, { length } = captionTracks; index < length; index++) {
+		for (let index = 0, { length } = captionTracks; index < length; index += 1) {
 			const { languageCode } = captionTracks[index]
 			API.getCaption(data, languageCode)
 		}
@@ -1053,14 +1053,12 @@ export const initVideoPlayer = async data => {
 			initDropdown(
 				controlsCaptions,
 				btn => {
+					removeTracks()
+
 					if (btn.dataset.src) {
 						const { label, src, srclang } = btn.dataset
-
-						removeTracks()
 						video.insertAdjacentHTML('afterBegin', createTrackHTML({ label, srclang, src }))
-					} else {
-						video.textTracks.mode = 'hidden'
-					}
+					} else video.textTracks.mode = 'hidden'
 				},
 				{ changeHead: true }
 			)

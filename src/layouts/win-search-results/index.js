@@ -58,22 +58,22 @@ export const openWinSearchResults = async _ => {
 
 	const query = searchBar.value
 
-	try {
-		if (lastSearchResult?.originalQuery !== query) {
+	if (lastSearchResult?.originalQuery !== query) {
+		try {
 			saveSearchQuery(query)
 			setTimeout(restrainRecentQueriesLength, 30)
 
 			data = await getSearchResultsData(query)
 
 			lastSearchResult = data
+		} catch ({ message }) {
+			showToast('error', message)
 		}
-	} catch ({ message }) {
-		showToast('error', message)
 	}
 
 	let searchResults = getSelector('.search-results')
 
-	if (searchResults.classList.contains('_active')) {
+	if (searchResults.classList.contains('_active') || lastSearchResult?.originalQuery === query) {
 		let cardAll = searchResults.querySelectorAll('.card')
 
 		data ||= lastSearchResult
@@ -108,7 +108,7 @@ export const openWinSearchResults = async _ => {
 					break
 			}
 		}
-		
+
 		cardAll = null
 	}
 

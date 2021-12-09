@@ -29,20 +29,7 @@ const focusCurrentChoice = dropdown => {
 	dropdownBtnCurrent = null
 }
 
-const toggleDropdown = dropdown => {
-	const onOpenDropdown = _ => {
-		focusCurrentChoice(dropdown)
-	}
-
-	if (dropdown.classList.contains('_active')) dropdown.classList.remove('_active')
-	else {
-		hideLastDropdown(dropdown)
-		dropdown.classList.add('_active')
-		setTimeout(onOpenDropdown, 100)
-	}
-}
-
-export const hideLastDropdown = (currentDropdown = null) => {
+export function hideLastDropdown(currentDropdown = null) {
 	let winActive = getSelector('.main__content').querySelector('.win._active')
 
 	if (winActive) {
@@ -54,6 +41,19 @@ export const hideLastDropdown = (currentDropdown = null) => {
 	}
 
 	winActive = null
+}
+
+function toggleDropdown(dropdown) {
+	const onOpenDropdown = _ => {
+		focusCurrentChoice(dropdown)
+	}
+
+	if (dropdown.classList.contains('_active')) dropdown.classList.remove('_active')
+	else {
+		hideLastDropdown(dropdown)
+		dropdown.classList.add('_active')
+		setTimeout(onOpenDropdown, 100)
+	}
 }
 
 export const initDropdown = (dropdown, callback, options = null) => {
