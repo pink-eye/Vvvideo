@@ -73,6 +73,7 @@
 		"electron-squirrel-startup": "^1.0.0",
 		"proxy-agent": "^5.0.0",
 		"sponsorblock-api": "^0.2.2",
+		"v8-compile-cache": "^2.3.0",
 		"youtube-suggest": "^1.1.2",
 		"yt-channel-info": "^2.2.0",
 		"ytdl-core": "^4.9.1",
