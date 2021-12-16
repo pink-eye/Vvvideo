@@ -7,6 +7,7 @@ import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'
 import { fillChannelCard } from 'Components/card/card-rich'
 
+const numCards = 20
 let increment = null
 let page = null
 let itemArray = []
@@ -145,7 +146,7 @@ export const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) =>
 		let firstCard = cardAll[0]
 		firstCard.focus()
 
-		increment += 20
+		increment += numCards
 		page += 1
 
 		getDataMore(typeCard)
@@ -161,7 +162,7 @@ export const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) =>
 		givenBtnPrevPage = null
 	}
 
-	if (page * 20 > itemArray.length - 1) {
+	if (page * numCards > itemArray.length - 1) {
 		let givenBtnNextPage = btnNextPage
 		givenBtnNextPage.disabled = true
 		givenBtnNextPage = null
@@ -181,7 +182,7 @@ export const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) =>
 		let firstCard = cardAll[0]
 		firstCard.focus()
 
-		increment -= 20
+		increment -= numCards
 		page -= 1
 
 		recycleDOM(cardAll, typeCard)

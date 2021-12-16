@@ -118,7 +118,7 @@ export const rememberWatchedTime = _ => {
 
 const getItemWithWatchedTime = videoId => storage.history.find(item => item.id === videoId && item?.watchedTime)
 
-export const getWatchedtTime = videoId => {
+export const getWatchedTime = videoId => {
 	storage = appStorage.getStorage()
 	const { disableHistory: isDisabledHistory, dontRememberWatchedTime } = storage.settings
 

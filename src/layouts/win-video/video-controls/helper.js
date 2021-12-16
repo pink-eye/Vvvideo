@@ -50,7 +50,7 @@ export const filterVideoAndAudio = formats => filterFormats(formats, format => f
 
 export const filterHLS = formats => filterFormats(formats, format => format.isHLS && format.hasAudio && format.hasVideo)
 
-export const getPreferedQuality = formats => {
+export const getPreferredQuality = formats => {
 	if (formats.length === 0) return null
 
 	const appStorage = new AppStorage()

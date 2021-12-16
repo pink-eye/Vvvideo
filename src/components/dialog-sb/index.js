@@ -185,8 +185,8 @@ const sendSegmentSB = async _ => {
 			await API.postSponsorblockInfo(videoId, uuidv4(), segment)
 			modal.close()
 			showToast('good', 'Segment was sent successfully!')
-		} catch (error) {
-			showToast('error', error.message)
+		} catch ({ message }) {
+			showToast('error', message)
 		}
 	} else showInvalidUI()
 

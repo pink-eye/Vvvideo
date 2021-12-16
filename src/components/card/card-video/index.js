@@ -1,7 +1,7 @@
 import { normalizeCount, convertSecondsToDuration } from 'Global/utils'
 import { removeSkeleton } from 'Components/skeleton'
 import { onErrorImage } from 'Components/card/helper'
-import { calculateWatchedProgress, getWatchedtTime } from 'Layouts/win-history/helper'
+import { calculateWatchedProgress, getWatchedTime } from 'Layouts/win-history/helper'
 
 export const fillVideoCard = (video, index, data) => {
 	let videoCard = video
@@ -51,7 +51,7 @@ export const fillVideoCard = (video, index, data) => {
 
 	info?.uploadedAt && (date = info.uploadedAt)
 
-	if (info?.liveNow || info?.isLive) date = 'Live'
+	if (info?.liveNow || info?.isLive) date = 'LIVE'
 
 	if (info?.premiere || info?.viewCountText?.includes('wait')) date = 'Premiere'
 
@@ -72,7 +72,7 @@ export const fillVideoCard = (video, index, data) => {
 
 	const videoId = videoCard.dataset.id
 
-	if (getWatchedtTime(videoId)) {
+	if (getWatchedTime(videoId)) {
 		let cardImage = videoCard.querySelector('.card__image')
 		let watchedProgress = calculateWatchedProgress(videoId)
 

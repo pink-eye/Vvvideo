@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 			appStorage.setStorage(storage)
 		}
 
-		API.readStorage(onReadStorage)
+		await API.readStorage(onReadStorage)
 	}
 
 	fillWinSettings()
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	})
 
 	initDropdown(formatDropdown, btn => {
-		storage.settings.defaltVideoFormat = btn.textContent
+		storage.settings.defaultVideoFormat = btn.textContent
 		appStorage.updateStorage(storage)
 	})
 

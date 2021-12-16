@@ -52,15 +52,13 @@ const buildStorage = data => {
 	if (data?.history) {
 		const { history } = data
 
-		if (history.length > 0)
-			storage.history = history
+		if (history.length > 0) storage.history = history
 	}
 
 	if (data?.recentQueries) {
 		const { recentQueries } = data
 
-		if (recentQueries.length > 0)
-			storage.recentQueries = recentQueries
+		if (recentQueries.length > 0) storage.recentQueries = recentQueries
 	}
 
 	if (data?.settings) {
@@ -70,7 +68,7 @@ const buildStorage = data => {
 }
 
 const readInputFile = _ => {
-	const validTip = 'Succesfully! Wait for refresh...'
+	const validTip = 'Successfully! Wait for refresh...'
 	const failTip = 'Fail... :('
 
 	let settings = getSelector('.settings')
@@ -127,6 +125,7 @@ const handleFile = _ => {
 }
 
 const handleInputField = event => {
+	storage = appStorage.getStorage()
 	const input = event.currentTarget
 	const option = input.id
 
@@ -176,6 +175,7 @@ const toggleTransition = isDisabled => {
 }
 
 const handleChangeCheckbox = event => {
+	storage = appStorage.getStorage()
 	const checkbox = event.currentTarget
 	const option = checkbox.id
 
@@ -329,11 +329,11 @@ export const fillWinSettings = _ => {
 		qualityDropdownHead = null
 	}
 
-	if (ss.defaltVideoFormat !== 'mp4') {
+	if (ss.defaultVideoFormat !== 'mp4') {
 		let formatDropdown = settings.querySelector('.option__format')
 		let formatDropdownHead = formatDropdown.querySelector('.dropdown__head')
 
-		formatDropdownHead.childNodes[0].data = ss.defaltVideoFormat
+		formatDropdownHead.childNodes[0].data = ss.defaultVideoFormat
 
 		formatDropdown = null
 		formatDropdownHead = null

@@ -165,7 +165,7 @@ const initSuggestions = _ => {
 
 	suggestionList.addEventListener('click', handleClickSuggestion)
 
-	const handleInpt = async _ => {
+	const handleInput = async _ => {
 		showOverlay()
 
 		suggestionListLength = 0
@@ -177,8 +177,8 @@ const initSuggestions = _ => {
 
 			try {
 				suggestions = enableProxy
-				? await API.scrapeSuggestsProxy(query, proxy)
-				: await API.scrapeSuggests(query)
+					? await API.scrapeSuggestsProxy(query, proxy)
+					: await API.scrapeSuggests(query)
 			} catch ({ message }) {
 				showToast('error', message)
 			}
@@ -198,7 +198,7 @@ const initSuggestions = _ => {
 		}
 	}
 
-	searchBar.addEventListener('input', handleInpt)
+	searchBar.addEventListener('input', handleInput)
 }
 
 export { initSuggestions, chooseSuggestion, hideSuggestions, resetSelected, showRecentQueries }

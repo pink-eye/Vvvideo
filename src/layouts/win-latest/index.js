@@ -35,7 +35,7 @@ const openWinLatest = async _ => {
 	const appStorage = new AppStorage()
 	const { subscriptions } = appStorage.getStorage()
 
-	if (subscriptions.length > 0) {
+	if (subscriptions?.length > 0) {
 		let btnLatest = document.querySelector('button[data-win="latest"]')
 
 		for (let index = 0, { length } = subscriptions; index < length; index += 1) {
@@ -60,14 +60,12 @@ const openWinLatest = async _ => {
 			showToast('good', 'Latest uploads is got successfully')
 		} catch ({ message }) {
 			showToast('error', message)
+		} finally {
+			resetIndicator()
 		}
 
-		promises.length = 0
-
-		resetIndicator()
-
 		latestArray?.length > videoAll.length ? initPages(latest, latestArray, videoAll, 'video') : disablePages(latest)
-	}
+	} else showToast('info', `Oops... You don't have subscriptions`)
 
 	for (let index = 0, { length } = videoAll; index < length; index += 1) {
 		let video = videoAll[index]
