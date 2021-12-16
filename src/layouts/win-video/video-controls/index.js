@@ -15,7 +15,7 @@ import {
 	filterVideoAndAudio,
 	filterVideoMP4NoAudio,
 	filterVideoWebm,
-	getPreferedQuality,
+	getPreferredQuality,
 	getHighestAudio,
 } from 'Layouts/win-video/video-controls/helper'
 import {
@@ -26,7 +26,7 @@ import {
 import { initDropdown } from 'Components/dropdown'
 import { removeSkeleton } from 'Components/skeleton'
 import { showToast } from 'Components/toast'
-import { getWatchedtTime, rememberWatchedTime } from 'Layouts/win-history/helper'
+import { getWatchedTime, rememberWatchedTime } from 'Layouts/win-history/helper'
 import { initDialogSB, recordSegmentSB } from 'Components/dialog-sb'
 import { AppStorage } from 'Global/app-storage'
 
@@ -77,11 +77,9 @@ const insertQualityList = videoFormats => {
 	let quality = controls.querySelector('.controls__quality')
 	let qualityList = quality.querySelector('.dropdown__list')
 
-	if (videoFormats.length > 0) {
-		for (let index = 0, { length } = videoFormats; index < length; index += 1) {
-			const videoFormat = videoFormats[index]
-			qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(videoFormat.qualityLabel))
-		}
+	for (let index = 0, { length } = videoFormats; index < length; index += 1) {
+		const videoFormat = videoFormats[index]
+		qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(videoFormat.qualityLabel))
 	}
 
 	controls = null
@@ -93,39 +91,34 @@ const createCaptionItemDefault = _ => `<li class="dropdown__item">
 											<button class="dropdown__btn btn-reset">No captions</button>
 										</li>`
 
-const insertCaptionList = data => {
+const handleCaption = ({ videoId, languageCode, simpleText }) => {
 	let controls = getSelector('.controls')
 	let captions = controls.querySelector('.controls__captions')
 	let captionList = captions.querySelector('.dropdown__list')
 
-	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
 	const folder = 'temp'
+	const file = `${videoId}.${languageCode}.vtt`
+	const path = `${folder}/${file}`
 
-	if (captionTracks?.length > 0) {
-		for (let index = 0, { length } = captionTracks; index < length; index += 1) {
-			const { name, languageCode } = captionTracks[index]
-			const file = `${data.videoDetails.videoId}.${languageCode}.vtt`
-			const path = `${folder}/${file}`
+	captionList.insertAdjacentHTML('afterBegin', createCaptionItemHTML(simpleText, languageCode, path))
 
-			captionList.insertAdjacentHTML('afterBegin', createCaptionItemHTML(name.simpleText, languageCode, path))
-		}
-	}
+	if (!captionList.textContent.includes('No captions'))
+		captionList.insertAdjacentHTML('afterBegin', createCaptionItemDefault())
 
-	captionList.insertAdjacentHTML('afterBegin', createCaptionItemDefault())
+	captions.hidden &&= false
 
 	controls = null
 	captions = null
 	captionList = null
 }
 
-const loadEachCaption = data => {
-	const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+const loadCaptions = (data, captionTracks, callback) => {
+	for (let index = 0, { length } = captionTracks; index < length; index += 1) {
+		const { languageCode } = captionTracks[index]
 
-	if (captionTracks?.length > 0) {
-		for (let index = 0, { length } = captionTracks; index < length; index += 1) {
-			const { languageCode } = captionTracks[index]
-			API.getCaption(data, languageCode)
-		}
+		API.getCaption(data, languageCode)
+			.then(callback)
+			.catch(({ message }) => showToast('error', message))
 	}
 }
 
@@ -167,7 +160,7 @@ const startVideoLive = url => {
 					hls.recoverMediaError()
 					break
 				default:
-					showToast('error', 'Fatal error was occured. Cannot recover :(')
+					showToast('error', 'Fatal error was occurred. Cannot recover :(')
 					hls.destroy()
 					break
 			}
@@ -192,10 +185,9 @@ const prepareVideoOnly = formats => {
 }
 
 const prepareVideoAndAudio = formats => {
-	let audio = getSelector('.video').querySelector('audio')
 	let videoFormats = null
 
-	switch (storage.settings.defaltVideoFormat) {
+	switch (storage.settings.defaultVideoFormat) {
 		case 'mp4':
 			videoFormats = filterVideoMP4NoAudio(formats)
 			break
@@ -204,95 +196,39 @@ const prepareVideoAndAudio = formats => {
 			break
 	}
 
-	const { url } = getHighestAudio(formats)
-	audio.src = url
-
-	if (videoFormats.length === 0) videoFormats = prepareVideoOnly(formats)
-
-	audio = null
-
 	return videoFormats
 }
 
 const prepareVideoPlayer = data => {
 	const { formats, videoDetails } = data
+	const { disableSeparatedStreams } = storage.settings
 
-	let videoParent = getSelector('.video')
-	let videoSkeleton = videoParent.querySelector('.video-skeleton')
-	let video = videoParent.querySelector('video')
-	let quality = getSelector('.controls').querySelector('.controls__quality')
-	let qualityCurrent = quality.querySelector('.dropdown__head')
+	let { video, audio } = getMedia()
 	let videoFormats = null
-	let hasCaptions = false
 	let currentQuality = null
-
-	const onLoadedData = _ => {
-		if (videoSkeleton) removeSkeleton(videoSkeleton)
-
-		video = null
-		videoSkeleton = null
-		videoParent = null
-	}
-
-	if (!formats || formats.length === 0) {
-		onLoadedData()
-		return undefined
-	}
 
 	if (videoDetails.isLive) {
 		videoFormats = prepareVideoLive(formats)
-		currentQuality = getPreferedQuality(videoFormats) ?? videoFormats[0]
-		startVideoLive(currentQuality.url)
+		currentQuality = getPreferredQuality(videoFormats) ?? videoFormats[0]
 	} else {
-		videoFormats = storage.settings.disableSeparatedStreams
-			? prepareVideoOnly(formats)
-			: prepareVideoAndAudio(formats)
+		if (disableSeparatedStreams) videoFormats = prepareVideoOnly(formats)
+		else {
+			videoFormats = prepareVideoAndAudio(formats)
 
-		currentQuality = getPreferedQuality(videoFormats) ?? videoFormats.at(-1)
+			if (!videoFormats || videoFormats.length === 0) videoFormats = prepareVideoOnly(formats)
+		}
+
+		currentQuality = getPreferredQuality(videoFormats) ?? videoFormats.at(-1)
 		video.src = currentQuality.url
-	}
 
-	qualityCurrent.textContent = currentQuality.qualityLabel
-
-	video.addEventListener('loadedmetadata', onLoadedData, { once: true })
-
-	insertQualityList(videoFormats)
-
-	if (data.player_response.captions) {
-		hasCaptions = true
-
-		loadEachCaption(data)
-		insertCaptionList(data)
-	}
-
-	quality = null
-	qualityCurrent = null
-
-	return { videoFormats, hasCaptions }
-}
-
-const initSponsorblockSegments = data => {
-	if (data.length === 0) return
-
-	let video = getSelector('video')
-	let progressSponsorblock = getSelector('.controls').querySelector('.progress__sponsorblock')
-	let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item')
-
-	for (let index = 0, { length } = sponsorblockItemAll; index < length; index += 1) {
-		const sponsorblockItem = sponsorblockItemAll[index]
-		const { startTime, endTime, videoDuration } = data[index]
-		const segmentLength = endTime - startTime
-		const vDuration = videoDuration !== 0 ? videoDuration : ~~video.duration
-		const sponsorblockItemWidth = convertToPercentage(segmentLength, vDuration)
-		const sponsorblockItemLeft = convertToPercentage(startTime, vDuration)
-
-		sponsorblockItem.style.setProperty('--width', `${sponsorblockItemWidth}%`)
-		sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`)
+		const { url } = getHighestAudio(formats)
+		audio.src = url
 	}
 
 	video = null
-	progressSponsorblock = null
-	sponsorblockItemAll = null
+	audio = null
+
+	return { videoFormats, currentQuality }
 }
 
 const changeVideoSrc = (url, currentTime) => {
@@ -381,18 +317,19 @@ const playEl = async el => {
 		if (playPromise !== undefined && !isPlaying(el)) {
 			try {
 				await playPromise
-
 				let audio = getSelector('.video').querySelector('audio')
-				let video = getSelector('video')
 
 				if (audio) {
+					let video = getSelector('video')
+
 					if (isPlaying(video) && isPlaying(audio)) syncMedia()
+
+					video = null
 				}
 
 				audio = null
-				video = null
-			} catch (error) {
-				showToast('error', error.message)
+			} catch ({ message }) {
+				showToast('error', message)
 			}
 		}
 	}
@@ -403,7 +340,7 @@ const startVideoFromLastPoint = _ => {
 
 	if (isEmpty(videoId)) return
 
-	const videoWatchedTime = getWatchedtTime(videoId)
+	const videoWatchedTime = getWatchedTime(videoId)
 
 	if (videoWatchedTime) getSelector('video').currentTime = videoWatchedTime
 }
@@ -486,17 +423,11 @@ const changeIcon = iconPath => {
 	controlsSwitchIcon = null
 }
 
-const showIconPlay = _ => {
-	changeIcon('img/svg/controls.svg#play')
-}
+const showIconPlay = _ => changeIcon('img/svg/controls.svg#play')
 
-const showIconPause = _ => {
-	changeIcon('img/svg/controls.svg#pause')
-}
+const showIconPause = _ => changeIcon('img/svg/controls.svg#pause')
 
-const toggleIconPlayPause = _ => {
-	getSelector('video').paused ? showIconPlay() : showIconPause()
-}
+const toggleIconPlayPause = _ => (getSelector('video').paused ? showIconPlay() : showIconPause())
 
 const updateTimeElapsed = _ => {
 	let controls = getSelector('.controls')
@@ -716,11 +647,11 @@ const startDecorationLoad = _ => {
 const skipSegmentSB = _ => {
 	const { disableSponsorblock, notifySkipSegment } = storage.settings
 
-	if (disableSponsorblock) return
+	if (disableSponsorblock || segmentsSB.length === 0) return
 
 	let video = getSelector('video')
 
-	if (isPlaying(video) && segmentsSB.length > 0) {
+	if (isPlaying(video)) {
 		for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
 			const { startTime, endTime } = segmentsSB[index]
 			if (video.currentTime >= startTime && video.currentTime <= endTime) {
@@ -793,7 +724,9 @@ const handleAbort = _ => {
 
 const handleError = _ => {
 	let { video, audio } = getMedia()
-	let errorMsg = video.error ? video.error.message : audio.error.message
+	let errorMsg = video.error?.message ?? audio?.error?.message
+
+	if (!errorMsg) return
 
 	showToast('error', errorMsg)
 	pauseEl(video)
@@ -803,10 +736,10 @@ const handleError = _ => {
 	video = null
 }
 
-const handleClickTimecode = event => {
-	if (!event.target.classList.contains('timecode')) return
+const handleClickTimecode = ({ target }) => {
+	if (!target.classList.contains('timecode')) return
 
-	let timecode = event.target
+	let timecode = target
 	getSelector('video').currentTime = convertDurationToSeconds(timecode.textContent)
 	isSync = false
 	document.activeElement.blur()
@@ -864,26 +797,26 @@ const backwardTime = _ => {
 	isSync = false
 }
 
-const handleKeyDownWithinVideo = event => {
+const handleKeyDownWithinVideo = ({ keyCode }) => {
 	if (getSelector('.video').classList.contains('_active') && (hasFocus(getSelector('body')) || hasFocus(null))) {
 		// ENTER || SPACE
-		if (event.keyCode === 13 || event.keyCode === 32) togglePlay()
+		if (keyCode === 13 || keyCode === 32) togglePlay()
 
 		// ARROW LEFT
-		if (event.keyCode === 37) backwardTime()
+		if (keyCode === 37) backwardTime()
 
 		// ARROW RIGHT
-		if (event.keyCode === 39) forwardTime()
+		if (keyCode === 39) forwardTime()
 
 		// M
-		if (event.keyCode === 77) toggleMuteVideoPlayer()
+		if (keyCode === 77) toggleMuteVideoPlayer()
 
 		// S
-		if (event.keyCode === 83) recordSegmentSB()
+		if (keyCode === 83) recordSegmentSB()
 
 		// V
 		const { disableSponsorblock } = storage.settings
-		if (event.keyCode === 86 && !disableSponsorblock) {
+		if (keyCode === 86 && !disableSponsorblock) {
 			doesSkipSegments = !doesSkipSegments
 			showToast(
 				'info',
@@ -892,20 +825,37 @@ const handleKeyDownWithinVideo = event => {
 		}
 
 		// F
-		if (event.keyCode === 70) toggleFullscreen()
+		if (keyCode === 70) toggleFullscreen()
 	}
 }
 
+const handleSegmentsSB = segments => {
+	if (!segments || segments.length === 0) return
+
+	segmentsSB = segments
+	fillSegmentsSB(segmentsSB)
+	visualizeSegmentsSB(segmentsSB)
+
+	!hasListeners && initDialogSB()
+}
+
+const loadSegmentsSB = (data, callback) => {
+	const { notifySkipSegment, disableSponsorblock } = storage.settings
+
+	if (disableSponsorblock) {
+		toggleSponsorblock(disableSponsorblock)
+		return
+	}
+
+	getSegmentsSB(data.videoDetails.videoId)
+		.then(callback)
+		.catch(() => notifySkipSegment && showToast('info', `Sponsorblock doesn't have segments for this video`))
+}
+
 const fillSegmentsSB = segments => {
-	const { disableSponsorblock } = storage.settings
-
-	toggleSponsorblock(disableSponsorblock)
-
-	if (disableSponsorblock || segments.length === 0) return
-
 	let video = getSelector('.video')
-	let controlsProgess = video.querySelector('.controls__progress')
-	let progressSponsorblock = controlsProgess.querySelector('.sponsorblock')
+	let controlsProgress = video.querySelector('.controls__progress')
+	let progressSponsorblock = controlsProgress.querySelector('.sponsorblock')
 	let sponsorblockItemHTML = createSponsorblockItemHTML()
 
 	for (let index = 0, { length } = segments; index < length; index += 1) {
@@ -913,12 +863,34 @@ const fillSegmentsSB = segments => {
 	}
 
 	video = null
-	controlsProgess = null
+	controlsProgress = null
 	progressSponsorblock = null
 	sponsorblockItemHTML = null
 }
 
-export const initVideoPlayer = async data => {
+const visualizeSegmentsSB = segments => {
+	let video = getSelector('video')
+	let progressSponsorblock = getSelector('.controls').querySelector('.progress__sponsorblock')
+	let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item')
+
+	for (let index = 0, { length } = sponsorblockItemAll; index < length; index += 1) {
+		const sponsorblockItem = sponsorblockItemAll[index]
+		const { startTime, endTime, videoDuration } = segments[index]
+		const segmentLength = endTime - startTime
+		const vDuration = videoDuration !== 0 ? videoDuration : ~~video.duration
+		const sponsorblockItemWidth = convertToPercentage(segmentLength, vDuration)
+		const sponsorblockItemLeft = convertToPercentage(startTime, vDuration)
+
+		sponsorblockItem.style.setProperty('--width', `${sponsorblockItemWidth}%`)
+		sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`)
+	}
+
+	video = null
+	progressSponsorblock = null
+	sponsorblockItemAll = null
+}
+
+export const initVideoPlayer = data => {
 	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
 	const controlsSwitch = controls.querySelector('.controls__switch')
@@ -933,28 +905,53 @@ export const initVideoPlayer = async data => {
 	const spoilerContent = videoParent.querySelector('.spoiler__content')
 	const video = videoWrapper.querySelector('video')
 	const audio = videoWrapper.querySelector('audio')
+	let videoSkeleton = videoParent.querySelector('.video-skeleton')
+	let hasCaptions = false
 
 	storage = appStorage.getStorage()
 
-	const { autoplay, notifySkipSegment } = storage.settings
+	const { videoFormats, currentQuality } = prepareVideoPlayer(data)
 
-	try {
-		segmentsSB = await getSegmentsSB(data.videoDetails.videoId)
-	} catch (error) {
-		if (notifySkipSegment) showToast('info', `Sponsorblock doesn't have segments for this video`)
+	const onLoadedData = _ => {
+		if (videoSkeleton) removeSkeleton(videoSkeleton)
+
+		videoSkeleton = null
 	}
 
-	fillSegmentsSB(segmentsSB)
+	if (!videoFormats || videoFormats.length === 0) {
+		onLoadedData()
+		return
+	}
 
-	const { videoFormats, hasCaptions } = prepareVideoPlayer(data)
+	video.addEventListener('loadedmetadata', onLoadedData, { once: true })
 
-	if (!videoFormats) return
+	if (data.videoDetails.isLive) startVideoLive(currentQuality.url)
+
+	let quality = controls.querySelector('.controls__quality')
+	let qualityCurrent = quality.querySelector('.dropdown__head')
+
+	qualityCurrent.textContent = currentQuality.qualityLabel
+	insertQualityList(videoFormats)
+
+	quality = null
+	qualityCurrent = null
+
+	if (data.player_response.captions) {
+		const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+
+		if (captionTracks?.length > 0) {
+			hasCaptions = true
+
+			loadCaptions(data, captionTracks, handleCaption)
+		}
+	}
+
+	loadSegmentsSB(data, handleSegmentsSB)
 
 	const initVideo = _ => {
 		const videoDuration = ~~video.duration
 		const time = convertSecondsToDuration(videoDuration)
 
-		initSponsorblockSegments(segmentsSB)
 		progressSeek.setAttribute('max', videoDuration)
 		timeDuration.textContent = time
 		timeDuration.setAttribute('datetime', time)
@@ -964,6 +961,8 @@ export const initVideoPlayer = async data => {
 	}
 
 	// MEDIA LISTENERS
+
+	const { autoplay } = storage.settings
 
 	if (autoplay) {
 		const handleCanPlay = _ => {
@@ -1026,7 +1025,7 @@ export const initVideoPlayer = async data => {
 
 	progressSeek.addEventListener('mousemove', handleMouseMoveProgressSeek)
 
-	window.addEventListener('unload', rememberWatchedTime, { once: true })
+	window.addEventListener('beforeunload', rememberWatchedTime, { once: true })
 
 	// HOT KEYS
 
@@ -1034,8 +1033,6 @@ export const initVideoPlayer = async data => {
 
 	if (!hasListeners) {
 		hasListeners = true
-
-		initDialogSB()
 
 		const controlsQuality = controls.querySelector('.controls__quality')
 
@@ -1063,7 +1060,6 @@ export const initVideoPlayer = async data => {
 				{ changeHead: true }
 			)
 		} else {
-			controlsCaptions.hidden = true
 			controlsCaptions = null
 		}
 
@@ -1120,14 +1116,14 @@ export const resetVideoPlayer = _ => {
 
 	rememberWatchedTime()
 
-	window.removeEventListener('unload', rememberWatchedTime)
+	window.removeEventListener('beforeunload', rememberWatchedTime)
 
 	isFirstPlay ||= true
 	isSync &&= false
 	doesSkipSegments ||= true
 	segmentsSB.length = 0
 
-	captions.hidden &&= false
+	captions.hidden ||= true
 
 	while (sponsorblock.firstChild) sponsorblock.firstChild.remove()
 

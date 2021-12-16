@@ -138,7 +138,11 @@ contextBridge.exposeInMainWorld('API', {
 					res.pipe(fs.createWriteStream(path.resolve(__dirname, outputFolder, outputFile)))
 
 					res.on('end', _ => {
-						resolve()
+						resolve({
+							videoId: info.videoDetails.videoId,
+							languageCode: track.languageCode,
+							simpleText: track.name.simpleText,
+						})
 					})
 				})
 			)
