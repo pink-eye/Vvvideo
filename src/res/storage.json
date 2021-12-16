@@ -20,7 +20,7 @@
 		"autoplay": true,
 		"disableSeparatedStreams": false,
 		"disableStoryboard": false,
-		"defaltVideoFormat": "webm",
+		"defaultVideoFormat": "webm",
 		"disableSearchSuggestions": false,
 		"regionTrending": "US",
 		"notAdaptContent": false,
