@@ -1,3 +1,4 @@
+require('v8-compile-cache')
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const electron = require('electron')
@@ -35,7 +36,7 @@ const createWindow = _ => {
 			preload: path.join(__dirname, 'preload.js'),
 		},
 	})
-	
+
 	win.loadFile(path.join(__dirname, 'index.html'))
 
 	win.once('ready-to-show', _ => {
@@ -52,19 +53,32 @@ const createWindow = _ => {
 }
 
 const checkProxy = _ => {
-	try {
-		let data = fs.readFileSync(STORAGE_PATH, 'utf-8')
+	fs.readFile(STORAGE_PATH, 'utf-8', (error, data) => {
+		if (error) throw error
+
 		let { enableProxy, proxy } = JSON.parse(data).settings
 
 		if (enableProxy) {
 			let { protocol, host, port } = proxy
 			app.commandLine.appendSwitch('proxy-server', `${protocol}://${host}:${port}`)
 		}
-	} catch (error) {
-		console.log(error)
-	}
+	})
 }
 
 app.on('will-finish-launching', checkProxy)
 
-app.on('ready', createWindow)
+app.whenReady().then(() => {
+	createWindow()
+
+	app.on('activate', () => {
+		if (BrowserWindow.getAllWindows().length === 0) {
+			createWindow()
+		}
+	})
+})
+
+app.on('window-all-closed', () => {
+	if (process.platform !== 'darwin') {
+		app.quit()
+	}
+})
