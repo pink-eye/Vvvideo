@@ -168,8 +168,8 @@
 	&__icon {
 		margin-right: 0;
 
-		svg {
-			fill: hsl(0,0%,100%)!important;
+		& svg {
+			fill: hsl(0,0%,100%);
 		}
 	}
 

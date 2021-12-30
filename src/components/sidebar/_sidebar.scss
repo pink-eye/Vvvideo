@@ -70,12 +70,9 @@
 				color: hsl(0, 0%, 100%);
 			}
 
-			.sidebar__icon {
-
-				svg {
-					fill: hsl(0, 0%, 100%) !important;
-					stroke: hsl(0, 0%, 100%) !important;
-				}
+			.sidebar__icon svg {
+				fill: hsl(0, 0%, 100%);
+				stroke: hsl(0, 0%, 100%);
 			}
 
 			&:focus-visible {
@@ -95,7 +92,8 @@
 			background-repeat: no-repeat;
 			background-size: 0 100%;
 
-			transition: border-color var(--trns),
+			transition:
+				border-color var(--trns),
 				background-color var(--trns),
 				background-size var(--trns-time-default) var(--ease-in-sine);
 		}
@@ -124,12 +122,9 @@
 					color: var(--color-accent-s);
 				}
 
-				.sidebar__icon {
-
-					svg {
-						fill: var(--color-accent-s) !important;
-						stroke: var(--color-accent-s) !important;
-					}
+				.sidebar__icon svg {
+					fill: var(--color-accent-s);
+					stroke: var(--color-accent-s);
 				}
 			}
 		}

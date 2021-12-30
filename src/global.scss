@@ -19,8 +19,8 @@
 svg {
 	transition: stroke var(--trns), fill var(--trns);
 
-	fill: var(--color-icon) !important;
-	stroke: var(--color-icon) !important;
+	fill: var(--color-icon);
+	stroke: var(--color-icon);
 }
 
 .title {
@@ -106,18 +106,18 @@ img {
 	&:not([disabled]) {
 		background-color: var(--color-bg-form);
 
-		svg {
-			fill: var(--color-title) !important;
-			stroke: var(--color-title) !important;
+		& svg {
+			fill: var(--color-title);
+			stroke: var(--color-title);
 		}
 	}
 
 	&[disabled] {
 		background-color: var(--color-bg-btn-disabled);
 
-		svg {
-			fill: var(--color-text) !important;
-			stroke: var(--color-text) !important;
+		& svg {
+			fill: var(--color-text);
+			stroke: var(--color-text);
 		}
 	}
 
@@ -128,9 +128,9 @@ img {
 			&:hover {
 				background-color: var(--color-title);
 
-				svg {
-					fill: var(--color-bg-form) !important;
-					stroke: var(--color-bg-form) !important;
+				& svg {
+					fill: var(--color-bg-form);
+					stroke: var(--color-bg-form);
 				}
 			}
 		}

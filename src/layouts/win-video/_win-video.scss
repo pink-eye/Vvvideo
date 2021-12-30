@@ -149,7 +149,7 @@
 			position: relative;
 			z-index: 1;
 
-			fill: hsl(0, 0%, 100%) !important;
+			fill: hsl(0, 0%, 100%);
 		}
 
 		&:not(._active),

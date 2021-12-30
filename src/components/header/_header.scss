@@ -46,10 +46,10 @@
 
 		transition: background-color var(--trns), border-color var(--trns);
 
-		svg {
+		& svg {
 			transition: fill var(--trns);
 
-			fill: var(--color-title) !important;
+			fill: var(--color-title);
 		}
 
 		@media (hover: hover) and (pointer: fine) {
@@ -57,8 +57,8 @@
 			&:hover {
 				background-color: var(--color-accent-l);
 
-				svg {
-					fill: var(--color-accent-s) !important;
+				& svg {
+					fill: var(--color-accent-s);
 				}
 			}
 		}
