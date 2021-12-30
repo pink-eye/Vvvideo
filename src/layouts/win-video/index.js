@@ -7,7 +7,7 @@ import { showToast } from 'Components/toast'
 import { resetSkeleton, removeSkeleton } from 'Components/skeleton'
 import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
 import { AppStorage } from 'Global/app-storage'
-import { initVideoPlayer } from 'Layouts/win-video/video-controls'
+import { initVideoPlayer } from 'Components/video-controls'
 import { normalizeVideoDescription, roundNum } from 'Layouts/win-video/helper'
 
 const appStorage = new AppStorage()

@@ -17,12 +17,12 @@ import {
 	filterVideoWebm,
 	getPreferredQuality,
 	getHighestAudio,
-} from 'Layouts/win-video/video-controls/helper'
+} from 'Components/video-controls/helper'
 import {
 	toggleSponsorblock,
 	createSponsorblockItemHTML,
 	getSegmentsSB,
-} from 'Layouts/win-video/video-controls/sponsorblock'
+} from 'Components/video-controls/sponsorblock'
 import { initDropdown } from 'Components/dropdown'
 import { removeSkeleton } from 'Components/skeleton'
 import { showToast } from 'Components/toast'
@@ -172,19 +172,7 @@ const startVideoLive = url => {
 	video = null
 }
 
-const prepareVideoLive = formats => {
-	disableAudio()
-
-	return filterHLS(formats)
-}
-
-const prepareVideoOnly = formats => {
-	disableAudio()
-
-	return filterVideoAndAudio(formats)
-}
-
-const prepareVideoAndAudio = formats => {
+const getVideoFormatsByPreferredFormat = formats => {
 	let videoFormats = null
 
 	switch (storage.settings.defaultVideoFormat) {
@@ -199,36 +187,63 @@ const prepareVideoAndAudio = formats => {
 	return videoFormats
 }
 
-const prepareVideoPlayer = data => {
+const prepareVideoPlayer = async data => {
 	const { formats, videoDetails } = data
-	const { disableSeparatedStreams } = storage.settings
+	const { disableSeparatedStreams, enableProxy, proxy } = storage.settings
 
-	let { video, audio } = getMedia()
 	let videoFormats = null
-	let currentQuality = null
 
-	if (videoDetails.isLive) {
-		videoFormats = prepareVideoLive(formats)
-		currentQuality = getPreferredQuality(videoFormats) ?? videoFormats[0]
-	} else {
-		if (disableSeparatedStreams) videoFormats = prepareVideoOnly(formats)
-		else {
-			videoFormats = prepareVideoAndAudio(formats)
+	if (videoDetails.isLive || disableSeparatedStreams) disableAudio()
 
-			if (!videoFormats || videoFormats.length === 0) videoFormats = prepareVideoOnly(formats)
-		}
-
-		currentQuality = getPreferredQuality(videoFormats) ?? videoFormats.at(-1)
-		video.src = currentQuality.url
-
-		const { url } = getHighestAudio(formats)
-		audio.src = url
+	if (videoDetails.isLive) videoFormats = filterHLS(formats)
+	else {
+		if (!disableSeparatedStreams) videoFormats = getVideoFormatsByPreferredFormat(formats)
+		else if (!videoFormats || videoFormats.length === 0 || disableSeparatedStreams)
+			videoFormats = filterVideoAndAudio(formats)
 	}
 
-	video = null
-	audio = null
+	const currentQualityVideo = getPreferredQuality(videoFormats) ?? videoFormats.at(-1)
+	const currentQualityAudio = getHighestAudio(formats)
 
-	return { videoFormats, currentQuality }
+	let urlRequests = null
+
+	try {
+		urlRequests = await Promise.all([
+			API.makeRequest(currentQualityVideo.url),
+			API.makeRequest(currentQualityAudio.url),
+		])
+	} catch ({ message }) {
+		showToast('error', message)
+		return
+	}
+
+	const [videoResponse, audioResponse] = urlRequests
+	const isOK = videoResponse.statusCode === 200 && audioResponse.statusCode === 200
+
+	if (isOK) {
+		let { video, audio } = getMedia()
+
+		video.src = currentQualityVideo.url
+		audio && (audio.src = currentQualityAudio.url)
+
+		video = null
+		audio = null
+
+		return { videoFormats, currentQuality: currentQualityVideo }
+	} else {
+		const id = videoDetails.videoId
+
+		let updatedData = null
+
+		try {
+			updatedData = enableProxy ? await API.scrapeVideoProxy(id, proxy) : await API.scrapeVideo(id)
+		} catch {
+			showToast('error', 'Oops... Check net connection')
+			return
+		}
+
+		return prepareVideoPlayer(updatedData)
+	}
 }
 
 const changeVideoSrc = (url, currentTime) => {
@@ -890,7 +905,7 @@ const visualizeSegmentsSB = segments => {
 	sponsorblockItemAll = null
 }
 
-export const initVideoPlayer = data => {
+export const initVideoPlayer = async data => {
 	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
 	const controlsSwitch = controls.querySelector('.controls__switch')
@@ -910,7 +925,7 @@ export const initVideoPlayer = data => {
 
 	storage = appStorage.getStorage()
 
-	const { videoFormats, currentQuality } = prepareVideoPlayer(data)
+	const { videoFormats, currentQuality } = await prepareVideoPlayer(data)
 
 	const onLoadedData = _ => {
 		if (videoSkeleton) removeSkeleton(videoSkeleton)

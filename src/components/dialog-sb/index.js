@@ -2,7 +2,7 @@ import { getSelector, convertDurationToSeconds, convertSecondsToDuration } from 
 import { AppStorage } from 'Global/app-storage'
 import { showToast } from 'Components/toast'
 import { formatDuration } from 'Components/dialog-sb/helper'
-import { uuidv4 } from 'Layouts/win-video/video-controls/sponsorblock'
+import { uuidv4 } from 'Components/video-controls/sponsorblock'
 
 let isRecording = false
 

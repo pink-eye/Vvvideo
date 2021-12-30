@@ -162,4 +162,6 @@ contextBridge.exposeInMainWorld('API', {
 			}
 		})
 	},
+
+	makeRequest: url => new Promise(resolve => https.get(url, resolve)),
 })
