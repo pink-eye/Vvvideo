@@ -4,13 +4,21 @@ const { cleanStyles, compileStyles, watchStyles } = require('./gulp/styles')
 const { cleanScripts, lintScripts, bundleModules, watchScripts } = require('./gulp/scripts')
 const { clean, minifyStyles, uglifyScripts, compressImages } = require('./gulp/build')
 
-exports.default = series(cleanDefault, parallel(transformHTML, moveResources, moveImages), watchFiles)
+const runDefault = () => series(cleanDefault, parallel(transformHTML, moveResources, moveImages), watchFiles)
 
-exports.styles = series(cleanStyles, compileStyles, watchStyles)
+const runStyles = () => series(cleanStyles, compileStyles, watchStyles)
 
-exports.scripts = series(cleanScripts, bundleModules, watchScripts)
+const runScripts = () => series(cleanScripts, bundleModules, watchScripts)
+
+exports.default = runDefault()
+
+exports.styles = runStyles()
+
+exports.scripts = runScripts()
 
 exports.lintJS = lintScripts
+
+exports.dev = parallel(runDefault(), runScripts(), runStyles())
 
 exports.build = series(
 	clean,
