@@ -18,11 +18,7 @@ import {
 	getPreferredQuality,
 	getHighestAudio,
 } from 'Components/video-controls/helper'
-import {
-	toggleSponsorblock,
-	createSponsorblockItemHTML,
-	getSegmentsSB,
-} from 'Components/video-controls/sponsorblock'
+import { toggleSponsorblock, createSponsorblockItemHTML, getSegmentsSB } from 'Components/video-controls/sponsorblock'
 import { initDropdown } from 'Components/dropdown'
 import { removeSkeleton } from 'Components/skeleton'
 import { showToast } from 'Components/toast'
@@ -428,9 +424,9 @@ const togglePlay = _ => {
 	video = null
 }
 
-const changeIcon = iconPath => {
+const changeIcon = (className, iconPath) => {
 	let controls = getSelector('.controls')
-	let controlsSwitchIcon = controls.querySelector('.controls__switch svg use')
+	let controlsSwitchIcon = controls.querySelector(`.controls__${className} svg use`)
 
 	controlsSwitchIcon.setAttribute('xlink:href', iconPath)
 
@@ -438,9 +434,13 @@ const changeIcon = iconPath => {
 	controlsSwitchIcon = null
 }
 
-const showIconPlay = _ => changeIcon('img/svg/controls.svg#play')
+const showIconPlay = _ => changeIcon('switch', 'img/svg/controls.svg#play')
 
-const showIconPause = _ => changeIcon('img/svg/controls.svg#pause')
+const showIconPause = _ => changeIcon('switch', 'img/svg/controls.svg#pause')
+
+const showIconOpenFullscreen = _ => changeIcon('screen', 'img/svg/controls.svg#open-fullscreen')
+
+const showIconCloseFullscreen = _ => changeIcon('screen', 'img/svg/controls.svg#close-fullscreen')
 
 const toggleIconPlayPause = _ => (getSelector('video').paused ? showIconPlay() : showIconPause())
 
@@ -505,7 +505,13 @@ const showBars = _ => {
 export const toggleFullscreen = _ => {
 	let videoWrapper = getSelector('.video').querySelector('.video__wrapper')
 
-	document.fullscreenElement ? document.exitFullscreen() : videoWrapper.requestFullscreen()
+	if (document.fullscreenElement) {
+		document.exitFullscreen()
+		showIconOpenFullscreen()
+	} else {
+		videoWrapper.requestFullscreen()
+		showIconCloseFullscreen()
+	}
 
 	videoWrapper = null
 }
@@ -737,13 +743,10 @@ const handleAbort = _ => {
 	video = null
 }
 
-const handleError = _ => {
+const handleError = ({ target }) => {
 	let { video, audio } = getMedia()
-	let errorMsg = video.error?.message ?? audio?.error?.message
 
-	if (!errorMsg) return
-
-	showToast('error', errorMsg)
+	showToast('error', target.error.message)
 	pauseEl(video)
 	pauseEl(audio)
 

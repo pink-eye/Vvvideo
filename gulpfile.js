@@ -10,11 +10,11 @@ const runStyles = () => series(cleanStyles, compileStyles, watchStyles)
 
 const runScripts = () => series(cleanScripts, bundleModules, watchScripts)
 
-exports.default = runDefault()
+exports.default = runDefault
 
-exports.styles = runStyles()
+exports.styles = runStyles
 
-exports.scripts = runScripts()
+exports.scripts = runScripts
 
 exports.lintJS = lintScripts
 
