@@ -70,7 +70,7 @@
 
 		width: auto;
 		max-height: 125px;
-		padding: 10px 5px;
+		padding: 5px;
 		border-radius: var(--brs-m);
 		overflow-y: auto;
 
@@ -82,7 +82,8 @@
 		background-color: var(--color-bg-form);
 		box-shadow: var(--box-shadow-m);
 
-		transition: opacity var(--trns),
+		transition:
+			opacity var(--trns),
 			visibility var(--trns),
 			background-color var(--trns),
 			box-shadow var(--trns),
@@ -104,7 +105,7 @@
 
 	&__btn {
 		width: 100%;
-		padding: 7px 20px;
+		padding: 12px 25px;
 		border-radius: var(--brs-s);
 
 		text-align: left;

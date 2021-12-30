@@ -11,6 +11,7 @@
 
 	.dropdown__head {
 		align-items: center;
+		justify-content: center;
 
 		font-weight: 500;
 	}
@@ -145,11 +146,13 @@
 	}
 
 	&__screen {
+		display: flex;
+		align-items: center;
 		margin-left: 10px;
 	}
 
 	&__speed {
-		min-width: 45px;
+		min-width: 50px;
 
 		cursor: pointer;
 	}

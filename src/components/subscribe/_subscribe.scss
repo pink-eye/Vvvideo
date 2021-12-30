@@ -2,8 +2,8 @@
 	position: relative;
 
 	display: inline-block;
-	padding: 21px 42px;
-	border-radius: var(--brs-xl);
+	padding: 27px 42px;
+	border-radius: var(--brs-m);
 
 	color: hsl(0, 0%, 100%);
 	font-weight: 500;
@@ -14,9 +14,9 @@
 		position: absolute;
 		inset: 0;
 
-		border-radius: var(--brs-xl);
+		border-radius: var(--brs-m);
 
-		box-shadow: 0 35px 15px -30px var(--color-box-shadow-xl);
+		box-shadow: 0 35px 15px -35px var(--color-box-shadow-xl);
 
 		transition: transform var(--trns), background-color var(--trns);
 
