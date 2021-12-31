@@ -7,7 +7,7 @@ import {
 	convertDurationToSeconds,
 	hasFocus,
 	handleClickLink,
-	closeApp
+	closeApp,
 } from 'Global/utils'
 import {
 	getMin,
@@ -908,14 +908,6 @@ const visualizeSegmentsSB = segments => {
 	sponsorblockItemAll = null
 }
 
-const handleBeforeUnload = event => {
-	event.preventDefault()
-	event.returnValue = ''
-	showToast('info', 'Save watched time to history...')
-	rememberWatchedTime()
-	closeApp()
-}
-
 export const initVideoPlayer = async data => {
 	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
@@ -1051,8 +1043,6 @@ export const initVideoPlayer = async data => {
 
 	progressSeek.addEventListener('mousemove', handleMouseMoveProgressSeek)
 
-	window.addEventListener('beforeunload', handleBeforeUnload, { once: true })
-
 	videoWrapper.addEventListener('fullscreenchange', toggleIconFullscreen)
 
 	// HOT KEYS
@@ -1142,8 +1132,6 @@ export const resetVideoPlayer = _ => {
 	let speed = controls.querySelector('.controls__speed')
 	let speedCurrent = speed.querySelector('.dropdown__head')
 	let spoilerContent = videoParent.querySelector('.spoiler__content')
-
-	window.removeEventListener('beforeunload', handleBeforeUnload)
 
 	isFirstPlay ||= true
 	isSync &&= false
