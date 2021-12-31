@@ -18,7 +18,7 @@ const focusCurrentChoice = dropdown => {
 	for (let index = 0, { length } = dropdownBtnAll; index < length; index += 1) {
 		const dropdownBtn = dropdownBtnAll[index]
 
-		if (dropdownHead.textContent === dropdownBtn.textContent) {
+		if (dropdownHead.textContent.trim() === dropdownBtn.textContent.trim()) {
 			dropdownBtn.focus()
 			dropdownBtn.classList.add('_current')
 		}
