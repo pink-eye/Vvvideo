@@ -7,6 +7,7 @@ import {
 	convertDurationToSeconds,
 	hasFocus,
 	handleClickLink,
+	closeApp
 } from 'Global/utils'
 import {
 	getMin,
@@ -907,6 +908,14 @@ const visualizeSegmentsSB = segments => {
 	sponsorblockItemAll = null
 }
 
+const handleBeforeUnload = event => {
+	event.preventDefault()
+	event.returnValue = ''
+	showToast('info', 'Save watched time to history...')
+	rememberWatchedTime()
+	closeApp()
+}
+
 export const initVideoPlayer = async data => {
 	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
@@ -1042,7 +1051,7 @@ export const initVideoPlayer = async data => {
 
 	progressSeek.addEventListener('mousemove', handleMouseMoveProgressSeek)
 
-	window.addEventListener('beforeunload', rememberWatchedTime, { once: true })
+	window.addEventListener('beforeunload', handleBeforeUnload, { once: true })
 
 	videoWrapper.addEventListener('fullscreenchange', toggleIconFullscreen)
 
@@ -1086,9 +1095,11 @@ export const initVideoPlayer = async data => {
 			const controlsSpeed = controls.querySelector('.controls__speed')
 
 			initDropdown(controlsSpeed, btn => {
-				audio && (audio.playbackRate = btn.dataset.speed)
+				const { speed } = btn.dataset
 
-				video.playbackRate = btn.dataset.speed
+				audio && (audio.playbackRate = speed)
+
+				video.playbackRate = speed
 
 				isSync = false
 			})
@@ -1107,6 +1118,8 @@ export const initVideoPlayer = async data => {
 }
 
 export const resetVideoPlayer = _ => {
+	rememberWatchedTime()
+
 	let { video, audio } = getMedia()
 	let videoParent = getSelector('.video')
 	let videoWrapper = videoParent.querySelector('.video__wrapper')
@@ -1130,9 +1143,7 @@ export const resetVideoPlayer = _ => {
 	let speedCurrent = speed.querySelector('.dropdown__head')
 	let spoilerContent = videoParent.querySelector('.spoiler__content')
 
-	rememberWatchedTime()
-
-	window.removeEventListener('beforeunload', rememberWatchedTime)
+	window.removeEventListener('beforeunload', handleBeforeUnload)
 
 	isFirstPlay ||= true
 	isSync &&= false

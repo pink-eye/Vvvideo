@@ -47,8 +47,8 @@ export const saveVideoInHistory = data => {
 		const { id } = newItem
 		const sameItem = isExist(id)
 
-		if (sameItem?.watchedTime) {
-			newItem.watchedTime = sameItem.watchedTime
+		if (sameItem) {
+			if (sameItem.watchedTime) newItem.watchedTime = sameItem.watchedTime
 			removeHistoryItem(id)
 		}
 
@@ -89,26 +89,18 @@ export const rememberWatchedTime = _ => {
 
 	if (isDisabledHistory && dontRememberWatchedTime) return
 
-	let videoParent = getSelector('.video')
-	let video = videoParent.querySelector('video')
+	const { id } = getSelector('.video').dataset
+	const { currentTime } = getSelector('video')
 
-	const watchedTime = video.currentTime
-
-	if (watchedTime === 0) return
-
-	const videoId = videoParent.dataset.id
+	if (currentTime === 0) return
 
 	for (let index = 0, { length } = storage.history; index < length; index += 1) {
-		if (storage.history[index].id === videoId) {
-			storage.history[index].watchedTime = watchedTime
-			break
+		if (storage.history[index].id === id) {
+			storage.history[index].watchedTime = currentTime
+			appStorage.updateStorage(storage)
+			return
 		}
 	}
-
-	appStorage.updateStorage(storage)
-
-	videoParent = null
-	video = null
 }
 
 const getItemWithWatchedTime = videoId => storage.history.find(item => item.id === videoId && item?.watchedTime)

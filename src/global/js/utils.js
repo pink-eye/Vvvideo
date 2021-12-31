@@ -12,17 +12,11 @@ export const getSelector = selector => {
 	return cacheSelector(selector)
 }
 
-export const reloadApp = _ => {
-	window.location.reload()
-}
+export const reloadApp = _ => window.location.reload()
 
-export const closeApp = _ => {
-	window.close()
-}
+export const closeApp = _ => window.close()
 
-export const scrollToTop = _ => {
-	window.scrollTo(0, 0)
-}
+export const scrollToTop = _ => window.scrollTo(0, 0)
 
 export const scrollToElem = y => {
 	let header = getSelector('.header')

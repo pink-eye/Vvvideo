@@ -148,8 +148,7 @@ const initSuggestions = _ => {
 
 	if (disableSearchSuggestions) return
 
-	const handleClickSuggestion = event => {
-		let { target } = event
+	const handleClickSuggestion = ({ target }) => {
 		let el = target.classList.contains('suggestion') ? target : target.closest('.suggestion')
 
 		if (!el) return
