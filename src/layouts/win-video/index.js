@@ -122,6 +122,9 @@ const openWinVideo = data => {
 	partSkeletonAll = null
 	titleSkeleton = null
 	authorCard = null
+	videoTitle = null
+	videoPoster = null
+	video = null
 }
 
 export const resetWinVideo = _ => {
@@ -165,10 +168,12 @@ export const resetWinVideo = _ => {
 	video = null
 	videoPoster = null
 	videoLikes = null
+	videoInfo = null
 	skeletonAll = null
 	videoDislikes = null
 	spoilerContent = null
 	videoViews = null
+	videoTitle = null
 	videoDate = null
 	subscribeBtn = null
 }

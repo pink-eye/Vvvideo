@@ -1,4 +1,4 @@
-import { getDurationTimeout } from 'Global/utils'
+import { getDurationTimeout, invokeFunctionByTimeout } from 'Global/utils'
 
 const removeSkeleton = skeleton => {
 	let givenSkeleton = skeleton
@@ -10,7 +10,8 @@ const removeSkeleton = skeleton => {
 		givenSkeleton = null
 	}
 
-	setTimeout(onRemoveSkeleton, getDurationTimeout())
+	const timeout = getDurationTimeout()
+	invokeFunctionByTimeout(onRemoveSkeleton, timeout)
 }
 
 const resetSkeleton = skeleton => {

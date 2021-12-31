@@ -1,5 +1,5 @@
 import { AppStorage } from 'Global/app-storage'
-import { getDurationTimeout, isEmpty } from 'Global/utils'
+import { getDurationTimeout, isEmpty, invokeFunctionByTimeout } from 'Global/utils'
 import { showToast } from 'Components/toast'
 
 const appStorage = new AppStorage()
@@ -57,7 +57,8 @@ const transformBtn = (btn, btnText, isSubscribed) => {
 		givenBtnText = null
 	}
 
-	setTimeout(onChangeState, getDurationTimeout(200))
+	const timeout = getDurationTimeout(200)
+	invokeFunctionByTimeout(onChangeState, timeout)
 }
 
 const handleClickSubscribeBtn = event => {

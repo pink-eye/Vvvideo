@@ -58,14 +58,11 @@ const openWinChannel = data => {
 		}
 
 		channelBannerImg.addEventListener('load', onLoadBanner, { once: true })
-	} else if (authorThumbnails) {
-		channelBanner.style.setProperty('--bg-image', `url(${authorThumbnails.at(-1).url})`)
-		removeSkeleton(bannerSkeleton)
-
-		channelBannerImg = null
-		bannerSkeleton = null
 	} else {
-		channelBanner.style.setProperty('--bg-image', '#fff')
+		authorThumbnails
+			? channelBanner.style.setProperty('--bg-image', `url(${authorThumbnails.at(-1).url})`)
+			: channelBanner.style.setProperty('--bg-image', '#fff')
+
 		removeSkeleton(bannerSkeleton)
 
 		channelBannerImg = null

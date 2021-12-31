@@ -1,4 +1,4 @@
-import { getDurationTimeout, getSelector } from 'Global/utils'
+import { getDurationTimeout, getSelector, invokeFunctionByTimeout } from 'Global/utils'
 import { AppStorage } from 'Global/app-storage'
 
 const isLargeScreen = _ => (window.innerWidth - 1600) / 2 > 226
@@ -25,7 +25,8 @@ export const toggleMenu = _ => {
 			sidebarBtnActive = null
 		}
 
-		setTimeout(onOpenMenu, getDurationTimeout())
+		const timeout = getDurationTimeout()
+		invokeFunctionByTimeout(onOpenMenu, timeout)
 	} else {
 		burger.classList.remove('_active')
 		sidebar.classList.add('_closed')

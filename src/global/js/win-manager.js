@@ -1,4 +1,4 @@
-import { getSelector, scrollToTop, getDurationTimeout } from 'Global/utils'
+import { getSelector, scrollToTop, getDurationTimeout, invokeFunctionByTimeout } from 'Global/utils'
 import { AppStorage } from 'Global/app-storage'
 import { YoutubeHelper } from 'Global/youtube-helper'
 import { resetGrid, resetGridAuthorCard } from 'Components/grid'
@@ -87,9 +87,7 @@ const startFillingWin = ({ win, btnWin, id }) => {
 const showWin = win => {
 	win.classList.add('_active')
 
-	const afterActiveWin = _ => {
-		win.classList.add('_anim-win')
-	}
+	const afterActiveWin = _ => win.classList.add('_anim-win')
 
 	setTimeout(afterActiveWin, 15)
 }
@@ -101,19 +99,18 @@ const hideWin = win => {
 		const onHideLastWin = _ => {
 			win.classList.remove('_active')
 
-			const afterOpenWin = _ => {
-				resetWin(win)
-			}
+			const afterOpenWin = _ => resetWin(win)
 
 			setTimeout(afterOpenWin, 200)
 		}
 
-		setTimeout(onHideLastWin, getDurationTimeout(200))
+		const timeout = getDurationTimeout(200)
+		invokeFunctionByTimeout(onHideLastWin, timeout)
 	}
 }
 
-export const manageWin = async event => {
-	let btnWin = event.target.dataset.win ? event.target : event.target.closest('[data-win]')
+export const manageWin = async ({ target }) => {
+	let btnWin = target.dataset.win ? target : target.closest('[data-win]')
 
 	if (btnWin && !btnWin.disabled) {
 		let { win, id } = btnWin.dataset
@@ -186,7 +183,8 @@ export const manageWin = async event => {
 				btnWin &&= null
 			}
 
-			setTimeout(afterHideLastWin, getDurationTimeout(200))
+			const timeout = getDurationTimeout(200)
+			invokeFunctionByTimeout(afterHideLastWin, timeout)
 		}
 	}
 }

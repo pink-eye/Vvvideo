@@ -5,8 +5,6 @@ import { getSelector, convertSecondsToDuration, convertDurationToSeconds, conver
 const appStorage = new AppStorage()
 let storage = null
 
-const isRecent = newItem => storage.history.length > 0 && newItem.id === storage.history[0].id
-
 const isExist = id => storage.history.find(item => item.id === id)
 
 const removeHistoryItem = id => {
@@ -22,7 +20,6 @@ const restrainHistoryLength = _ => {
 	const { history } = storage
 
 	if (history.length > maxHistoryLength) storage.history.length = maxHistoryLength
-
 }
 
 const scrapeVideoInfoFromData = data => {
@@ -47,20 +44,18 @@ export const saveVideoInHistory = data => {
 
 	if (data) {
 		const newItem = scrapeVideoInfoFromData(data)
-		if (!isRecent(newItem)) {
-			const { id } = newItem
-			const sameItem = isExist(id)
+		const { id } = newItem
+		const sameItem = isExist(id)
 
-			if (sameItem && sameItem?.watchedTime) {
-				newItem.watchedTime = sameItem.watchedTime
-				removeHistoryItem(id)
-			}
-
-			addHistoryItem(newItem)
-
-			restrainHistoryLength()
-			appStorage.updateStorage(storage)
+		if (sameItem?.watchedTime) {
+			newItem.watchedTime = sameItem.watchedTime
+			removeHistoryItem(id)
 		}
+
+		addHistoryItem(newItem)
+
+		restrainHistoryLength()
+		appStorage.updateStorage(storage)
 	}
 }
 

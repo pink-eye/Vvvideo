@@ -121,6 +121,8 @@ export const convertDurationToSeconds = duration => {
 export const getDurationTimeout = (timeout = 300) =>
 	new AppStorage().getStorage().settings.disableTransition ? 0 : timeout
 
+export const invokeFunctionByTimeout = (callback, timeout) => (timeout > 0 ? setTimeout(callback, timeout) : callback())
+
 export const handleClickLink = event => {
 	event.preventDefault()
 

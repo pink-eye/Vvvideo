@@ -310,7 +310,7 @@ const syncMedia = _ => {
 	video = null
 }
 
-export const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2
+const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2
 
 const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime > 0
 
@@ -347,16 +347,16 @@ const playEl = async el => {
 }
 
 const startVideoFromLastPoint = _ => {
-	const videoId = getSelector('.video').dataset.id
+	const { id } = getSelector('.video').dataset
 
-	if (isEmpty(videoId)) return
+	if (isEmpty(id)) return
 
-	const videoWatchedTime = getWatchedTime(videoId)
+	const videoWatchedTime = getWatchedTime(id)
 
 	if (videoWatchedTime) getSelector('video').currentTime = videoWatchedTime
 }
 
-export const playVideoPlayer = async _ => {
+const playVideoPlayer = async _ => {
 	let { video, audio } = getMedia()
 
 	await playEl(video)
@@ -374,7 +374,7 @@ export const playVideoPlayer = async _ => {
 	video = null
 }
 
-export const pauseVideoPlayer = _ => {
+const pauseVideoPlayer = _ => {
 	let { video, audio } = getMedia()
 
 	pauseEl(video)
@@ -444,11 +444,13 @@ const showIconCloseFullscreen = _ => changeIcon('screen', 'img/svg/controls.svg#
 
 const toggleIconPlayPause = _ => (getSelector('video').paused ? showIconPlay() : showIconPause())
 
+const toggleIconFullscreen = () => (document.fullscreenElement ? showIconCloseFullscreen() : showIconOpenFullscreen())
+
 const updateTimeElapsed = _ => {
 	let controls = getSelector('.controls')
 	let timeElapsed = controls.querySelector('.time__elapsed')
-	const currentTime = ~~getSelector('video').currentTime
-	const time = convertSecondsToDuration(currentTime)
+	const { currentTime } = getSelector('video')
+	const time = convertSecondsToDuration(~~currentTime)
 
 	timeElapsed.textContent = time
 	timeElapsed.setAttribute('datetime', time)
@@ -502,16 +504,10 @@ const showBars = _ => {
 	topBar = null
 }
 
-export const toggleFullscreen = _ => {
+const toggleFullscreen = _ => {
 	let videoWrapper = getSelector('.video').querySelector('.video__wrapper')
 
-	if (document.fullscreenElement) {
-		document.exitFullscreen()
-		showIconOpenFullscreen()
-	} else {
-		videoWrapper.requestFullscreen()
-		showIconCloseFullscreen()
-	}
+	document.fullscreenElement ? document.exitFullscreen() : videoWrapper.requestFullscreen()
 
 	videoWrapper = null
 }
@@ -671,11 +667,13 @@ const skipSegmentSB = _ => {
 	if (disableSponsorblock || segmentsSB.length === 0) return
 
 	let video = getSelector('video')
+	const { currentTime } = video
 
 	if (isPlaying(video)) {
 		for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
 			const { startTime, endTime } = segmentsSB[index]
-			if (video.currentTime >= startTime && video.currentTime <= endTime) {
+
+			if (currentTime >= startTime && currentTime <= endTime) {
 				video.currentTime = endTime
 				isSync = false
 
@@ -757,8 +755,8 @@ const handleError = ({ target }) => {
 const handleClickTimecode = ({ target }) => {
 	if (!target.classList.contains('timecode')) return
 
-	let timecode = target
-	getSelector('video').currentTime = convertDurationToSeconds(timecode.textContent)
+	let { textContent } = target
+	getSelector('video').currentTime = convertDurationToSeconds(textContent)
 	isSync = false
 	document.activeElement.blur()
 	scrollToTop()
@@ -781,6 +779,7 @@ const handleInputVolumeSeek = _ => {
 const handleEnd = _ => {
 	let { video, audio } = getMedia()
 
+	pauseVideoPlayer()
 	audio && (audio.currentTime = 0)
 	video.currentTime = 0
 
@@ -921,8 +920,6 @@ export const initVideoPlayer = async data => {
 	const videoParent = getSelector('.video')
 	const videoWrapper = videoParent.querySelector('.video__wrapper')
 	const spoilerContent = videoParent.querySelector('.spoiler__content')
-	const video = videoWrapper.querySelector('video')
-	const audio = videoWrapper.querySelector('audio')
 	let videoSkeleton = videoParent.querySelector('.video-skeleton')
 	let hasCaptions = false
 
@@ -940,6 +937,8 @@ export const initVideoPlayer = async data => {
 		onLoadedData()
 		return
 	}
+
+	const { video, audio } = getMedia()
 
 	video.addEventListener('loadedmetadata', onLoadedData, { once: true })
 
@@ -1045,6 +1044,8 @@ export const initVideoPlayer = async data => {
 
 	window.addEventListener('beforeunload', rememberWatchedTime, { once: true })
 
+	videoWrapper.addEventListener('fullscreenchange', toggleIconFullscreen)
+
 	// HOT KEYS
 
 	document.addEventListener('keydown', handleKeyDownWithinVideo)
@@ -1106,12 +1107,10 @@ export const initVideoPlayer = async data => {
 }
 
 export const resetVideoPlayer = _ => {
+	let { video, audio } = getMedia()
 	let videoParent = getSelector('.video')
 	let videoWrapper = videoParent.querySelector('.video__wrapper')
-	let video = getSelector('video')
-	let audio = videoWrapper.querySelector('audio')
 	let controls = getSelector('.controls')
-	let controlsSwitchIcon = controls.querySelector('.controls__switch svg use')
 	let sponsorblock = controls.querySelector('.sponsorblock')
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock')
 	let progress = controls.querySelector('.progress')
@@ -1121,7 +1120,6 @@ export const resetVideoPlayer = _ => {
 	let progressSeek = progress.querySelector('.progress__seek')
 	let qualityList = quality.querySelector('.dropdown__list')
 	let captions = controls.querySelector('.controls__captions')
-	let captionHead = controls.querySelector('.dropdown__head')
 	let captionList = captions.querySelector('.dropdown__list')
 	let volumeSeek = controls.querySelector('.volume__seek')
 	let controlDecorations = controls.querySelector('.controls__decorations')
@@ -1153,7 +1151,6 @@ export const resetVideoPlayer = _ => {
 	removeTracks()
 
 	speedCurrent.textContent = 'x1'
-	captionHead.textContent = 'CC'
 
 	if (!isEmpty(hls)) {
 		hls.detachMedia()
@@ -1178,6 +1175,8 @@ export const resetVideoPlayer = _ => {
 	video.removeEventListener('waiting', handleLoadingVideo)
 
 	video.removeEventListener('stalled', handleLoadingVideo)
+
+	videoWrapper.removeEventListener('fullscreenchange', toggleIconFullscreen)
 
 	if (audio) {
 		audio.removeEventListener('playing', handlePlaying)
@@ -1232,12 +1231,10 @@ export const resetVideoPlayer = _ => {
 				'<audio crossorigin="anonymous" referrerpolicy="no-referrer" preload></audio>'
 		  )
 
-	let iconPathPlay = 'img/svg/controls.svg#play'
-
-	if (controlsSwitchIcon.getAttribute('xlink:href') !== iconPathPlay)
-		controlsSwitchIcon.setAttribute('xlink:href', iconPathPlay)
-
 	controls.hidden &&= false
+
+	showIconPlay()
+	showIconOpenFullscreen()
 
 	API.clearTempFolder()
 
@@ -1246,7 +1243,6 @@ export const resetVideoPlayer = _ => {
 	video = null
 	audio = null
 	controls = null
-	controlsSwitchIcon = null
 	sponsorblock = null
 	sponsorblockBtn = null
 	progress = null
