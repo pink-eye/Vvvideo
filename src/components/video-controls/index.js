@@ -32,6 +32,7 @@ let isSync = false
 let doesSkipSegments = true
 let hls = null
 let segmentsSB = []
+let videoFormats = null
 let chapters = null
 
 const appStorage = new AppStorage()
@@ -75,8 +76,8 @@ const insertQualityList = videoFormats => {
 	let qualityList = quality.querySelector('.dropdown__list')
 
 	for (let index = 0, { length } = videoFormats; index < length; index += 1) {
-		const videoFormat = videoFormats[index]
-		qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(videoFormat.qualityLabel))
+		const { qualityLabel } = videoFormats[index]
+		qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(qualityLabel))
 	}
 
 	controls = null
@@ -170,25 +171,18 @@ const startVideoLive = url => {
 }
 
 const getVideoFormatsByPreferredFormat = formats => {
-	let videoFormats = null
-
 	switch (storage.settings.defaultVideoFormat) {
 		case 'mp4':
-			videoFormats = filterVideoMP4NoAudio(formats)
-			break
-		case 'webm':
-			videoFormats = filterVideoWebm(formats)
-			break
-	}
+			return filterVideoMP4NoAudio(formats)
 
-	return videoFormats
+		case 'webm':
+			return filterVideoWebm(formats)
+	}
 }
 
 const prepareVideoPlayer = async data => {
 	const { formats, videoDetails } = data
 	const { disableSeparatedStreams, enableProxy, proxy } = storage.settings
-
-	let videoFormats = null
 
 	if (videoDetails.isLive || disableSeparatedStreams) disableAudio()
 
@@ -226,7 +220,7 @@ const prepareVideoPlayer = async data => {
 		video = null
 		audio = null
 
-		return { videoFormats, currentQuality: currentQualityVideo }
+		return currentQualityVideo
 	} else {
 		const id = videoDetails.videoId
 
@@ -965,7 +959,7 @@ export const initVideoPlayer = async data => {
 
 	storage = appStorage.getStorage()
 
-	const { videoFormats, currentQuality } = await prepareVideoPlayer(data)
+	const currentQuality = await prepareVideoPlayer(data)
 
 	const onLoadedData = _ => {
 		if (videoSkeleton) removeSkeleton(videoSkeleton)
@@ -1098,9 +1092,9 @@ export const initVideoPlayer = async data => {
 
 		initDropdown(controlsQuality, btn => {
 			for (let index = 0, { length } = videoFormats; index < length; index += 1) {
-				const videoFormat = videoFormats[index]
+				const { qualityLabel, url } = videoFormats[index]
 
-				if (videoFormat.qualityLabel === btn.textContent) chooseQuality(videoFormat.url)
+				if (qualityLabel === btn.textContent) chooseQuality(url)
 			}
 		})
 
@@ -1171,6 +1165,7 @@ export const resetVideoPlayer = _ => {
 	doesSkipSegments ||= true
 	segmentsSB.length = 0
 	chapters = null
+	videoFormats = null
 
 	captions.hidden ||= true
 
