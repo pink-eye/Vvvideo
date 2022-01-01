@@ -19,6 +19,8 @@ export const normalizeVideoDescription = text => {
 }
 
 export const roundNum = num => {
+	if(!num) return '-'
+
 	let numStr = num.toString().replace(/[^0-9.]/g, '')
 
 	if (numStr < 1000) return numStr

@@ -61,7 +61,7 @@ export const openWinSearchResults = async _ => {
 	if (lastSearchResult?.originalQuery !== query) {
 		try {
 			saveSearchQuery(query)
-			setTimeout(restrainRecentQueriesLength, 30)
+			setTimeout(restrainRecentQueriesLength, 15)
 
 			data = await getSearchResultsData(query)
 

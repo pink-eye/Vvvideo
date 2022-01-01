@@ -32,14 +32,6 @@
 
 		@media (min-width: 48em) {
 
-			&:not(:first-child):not(:last-child) {
-				margin-top: 10px;
-			}
-
-			&:nth-last-child(-n + 2) {
-				margin-bottom: 10px;
-			}
-
 			&:last-child {
 				margin-top: auto;
 			}
@@ -84,7 +76,7 @@
 			--wipe-dir: 90deg;
 			display: flex;
 			align-items: center;
-			padding-block: 14px;
+			padding-block: 19px;
 			padding-right: 10px;
 			padding-left: 20px;
 

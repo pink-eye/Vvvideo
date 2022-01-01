@@ -7,7 +7,6 @@ import {
 	convertDurationToSeconds,
 	hasFocus,
 	handleClickLink,
-	closeApp,
 } from 'Global/utils'
 import {
 	getMin,
@@ -33,6 +32,7 @@ let isSync = false
 let doesSkipSegments = true
 let hls = null
 let segmentsSB = []
+let chapters = null
 
 const appStorage = new AppStorage()
 let storage = null
@@ -552,34 +552,63 @@ const updateProgress = _ => {
 	video = null
 }
 
-const updateSeekTooltip = params => {
+const updateChapters = params => {
+	const { duration, skipTo } = params
+
+	if (!chapters || chapters.length === 0 || (skipTo < 0 && skipTo > Math.floor(duration))) return
+
+	let controls = getSelector('.controls')
+	let seekTooltipChapter = controls.querySelector('.seek-tooltip__chapter')
+
+	chapters.forEach(({ title, start_time }) => {
+		if (start_time < skipTo) {
+			seekTooltipChapter.textContent = title
+			return
+		}
+	})
+
+	controls = null
+	seekTooltipChapter = null
+}
+
+const updateSeekTooltipTime = params => {
+	const { duration, skipTo } = params
+
+	if (skipTo < 0 && skipTo > Math.floor(duration)) return
+
 	let controls = getSelector('.controls')
 	let progressSeek = controls.querySelector('.progress__seek')
-	let progressSeekTooltip = controls.querySelector('.progress__seek-tooltip')
+	let seekTooltipTime = controls.querySelector('.seek-tooltip__time')
 
-	const { duration, skipTo, widthProgressBar, posCursor } = params
-
-	if (skipTo > 0 && skipTo < Math.floor(duration)) {
-		const t = convertSecondsToDuration(skipTo)
-		progressSeek.setAttribute('data-seek', skipTo)
-		progressSeekTooltip.textContent = t
-	}
-
-	if (posCursor < widthProgressBar * 0.1) {
-		progressSeekTooltip.style.left = `${widthProgressBar * 0.1}px`
-	}
-
-	if (posCursor > widthProgressBar * 0.1 && posCursor < widthProgressBar * 0.9) {
-		progressSeekTooltip.style.left = `${posCursor}px`
-	}
-
-	if (posCursor > widthProgressBar * 0.9) {
-		progressSeekTooltip.style.left = `${widthProgressBar * 0.9}px`
-	}
+	const skipToTime = convertSecondsToDuration(skipTo)
+	progressSeek.setAttribute('data-seek', skipTo)
+	seekTooltipTime.textContent = skipToTime
 
 	controls = null
 	progressSeek = null
-	progressSeekTooltip = null
+	seekTooltipTime = null
+}
+
+const updateSeekTooltipPosition = params => {
+	let controls = getSelector('.controls')
+	let seekTooltip = controls.querySelector('.seek-tooltip')
+
+	const { widthProgressBar, posCursor } = params
+
+	if (posCursor < widthProgressBar * 0.1) {
+		seekTooltip.style.left = `${widthProgressBar * 0.1}px`
+	}
+
+	if (posCursor > widthProgressBar * 0.1 && posCursor < widthProgressBar * 0.9) {
+		seekTooltip.style.left = `${posCursor}px`
+	}
+
+	if (posCursor > widthProgressBar * 0.9) {
+		seekTooltip.style.left = `${widthProgressBar * 0.9}px`
+	}
+
+	controls = null
+	seekTooltip = null
 }
 
 const updateBuffered = _ => {
@@ -800,7 +829,9 @@ const handleMouseMoveProgressSeek = event => {
 	const params = { duration, skipTo, widthProgressBar, posCursor }
 
 	updateStoryboard(params)
-	updateSeekTooltip(params)
+	updateSeekTooltipTime(params)
+	updateSeekTooltipPosition(params)
+	updateChapters(params)
 
 	video = null
 }
@@ -908,6 +939,14 @@ const visualizeSegmentsSB = segments => {
 	sponsorblockItemAll = null
 }
 
+let timeout = null
+
+const handleMouseMove = _ => {
+	clearTimeout(timeout)
+	timeout = setTimeout(hideBars, 3000)
+	showBars()
+}
+
 export const initVideoPlayer = async data => {
 	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
@@ -970,6 +1009,7 @@ export const initVideoPlayer = async data => {
 		const videoDuration = ~~video.duration
 		const time = convertSecondsToDuration(videoDuration)
 
+		chapters = data.videoDetails.chapters
 		progressSeek.setAttribute('max', videoDuration)
 		timeDuration.textContent = time
 		timeDuration.setAttribute('datetime', time)
@@ -1045,6 +1085,8 @@ export const initVideoPlayer = async data => {
 
 	videoWrapper.addEventListener('fullscreenchange', toggleIconFullscreen)
 
+	controls.addEventListener('mousemove', handleMouseMove)
+
 	// HOT KEYS
 
 	document.addEventListener('keydown', handleKeyDownWithinVideo)
@@ -1094,16 +1136,6 @@ export const initVideoPlayer = async data => {
 				isSync = false
 			})
 		}
-
-		let timeout = null
-
-		const handleMouseMove = _ => {
-			clearTimeout(timeout)
-			timeout = setTimeout(hideBars, 3000)
-			showBars()
-		}
-
-		controls.addEventListener('mousemove', handleMouseMove)
 	}
 }
 
@@ -1129,6 +1161,7 @@ export const resetVideoPlayer = _ => {
 	let controlsSwitch = controls.querySelector('.controls__switch')
 	let controlsScreen = controls.querySelector('.controls__screen')
 	let timeElapsed = controls.querySelector('.time__elapsed')
+	let seekTooltipChapter = controls.querySelector('.seek-tooltip__chapter')
 	let speed = controls.querySelector('.controls__speed')
 	let speedCurrent = speed.querySelector('.dropdown__head')
 	let spoilerContent = videoParent.querySelector('.spoiler__content')
@@ -1137,6 +1170,7 @@ export const resetVideoPlayer = _ => {
 	isSync &&= false
 	doesSkipSegments ||= true
 	segmentsSB.length = 0
+	chapters = null
 
 	captions.hidden ||= true
 
@@ -1162,6 +1196,7 @@ export const resetVideoPlayer = _ => {
 	timeDuration.removeAttribute('datetime')
 	timeElapsed.removeAttribute('datetime')
 	progress.removeAttribute('style')
+	seekTooltipChapter.textContent = ''
 
 	storage = appStorage.getStorage()
 
@@ -1221,6 +1256,8 @@ export const resetVideoPlayer = _ => {
 
 	document.removeEventListener('keydown', handleKeyDownWithinVideo)
 
+	controls.removeEventListener('mousemove', handleMouseMove)
+
 	resetMediaEl(video)
 
 	audio
@@ -1238,6 +1275,7 @@ export const resetVideoPlayer = _ => {
 	API.clearTempFolder()
 
 	videoParent = null
+	seekTooltipChapter = null
 	videoWrapper = null
 	video = null
 	audio = null

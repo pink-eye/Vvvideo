@@ -344,9 +344,12 @@
 
 .seek-tooltip {
 	position: absolute;
+
 	top: 0;
 	left: 100px;
 
+	display: flex;
+	width: max-content;
 	padding: 2px 10px;
 	border-top-left-radius: var(--brs-m);
 	border-top-right-radius: var(--brs-m);
@@ -361,6 +364,20 @@
 	opacity: 0;
 
 	transition: opacity var(--trns);
+
+	&__chapter {
+		margin: 0;
+
+		&:before {
+			margin-inline: 5px;
+
+			content: '-';
+		}
+	}
+
+	&__chapter:empty {
+		display: none;
+	}
 }
 
 .volume {

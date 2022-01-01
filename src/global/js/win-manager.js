@@ -20,21 +20,36 @@ const resetWin = win => {
 		win.classList.contains('trending') ||
 		win.classList.contains('history') ||
 		win.classList.contains('latest')
-	)
+	) {
 		resetGrid(win)
+		return
+	}
 
-	if (win.classList.contains('subscriptions')) resetGridAuthorCard()
+	if (win.classList.contains('subscriptions')) {
+		resetGridAuthorCard()
+		return
+	}
 
 	if (win.classList.contains('video')) {
 		resetVideoPlayer()
 		resetWinVideo()
+		return
 	}
 
-	if (win.classList.contains('playlist')) resetWinPlaylist()
+	if (win.classList.contains('playlist')) {
+		resetWinPlaylist()
+		return
+	}
 
-	if (win.classList.contains('channel')) resetWinChannel()
+	if (win.classList.contains('channel')) {
+		resetWinChannel()
+		return
+	}
 
-	if (win.classList.contains('settings')) resetWinSettings()
+	if (win.classList.contains('settings')) {
+		resetWinSettings()
+		return
+	}
 }
 
 const startFillingWin = ({ win, btnWin, id }) => {
