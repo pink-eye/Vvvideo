@@ -16,6 +16,7 @@
 
 	&__image {
 		--watched-progress: 0;
+		--width-bar: var(--watched-progress, 0%);
 		position: relative;
 
 		display: flex;
@@ -37,13 +38,11 @@
 			left: 0;
 			z-index: 1;
 
-			width: var(--watched-progress);
+			width: unquote('min(100%, calc(var(--width-bar) * 999))');
 			height: 4px;
 			border-radius: var(--brs-s);
 
-			background-color: var(--color-accent-s);
-
-			transition: width var(--trns);
+			background: linear-gradient(90deg, var(--color-accent-s) var(--watched-progress), hsla(223, 4, 50, 0.5) var(--watched-progress));
 
 			content: '';
 		}
