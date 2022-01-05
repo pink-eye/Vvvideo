@@ -22,15 +22,15 @@
 			<div class="progress__bar"></div>
 			<input class="progress__seek seek" value="0" min="0" type="range" step="1" />
 			<div class="progress__seek-tooltip seek-tooltip">
+				<div class="seek-tooltip__storyboard"></div>
 				<time class="seek-tooltip__time">00:00</time>
 				<p class="seek-tooltip__chapter"></p>
 			</div>
-			<div class="progress__storyboard"></div>
 			<ul class="progress__sponsorblock sponsorblock list-reset"></ul>
 		</div>
 		<div class="controls__wrapper">
 			<button class="controls__switch onclick-effect btn-reset">
-				<svg width="22px" height="22px">
+				<svg width="20px" height="20px">
 					<use xlink:href="img/svg/controls.svg#play"></use>
 				</svg>
 			</button>
@@ -47,6 +47,7 @@
 				<time class="time__elapsed">00:00</time>
 				<small class="time__separator"> / </small>
 				<time class="time__duration">00:00</time>
+				<p class="time__chapter"></p>
 			</div>
 			<div class="controls__right">
 				<button class="controls__sponsorblock onclick-effect btn-reset">
@@ -54,7 +55,7 @@
 				</button>
 				<div class="controls__captions dropdown" hidden>
 					<button class="dropdown__head btn-reset">
-						<svg width="30px" height="30px">
+						<svg width="28px" height="28px">
 							<use xlink:href="img/svg/controls.svg#cc"></use>
 						</svg>
 					</button>
@@ -94,7 +95,7 @@
 					<ul class="dropdown__list dropdown__list_top list-reset"></ul>
 				</div>
 				<button class="controls__screen onclick-effect btn-reset">
-					<svg width="27px" height="27px">
+					<svg width="25px" height="25px">
 						<use xlink:href="img/svg/controls.svg#open-fullscreen"></use>
 					</svg>
 				</button>

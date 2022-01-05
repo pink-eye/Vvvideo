@@ -68,7 +68,7 @@ const createCaptionItemHTML = (simpleText, srclang, src) => `<li class="dropdown
 const createTrackHTML = ({ label, srclang, src }) =>
 	`<track kind="subtitles" label="${label}" srclang="${srclang}" src="${src}" default></track>`
 
-const createStoryboardHTML = _ => `<div class="progress__storyboard"></div>`
+const createStoryboardHTML = _ => `<div class="seek-tooltip__storyboard"></div>`
 
 const insertQualityList = videoFormats => {
 	let controls = getSelector('.controls')
@@ -454,6 +454,19 @@ const updateTimeElapsed = _ => {
 	timeElapsed = null
 }
 
+const updateBarChapter = () => {
+	if (!chapters || chapters.length === 0) return
+
+	let controls = getSelector('.controls')
+	let barChapter = controls.querySelector('.time__chapter')
+	const { currentTime } = getSelector('video')
+
+	barChapter.textContent = getRequiredChapter(currentTime)
+
+	controls = null
+	barChapter = null
+}
+
 const updateVolumeEl = el => {
 	let controls = getSelector('.controls')
 	let volumeBar = controls.querySelector('.volume__bar')
@@ -508,29 +521,17 @@ const toggleFullscreen = _ => {
 }
 
 const updateStoryboard = params => {
-	let progressStoryboard = getSelector('.controls').querySelector('.progress__storyboard')
+	let storyboard = getSelector('.controls').querySelector('.seek-tooltip__storyboard')
 
-	if (progressStoryboard && isEmpty(hls)) {
-		const { skipTo, widthProgressBar, posCursor } = params
+	if (storyboard && isEmpty(hls)) {
+		const { skipTo } = params
 		const { posX, posY } = getPosStroryboard(getSelector('video').duration, skipTo, 100)
 
-		progressStoryboard.style.setProperty('--posX', `-${posX}px`)
-		progressStoryboard.style.setProperty('--posY', `-${posY}px`)
-
-		if (posCursor < widthProgressBar * 0.1) {
-			progressStoryboard.style.left = `${widthProgressBar * 0.1}px`
-		}
-
-		if (posCursor > widthProgressBar * 0.1 && posCursor < widthProgressBar * 0.9) {
-			progressStoryboard.style.left = `${posCursor}px`
-		}
-
-		if (posCursor > widthProgressBar * 0.9) {
-			progressStoryboard.style.left = `${widthProgressBar * 0.9}px`
-		}
+		storyboard.style.setProperty('--posX', `-${posX}px`)
+		storyboard.style.setProperty('--posY', `-${posY}px`)
 	}
 
-	progressStoryboard = null
+	storyboard = null
 }
 
 const updateProgress = _ => {
@@ -546,7 +547,20 @@ const updateProgress = _ => {
 	video = null
 }
 
-const updateChapters = params => {
+const getRequiredChapter = time => {
+	let chapterTitle = null
+
+	chapters.forEach(({ title, start_time }) => {
+		if (start_time < time) {
+			chapterTitle = title
+			return
+		}
+	})
+
+	return chapterTitle
+}
+
+const updateSeekTooltipChapters = params => {
 	const { duration, skipTo } = params
 
 	if (!chapters || chapters.length === 0 || (skipTo < 0 && skipTo > Math.floor(duration))) return
@@ -554,12 +568,7 @@ const updateChapters = params => {
 	let controls = getSelector('.controls')
 	let seekTooltipChapter = controls.querySelector('.seek-tooltip__chapter')
 
-	chapters.forEach(({ title, start_time }) => {
-		if (start_time < skipTo) {
-			seekTooltipChapter.textContent = title
-			return
-		}
-	})
+	seekTooltipChapter.textContent = getRequiredChapter(skipTo)
 
 	controls = null
 	seekTooltipChapter = null
@@ -743,6 +752,7 @@ const handleTimeUpdate = _ => {
 
 	updateTimeElapsed()
 	updateProgress()
+	updateBarChapter()
 
 	doesSkipSegments && skipSegmentSB()
 
@@ -825,7 +835,7 @@ const handleMouseMoveProgressSeek = event => {
 	updateStoryboard(params)
 	updateSeekTooltipTime(params)
 	updateSeekTooltipPosition(params)
-	updateChapters(params)
+	updateSeekTooltipChapters(params)
 
 	video = null
 }
@@ -1143,8 +1153,9 @@ export const resetVideoPlayer = _ => {
 	let sponsorblock = controls.querySelector('.sponsorblock')
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock')
 	let progress = controls.querySelector('.progress')
-	let progressStoryboard = controls.querySelector('.progress__storyboard')
+	let storyboard = controls.querySelector('.seek-tooltip__storyboard')
 	let timeDuration = controls.querySelector('.time__duration')
+	let barChapter = controls.querySelector('.time__chapter')
 	let quality = controls.querySelector('.controls__quality')
 	let progressSeek = progress.querySelector('.progress__seek')
 	let qualityList = quality.querySelector('.dropdown__list')
@@ -1179,6 +1190,7 @@ export const resetVideoPlayer = _ => {
 	removeTracks()
 
 	speedCurrent.textContent = 'x1'
+	barChapter.textContent = ''
 
 	if (!isEmpty(hls)) {
 		hls.detachMedia()
@@ -1197,7 +1209,7 @@ export const resetVideoPlayer = _ => {
 
 	const { disableStoryboard } = storage.settings
 
-	if (!disableStoryboard && !progressStoryboard) progress.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
+	if (!disableStoryboard && !storyboard) progress.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
 
 	video.removeEventListener('playing', handlePlaying)
 
@@ -1278,7 +1290,8 @@ export const resetVideoPlayer = _ => {
 	sponsorblock = null
 	sponsorblockBtn = null
 	progress = null
-	progressStoryboard = null
+	storyboard = null
+	barChapter = null
 	timeDuration = null
 	quality = null
 	captionList = null

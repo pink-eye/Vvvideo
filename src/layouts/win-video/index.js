@@ -26,7 +26,7 @@ const openWinVideo = data => {
 	let topBarTitle = video.querySelector('.top-bar__title')
 	let topBarAuthor = video.querySelector('.top-bar__author')
 	let controls = getSelector('.controls')
-	let progressStoryboard = controls.querySelector('.progress__storyboard')
+	let storyboard = controls.querySelector('.seek-tooltip__storyboard')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
 	let videoViews = videoInfo.querySelector('.video-info__views')
@@ -58,10 +58,10 @@ const openWinVideo = data => {
 
 	// FILL VIDEO INFO
 
-	if (settings.disableStoryboard || videoDetails.storyboards.length === 0) progressStoryboard.remove()
+	if (settings.disableStoryboard || videoDetails.storyboards.length === 0) storyboard.remove()
 
-	if (progressStoryboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
-		progressStoryboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
+	if (storyboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
+		storyboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
 
 	if (videoDetails.title !== videoTitle.textContent) videoTitle.textContent = videoDetails.title
 	topBarTitle.textContent = videoDetails.title
@@ -118,7 +118,7 @@ const openWinVideo = data => {
 	topBarTitle = null
 	topBarAuthor = null
 	videoDislikes = null
-	progressStoryboard = null
+	storyboard = null
 	partSkeletonAll = null
 	titleSkeleton = null
 	authorCard = null
