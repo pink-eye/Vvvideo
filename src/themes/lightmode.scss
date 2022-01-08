@@ -21,7 +21,7 @@
 	--color-box-shadow-l: hsla(210, 10%, 35%, 0.55);
 	--color-box-shadow-xl: hsl(0, 0%, 0%);
 	--color-error: hsl(0, 100%, 50%);
-	--color-good: hsl(150, 90%, 45%);
+	--color-good: hsl(138, 100%, 50%);
 	--color-info: hsl(229, 82%, 58%);
 	--color-switch: hsl(0, 0%, 100%);
 	--color-switch-highlight: hsl(0, 0%, 0%, 0.25);
@@ -34,7 +34,8 @@
 	--color-bg-suggest-selected: hsl(0, 0%, 100%);
 	--color-bg-suggest-hover: hsl(0, 0%, 95%);
 	--color-text-suggest-selected: var(--color-title);
-	--color-text-toast: hsl(245, 5%, 45%);
+	--color-bg-toast: var(--color-bg-form);
+	--color-text-toast: var(--color-title);
 }
 
 img {

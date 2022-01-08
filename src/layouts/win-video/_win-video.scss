@@ -174,21 +174,12 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+	z-index: 11;
 
 	width: 100%;
 	margin-inline: auto;
 	padding-block: 30px;
 	padding-inline: 20px;
-
-	background-image:
-		linear-gradient(
-			0deg,
-			hsla(0, 0%, 0%, 0) 0%,
-			hsla(0, 0%, 0%, 0.2) 25%,
-			hsla(0, 0%, 0%, 0.5) 50%,
-			hsla(0, 0%, 0%, 0.6) 75%,
-			hsla(0, 0%, 0%, 0.75) 100%
-		);
 
 	&:not(._opened) {
 		opacity: 0;
@@ -218,6 +209,6 @@
 	&__author {
 		color: hsl(0, 0%, 100%);
 
-		opacity: 0.4;
+		opacity: 0.6;
 	}
 }

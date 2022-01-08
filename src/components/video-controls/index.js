@@ -487,28 +487,26 @@ const updateVolumeEl = el => {
 const hideBars = _ => {
 	let controls = getSelector('.controls')
 	let dropdownActive = controls.querySelector('.dropdown._active')
-	let controlsBar = controls.querySelector('.controls__bar')
 	let topBar = getSelector('.video').querySelector('.top-bar')
 
 	if (!dropdownActive) {
-		controlsBar.classList.remove('_opened')
+		controls.classList.remove('_opened')
 		topBar.classList.remove('_opened')
 	}
 
 	dropdownActive = null
-	controlsBar = null
 	controls = null
 	topBar = null
 }
 
 const showBars = _ => {
 	let topBar = getSelector('.video').querySelector('.top-bar')
-	let controlsBar = getSelector('.controls').querySelector('.controls__bar')
+	let controls = getSelector('.controls')
 
-	controlsBar.classList.add('_opened')
+	controls.classList.add('_opened')
 	topBar.classList.add('_opened')
 
-	controlsBar = null
+	controls = null
 	topBar = null
 }
 

@@ -30,13 +30,14 @@
 	position: relative;
 
 	display: flex;
-	padding-block: 10px;
+	align-items: center;
+	padding-block: 15px;
 	padding-inline: 15px 30px;
 	overflow: hidden;
 
 	color: var(--color-text-toast);
 
-	background-color: var(--color-bg-form);
+	background-color: var(--color-bg-toast);
 	box-shadow: var(--box-shadow-m);
 
 	&:not(._visible) {
@@ -175,11 +176,11 @@
 	}
 
 	@media (min-width: 36em) {
-		font-size: 1.25rem;
+		font-size: 1.1rem;
 	}
 
 	@media (max-width: 35.9375em) {
-		font-size: 1rem;
+		font-size: 0.9rem;
 	}
 
 	@media (min-width: 36em) {

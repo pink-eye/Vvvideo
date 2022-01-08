@@ -7,7 +7,28 @@
 	width: 100%;
 	height: 100%;
 
-	background-color: transparent;
+	transition: background-color var(--trns);
+
+	&:not(._opened) {
+		background-color: transparent;
+
+		.controls__bar {
+			transform: translateY(100%);
+
+			transition: transform var(--trns-slow) var(--trns-time-default);
+		}
+
+		.progress {
+			height: 4px;
+		}
+
+		.controls__wrapper {
+			visibility: hidden;
+			opacity: 0;
+
+			transition: opacity var(--trns) 0.3s, visibility var(--trns) 0.3s;
+		}
+	}
 
 	.dropdown__head {
 		align-items: center;
@@ -31,6 +52,27 @@
 		color: hsl(0, 0%, 100%);
 	}
 
+	&._opened {
+		background-color: hsla(0, 0%, 0%, 0.4);
+
+		.controls__bar {
+			transform: translateY(0);
+
+			transition: transform var(--trns);
+		}
+
+		.progress {
+			height: 7px;
+		}
+
+		.controls__wrapper {
+			visibility: visible;
+			opacity: 1;
+
+			transition: opacity var(--trns), visibility var(--trns);
+		}
+	}
+
 	&__bar {
 		position: absolute;
 		bottom: 0;
@@ -40,52 +82,9 @@
 		width: 100%;
 		padding-inline: 10px;
 
-		background-image:
-			linear-gradient(
-				180deg,
-				hsla(0, 0%, 0%, 0) 0%,
-				hsla(0, 0%, 0%, 0.2) 25%,
-				hsla(0, 0%, 0%, 0.5) 50%,
-				hsla(0, 0%, 0%, 0.6) 75%,
-				hsla(0, 0%, 0%, 0.75) 100%
-			);
 		cursor: unset;
 
 		transition: transform var(--trns-slow) var(--trns-time-default);
-
-		&:not(._opened) {
-			transform: translateY(100%);
-
-			transition: transform var(--trns-slow) var(--trns-time-default);
-
-			.progress {
-				height: 4px;
-			}
-
-			.controls__wrapper {
-				visibility: hidden;
-				opacity: 0;
-
-				transition: opacity var(--trns) 0.3s, visibility var(--trns) 0.3s;
-			}
-		}
-
-		&._opened {
-			transform: translateY(0);
-
-			transition: transform var(--trns);
-
-			.progress {
-				height: 7px;
-			}
-
-			.controls__wrapper {
-				visibility: visible;
-				opacity: 1;
-
-				transition: opacity var(--trns), visibility var(--trns);
-			}
-		}
 
 		@media (min-width: 31.3125em) {
 			height: 60px;
@@ -267,7 +266,7 @@
 		border-radius: var(--brs-s);
 		overflow: hidden;
 
-		background: linear-gradient(90deg, var(--color-accent-s) var(--progress), var(--color-buffered) var(--progress), var(--color-buffered) var(--buffered), transparent var(--buffered));
+		// background: linear-gradient(90deg, var(--color-accent-s) var(--progress), var(--color-buffered) var(--progress), var(--color-buffered) var(--buffered), transparent var(--buffered));
 	}
 }
 
