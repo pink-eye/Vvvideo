@@ -170,28 +170,41 @@ const startVideoLive = url => {
 	video = null
 }
 
-const getVideoFormatsByPreferredFormat = formats => {
-	switch (storage.settings.defaultVideoFormat) {
+const getVideoFormatsByDefaultFormat = (formats, defaultVideoFormat) => {
+	let requiredFormats = null
+
+	switch (defaultVideoFormat) {
 		case 'mp4':
-			return filterVideoMP4NoAudio(formats)
+			requiredFormats = filterVideoMP4NoAudio(formats)
+
+			if (requiredFormats?.length > 0) break
+			else return getVideoFormatsByDefaultFormat(formats, 'webm')
 
 		case 'webm':
-			return filterVideoWebm(formats)
+			requiredFormats = filterVideoWebm(formats)
+
+			if (requiredFormats?.length > 0) break
+			else return getVideoFormatsByDefaultFormat(formats, 'mp4')
 	}
+
+	return requiredFormats
 }
 
 const prepareVideoPlayer = async data => {
 	const { formats, videoDetails } = data
-	const { disableSeparatedStreams, enableProxy, proxy } = storage.settings
+	const { disableSeparatedStreams, enableProxy, proxy, defaultVideoFormat } = storage.settings
 
 	if (videoDetails.isLive || disableSeparatedStreams) disableAudio()
 
 	if (videoDetails.isLive) videoFormats = filterHLS(formats)
 	else {
-		if (!disableSeparatedStreams) videoFormats = getVideoFormatsByPreferredFormat(formats)
-		else if (!videoFormats || videoFormats.length === 0 || disableSeparatedStreams)
+		if (!disableSeparatedStreams) videoFormats = getVideoFormatsByDefaultFormat(formats, defaultVideoFormat)
+
+		if (!videoFormats || videoFormats.length === 0 || disableSeparatedStreams)
 			videoFormats = filterVideoAndAudio(formats)
 	}
+
+	console.log('file: index.js ~ line 194 ~ videoFormats', videoFormats)
 
 	const currentQualityVideo = getPreferredQuality(videoFormats) ?? videoFormats.at(-1)
 	const currentQualityAudio = getHighestAudio(formats)
@@ -867,11 +880,13 @@ const handleKeyDownWithinVideo = ({ keyCode }) => {
 
 		// V
 		const { disableSponsorblock } = storage.settings
+
 		if (keyCode === 86 && !disableSponsorblock) {
 			doesSkipSegments = !doesSkipSegments
+
 			showToast(
 				'info',
-				doesSkipSegments ? 'Sponsorblock is disabled on this video' : 'Sponsorblock is enabled again'
+				doesSkipSegments ? 'Sponsorblock is enabled again' : 'Sponsorblock is disabled on this video'
 			)
 		}
 

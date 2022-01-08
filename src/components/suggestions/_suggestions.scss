@@ -44,17 +44,21 @@
 
 	border-radius: var(--brs-s);
 
-	color: var(--color-text-field);
 	font-weight: 400;
 	font-size: var(--caption-font-size);
 	text-align: left;
-
-	background-color: var(--color-bg-field);
 
 	transition: background-color var(--trns), border-color var(--trns), color var(--trns);
 
 	&:not(:first-child) {
 		margin-top: 7px;
+	}
+
+	&:not(._selected),
+	&:not(:focus-visible) {
+		color: var(--color-text-field);
+
+		background-color: var(--color-bg-field);
 	}
 
 	&._selected,

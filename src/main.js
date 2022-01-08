@@ -21,9 +21,7 @@ const handleFocus = () => {
 	showRecentQueries()
 }
 
-const handleClickWindow = event => {
-	const { target } = event
-
+const handleClickWindow = ({ target }) => {
 	if (!target.closest('.dropdown')) {
 		hideLastDropdown()
 	}
@@ -50,13 +48,9 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	storage = appStorage.getStorage()
 
 	if (!storage) {
-		const onReadStorage = data => {
-			storage = {}
-			Object.assign(storage, JSON.parse(data))
-			appStorage.setStorage(storage)
-		}
-
-		await API.readStorage(onReadStorage)
+		const data = await API.readStorage()
+		storage = JSON.parse(data)
+		appStorage.setStorage(storage)
 	}
 
 	fillWinSettings()

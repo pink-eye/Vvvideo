@@ -36,7 +36,7 @@
 				@media (hover: hover) and (pointer: fine) {
 
 					&:hover {
-						border: var(--width-line) solid var(--color-error);
+						border: inherit;
 					}
 				}
 			}

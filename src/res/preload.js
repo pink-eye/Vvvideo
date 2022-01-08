@@ -88,8 +88,6 @@ contextBridge.exposeInMainWorld('API', {
 
 	getVideoId: str => ytdl.getVideoID(str),
 
-	YTDLFilterFormats: formats => ytdl.filterFormats(formats, 'videoandaudio'),
-
 	YTDLChooseFormat: (formats, quality) => ytdl.chooseFormat(formats, { quality }),
 
 	getSponsorblockInfo: (videoId, uuidv4) =>
@@ -105,23 +103,22 @@ contextBridge.exposeInMainWorld('API', {
 
 	postSponsorblockInfo: (videoId, uuidv4, segment) => new SponsorBlock(uuidv4).postSegments(videoId, segment),
 
-	readStorage: async callback => {
-		let readerStream = fs.createReadStream(STORAGE_PATH)
+	readStorage: _ =>
+		new Promise(resolve => {
+			let readerStream = fs.createReadStream(STORAGE_PATH)
 
-		readerStream.setEncoding('UTF8')
-		readerStream.on('data', callback)
-	},
+			readerStream.setEncoding('UTF8')
+			readerStream.on('data', resolve)
+		}),
 
-	writeStorage: async data => {
+	writeStorage: data => {
 		let writerStream = fs.createWriteStream(STORAGE_PATH)
 
 		writerStream.write(JSON.stringify(data))
 		writerStream.end()
 	},
 
-	openExternalLink: url => {
-		shell.openExternal(url)
-	},
+	openExternalLink: url => shell.openExternal(url),
 
 	getCaption: async (info, requiredLanguage) => {
 		const format = 'vtt'

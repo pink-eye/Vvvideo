@@ -18,14 +18,16 @@ const resetGridAuthorCard = _ => {
 }
 
 const resetGrid = parent => {
-	const cardAll = parent.querySelectorAll('.card')
+	let cardAll = parent.querySelectorAll('.card')
 
-	if (cardAll.length > 0) {
-		for (let index = 0, { length } = cardAll; index < length; index += 1) {
-			const card = cardAll[index]
-			resetCard(card)
-		}
+	if (cardAll.length === 0) return
+
+	for (let index = 0, { length } = cardAll; index < length; index += 1) {
+		const card = cardAll[index]
+		resetCard(card)
 	}
+
+	cardAll = null
 }
 
 export { resetGrid, resetGridAuthorCard }

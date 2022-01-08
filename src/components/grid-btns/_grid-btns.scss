@@ -7,7 +7,7 @@
 	margin-inline: auto;
 	margin-top: 40px;
 
-	button {
+	& > button {
 		padding: 10px 35px;
 
 		&[disabled] {
@@ -23,7 +23,7 @@
 
 	&__prev {
 
-		svg {
+		& svg {
 			transform: scale(-1);
 		}
 	}

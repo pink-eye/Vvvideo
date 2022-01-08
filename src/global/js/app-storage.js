@@ -11,9 +11,9 @@ export class AppStorage {
 		return JSON.parse(dataJSON)
 	}
 
-	async updateStorage(data) {
+	updateStorage(data) {
 		this.setStorage(data)
-		await API.writeStorage(data)
+		API.writeStorage(data)
 	}
 
 	clearLocalStorage() {

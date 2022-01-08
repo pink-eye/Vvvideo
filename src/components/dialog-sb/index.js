@@ -26,8 +26,9 @@ const hideInvalidUI = _ => {
 	dialogSbWarning = null
 }
 
-const handleInputDialogField = event => {
-	let dialogSbField = event.target
+const handleInputDialogField = ({ target }) => {
+	let dialogSbField = target
+
 	dialogSbField.value = formatDuration(dialogSbField.value)
 
 	hideInvalidUI()
@@ -42,7 +43,7 @@ const showDialogSB = _ => {
 	let audio = getSelector('.video').querySelector('audio')
 
 	video.pause()
-	audio && audio.pause()
+	audio?.pause()
 
 	hideInvalidUI()
 
@@ -67,16 +68,14 @@ export const recordSegmentSB = _ => {
 	if (disableSponsorblock) return
 
 	let video = getSelector('video')
-	let controlsSponsorblock = getSelector('.controls').querySelector('.controls__sponsorblock')
-
-	let dialogSb = getSelector('.dialog-sb')
 
 	if (!video.paused || !video.ended) {
+		let dialogSb = getSelector('.dialog-sb')
+		let controlsSponsorblock = getSelector('.controls').querySelector('.controls__sponsorblock')
+
 		if (!isRecording) {
 			let dialogSbStart = dialogSb.querySelector('input#start')
 			dialogSbStart.value = convertSecondsToDuration(video.currentTime)
-
-			isRecording = true
 
 			controlsSponsorblock.classList.add('_record')
 
@@ -87,19 +86,19 @@ export const recordSegmentSB = _ => {
 			let dialogSbEnd = dialogSb.querySelector('input#end')
 			dialogSbEnd.value = convertSecondsToDuration(video.currentTime)
 
-			isRecording = false
-
 			controlsSponsorblock.classList.remove('_record')
 
 			showDialogSB()
 
 			dialogSbEnd = null
 		}
+
+		isRecording = !isRecording
+		dialogSb = null
+		controlsSponsorblock = null
 	} else showToast('error', 'You must play video!')
 
 	video = null
-	controlsSponsorblock = null
-	dialogSb = null
 }
 
 const resetDialogSB = _ => {
@@ -124,29 +123,21 @@ const resetDialogSB = _ => {
 
 const isValidFields = _ => {
 	let dialogSb = getSelector('.dialog-sb')
-	let dialogSbStart = dialogSb.querySelector('input#start')
-	let dialogSbEnd = dialogSb.querySelector('input#end')
-	let video = getSelector('video')
 
-	const videoDuration = video.duration
+	const { value: valueStart } = dialogSb.querySelector('input#start')
+	const { value: valueEnd } = dialogSb.querySelector('input#end')
+	const { duration } = getSelector('video')
 
-	const patternTimecodeMSS = /^[0-9]:[0-5][0-9]$/g
-	const patternTimecodeMMSS = /^[0-5][0-9]:[0-5][0-9]$/g
-	const patternTimecodeHMMSS = /^[0-9]:[0-5][0-9]:[0-5][0-9]$/g
-	const patternTimecodeHHMMSS = /^[0-2][0-3]:[0-5][0-9]:[0-5][0-9]$/g
+	let patternTimecodeMMSS = /\b(?<!>)([0-5]?[0-9]):([0-5][0-9])(?!<)\b/gm
+	let patternTimecodeHHMMSS = /\b(2[0-3]|[0-1]?[\d]):[0-5][\d]:[0-5][\d]\b/gm
 
 	const result =
-		((dialogSbStart.value.match(patternTimecodeHHMMSS) && dialogSbEnd.value.match(patternTimecodeHHMMSS)) ||
-			(dialogSbStart.value.match(patternTimecodeHMMSS) && dialogSbEnd.value.match(patternTimecodeHMMSS)) ||
-			(dialogSbStart.value.match(patternTimecodeMMSS) && dialogSbEnd.value.match(patternTimecodeMMSS)) ||
-			(dialogSbStart.value.match(patternTimecodeMSS) && dialogSbEnd.value.match(patternTimecodeMSS))) &&
-		convertDurationToSeconds(dialogSbStart.value) < convertDurationToSeconds(dialogSbEnd.value) &&
-		convertDurationToSeconds(dialogSbEnd.value) <= convertDurationToSeconds(videoDuration)
+		((valueStart.match(patternTimecodeHHMMSS) && valueEnd.match(patternTimecodeHHMMSS)) ||
+			(valueStart.match(patternTimecodeMMSS) && valueEnd.match(patternTimecodeMMSS))) &&
+		convertDurationToSeconds(valueStart) < convertDurationToSeconds(valueEnd) &&
+		convertDurationToSeconds(valueEnd) <= convertDurationToSeconds(duration)
 
 	dialogSb = null
-	dialogSbStart = null
-	dialogSbEnd = null
-	video = null
 
 	return result
 }
@@ -157,10 +148,12 @@ const showInvalidUI = _ => {
 	let dialogSbEnd = dialogSb.querySelector('input#end')
 	let dialogSbWarning = dialogSb.querySelector('.dialog-sb__warning')
 
-	dialogSbStart.classList.add('_error')
-	dialogSbEnd.classList.add('_error')
-	dialogSbWarning.hidden = false
-	dialogSbStart.focus()
+	if (!dialogSbStart.classList.contains('_error')) {
+		dialogSbStart.classList.add('_error')
+		dialogSbEnd.classList.add('_error')
+		dialogSbWarning.hidden ||= false
+		dialogSbStart.focus()
+	}
 
 	dialogSb = null
 	dialogSbStart = null
@@ -169,17 +162,17 @@ const showInvalidUI = _ => {
 }
 
 const sendSegmentSB = async _ => {
-	let videoId = getSelector('.video').dataset.id
-	let dialogSb = getSelector('.dialog-sb')
-	let dialogSbStart = dialogSb.querySelector('input#start')
-	let dialogSbEnd = dialogSb.querySelector('input#end')
-	let dialogSbCategory = dialogSb.querySelector('input[name="category"]:checked')
-
 	if (isValidFields()) {
-		let startTime = convertDurationToSeconds(dialogSbStart.value)
-		let endTime = convertDurationToSeconds(dialogSbEnd.value)
-		let category = dialogSbCategory.id
-		let segment = { startTime, endTime, category }
+		let dialogSb = getSelector('.dialog-sb')
+
+		const { id: videoId } = getSelector('.video').dataset
+		const { id: category } = dialogSb.querySelector('input[name="category"]:checked')
+		const { value: valueStart } = dialogSb.querySelector('input#start')
+		const { value: valueEnd } = dialogSb.querySelector('input#end')
+
+		const startTime = convertDurationToSeconds(valueStart)
+		const endTime = convertDurationToSeconds(valueEnd)
+		const segment = { startTime, endTime, category }
 
 		try {
 			await API.postSponsorblockInfo(videoId, uuidv4(), segment)
@@ -188,12 +181,9 @@ const sendSegmentSB = async _ => {
 		} catch ({ message }) {
 			showToast('error', message)
 		}
-	} else showInvalidUI()
 
-	dialogSb = null
-	dialogSbStart = null
-	dialogSbEnd = null
-	dialogSbCategory = null
+		dialogSb = null
+	} else showInvalidUI()
 }
 
 const onCloseModal = _ => {
@@ -218,9 +208,7 @@ export const initDialogSB = _ => {
 
 	dialogSbBtnSend.addEventListener('click', sendSegmentSB)
 
-	dialogSbBtnCancel.addEventListener('click', _ => {
-		modal.close()
-	})
+	dialogSbBtnCancel.addEventListener('click', _ => modal.close())
 
 	controlsSponsorblock.addEventListener('click', recordSegmentSB)
 }

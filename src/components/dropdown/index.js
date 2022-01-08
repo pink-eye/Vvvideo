@@ -32,21 +32,19 @@ const focusCurrentChoice = dropdown => {
 export function hideLastDropdown(currentDropdown = null) {
 	let winActive = getSelector('.main__content').querySelector('.win._active')
 
-	if (winActive) {
-		let dropdownActive = winActive.querySelector('.dropdown._active')
+	if (!winActive) return
 
-		if (dropdownActive && dropdownActive !== currentDropdown) toggleDropdown(dropdownActive)
+	let dropdownActive = winActive.querySelector('.dropdown._active')
 
-		dropdownActive = null
-	}
+	if (dropdownActive && dropdownActive !== currentDropdown) toggleDropdown(dropdownActive)
+
+	dropdownActive = null
 
 	winActive = null
 }
 
 function toggleDropdown(dropdown) {
-	const onOpenDropdown = _ => {
-		focusCurrentChoice(dropdown)
-	}
+	const onOpenDropdown = _ => focusCurrentChoice(dropdown)
 
 	if (dropdown.classList.contains('_active')) dropdown.classList.remove('_active')
 	else {
@@ -61,9 +59,7 @@ export const initDropdown = (dropdown, callback, options = null) => {
 
 	if (!dropdownList) return
 
-	const handleClickBtn = event => {
-		let { target } = event
-
+	const handleClickBtn = ({ target }) => {
 		let dropdownBtn = target.classList.contains('dropdown__btn') ? target : target.closest('.dropdown__btn')
 
 		if (!dropdownBtn) return
@@ -82,18 +78,16 @@ export const initDropdown = (dropdown, callback, options = null) => {
 export const startDropdowns = _ => {
 	const dropdownAll = document.querySelectorAll('.dropdown')
 
-	if (dropdownAll.length > 0) {
-		for (let index = 0, { length } = dropdownAll; index < length; index += 1) {
-			const dropdown = dropdownAll[index]
-			const dropdownHead = dropdown.querySelector('.dropdown__head')
+	if (dropdownAll.length === 0) return
 
-			if (dropdownHead) {
-				const handleClickHead = _ => {
-					toggleDropdown(dropdown)
-				}
+	for (let index = 0, { length } = dropdownAll; index < length; index += 1) {
+		const dropdown = dropdownAll[index]
+		const dropdownHead = dropdown.querySelector('.dropdown__head')
 
-				dropdownHead.addEventListener('click', handleClickHead)
-			}
+		if (dropdownHead) {
+			const handleClickHead = _ => toggleDropdown(dropdown)
+
+			dropdownHead.addEventListener('click', handleClickHead)
 		}
 	}
 }

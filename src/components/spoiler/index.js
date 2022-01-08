@@ -1,16 +1,14 @@
-const toggleSpoiler = event => {
-	let spoiler = event.currentTarget.closest('.spoiler')
+const toggleSpoiler = ({ currentTarget }) => {
+	let spoiler = currentTarget.closest('.spoiler')
 
 	if (spoiler.classList.contains('_opened')) {
 		spoiler.removeAttribute('style')
 		spoiler.classList.remove('_opened')
 	} else {
-		let heightContent = spoiler.querySelector('.spoiler__content').offsetHeight
+		const { offsetHeight } = spoiler.querySelector('.spoiler__content')
 
-		spoiler.style.setProperty('--height-content', `${heightContent}px`)
+		spoiler.style.setProperty('--height-content', `${offsetHeight}px`)
 		spoiler.classList.add('_opened')
-
-		heightContent = null
 	}
 
 	spoiler = null

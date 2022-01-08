@@ -78,8 +78,8 @@ const showRequiredTab = async tab => {
 	channel = null
 }
 
-const handleClickTab = async event => {
-	let tab = event.currentTarget
+const handleClickTab = async ({ currentTarget }) => {
+	let tab = currentTarget
 
 	if (!tab.classList.contains('_active')) {
 		hideLastTab()
@@ -91,16 +91,17 @@ const handleClickTab = async event => {
 
 export const initTabs = primary => {
 	const tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
+
+	if (tabAll.length === 0) return
+
 	let primaryTab = tabAll[primary]
 
 	showRequiredTab(primaryTab)
 
-	if (tabAll.length > 0) {
-		for (let index = 0, { length } = tabAll; index < length; index += 1) {
-			const tab = tabAll[index]
+	for (let index = 0, { length } = tabAll; index < length; index += 1) {
+		const tab = tabAll[index]
 
-			tab.addEventListener('click', handleClickTab)
-		}
+		tab.addEventListener('click', handleClickTab)
 	}
 
 	primaryTab = null
@@ -109,12 +110,12 @@ export const initTabs = primary => {
 export const destroyTabs = _ => {
 	let tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
 
-	if (tabAll.length > 0) {
-		for (let index = 0, { length } = tabAll; index < length; index += 1) {
-			const tab = tabAll[index]
+	if (tabAll.length === 0) return
+	
+	for (let index = 0, { length } = tabAll; index < length; index += 1) {
+		const tab = tabAll[index]
 
-			tab.removeEventListener('click', handleClickTab)
-		}
+		tab.removeEventListener('click', handleClickTab)
 	}
 
 	tabAll = null

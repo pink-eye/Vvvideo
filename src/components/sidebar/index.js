@@ -9,7 +9,9 @@ const activateSidebarBtn = btn => {
 const deactivateLastSidebarBtn = _ => {
 	let lastActiveSidebarBtn = getSelector('.sidebar').querySelector('.sidebar__btn._active')
 
-	lastActiveSidebarBtn && lastActiveSidebarBtn.classList.remove('_active')
+	if (!lastActiveSidebarBtn) return
+
+	lastActiveSidebarBtn.classList.remove('_active')
 
 	lastActiveSidebarBtn = null
 }

@@ -41,9 +41,11 @@
 		position: relative;
 		z-index: 2;
 
-		opacity: 1;
-
 		transition: opacity var(--trns-fast);
+
+		&:not([style]) {
+			opacity: 1;
+		}
 	}
 
 	@media (min-width: 34.4375em) {

@@ -24,7 +24,7 @@ const enablePages = parent => {
 const updateCount = parent => {
 	let count = parent.querySelector('.btns__count')
 
-	count && (count.textContent = page)
+	count.textContent = page
 
 	count = null
 }
@@ -32,7 +32,8 @@ const updateCount = parent => {
 const recycleDOM = async (cardAll, typeCard) => {
 	for (let index = 0, { length } = cardAll; index < length; index += 1) {
 		const card = cardAll[index]
-		const nextItem = itemArray[index + increment]
+		const nextIndex = index + increment
+		const nextItem = itemArray[nextIndex]
 
 		if (nextItem) {
 			card.hidden &&= false
@@ -41,21 +42,21 @@ const recycleDOM = async (cardAll, typeCard) => {
 
 			if (typeCard === 'rich') {
 				type = nextItem.type
-				card.dataset.win = `${type}`
+				card.dataset.win = type
 				card.classList.add(`_${type}`)
 			}
 
 			switch (type) {
 				case 'video':
-					fillVideoCard(card, index + increment, itemArray)
+					fillVideoCard(card, nextIndex, itemArray)
 					break
 
 				case 'playlist':
-					fillPlaylistCard(card, index + increment, itemArray)
+					fillPlaylistCard(card, nextIndex, itemArray)
 					break
 
 				case 'channel':
-					fillChannelCard(card, index + increment, itemArray)
+					fillChannelCard(card, nextIndex, itemArray)
 					break
 
 				case 'author':
@@ -132,11 +133,11 @@ const getDataMore = async typeCard => {
 		showToast('error', message)
 	}
 
-	if (dataMore) {
-		const { items, continuation } = dataMore
-		itemArray.push(...items)
-		hasContinuation = continuation
-	}
+	if (!dataMore) return
+
+	const { items, continuation } = dataMore
+	itemArray.push(...items)
+	hasContinuation = continuation
 }
 
 export const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
@@ -201,7 +202,7 @@ export const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) =>
 const resetCount = parent => {
 	let count = parent.querySelector('.btns__count')
 
-	if (count && +count.textContent !== 1) count.textContent = 1
+	if (+count.textContent !== 1) count.textContent = 1
 
 	count = null
 }
@@ -228,13 +229,9 @@ export const initPages = (parent, data, cardAll, typeCard, continuation = null) 
 	let btnNextPage = parent.querySelector('.btns__next')
 	let btnPrevPage = parent.querySelector('.btns__prev')
 
-	const handleClickNextPage = _ => {
-		nextPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
-	}
+	const handleClickNextPage = _ => nextPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
 
-	const handleClickPrevPage = _ => {
-		prevPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
-	}
+	const handleClickPrevPage = _ => prevPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
 
 	btnNextPage.addEventListener('click', handleClickNextPage)
 	btnPrevPage.addEventListener('click', handleClickPrevPage)

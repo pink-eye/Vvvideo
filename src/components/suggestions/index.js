@@ -123,7 +123,7 @@ const chooseSuggestion = direction => {
 }
 
 const getRelevantRecentQueries = query => {
-	let { recentQueries } = appStorage.getStorage()
+	const { recentQueries } = appStorage.getStorage()
 
 	if (recentQueries.length === 0) return undefined
 
@@ -131,7 +131,7 @@ const getRelevantRecentQueries = query => {
 }
 
 const showRecentQueries = _ => {
-	let { recentQueries } = appStorage.getStorage()
+	const { recentQueries } = appStorage.getStorage()
 
 	if (recentQueries.length === 0) return
 
@@ -190,7 +190,7 @@ const initSuggestions = _ => {
 				if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
 			}
 
-			if (suggestions.length > 0) addSuggestion(suggestions, false)
+			if (suggestions?.length > 0) addSuggestion(suggestions, false)
 		} else {
 			hideSuggestions()
 			hideOverlay()

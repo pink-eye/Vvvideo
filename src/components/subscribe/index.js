@@ -7,11 +7,12 @@ let storage = null
 
 const hasSubscription = (channelId, name) => {
 	storage = appStorage.getStorage()
-	let isSubscribed = false
 
 	const { subscriptions } = storage
 
 	if (subscriptions.length === 0) return false
+
+	let isSubscribed = false
 
 	for (let index = 0, { length } = subscriptions; index < length; index += 1) {
 		const subscription = subscriptions[index]
@@ -25,12 +26,12 @@ const hasSubscription = (channelId, name) => {
 	return isSubscribed
 }
 
-const addSubscription = async obj => {
+const addSubscription = obj => {
 	storage.subscriptions.push(obj)
 	appStorage.updateStorage(storage)
 }
 
-const removeSubscription = async obj => {
+const removeSubscription = obj => {
 	storage.subscriptions = storage.subscriptions.filter(
 		item => item.channelId !== obj.channelId || item.name !== obj.name
 	)
@@ -61,10 +62,8 @@ const transformBtn = (btn, btnText, isSubscribed) => {
 	invokeFunctionByTimeout(onChangeState, timeout)
 }
 
-const handleClickSubscribeBtn = event => {
-	let btn = event.currentTarget
-
-	let btnText = btn.querySelector('.subscribe__text')
+const handleClickSubscribeBtn = ({ currentTarget }) => {
+	let btn = currentTarget
 
 	const { channelId, name } = btn.dataset
 
@@ -72,16 +71,19 @@ const handleClickSubscribeBtn = event => {
 		const isSubscribed = hasSubscription(channelId, name)
 		const subObj = { channelId, name }
 
+		let btnText = btn.querySelector('.subscribe__text')
+
 		transformBtn(btn, btnText, isSubscribed)
 
 		isSubscribed ? removeSubscription(subObj) : addSubscription(subObj)
+
+		btnText = null
 	} else {
 		showToast('error', 'Did not get data about the channel')
 		btn.removeEventListener('click', handleClickSubscribeBtn)
 	}
 
 	btn = null
-	btnText = null
 }
 
 export const prepareSubscribeBtn = (btn, channelId, name) => {

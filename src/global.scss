@@ -48,9 +48,6 @@ img {
 .btn-accent {
 	border: 3px solid var(--color-accent-s);
 
-	color: hsl(0, 0%, 100%);
-
-	background-color: var(--color-accent-s);
 
 	transition: background-color var(--trns), border-color var(--trns), transform var(--trns-fast), color var(--trns);
 
@@ -58,6 +55,12 @@ img {
 
 		&:not(:focus-visible):hover {
 			border: 3px solid var(--color-accent-m);
+		}
+
+		&:not(:hover) {
+			color: hsl(0, 0%, 100%);
+
+			background-color: var(--color-accent-s);
 		}
 
 		&:focus-visible {
@@ -75,13 +78,16 @@ img {
 .btn-primary {
 	border: 3px solid var(--color-bg-btn);
 
-	color: var(--color-title);
-
-	background-color: var(--color-bg-btn);
 
 	transition: background-color var(--trns), color var(--trns), transform var(--trns-fast), border-color var(--trns);
 
 	@media (hover: hover) and (pointer: fine) {
+
+		&:not(:hover) {
+			color: var(--color-title);
+
+			background-color: var(--color-bg-btn);
+		}
 
 		&:focus {
 			outline: 0;
