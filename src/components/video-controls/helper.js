@@ -54,7 +54,7 @@ export const getPreferredQuality = formats => {
 	if (formats.length === 0) return null
 
 	const appStorage = new AppStorage()
-	const storage = appStorage.getStorage()
+	const storage = appStorage.get()
 	const { defaultQuality } = storage.settings
 
 	return defaultQuality === 'highest'

@@ -1,22 +1,42 @@
 export class AppStorage {
 	KEY_STORAGE = 'storage'
 
-	setStorage(data) {
+	set(data) {
 		const dataJSON = JSON.stringify(data)
 		localStorage.setItem(this.KEY_STORAGE, dataJSON)
 	}
 
-	getStorage() {
+	get() {
+		const storageFromLS = this.#getFromLocalStorage()
+
+		if (storageFromLS) return storageFromLS
+
+		return this.#getFromFile()
+	}
+
+	#getFromLocalStorage() {
 		const dataJSON = localStorage.getItem(this.KEY_STORAGE)
 		return JSON.parse(dataJSON)
 	}
 
-	updateStorage(data) {
-		this.setStorage(data)
+	async #getFromFile() {
+		const storageJSON = await API.readStorage()
+
+		if (!storageJSON) return
+
+		const storage = JSON.parse(storageJSON)
+
+		this.set(storage)
+
+		return storage
+	}
+
+	update(data) {
+		this.set(data)
 		API.writeStorage(data)
 	}
 
 	clearLocalStorage() {
-		localStorage.removeItem(this.KEY_STORAGE)
+		localStorage.clear()
 	}
 }

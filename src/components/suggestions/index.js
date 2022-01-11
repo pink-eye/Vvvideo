@@ -123,7 +123,7 @@ const chooseSuggestion = direction => {
 }
 
 const getRelevantRecentQueries = query => {
-	const { recentQueries } = appStorage.getStorage()
+	const { recentQueries } = appStorage.get()
 
 	if (recentQueries.length === 0) return undefined
 
@@ -131,7 +131,7 @@ const getRelevantRecentQueries = query => {
 }
 
 const showRecentQueries = _ => {
-	const { recentQueries } = appStorage.getStorage()
+	const { recentQueries } = appStorage.get()
 
 	if (recentQueries.length === 0) return
 
@@ -143,8 +143,7 @@ const initSuggestions = _ => {
 	let searchBar = headerSearch.querySelector('.search__bar')
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
 
-	const { disableSearchSuggestions, enableProxy, proxy, dontShowRecentQueriesOnTyping } =
-		appStorage.getStorage().settings
+	const { disableSearchSuggestions, enableProxy, proxy, dontShowRecentQueriesOnTyping } = appStorage.get().settings
 
 	if (disableSearchSuggestions) return
 

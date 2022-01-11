@@ -204,8 +204,6 @@ const prepareVideoPlayer = async data => {
 			videoFormats = filterVideoAndAudio(formats)
 	}
 
-	console.log('file: index.js ~ line 194 ~ videoFormats', videoFormats)
-
 	const currentQualityVideo = getPreferredQuality(videoFormats) ?? videoFormats.at(-1)
 	const currentQualityAudio = getHighestAudio(formats)
 
@@ -718,15 +716,19 @@ const skipSegmentSB = _ => {
 			const { startTime, endTime } = segmentsSB[index]
 
 			if (currentTime >= startTime && currentTime <= endTime) {
-				video.currentTime = endTime
-				isSync = false
+				setTimeout(() => {
+					video.currentTime = endTime
+					isSync = false
 
-				if (notifySkipSegment) showToast('info', 'Segment is skipped!')
+					if (notifySkipSegment) showToast('info', 'Segment is skipped!')
+
+					video = null
+				}, 500)
+
+				return
 			}
 		}
 	}
-
-	video = null
 }
 
 const handlePlaying = _ => {
@@ -901,8 +903,6 @@ const handleSegmentsSB = segments => {
 	segmentsSB = segments
 	fillSegmentsSB(segmentsSB)
 	visualizeSegmentsSB(segmentsSB)
-
-	!hasListeners && initDialogSB()
 }
 
 const loadSegmentsSB = (data, callback) => {
@@ -980,7 +980,7 @@ export const initVideoPlayer = async data => {
 	let videoSkeleton = videoParent.querySelector('.video-skeleton')
 	let hasCaptions = false
 
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 
 	const currentQuality = await prepareVideoPlayer(data)
 
@@ -1153,6 +1153,8 @@ export const initVideoPlayer = async data => {
 				isSync = false
 			})
 		}
+
+		initDialogSB()
 	}
 }
 
@@ -1218,7 +1220,7 @@ export const resetVideoPlayer = _ => {
 	progress.removeAttribute('style')
 	seekTooltipChapter.textContent = ''
 
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 
 	const { disableStoryboard } = storage.settings
 

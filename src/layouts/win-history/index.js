@@ -5,7 +5,7 @@ import { initPages, disablePages } from 'Components/grid-btns'
 
 export const openWinHistory = _ => {
 	const appStorage = new AppStorage()
-	const storage = appStorage.getStorage()
+	const storage = appStorage.get()
 
 	if (storage.settings.disableHistory) return
 

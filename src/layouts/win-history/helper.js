@@ -38,7 +38,7 @@ const scrapeVideoInfoFromData = data => {
 }
 
 export const saveVideoInHistory = data => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 
 	if (storage.settings.disableHistory) return
 
@@ -55,16 +55,16 @@ export const saveVideoInHistory = data => {
 		addHistoryItem(newItem)
 
 		restrainHistoryLength()
-		appStorage.updateStorage(storage)
+		appStorage.update(storage)
 	}
 }
 
 export const clearHistory = async _ => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 
 	if (storage.history.length > 0) {
 		storage.history.length = 0
-		appStorage.updateStorage(storage)
+		appStorage.update(storage)
 
 		if (!storage.settings.disableHistory) showToast('good', "History's been cleaned")
 	} else if (!storage.settings.disableHistory) showToast('info', "History's empty")
@@ -84,7 +84,7 @@ export const disableHistory = _ => {
 }
 
 export const rememberWatchedTime = _ => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 	const { disableHistory: isDisabledHistory, dontRememberWatchedTime } = storage.settings
 
 	if (isDisabledHistory && dontRememberWatchedTime) return
@@ -97,7 +97,7 @@ export const rememberWatchedTime = _ => {
 	for (let index = 0, { length } = storage.history; index < length; index += 1) {
 		if (storage.history[index].id === id) {
 			storage.history[index].watchedTime = currentTime
-			appStorage.updateStorage(storage)
+			appStorage.update(storage)
 			return
 		}
 	}
@@ -106,7 +106,7 @@ export const rememberWatchedTime = _ => {
 const getItemWithWatchedTime = videoId => storage.history.find(item => item.id === videoId && item?.watchedTime)
 
 export const getWatchedTime = videoId => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 	const { disableHistory: isDisabledHistory, dontRememberWatchedTime } = storage.settings
 
 	if (isDisabledHistory && dontRememberWatchedTime) return

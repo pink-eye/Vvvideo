@@ -6,7 +6,7 @@ const appStorage = new AppStorage()
 let storage = null
 
 const hasSubscription = (channelId, name) => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 
 	const { subscriptions } = storage
 
@@ -28,14 +28,14 @@ const hasSubscription = (channelId, name) => {
 
 const addSubscription = obj => {
 	storage.subscriptions.push(obj)
-	appStorage.updateStorage(storage)
+	appStorage.update(storage)
 }
 
 const removeSubscription = obj => {
 	storage.subscriptions = storage.subscriptions.filter(
 		item => item.channelId !== obj.channelId || item.name !== obj.name
 	)
-	appStorage.updateStorage(storage)
+	appStorage.update(storage)
 }
 
 const transformBtn = (btn, btnText, isSubscribed) => {

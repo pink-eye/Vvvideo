@@ -12,11 +12,9 @@ export const uuidv4 = _ =>
 export const getSegmentsSB = id => API.getSponsorblockInfo(id, uuidv4())
 
 export const toggleSponsorblock = option => {
-	let video = getSelector('.video')
-	let sponsorblockBtn = video.querySelector('.controls__sponsorblock')
+	let sponsorblockBtn = getSelector('.controls').querySelector('.controls__sponsorblock')
 
 	sponsorblockBtn.hidden = option
 
-	video = null
 	sponsorblockBtn = null
 }

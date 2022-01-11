@@ -10,7 +10,7 @@ export const toggleMenu = _ => {
 	let sidebarBtnActive = sidebar.querySelector('.sidebar__btn._active')
 
 	const appStorage = new AppStorage()
-	const { notAdaptContent } = appStorage.getStorage().settings
+	const { notAdaptContent } = appStorage.get().settings
 
 	if (!burger.classList.contains('_active')) {
 		burger.classList.add('_active')

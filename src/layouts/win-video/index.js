@@ -14,7 +14,7 @@ const appStorage = new AppStorage()
 let storage = null
 
 const getVideoData = id => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 
 	const { enableProxy, proxy } = storage.settings
 	return enableProxy ? API.scrapeVideoProxy(id, proxy) : API.scrapeVideo(id)

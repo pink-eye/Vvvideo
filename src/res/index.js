@@ -5,31 +5,39 @@ const electron = require('electron')
 const globalShortcut = electron.globalShortcut
 const fs = require('fs')
 
-if (require('electron-squirrel-startup')) return app.quit()
+if (require('electron-squirrel-startup')) app.quit()
 
 let win = null
-let icon = null
 
 const STORAGE_PATH = path.resolve(__dirname, 'storage.json')
 
-switch (process.platform) {
-	case 'win32':
-		icon = path.resolve(__dirname, 'assets', 'icons', 'icon.ico')
-		break
-	case 'darwin':
-		icon = path.resolve(__dirname, 'assets', 'icons', 'icon.icns')
-		break
-	case 'linux':
-		icon = path.resolve(__dirname, 'assets', 'icons', 'icon.png')
-		break
+const getIconByPlatform = () => {
+	switch (process.platform) {
+		case 'win32':
+			return path.resolve(__dirname, 'assets', 'icons', 'icon.ico')
+
+		case 'darwin':
+			return path.resolve(__dirname, 'assets', 'icons', 'icon.icns')
+
+		case 'linux':
+			return path.resolve(__dirname, 'assets', 'icons', 'icon.png')
+	}
+}
+
+const handleReadyToShow = () => {
+	win.show()
+	win.focus()
 }
 
 const createWindow = _ => {
+	const icon = getIconByPlatform()
+
 	win = new BrowserWindow({
 		icon,
 		frame: false,
 		fullscreen: true,
 		offscreen: false,
+		show: false,
 		backgroundColor: '#16161d',
 		minWidth: 320,
 		webPreferences: {
@@ -39,17 +47,11 @@ const createWindow = _ => {
 
 	win.loadFile(path.join(__dirname, 'index.html'))
 
-	win.once('ready-to-show', _ => {
-		win.show()
-	})
+	win.once('ready-to-show', handleReadyToShow)
 
-	globalShortcut.register('CmdOrCtrl + Alt + Y', _ => {
-		win.isMinimized() ? win.show() : win.minimize()
-	})
+	globalShortcut.register('CmdOrCtrl + Alt + Y', _ => (win.isMinimized() ? win.show() : win.minimize()))
 
-	win.on('close', _ => {
-		win.destroy()
-	})
+	win.on('close', _ => win.destroy())
 }
 
 const checkProxy = _ => {

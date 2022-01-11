@@ -50,7 +50,7 @@ const updateSubscriptionData = async storage => {
 
 export const openWinSubs = async _ => {
 	const appStorage = new AppStorage()
-	let storage = appStorage.getStorage()
+	let storage = appStorage.get()
 	let subscriptions = getSelector('.subscriptions')
 	let authorCardAll = subscriptions.querySelectorAll('.author')
 
@@ -83,7 +83,7 @@ export const openWinSubs = async _ => {
 	if (updatedSubscriptions) {
 		storage.subscriptions = updatedSubscriptions
 
-		appStorage.updateStorage(storage)
+		appStorage.update(storage)
 	}
 
 	subscriptions = null

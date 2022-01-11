@@ -33,7 +33,7 @@ const openWinLatest = async _ => {
 	let videoAll = latest.querySelectorAll('.card')
 
 	const appStorage = new AppStorage()
-	const { subscriptions } = appStorage.getStorage()
+	const { subscriptions } = appStorage.get()
 
 	if (subscriptions?.length > 0) {
 		let btnLatest = document.querySelector('button[data-win="latest"]')

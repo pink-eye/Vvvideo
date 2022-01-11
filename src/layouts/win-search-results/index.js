@@ -11,16 +11,16 @@ let lastSearchResult = null
 const appStorage = new AppStorage()
 
 export const clearRecentQueries = () => {
-	let storage = appStorage.getStorage()
+	let storage = appStorage.get()
 
 	if (storage.recentQueries.length === 0) return
 
 	storage.recentQueries.length = 0
-	appStorage.updateStorage(storage)
+	appStorage.update(storage)
 }
 
 const restrainRecentQueriesLength = _ => {
-	let storage = appStorage.getStorage()
+	let storage = appStorage.get()
 	const { disableRecentQueries, maxRecentQueriesLength } = storage.settings
 
 	if (disableRecentQueries) return
@@ -29,11 +29,11 @@ const restrainRecentQueriesLength = _ => {
 
 	if (recentQueries.length > maxRecentQueriesLength) storage.recentQueries.length = maxRecentQueriesLength
 
-	appStorage.updateStorage(storage)
+	appStorage.update(storage)
 }
 
 const saveSearchQuery = query => {
-	let storage = appStorage.getStorage()
+	let storage = appStorage.get()
 	const { disableRecentQueries } = storage.settings
 
 	if (disableRecentQueries) return
@@ -44,11 +44,11 @@ const saveSearchQuery = query => {
 
 	storage.recentQueries = [query, ...recentQueries]
 
-	appStorage.updateStorage(storage)
+	appStorage.update(storage)
 }
 
 const getSearchResultsData = query => {
-	const { enableProxy, proxy } = appStorage.getStorage().settings
+	const { enableProxy, proxy } = appStorage.get().settings
 	return enableProxy ? API.scrapeSearchResultsProxy(query, proxy) : API.scrapeSearchResults(query, { pages: 2 })
 }
 
@@ -60,6 +60,7 @@ export const openWinSearchResults = async _ => {
 
 	if (lastSearchResult?.originalQuery !== query) {
 		try {
+			document.activeElement.blur()
 			saveSearchQuery(query)
 			setTimeout(restrainRecentQueriesLength, 15)
 

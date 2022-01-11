@@ -9,7 +9,7 @@ import { fillAuthorCard, resetAuthorCard } from 'Components/card/card-author'
 
 const getPlaylistData = id => {
 	const appStorage = new AppStorage()
-	const { proxy, enableProxy } = appStorage.getStorage().settings
+	const { proxy, enableProxy } = appStorage.get().settings
 
 	return enableProxy ? API.scrapePlaylistVideosProxy(id, proxy) : API.scrapePlaylistVideos(id)
 }

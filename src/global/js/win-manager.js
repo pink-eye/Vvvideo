@@ -54,7 +54,7 @@ const resetWin = win => {
 
 const startFillingWin = ({ win, btnWin, id }) => {
 	const appStorage = new AppStorage()
-	const { settings } = appStorage.getStorage()
+	const { settings } = appStorage.get()
 
 	switch (win) {
 		case 'trending':

@@ -14,6 +14,7 @@ import {
 import { showOverlay, hideOverlay } from 'Components/overlay'
 import { initDropdown, hideLastDropdown, startDropdowns } from 'Components/dropdown'
 import { toggleMenu } from 'Components/burger'
+import { showToast } from 'Components/toast'
 
 const handleFocus = () => {
 	hideSuggestions()
@@ -33,7 +34,20 @@ const handleClickWindow = ({ target }) => {
 
 document.addEventListener('DOMContentLoaded', startDropdowns)
 
-document.addEventListener('DOMContentLoaded', async _ => {
+document.addEventListener('DOMContentLoaded', _ => {
+	const appStorage = new AppStorage()
+	const storage = appStorage.get()
+
+	if (!storage) {
+		showToast('error', 'OH SHIT! I have no storage O_O')
+
+		return
+	}
+
+	fillWinSettings()
+	openWinLatest()
+	initSuggestions()
+
 	// MAIN SELECTORS
 	const header = getSelector('.header')
 	const sidebar = getSelector('.sidebar')
@@ -42,20 +56,6 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	const headerSearch = getSelector('.search')
 	const searchBar = headerSearch.querySelector('.search__bar')
 	const searchBtn = headerSearch.querySelector('.search__btn')
-
-	let storage = {}
-	const appStorage = new AppStorage()
-	storage = appStorage.getStorage()
-
-	if (!storage) {
-		const data = await API.readStorage()
-		storage = JSON.parse(data)
-		appStorage.setStorage(storage)
-	}
-
-	fillWinSettings()
-	openWinLatest()
-	initSuggestions()
 
 	if (storage.settings.disableSearchSuggestions) {
 		searchBar.addEventListener('blur', hideOverlay)
@@ -115,22 +115,22 @@ document.addEventListener('DOMContentLoaded', async _ => {
 	initDropdown(themeDropdown, btn => {
 		setTheme(btn.dataset.choice)
 		storage.settings.theme = btn.dataset.choice
-		appStorage.updateStorage(storage)
+		appStorage.update(storage)
 	})
 
 	initDropdown(qualityDropdown, btn => {
 		storage.settings.defaultQuality = btn.dataset.choice
-		appStorage.updateStorage(storage)
+		appStorage.update(storage)
 	})
 
 	initDropdown(protocolDropdown, btn => {
 		storage.settings.proxy.protocol = btn.textContent.toLowerCase()
-		appStorage.updateStorage(storage)
+		appStorage.update(storage)
 	})
 
 	initDropdown(formatDropdown, btn => {
 		storage.settings.defaultVideoFormat = btn.textContent
-		appStorage.updateStorage(storage)
+		appStorage.update(storage)
 	})
 
 	// INIT SHORTCUTS

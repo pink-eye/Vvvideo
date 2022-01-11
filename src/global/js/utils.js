@@ -97,7 +97,7 @@ export const convertSecondsToDuration = lengthSeconds => {
 export const convertDurationToSeconds = duration => {
 	if (isEmpty(duration)) return undefined
 
-	if (!duration.includes(':')) return undefined
+	if (duration.length === 0 || !duration.includes(':')) return undefined
 
 	if (duration.length === 5 || duration.length === 4) {
 		const [minutes, seconds] = duration.split(':')
@@ -112,8 +112,7 @@ export const convertDurationToSeconds = duration => {
 	return undefined
 }
 
-export const getDurationTimeout = (timeout = 300) =>
-	new AppStorage().getStorage().settings.disableTransition ? 0 : timeout
+export const getDurationTimeout = (timeout = 300) => (new AppStorage().get().settings.disableTransition ? 0 : timeout)
 
 export const invokeFunctionByTimeout = (callback, timeout) => (timeout > 0 ? setTimeout(callback, timeout) : callback())
 

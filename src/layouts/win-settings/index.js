@@ -84,7 +84,7 @@ const readInputFile = _ => {
 		else {
 			buildStorage(data)
 			makeResultImport('_valid', validTip)
-			appStorage.updateStorage(storage)
+			appStorage.update(storage)
 			setTimeout(reloadApp, 3000)
 		}
 	}
@@ -125,7 +125,7 @@ const handleFile = _ => {
 }
 
 const handleInputField = event => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 	const input = event.currentTarget
 	const option = input.id
 
@@ -153,7 +153,7 @@ const handleInputField = event => {
 			break
 	}
 
-	appStorage.updateStorage(storage)
+	appStorage.update(storage)
 }
 
 const toggleTransition = isDisabled => {
@@ -175,7 +175,7 @@ const toggleTransition = isDisabled => {
 }
 
 const handleChangeCheckbox = event => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 	const checkbox = event.currentTarget
 	const option = checkbox.id
 
@@ -209,7 +209,7 @@ const handleChangeCheckbox = event => {
 			break
 	}
 
-	appStorage.updateStorage(storage)
+	appStorage.update(storage)
 }
 
 export const openWinSettings = _ => {
@@ -290,7 +290,7 @@ export const setTheme = themeOption => {
 }
 
 export const fillWinSettings = _ => {
-	storage = appStorage.getStorage()
+	storage = appStorage.get()
 	const { settings: ss } = storage
 	const settings = getSelector('.settings')
 	const btnClearHistory = settings.querySelector('#clear-history')
