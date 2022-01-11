@@ -57,11 +57,27 @@ input {
 	outline: 0;
 
 	transition: border-color var(--trns);
+}
 
+input {
 	@media (hover: hover) and (pointer: fine) {
 
 		&:focus-visible {
 			border: var(--width-line) solid var(--color-accent-s);
+		}
+	}
+}
+
+button,
+a {
+	@media (hover: hover) and (pointer: fine) {
+
+		&:focus-visible:not(:is(._active,.btn-accent)) {
+			border: var(--width-line) solid var(--color-accent-s);
+		}
+
+		&:focus-visible:is(._active,.btn-accent) {
+			border: var(--width-line) solid var(--color-title);
 		}
 	}
 }

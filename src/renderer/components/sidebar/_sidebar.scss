@@ -66,10 +66,6 @@
 				fill: hsl(0, 0%, 100%);
 				stroke: hsl(0, 0%, 100%);
 			}
-
-			&:focus-visible {
-				border: var(--width-line) solid var(--color-accent-l);
-			}
 		}
 
 		@media (min-width: 48em) {

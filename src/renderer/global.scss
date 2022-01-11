@@ -63,10 +63,6 @@ img {
 			background-color: var(--color-accent-s);
 		}
 
-		&:focus-visible {
-			border: 3px solid var(--color-descr);
-		}
-
 		&:hover {
 			color: var(--color-accent-s);
 
