@@ -11,17 +11,16 @@
 		"publish": "electron-forge publish",
 		"format": "prettier src/ gulp/ gulpfile.js --write",
 		"test": "jest",
-		"stylelint": "stylelint src/**/*.scss --fix",
-		"prepare": "husky install"
+		"stylelint": "stylelint src/renderer/**/*.scss --fix"
 	},
 	"jest": {
 		"moduleFileExtensions": [
 			"js"
 		],
 		"moduleNameMapper": {
-			"^Global/(.*)$": "<rootDir>/src/global/js/$1",
-			"^Components/(.*)$": "<rootDir>/src/components/$1",
-			"^Layouts/(.*)$": "<rootDir>/src/layouts/$1"
+			"^Global/(.*)$": "<rootDir>/src/renderer/global/js/$1",
+			"^Components/(.*)$": "<rootDir>/src/renderer/components/$1",
+			"^Layouts/(.*)$": "<rootDir>/src/renderer/layouts/$1"
 		}
 	},
 	"keywords": [],
@@ -33,7 +32,7 @@
 		"forge": {
 			"packagerConfig": {
 				"name": "Vvvideo",
-				"icon": "./bundle/assets/icons/icon.ico",
+				"icon": "./assets/icons/icon.ico",
 				"ignore": [
 					"^(/__tests__$)",
 					"^(/.husky$)",

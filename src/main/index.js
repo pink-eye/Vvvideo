@@ -12,13 +12,13 @@ const STORAGE_PATH = path.resolve(__dirname, 'storage.json')
 const getIconByPlatform = () => {
 	switch (process.platform) {
 		case 'win32':
-			return path.resolve(__dirname, 'assets', 'icons', 'icon.ico')
+			return path.resolve(__dirname, '..', 'assets', 'icons', 'icon.ico')
 
 		case 'darwin':
-			return path.resolve(__dirname, 'assets', 'icons', 'icon.icns')
+			return path.resolve(__dirname, '..', 'assets', 'icons', 'icon.icns')
 
 		case 'linux':
-			return path.resolve(__dirname, 'assets', 'icons', 'icon.png')
+			return path.resolve(__dirname, '..', 'assets', 'icons', 'icon.png')
 	}
 }
 

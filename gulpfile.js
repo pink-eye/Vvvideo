@@ -1,28 +1,17 @@
 const { series, parallel } = require('gulp')
-const { runMainProcessDev, runMainProcessBuild } = require('./gulp/main-process')
-const { runDefault, moveResources, transformHTML, moveImages } = require('./gulp/default')
-const runStyles = require('./gulp/styles')
-const { lintScripts, runScripts } = require('./gulp/scripts')
-const { clean, minifyHTML, compressImages, minifyStyles, uglifyScripts } = require('./gulp/build')
+const runMainProcess = require('./gulp/tasks/main')
+const runRendererProcess = require('./gulp/tasks/renderer')
+const lintScripts = require('./gulp/tasks/renderer/lint-scripts')
+const paths = require('./gulp/config/paths')
+const del = require('del')
 
-exports.default = runDefault
+global.app = {
+	isProd: process.argv.includes('--prod'),
+	paths,
+}
 
-exports.styles = runStyles
-
-exports.scripts = runScripts
+const clean = () => del([`${app.paths.bundle}/*`])
 
 exports.lintJS = lintScripts
 
-exports.dev = parallel(runDefault(), runScripts(), runStyles(), runMainProcessDev())
-
-exports.build = series(
-	clean,
-	moveResources,
-	transformHTML,
-	minifyHTML,
-	moveImages,
-	compressImages,
-	minifyStyles,
-	uglifyScripts,
-	runMainProcessBuild()
-)
+exports.default = series(clean, parallel(runRendererProcess, runMainProcess))
