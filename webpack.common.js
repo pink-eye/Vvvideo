@@ -6,9 +6,9 @@ module.exports = {
 	},
 	resolve: {
 		alias: {
-			Global: path.resolve(__dirname, 'src', 'global', 'js'),
-			Components: path.resolve(__dirname, 'src', 'components'),
-			Layouts: path.resolve(__dirname, 'src', 'layouts'),
+			Global: path.resolve(__dirname, 'src', 'renderer', 'global', 'js'),
+			Components: path.resolve(__dirname, 'src', 'renderer', 'components'),
+			Layouts: path.resolve(__dirname, 'src', 'renderer', 'layouts'),
 		},
 	},
 	module: {

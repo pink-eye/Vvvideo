@@ -1,16 +1,16 @@
-const { src, dest, watch } = require('gulp')
+const { src, dest, watch, series, parallel } = require('gulp')
 const del = require('del')
 const fileInclude = require('gulp-file-include')
-const htmlmin = require('gulp-htmlmin')
+const paths = require('./paths.js')
 
-const cleanDefault = () => del(['bundle/*', '!bundle/css', '!bundle/js'])
+const cleanDefault = () => del([`${paths.bundle}/*`, `!${paths.bundle}/css`, `!${paths.bundle}/js`])
 
-const moveResources = () => src('src/res/**').pipe(dest('bundle'))
+const moveResources = () => src(`${paths.renderer}/res/**`).pipe(dest(`${paths.bundle}`))
 
-const moveImages = () => src('src/img/**').pipe(dest('bundle/img'))
+const moveImages = () => src(`${paths.renderer}/img/**`).pipe(dest(`${paths.bundle}/img`))
 
 const transformHTML = () =>
-	src('src/*.html')
+	src(`${paths.renderer}/*.html`)
 		.pipe(
 			fileInclude({
 				prefix: '@',
@@ -18,28 +18,15 @@ const transformHTML = () =>
 				indent: true,
 			})
 		)
-		.pipe(dest('bundle'))
-
-const minifyHTML = () =>
-	src('bundle/*.html')
-		.pipe(
-			htmlmin({
-				collapseWhitespace: true,
-			})
-		)
-		.pipe(dest('bundle'))
+		.pipe(dest(`${paths.bundle}`))
 
 const watchFiles = () => {
-	watch('src/**/*.html', transformHTML)
-	watch('src/res/**', moveResources)
-	watch('src/img/**', moveImages)
+	watch(`${paths.renderer}/**/*.html`, transformHTML)
+	watch(`${paths.renderer}/res/**`, moveResources)
+	watch(`${paths.renderer}/img/**`, moveImages)
 }
 
-module.exports = {
-	cleanDefault,
-	transformHTML,
-	minifyHTML,
-	moveResources,
-	moveImages,
-	watchFiles,
-}
+const runDefault = () =>
+	series(cleanDefault, parallel(transformHTML, moveResources, moveImages), watchFiles)
+
+module.exports = { runDefault, moveResources, transformHTML, moveImages }

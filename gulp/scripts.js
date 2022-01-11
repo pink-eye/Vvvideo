@@ -1,4 +1,4 @@
-const { src, dest, watch } = require('gulp')
+const { src, dest, watch, series } = require('gulp')
 const eslint = require('gulp-eslint-new')
 const del = require('del')
 const concat = require('gulp-concat')
@@ -7,6 +7,7 @@ const columnify = require('columnify')
 const webpack = require('webpack')
 const webpackStream = require('webpack-stream')
 const webpackDev = require('../webpack.dev.js')
+const paths = require('./paths.js')
 
 // CHALKS
 
@@ -19,10 +20,17 @@ const info = chalk.hex('#3c5cec')
 const secondary = chalk.hex('#818c98')
 const resultChalk = chalk.cyanBright
 
-const cleanScripts = () => del(['bundle/js/*'])
+const cleanScripts = () => del([`${paths.bundle}/js/*`])
 
 const logESLintResult = result => {
-	const { filePath, warningCount, fixableWarningCount, errorCount, fixableErrorCount, fatalErrorCount } = result
+	const {
+		filePath,
+		warningCount,
+		fixableWarningCount,
+		errorCount,
+		fixableErrorCount,
+		fatalErrorCount,
+	} = result
 
 	let { messages } = result
 
@@ -60,10 +68,15 @@ const logESLintResult = result => {
 		console.log(columnsMessages)
 		console.log('')
 
-		if (warningCount > 0) console.log(warningBright(`${warningCount} warnings (${fixableWarningCount} fixable)`))
+		if (warningCount > 0)
+			console.log(warningBright(`${warningCount} warnings (${fixableWarningCount} fixable)`))
 
 		if (errorCount > 0)
-			console.log(errorBright(`${errorCount} errors (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`))
+			console.log(
+				errorBright(
+					`${errorCount} errors (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`
+				)
+			)
 
 		console.log('')
 		console.log('')
@@ -74,13 +87,22 @@ const logESLintTotalResults = results => {
 	console.log('')
 	console.log('')
 
-	const { warningCount, fatalErrorCount, fixableWarningCount, errorCount, fixableErrorCount, length } = results
+	const {
+		warningCount,
+		fatalErrorCount,
+		fixableWarningCount,
+		errorCount,
+		fixableErrorCount,
+		length,
+	} = results
 
 	const total = [
 		{
 			files: resultChalk(`${length} files`),
 			warnings: warningBright(`${warningCount} warnings (${fixableWarningCount} fixable)`),
-			errors: errorBright(`${errorCount} error (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`),
+			errors: errorBright(
+				`${errorCount} error (${fixableErrorCount} fixable, ${fatalErrorCount} fatal)`
+			),
 		},
 	]
 
@@ -101,20 +123,41 @@ const logESLintTotalResults = results => {
 }
 
 const lintScripts = () =>
-	src(['src/components/**/*.js', 'src/layouts/**/*.js', 'src/global/**/*.js', 'src/main.js'])
+	src([
+		`${paths.renderer}/components/**/*.js`,
+		`${paths.renderer}/layouts/**/*.js`,
+		`${paths.renderer}/global/**/*.js`,
+		`${paths.renderer}/main.js`,
+	])
 		.pipe(eslint({ fix: true }))
 		.pipe(eslint.result(logESLintResult))
 		.pipe(eslint.results(logESLintTotalResults))
 
 const bundleModules = () => {
-	src('src/lib/scripts/*.js').pipe(concat('vendor.js')).pipe(dest('bundle/js/'))
-	return src(['src/components/**/*.js', 'src/layouts/**/*.js', 'src/global/**/*.js', 'src/main.js'])
+	src(`${paths.renderer}/lib/scripts/*.js`)
+		.pipe(concat('vendor.js'))
+		.pipe(dest(`${paths.bundle}/js/`))
+	return src([
+		`${paths.renderer}/components/**/*.js`,
+		`${paths.renderer}/layouts/**/*.js`,
+		`${paths.renderer}/global/**/*.js`,
+		`${paths.renderer}/main.js`,
+	])
 		.pipe(webpackStream(webpackDev), webpack)
-		.pipe(dest('bundle/js'))
+		.pipe(dest(`${paths.bundle}/js`))
 }
 
-const watchScripts = () => {
-	watch(['src/components/**/*.js', 'src/layouts/**/*.js', 'src/global/**/*.js', 'src/main.js'], bundleModules)
-}
+const watchScripts = () =>
+	watch(
+		[
+			`${paths.renderer}/components/**/*.js`,
+			`${paths.renderer}/layouts/**/*.js`,
+			`${paths.renderer}/global/**/*.js`,
+			`${paths.renderer}/main.js`,
+		],
+		bundleModules
+	)
 
-module.exports = { cleanScripts, lintScripts, bundleModules, watchScripts }
+const runScripts = () => series(cleanScripts, bundleModules, watchScripts)
+
+module.exports = { lintScripts, runScripts }

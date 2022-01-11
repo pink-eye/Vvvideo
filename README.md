@@ -1,4 +1,4 @@
-<p align="center"><img src="src/res/assets/icons/png/256x256.png" width="150"></p>
+<p align="center"><img src="assets/icons/png/256x256.png" width="150"></p>
 
 <h1 align="center">Vvvideo</h1>
 
@@ -11,17 +11,15 @@
 </p>
 
 ## 📷 Screenshots
+![Screenshot-Latest](./assets/screenshots/screenshot(2).png)
 
+![Screenshot-Video](./assets/screenshots/screenshot(3).png)
 
-![Screenshot-Latest](./src/res/assets/screenshots/screenshot(2).png)
+![Screenshot-Channel](./assets/screenshots/screenshot(4).png)
 
-![Screenshot-Video](./src/res/assets/screenshots/screenshot(3).png)
+![Screenshot-Trending](./assets/screenshots/screenshot(1).png)
 
-![Screenshot-Channel](./src/res/assets/screenshots/screenshot(4).png)
-
-![Screenshot-Trending](./src/res/assets/screenshots/screenshot(1).png)
-
-![Screenshot-Settings](./src/res/assets/screenshots/screenshot(5).png)
+![Screenshot-Settings](./assets/screenshots/screenshot(5).png)
 
 
 ## 💥 Features
@@ -42,7 +40,6 @@
 * Hot keys
 
 ## 🛠️ Building
-
 ```
 # Clone this repo
 git clone https://github.com/pink-eye/Vvvideo

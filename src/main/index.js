@@ -1,13 +1,11 @@
 require('v8-compile-cache')
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, globalShortcut } = require('electron')
 const path = require('path')
-const electron = require('electron')
-const globalShortcut = electron.globalShortcut
 const fs = require('fs')
 
 if (require('electron-squirrel-startup')) app.quit()
 
-let win = null
+let mainWindow = null
 
 const STORAGE_PATH = path.resolve(__dirname, 'storage.json')
 
@@ -25,14 +23,14 @@ const getIconByPlatform = () => {
 }
 
 const handleReadyToShow = () => {
-	win.show()
-	win.focus()
+	mainWindow.show()
+	mainWindow.focus()
 }
 
 const createWindow = _ => {
 	const icon = getIconByPlatform()
 
-	win = new BrowserWindow({
+	mainWindow = new BrowserWindow({
 		icon,
 		frame: false,
 		fullscreen: true,
@@ -45,13 +43,15 @@ const createWindow = _ => {
 		},
 	})
 
-	win.loadFile(path.join(__dirname, 'index.html'))
+	mainWindow.loadFile(path.join(__dirname, 'index.html'))
 
-	win.once('ready-to-show', handleReadyToShow)
+	mainWindow.once('ready-to-show', handleReadyToShow)
 
-	globalShortcut.register('CmdOrCtrl + Alt + Y', _ => (win.isMinimized() ? win.show() : win.minimize()))
+	globalShortcut.register('CmdOrCtrl + Alt + Y', _ =>
+		mainWindow.isMinimized() ? mainWindow.show() : mainWindow.minimize()
+	)
 
-	win.on('close', _ => win.destroy())
+	mainWindow.on('close', _ => mainWindow.destroy())
 }
 
 const checkProxy = _ => {
