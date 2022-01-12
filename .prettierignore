@@ -2,4 +2,4 @@ bundle
 node_modules
 **/*.scss
 **/*.html
-src/js/vendor
+src/renderer/lib
