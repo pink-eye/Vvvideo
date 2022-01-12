@@ -17,7 +17,9 @@
 }
 
 svg {
-	transition: stroke var(--trns), fill var(--trns);
+	transition:
+		stroke var(--trns),
+		fill var(--trns);
 
 	fill: var(--color-icon);
 	stroke: var(--color-icon);
@@ -49,7 +51,11 @@ img {
 	border: 3px solid var(--color-accent-s);
 
 
-	transition: background-color var(--trns), border-color var(--trns), transform var(--trns-fast), color var(--trns);
+	transition:
+		background-color var(--trns),
+		border-color var(--trns),
+		transform var(--trns-fast),
+		color var(--trns);
 
 	@media (hover: hover) and (pointer: fine) {
 
@@ -75,7 +81,11 @@ img {
 	border: 3px solid var(--color-bg-btn);
 
 
-	transition: background-color var(--trns), color var(--trns), transform var(--trns-fast), border-color var(--trns);
+	transition:
+		background-color var(--trns),
+		color var(--trns),
+		transform var(--trns-fast),
+		border-color var(--trns);
 
 	@media (hover: hover) and (pointer: fine) {
 
@@ -103,7 +113,10 @@ img {
 
 	font-size: 0;
 
-	transition: background-color var(--trns), transform var(--trns-fast), border-color var(--trns);
+	transition:
+		background-color var(--trns),
+		transform var(--trns-fast),
+		border-color var(--trns);
 
 	&:not([disabled]) {
 		background-color: var(--color-bg-form);
@@ -160,7 +173,9 @@ img {
 
 		background-color: var(--color-descr);
 
-		transition: transform var(--trns), background-color var(--trns);
+		transition:
+			transform var(--trns),
+			background-color var(--trns);
 
 		content: '';
 	}

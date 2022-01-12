@@ -2,7 +2,7 @@ import { getSelector } from 'Global/utils'
 import { resetCard } from 'Components/card'
 import { resetAuthorCard } from 'Components/card/card-author'
 
-const resetGridAuthorCard = _ => {
+const resetGridAuthorCard = () => {
 	let subscriptions = getSelector('.subscriptions')
 	let authorCardAll = subscriptions.querySelectorAll('.author')
 

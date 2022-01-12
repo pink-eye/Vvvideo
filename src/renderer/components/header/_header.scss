@@ -9,7 +9,10 @@
 
 	box-shadow: var(--box-shadow-s);
 
-	transition: top var(--trns), box-shadow var(--trns), background-color var(--trns);
+	transition:
+		top var(--trns),
+		box-shadow var(--trns),
+		background-color var(--trns);
 
 	&:not(._hidden) {
 		top: 0;
@@ -44,7 +47,9 @@
 
 		background-color: transparent;
 
-		transition: background-color var(--trns), border-color var(--trns);
+		transition:
+			background-color var(--trns),
+			border-color var(--trns);
 
 		& svg {
 			transition: fill var(--trns);

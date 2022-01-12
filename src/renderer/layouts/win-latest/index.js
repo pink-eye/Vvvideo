@@ -27,7 +27,7 @@ const getChannelVideosLocalScraper = channelId =>
 			.catch(reject)
 	})
 
-const openWinLatest = async _ => {
+const openWinLatest = async () => {
 	let latest = getSelector('.latest')
 	let promises = []
 	let videoAll = latest.querySelectorAll('.card')
@@ -64,7 +64,9 @@ const openWinLatest = async _ => {
 			resetIndicator()
 		}
 
-		latestArray?.length > videoAll.length ? initPages(latest, latestArray, videoAll, 'video') : disablePages(latest)
+		latestArray?.length > videoAll.length
+			? initPages(latest, latestArray, videoAll, 'video')
+			: disablePages(latest)
 	} else showToast('info', `Oops... You don't have subscriptions`)
 
 	for (let index = 0, { length } = videoAll; index < length; index += 1) {

@@ -5,7 +5,10 @@ export class YoutubeHelper {
 	}
 
 	isChannel(url) {
-		return this.hasBaseDomain(url) && (url.includes('/user/') || url.includes('/channel/') || url.includes('/c/'))
+		return (
+			this.hasBaseDomain(url) &&
+			(url.includes('/user/') || url.includes('/channel/') || url.includes('/c/'))
+		)
 	}
 
 	isPlaylist(url) {
@@ -16,7 +19,9 @@ export class YoutubeHelper {
 		const regExpUser = /(channel|user|c)\/([a-zA-Z0-9\-_]*.)/.exec(url)
 
 		if (regExpUser)
-			return regExpUser[2].endsWith('/') ? regExpUser[2].substring(0, regExpUser[2].length - 1) : regExpUser[2]
+			return regExpUser[2].endsWith('/')
+				? regExpUser[2].substring(0, regExpUser[2].length - 1)
+				: regExpUser[2]
 
 		return undefined
 	}

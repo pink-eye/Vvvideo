@@ -29,7 +29,9 @@
 		background: var(--color-track-inactive);
 		outline-offset: 5px;
 
-		transition: background-color var(--trns), border-color var(--trns);
+		transition:
+			background-color var(--trns),
+			border-color var(--trns);
 
 		appearance: none;
 		pointer-events: none;
@@ -49,7 +51,9 @@
 			transform: translateX(var(--thumb-position));
 			cursor: pointer;
 
-			transition: transform var(--trns), box-shadow var(--trns);
+			transition:
+				transform var(--trns),
+				box-shadow var(--trns);
 
 			content: '';
 			pointer-events: auto;

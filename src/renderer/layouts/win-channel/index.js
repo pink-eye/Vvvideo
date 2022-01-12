@@ -37,7 +37,7 @@ const openWinChannel = data => {
 	if (authorThumbnails) {
 		channelAvatar.src = authorThumbnails.at(-1).url
 
-		const onLoadAvatar = _ => {
+		const onLoadAvatar = () => {
 			removeSkeleton(avatarSkeleton)
 
 			channelAvatar = null
@@ -50,7 +50,7 @@ const openWinChannel = data => {
 	if (authorBanners) {
 		channelBannerImg.src = authorBanners.at(-1).url
 
-		const onLoadBanner = _ => {
+		const onLoadBanner = () => {
 			removeSkeleton(bannerSkeleton)
 
 			channelBannerImg = null
@@ -72,7 +72,9 @@ const openWinChannel = data => {
 	channelFollowers.textContent = subscriberText
 	removeSkeleton(followersSkeleton)
 
-	channelDescription.innerHTML = !isEmpty(description) ? `${normalizeAbout(description)}` : 'No information...'
+	channelDescription.innerHTML = !isEmpty(description)
+		? `${normalizeAbout(description)}`
+		: 'No information...'
 
 	channelDescription.addEventListener('click', handleClickLink)
 
@@ -89,7 +91,7 @@ const openWinChannel = data => {
 	followersSkeleton = null
 }
 
-export const resetWinChannel = _ => {
+export const resetWinChannel = () => {
 	let channel = getSelector('.channel')
 	let channelBanner = channel.querySelector('.channel__banner')
 	let channelBannerImg = channel.querySelector('.channel__banner img')

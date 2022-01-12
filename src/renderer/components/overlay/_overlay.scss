@@ -9,7 +9,9 @@
 
 	background-color: var(--color-bg-duration);
 
-	transition: opacity var(--trns), visibility var(--trns);
+	transition:
+		opacity var(--trns),
+		visibility var(--trns);
 
 	&:not(._active) {
 		visibility: hidden;

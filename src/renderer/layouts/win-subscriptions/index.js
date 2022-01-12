@@ -48,7 +48,7 @@ const updateSubscriptionData = async storage => {
 	return subscriptions
 }
 
-export const openWinSubs = async _ => {
+export const openWinSubs = async () => {
 	const appStorage = new AppStorage()
 	let storage = appStorage.get()
 	let subscriptions = getSelector('.subscriptions')

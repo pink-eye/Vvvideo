@@ -1,8 +1,8 @@
 import { getSelector } from 'Global/utils'
 
-export const createSponsorblockItemHTML = _ => '<li class="sponsorblock__item"></li>'
+export const createSponsorblockItemHTML = () => '<li class="sponsorblock__item"></li>'
 
-export const uuidv4 = _ =>
+export const uuidv4 = () =>
 	'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
 		let r = (Math.random() * 16) | 0,
 			v = c === 'x' ? r : (r & 0x3) | 0x8

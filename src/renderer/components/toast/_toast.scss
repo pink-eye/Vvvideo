@@ -44,7 +44,9 @@
 		visibility: hidden;
 		opacity: 0;
 
-		transition: opacity 1.5s ease-out, visibility 1.5s ease-out;
+		transition:
+			opacity 1.5s ease-out,
+			visibility 1.5s ease-out;
 		animation: slide-out-blurred-right 0.4s var(--ease-in-back) both;
 	}
 

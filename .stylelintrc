@@ -124,13 +124,15 @@
 		"declaration-colon-newline-after": "always-multi-line",
 		"declaration-colon-space-after": "always-single-line",
 		"declaration-colon-space-before": "never",
+		"declaration-bang-space-after": "never",
+		"declaration-bang-space-before": "always",
 
 		"no-descending-specificity": null,
 
 		"string-quotes": "single",
 
 		"value-no-vendor-prefix": null,
-		"value-list-comma-newline-after": "always-multi-line",
+		"value-list-comma-newline-after": "always",
 		"value-list-comma-newline-before": "never-multi-line",
 		"value-list-comma-space-after": "always-single-line",
 		"value-list-comma-space-before": "never",
@@ -187,6 +189,13 @@
 
 		"scss/at-import-partial-extension": null,
 		"scss/declaration-nested-properties-no-divided-groups": null,
-		"scss/no-global-function-names": null
+		"scss/no-global-function-names": null,
+
+		"function-comma-space-after": "always",
+		"function-comma-space-before": "never",
+		"function-parentheses-newline-inside": "always-multi-line",
+		"function-comma-newline-after": "always-multi-line",
+		"function-comma-newline-before": "never-multi-line",
+		"function-whitespace-after": "always"
 	}
 }

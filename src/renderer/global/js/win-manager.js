@@ -102,7 +102,7 @@ const startFillingWin = ({ win, btnWin, id }) => {
 const showWin = win => {
 	win.classList.add('_active')
 
-	const afterActiveWin = _ => win.classList.add('_anim-win')
+	const afterActiveWin = () => win.classList.add('_anim-win')
 
 	setTimeout(afterActiveWin, 15)
 }
@@ -111,10 +111,10 @@ const hideWin = win => {
 	if (win) {
 		win.classList.remove('_anim-win')
 
-		const onHideLastWin = _ => {
+		const onHideLastWin = () => {
 			win.classList.remove('_active')
 
-			const afterOpenWin = _ => resetWin(win)
+			const afterOpenWin = () => resetWin(win)
 
 			setTimeout(afterOpenWin, 200)
 		}
@@ -181,7 +181,7 @@ export const manageWin = async ({ target }) => {
 				activateSidebarBtn(btnWin)
 			} else deactivateLastSidebarBtn()
 
-			const afterHideLastWin = _ => {
+			const afterHideLastWin = () => {
 				scrollToTop()
 
 				startFillingWin({

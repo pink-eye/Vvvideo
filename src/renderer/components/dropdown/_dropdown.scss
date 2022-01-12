@@ -57,7 +57,9 @@
 		padding: 10px;
 		border-radius: var(--brs-s);
 
-		transition: color var(--trns), border-color var(--trns);
+		transition:
+			color var(--trns),
+			border-color var(--trns);
 
 		.arrow {
 			margin-left: 15px;
@@ -110,7 +112,10 @@
 
 		text-align: left;
 
-		transition: background-color var(--trns), color var(--trns), border-color var(--trns);
+		transition:
+			background-color var(--trns),
+			color var(--trns),
+			border-color var(--trns);
 
 		&:not(._current) {
 			color: var(--color-text);

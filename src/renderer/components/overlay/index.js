@@ -1,4 +1,4 @@
-const showOverlay = _ => {
+const showOverlay = () => {
 	let overlayAll = document.querySelectorAll('.overlay')
 
 	for (let index = 0, { length } = overlayAll; index < length; index += 1) {
@@ -11,7 +11,7 @@ const showOverlay = _ => {
 	overlayAll = null
 }
 
-const hideOverlay = _ => {
+const hideOverlay = () => {
 	let overlayAll = document.querySelectorAll('.overlay')
 
 	for (let index = 0, { length } = overlayAll; index < length; index += 1) {

@@ -18,7 +18,9 @@
 	transform-origin: 50% 50%;
 	opacity: var(--line-alpha);
 
-	animation: 1800ms spinner-arc ease-in-out infinite, 1500ms spinner-rotate linear infinite;
+	animation:
+		1800ms spinner-arc ease-in-out infinite,
+		1500ms spinner-rotate linear infinite;
 
 	fill: none;
 	stroke: var(--line-color);

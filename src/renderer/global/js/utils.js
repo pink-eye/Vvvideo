@@ -12,11 +12,11 @@ export const getSelector = selector => {
 	return cacheSelector(selector)
 }
 
-export const reloadApp = _ => window.location.reload()
+export const reloadApp = () => window.location.reload()
 
-export const closeApp = _ => window.close()
+export const closeApp = () => window.close()
 
-export const scrollToTop = _ => window.scrollTo(0, 0)
+export const scrollToTop = () => window.scrollTo(0, 0)
 
 export const scrollToElem = y => {
 	let header = getSelector('.header')
@@ -30,7 +30,8 @@ export const getCoordY = el => el.getBoundingClientRect().top + window.pageYOffs
 
 export const hasFocus = el => document.activeElement === el
 
-export const isEmpty = el => el === null || el === undefined || el === '' || el === 'undefined' || el === 'null'
+export const isEmpty = el =>
+	el === null || el === undefined || el === '' || el === 'undefined' || el === 'null'
 
 export const convertToPercentage = (firstNum, secondNum) => (firstNum * 100) / secondNum
 
@@ -41,7 +42,7 @@ export const hideOnScroll = (selector, mq) => {
 
 	let lastScrollValue = 0
 
-	const handleScroll = _ => {
+	const handleScroll = () => {
 		if (window.innerWidth <= mq || mq === 0) {
 			let scrollDistance = window.scrollY
 
@@ -51,7 +52,9 @@ export const hideOnScroll = (selector, mq) => {
 
 			if (scrollDistance === 0) selector.classList.remove('_hidden')
 
-			scrollDistance > lastScrollValue ? selector.classList.add('_hidden') : selector.classList.remove('_hidden')
+			scrollDistance > lastScrollValue
+				? selector.classList.add('_hidden')
+				: selector.classList.remove('_hidden')
 
 			lastScrollValue = scrollDistance
 		}
@@ -63,7 +66,8 @@ export const hideOnScroll = (selector, mq) => {
 export const normalizeCount = count => {
 	if (typeof count === 'string') return count.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 
-	if (typeof count === 'number' && !Number.isNaN(count)) return count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+	if (typeof count === 'number' && !Number.isNaN(count))
+		return count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 
 	if (Number.isNaN(count)) return 0
 
@@ -112,9 +116,11 @@ export const convertDurationToSeconds = duration => {
 	return undefined
 }
 
-export const getDurationTimeout = (timeout = 300) => (new AppStorage().get().settings.disableTransition ? 0 : timeout)
+export const getDurationTimeout = (timeout = 300) =>
+	new AppStorage().get().settings.disableTransition ? 0 : timeout
 
-export const invokeFunctionByTimeout = (callback, timeout) => (timeout > 0 ? setTimeout(callback, timeout) : callback())
+export const invokeFunctionByTimeout = (callback, timeout) =>
+	timeout > 0 ? setTimeout(callback, timeout) : callback()
 
 export const handleClickLink = event => {
 	event.preventDefault()

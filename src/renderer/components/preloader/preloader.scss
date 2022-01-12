@@ -10,7 +10,10 @@
 
 	background-color: var(--color-accent-s);
 
-	transition: transform var(--trns), opacity var(--trns), visibility var(--trns);
+	transition:
+		transform var(--trns),
+		opacity var(--trns),
+		visibility var(--trns);
 
 	&._hidden {
 		transform: scale(15);

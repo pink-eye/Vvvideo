@@ -21,7 +21,7 @@ export const fillPlaylistCard = (playlist, index, data) => {
 
 	playlistImage.setAttribute('src', playlistImageSrc)
 
-	const onLoadImage = _ => {
+	const onLoadImage = () => {
 		removeSkeleton(imageSkeleton)
 
 		playlistImage = null

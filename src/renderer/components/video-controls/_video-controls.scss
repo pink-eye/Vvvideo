@@ -26,7 +26,9 @@
 			visibility: hidden;
 			opacity: 0;
 
-			transition: opacity var(--trns) 0.3s, visibility var(--trns) 0.3s;
+			transition:
+				opacity var(--trns) 0.3s,
+				visibility var(--trns) 0.3s;
 		}
 	}
 
@@ -69,7 +71,9 @@
 			visibility: visible;
 			opacity: 1;
 
-			transition: opacity var(--trns), visibility var(--trns);
+			transition:
+				opacity var(--trns),
+				visibility var(--trns);
 		}
 	}
 
@@ -132,7 +136,10 @@
 		display: flex;
 		border-radius: var(--brs-s);
 
-		transition: transform var(--trns), background-color var(--trns), color var(--trns);
+		transition:
+			transform var(--trns),
+			background-color var(--trns),
+			color var(--trns);
 
 		& svg {
 			fill: hsl(0, 0%, 100%);
@@ -230,7 +237,9 @@
 	border-radius: var(--brs-s);
 
 	background-color: hsla(223, 4, 50, 0.5);
-	transform: translateY(-100%) translateX(-50%);
+	transform:
+		translateY(-100%)
+		translateX(-50%);
 	cursor: pointer;
 
 	transition: height var(--trns);
@@ -435,7 +444,9 @@
 		.volume__range {
 			width: 100px;
 
-			transition: transform var(--trns), width var(--trns);
+			transition:
+				transform var(--trns),
+				width var(--trns);
 		}
 	}
 

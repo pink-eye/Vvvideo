@@ -73,7 +73,9 @@
 
 		background-color: transparent;
 
-		transition: color var(--trns), border-color var(--trns);
+		transition:
+			color var(--trns),
+			border-color var(--trns);
 
 		&:not(._active) {
 			color: var(--color-icon);

@@ -36,19 +36,26 @@ export const filterFormats = (formats, fn) => Object.values(formats).filter(fn)
 export const filterVideoWebm = formats =>
 	filterFormats(
 		formats,
-		format => format.container === 'webm' && format.hasVideo && !format.isDashMPD && !format?.type
+		format =>
+			format.container === 'webm' && format.hasVideo && !format.isDashMPD && !format?.type
 	)
 
 export const filterVideoMP4NoAudio = formats =>
 	filterFormats(
 		formats,
 		format =>
-			format.container === 'mp4' && format.hasVideo && !format.hasAudio && !format.isDashMPD && !format?.type
+			format.container === 'mp4' &&
+			format.hasVideo &&
+			!format.hasAudio &&
+			!format.isDashMPD &&
+			!format?.type
 	)
 
-export const filterVideoAndAudio = formats => filterFormats(formats, format => format.hasAudio && format.hasVideo)
+export const filterVideoAndAudio = formats =>
+	filterFormats(formats, format => format.hasAudio && format.hasVideo)
 
-export const filterHLS = formats => filterFormats(formats, format => format.isHLS && format.hasAudio && format.hasVideo)
+export const filterHLS = formats =>
+	filterFormats(formats, format => format.isHLS && format.hasAudio && format.hasVideo)
 
 export const getPreferredQuality = formats => {
 	if (formats.length === 0) return null

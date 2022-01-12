@@ -18,7 +18,9 @@
 
 		box-shadow: 0 35px 15px -35px var(--color-box-shadow-xl);
 
-		transition: transform var(--trns), background-color var(--trns);
+		transition:
+			transform var(--trns),
+			background-color var(--trns);
 
 		content: '';
 	}

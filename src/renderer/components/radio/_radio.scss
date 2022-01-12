@@ -25,7 +25,9 @@
 			transform: translateX(-50%) translateY(-50%);
 			cursor: pointer;
 
-			transition: transform var(--trns), box-shadow var(--trns);
+			transition:
+				transform var(--trns),
+				box-shadow var(--trns);
 
 			content: '';
 			pointer-events: auto;
@@ -52,7 +54,10 @@
 				background-color: var(--color-bg);
 				cursor: pointer;
 
-				transition: background-color var(--trns), border-color var(--trns), box-shadow var(--trns);
+				transition:
+					background-color var(--trns),
+					border-color var(--trns),
+					box-shadow var(--trns);
 
 				content: '';
 			}

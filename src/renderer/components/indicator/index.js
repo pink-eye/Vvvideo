@@ -1,6 +1,6 @@
 import { getSelector } from 'Global/utils'
 
-const resetIndicator = _ => {
+const resetIndicator = () => {
 	let indicator = getSelector('.indicator')
 
 	if (indicator.classList.contains('_visible')) {
@@ -10,7 +10,7 @@ const resetIndicator = _ => {
 	indicator = null
 }
 
-const startIndicator = _ => {
+const startIndicator = () => {
 	let indicator = getSelector('.indicator')
 
 	if (!indicator.classList.contains('_visible')) {

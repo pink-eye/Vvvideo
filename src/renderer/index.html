@@ -3,12 +3,12 @@
 	<head>
 		<link rel="stylesheet" href="css/components/preloader/preloader.css" />
 		<script>
-			const handleLoadWindow = _ => {
+			const handleLoadWindow = () => {
 				let preloader = document.querySelector('.preloader')
 
 				preloader.classList.add('_hidden')
 
-				const removePreloader = _ => {
+				const removePreloader = () => {
 					preloader.remove()
 					preloader = null
 				}

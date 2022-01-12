@@ -78,7 +78,7 @@ const recycleDOM = async (cardAll, typeCard) => {
 	}
 }
 
-const createPages = _ => `<div class="btns" hidden>
+const createPages = () => `<div class="btns" hidden>
 							<button disabled class="btns__prev btn-secondary onclick-effect btn-reset">
 								<svg width="28px" height="28px">
 									<use xlink:href='img/svg/nav.svg#arrow'></use>
@@ -229,9 +229,9 @@ export const initPages = (parent, data, cardAll, typeCard, continuation = null) 
 	let btnNextPage = parent.querySelector('.btns__next')
 	let btnPrevPage = parent.querySelector('.btns__prev')
 
-	const handleClickNextPage = _ => nextPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
+	const handleClickNextPage = () => nextPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
 
-	const handleClickPrevPage = _ => prevPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
+	const handleClickPrevPage = () => prevPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
 
 	btnNextPage.addEventListener('click', handleClickNextPage)
 	btnPrevPage.addEventListener('click', handleClickPrevPage)

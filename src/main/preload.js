@@ -70,11 +70,13 @@ contextBridge.exposeInMainWorld('API', {
 
 	scrapePlaylistVideos: playlistId => ytpl(playlistId),
 
-	scrapePlaylistVideosProxy: (playlistId, obj) => ytpl(playlistId, { requestOptions: { agent: makeAgent(obj) } }),
+	scrapePlaylistVideosProxy: (playlistId, obj) =>
+		ytpl(playlistId, { requestOptions: { agent: makeAgent(obj) } }),
 
 	scrapeSearchResults: (q, options) => ytsr(`${q}`, options),
 
-	scrapeSearchResultsProxy: (q, obj) => ytsr(`${q}`, { requestOptions: { agent: makeAgent(obj) } }),
+	scrapeSearchResultsProxy: (q, obj) =>
+		ytsr(`${q}`, { requestOptions: { agent: makeAgent(obj) } }),
 
 	scrapeSearchResultsMore: continuation => ytsr.continueReq(continuation),
 
@@ -101,9 +103,10 @@ contextBridge.exposeInMainWorld('API', {
 			'preview',
 		]),
 
-	postSponsorblockInfo: (videoId, uuidv4, segment) => new SponsorBlock(uuidv4).postSegments(videoId, segment),
+	postSponsorblockInfo: (videoId, uuidv4, segment) =>
+		new SponsorBlock(uuidv4).postSegments(videoId, segment),
 
-	readStorage: _ =>
+	readStorage: () =>
 		new Promise(resolve => {
 			let readerStream = fs.createReadStream(STORAGE_PATH)
 
@@ -132,9 +135,11 @@ contextBridge.exposeInMainWorld('API', {
 
 			return new Promise(resolve =>
 				https.get(`${track.baseUrl}&fmt=${format}`, res => {
-					res.pipe(fs.createWriteStream(path.resolve(__dirname, outputFolder, outputFile)))
+					res.pipe(
+						fs.createWriteStream(path.resolve(__dirname, outputFolder, outputFile))
+					)
 
-					res.on('end', _ => {
+					res.on('end', () => {
 						resolve({
 							videoId: info.videoDetails.videoId,
 							languageCode: track.languageCode,
@@ -146,7 +151,7 @@ contextBridge.exposeInMainWorld('API', {
 		}
 	},
 
-	clearTempFolder: _ => {
+	clearTempFolder: () => {
 		const folder = path.resolve(__dirname, 'temp')
 
 		fs.readdir(folder, (err, files) => {

@@ -34,7 +34,7 @@ const handleClickWindow = ({ target }) => {
 
 document.addEventListener('DOMContentLoaded', startDropdowns)
 
-document.addEventListener('DOMContentLoaded', _ => {
+document.addEventListener('DOMContentLoaded', () => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
 

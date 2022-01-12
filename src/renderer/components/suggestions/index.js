@@ -42,7 +42,9 @@ const addSuggestion = (data, isRecent) => {
 				if (isRecent) newItem = createRecentQueryHTML(data[index])
 				else break
 			} else {
-				newItem = isRecent ? createRecentQueryHTML(data[index]) : createSuggestionHTML(data[index])
+				newItem = isRecent
+					? createRecentQueryHTML(data[index])
+					: createSuggestionHTML(data[index])
 			}
 
 			suggestionListLength += 1
@@ -55,7 +57,7 @@ const addSuggestion = (data, isRecent) => {
 	headerSearch = null
 }
 
-const resetSelected = _ => {
+const resetSelected = () => {
 	let headerSearch = getSelector('.search')
 	let selectedSuggestion = headerSearch.querySelector('._selected')
 
@@ -65,7 +67,7 @@ const resetSelected = _ => {
 	headerSearch = null
 }
 
-const hideSuggestions = _ => {
+const hideSuggestions = () => {
 	resetSelected()
 
 	let headerSearch = getSelector('.search')
@@ -130,7 +132,7 @@ const getRelevantRecentQueries = query => {
 	return recentQueries.filter(item => item.includes(query))
 }
 
-const showRecentQueries = _ => {
+const showRecentQueries = () => {
 	const { recentQueries } = appStorage.get()
 
 	if (recentQueries.length === 0) return
@@ -138,12 +140,13 @@ const showRecentQueries = _ => {
 	addSuggestion(recentQueries, true)
 }
 
-const initSuggestions = _ => {
+const initSuggestions = () => {
 	let headerSearch = getSelector('.search')
 	let searchBar = headerSearch.querySelector('.search__bar')
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
 
-	const { disableSearchSuggestions, enableProxy, proxy, dontShowRecentQueriesOnTyping } = appStorage.get().settings
+	const { disableSearchSuggestions, enableProxy, proxy, dontShowRecentQueriesOnTyping } =
+		appStorage.get().settings
 
 	if (disableSearchSuggestions) return
 
@@ -163,7 +166,7 @@ const initSuggestions = _ => {
 
 	suggestionList.addEventListener('click', handleClickSuggestion)
 
-	const handleInput = async _ => {
+	const handleInput = async () => {
 		showOverlay()
 
 		suggestionListLength = 0

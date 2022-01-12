@@ -21,7 +21,7 @@ export const fillChannelCard = (channel, index, data) => {
 
 	channelImage.setAttribute('src', info.bestAvatar.url)
 
-	const onLoadImage = _ => {
+	const onLoadImage = () => {
 		removeSkeleton(imageSkeleton)
 
 		channelImage = null

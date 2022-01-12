@@ -48,7 +48,10 @@
 	font-size: var(--caption-font-size);
 	text-align: left;
 
-	transition: background-color var(--trns), border-color var(--trns), color var(--trns);
+	transition:
+		background-color var(--trns),
+		border-color var(--trns),
+		color var(--trns);
 
 	&:not(:first-child) {
 		margin-top: 7px;

@@ -7,7 +7,7 @@ import { uuidv4 } from 'Components/video-controls/sponsorblock'
 let isRecording = false
 let modal = null
 
-const hideInvalidUI = _ => {
+const hideInvalidUI = () => {
 	let dialogSb = getSelector('.dialog-sb')
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
@@ -35,7 +35,7 @@ const handleInputDialogField = ({ target }) => {
 	dialogSbField = null
 }
 
-const showDialogSB = _ => {
+const showDialogSB = () => {
 	if (document.fullscreenElement) document.exitFullscreen()
 
 	let video = getSelector('video')
@@ -63,7 +63,7 @@ const showDialogSB = _ => {
 	audio = null
 }
 
-export const recordSegmentSB = _ => {
+export const recordSegmentSB = () => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
 	const { disableSponsorblock } = storage.settings
@@ -106,7 +106,7 @@ export const recordSegmentSB = _ => {
 
 const handleCancel = () => modal.close()
 
-const resetDialogSB = _ => {
+const resetDialogSB = () => {
 	let dialogSb = getSelector('.dialog-sb')
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
@@ -127,7 +127,7 @@ const resetDialogSB = _ => {
 	dialogSbBtnCancel = null
 }
 
-const isValidFields = _ => {
+const isValidFields = () => {
 	let dialogSb = getSelector('.dialog-sb')
 
 	const { value: valueStart } = dialogSb.querySelector('input#start')
@@ -148,7 +148,7 @@ const isValidFields = _ => {
 	return result
 }
 
-const showInvalidUI = _ => {
+const showInvalidUI = () => {
 	let dialogSb = getSelector('.dialog-sb')
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
@@ -167,7 +167,7 @@ const showInvalidUI = _ => {
 	dialogSbWarning = null
 }
 
-const sendSegmentSB = async _ => {
+const sendSegmentSB = async () => {
 	if (isValidFields()) {
 		let dialogSb = getSelector('.dialog-sb')
 
@@ -192,7 +192,7 @@ const sendSegmentSB = async _ => {
 	} else showInvalidUI()
 }
 
-const handleCloseModal = _ => {
+const handleCloseModal = () => {
 	let video = getSelector('video')
 
 	video.play()
@@ -202,7 +202,7 @@ const handleCloseModal = _ => {
 	video = null
 }
 
-export const initDialogSB = _ => {
+export const initDialogSB = () => {
 	const controlsSponsorblock = getSelector('.controls').querySelector('.controls__sponsorblock')
 
 	isRecording &&= false

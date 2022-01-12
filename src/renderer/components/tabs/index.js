@@ -5,7 +5,7 @@ import { fillPlaylistCard } from 'Components/card/card-playlist'
 import { showToast } from 'Components/toast'
 import { initPages, disablePages } from 'Components/grid-btns'
 
-export const hideLastTab = _ => {
+export const hideLastTab = () => {
 	let channel = getSelector('.channel')
 	let tabContentActive = channel.querySelector('.tab-content._active')
 
@@ -33,7 +33,8 @@ const showRequiredTab = async tab => {
 
 	let reqTabContent = channel.querySelector(`.tab-content[data-tab=${channelTab}]`)
 
-	if (reqTabContent && !reqTabContent.classList.contains('_active')) reqTabContent.classList.add('_active')
+	if (reqTabContent && !reqTabContent.classList.contains('_active'))
+		reqTabContent.classList.add('_active')
 
 	let data = null
 	const channelId = channel.dataset.id
@@ -107,11 +108,11 @@ export const initTabs = primary => {
 	primaryTab = null
 }
 
-export const destroyTabs = _ => {
+export const destroyTabs = () => {
 	let tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
 
 	if (tabAll.length === 0) return
-	
+
 	for (let index = 0, { length } = tabAll; index < length; index += 1) {
 		const tab = tabAll[index]
 

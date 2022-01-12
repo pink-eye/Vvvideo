@@ -48,7 +48,7 @@ git clone https://github.com/pink-eye/Vvvideo
 yarn add
 
 # Make a bundle
-gulp build
+gulp --prod
 
 # Create a package
 yarn run package

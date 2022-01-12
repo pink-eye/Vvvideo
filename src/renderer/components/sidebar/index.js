@@ -6,7 +6,7 @@ const activateSidebarBtn = btn => {
 	givenBtn = null
 }
 
-const deactivateLastSidebarBtn = _ => {
+const deactivateLastSidebarBtn = () => {
 	let lastActiveSidebarBtn = getSelector('.sidebar').querySelector('.sidebar__btn._active')
 
 	if (!lastActiveSidebarBtn) return

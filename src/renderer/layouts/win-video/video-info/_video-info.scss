@@ -157,7 +157,10 @@
 
 	background-color: var(--color-bg-btn);
 
-	transition: background-color var(--trns), border-color var(--trns), color var(--trns);
+	transition:
+		background-color var(--trns),
+		border-color var(--trns),
+		color var(--trns);
 
 	&:not(:first-child) {
 		margin-top: 5px;

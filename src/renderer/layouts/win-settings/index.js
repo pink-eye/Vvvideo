@@ -67,7 +67,7 @@ const buildStorage = data => {
 	}
 }
 
-const readInputFile = _ => {
+const readInputFile = () => {
 	const validTip = 'Successfully! Wait for refresh...'
 	const failTip = 'Fail... :('
 
@@ -77,7 +77,7 @@ const readInputFile = _ => {
 	const reader = new FileReader()
 	reader.readAsText(impExpField.files[0])
 
-	const onLoadReader = _ => {
+	const onLoadReader = () => {
 		const data = JSON.parse(reader.result)
 
 		if (!data?.subscriptions) makeResultImport('_invalid', failTip)
@@ -95,7 +95,7 @@ const readInputFile = _ => {
 	impExpField = null
 }
 
-const handleClickImport = _ => {
+const handleClickImport = () => {
 	const invalidTip = "I've not found a JSON file.\n Ensure you interacted this area"
 	let settings = getSelector('.settings')
 	let impExpField = settings.querySelector('.imp-exp__field')
@@ -108,7 +108,7 @@ const handleClickImport = _ => {
 	impExpField = null
 }
 
-const handleFile = _ => {
+const handleFile = () => {
 	let settings = getSelector('.settings')
 	let impExpBody = settings.querySelector('.imp-exp')
 	let impExpTip = settings.querySelector('.imp-exp__tip')
@@ -212,7 +212,7 @@ const handleChangeCheckbox = event => {
 	appStorage.update(storage)
 }
 
-export const openWinSettings = _ => {
+export const openWinSettings = () => {
 	const settings = getSelector('.settings')
 
 	// IMPLEMENT IMPORT
@@ -245,7 +245,7 @@ export const openWinSettings = _ => {
 	}
 }
 
-export const resetWinSettings = _ => {
+export const resetWinSettings = () => {
 	let settings = getSelector('.settings')
 
 	// RESET IMPORT
@@ -289,7 +289,7 @@ export const setTheme = themeOption => {
 	if (themeOption === 'system') theme.setMode(theme.getSystemScheme())
 }
 
-export const fillWinSettings = _ => {
+export const fillWinSettings = () => {
 	storage = appStorage.get()
 	const { settings: ss } = storage
 	const settings = getSelector('.settings')
@@ -323,7 +323,8 @@ export const fillWinSettings = _ => {
 		let qualityDropdown = settings.querySelector('.option__quality')
 		let qualityDropdownHead = qualityDropdown.querySelector('.dropdown__head')
 
-		qualityDropdownHead.childNodes[0].data = ss.defaultQuality === 'highest' ? 'Highest' : ss.defaultQuality
+		qualityDropdownHead.childNodes[0].data =
+			ss.defaultQuality === 'highest' ? 'Highest' : ss.defaultQuality
 
 		qualityDropdown = null
 		qualityDropdownHead = null

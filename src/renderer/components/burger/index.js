@@ -1,9 +1,9 @@
 import { getDurationTimeout, getSelector, invokeFunctionByTimeout } from 'Global/utils'
 import { AppStorage } from 'Global/app-storage'
 
-const isLargeScreen = _ => (window.innerWidth - 1600) / 2 > 226
+const isLargeScreen = () => (window.innerWidth - 1600) / 2 > 226
 
-export const toggleMenu = _ => {
+export const toggleMenu = () => {
 	let burger = getSelector('.header').querySelector('.burger')
 	let sidebar = getSelector('.sidebar')
 	let sidebarBtn = sidebar.querySelector('.sidebar__btn')
@@ -16,9 +16,10 @@ export const toggleMenu = _ => {
 		burger.classList.add('_active')
 		sidebar.classList.remove('_closed')
 
-		if (!isLargeScreen() && !notAdaptContent) getSelector('.main__content').style.setProperty('--margin', '227px')
+		if (!isLargeScreen() && !notAdaptContent)
+			getSelector('.main__content').style.setProperty('--margin', '227px')
 
-		const onOpenMenu = _ => {
+		const onOpenMenu = () => {
 			sidebarBtnActive ? sidebarBtnActive.focus() : sidebarBtn.focus()
 
 			sidebarBtn = null
@@ -31,7 +32,8 @@ export const toggleMenu = _ => {
 		burger.classList.remove('_active')
 		sidebar.classList.add('_closed')
 
-		if (!isLargeScreen() && !notAdaptContent) getSelector('.main__content').style.setProperty('--margin', '0')
+		if (!isLargeScreen() && !notAdaptContent)
+			getSelector('.main__content').style.setProperty('--margin', '0')
 	}
 
 	burger = null

@@ -1,6 +1,11 @@
 import { AppStorage } from 'Global/app-storage'
 import { showToast } from 'Components/toast'
-import { getSelector, convertSecondsToDuration, convertDurationToSeconds, convertToPercentage } from 'Global/utils'
+import {
+	getSelector,
+	convertSecondsToDuration,
+	convertDurationToSeconds,
+	convertToPercentage,
+} from 'Global/utils'
 
 const appStorage = new AppStorage()
 let storage = null
@@ -15,7 +20,7 @@ const addHistoryItem = newItem => {
 	storage.history = [newItem, ...storage.history]
 }
 
-const restrainHistoryLength = _ => {
+const restrainHistoryLength = () => {
 	const { maxHistoryLength } = storage.settings
 	const { history } = storage
 
@@ -59,7 +64,7 @@ export const saveVideoInHistory = data => {
 	}
 }
 
-export const clearHistory = async _ => {
+export const clearHistory = async () => {
 	storage = appStorage.get()
 
 	if (storage.history.length > 0) {
@@ -70,7 +75,7 @@ export const clearHistory = async _ => {
 	} else if (!storage.settings.disableHistory) showToast('info', "History's empty")
 }
 
-export const disableHistory = _ => {
+export const disableHistory = () => {
 	clearHistory()
 
 	let history = getSelector('.history')
@@ -83,7 +88,7 @@ export const disableHistory = _ => {
 	sidebarBtnHistory = null
 }
 
-export const rememberWatchedTime = _ => {
+export const rememberWatchedTime = () => {
 	storage = appStorage.get()
 	const { disableHistory: isDisabledHistory, dontRememberWatchedTime } = storage.settings
 
@@ -103,7 +108,8 @@ export const rememberWatchedTime = _ => {
 	}
 }
 
-const getItemWithWatchedTime = videoId => storage.history.find(item => item.id === videoId && item?.watchedTime)
+const getItemWithWatchedTime = videoId =>
+	storage.history.find(item => item.id === videoId && item?.watchedTime)
 
 export const getWatchedTime = videoId => {
 	storage = appStorage.get()

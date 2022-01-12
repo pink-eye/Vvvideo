@@ -19,7 +19,7 @@ export const clearRecentQueries = () => {
 	appStorage.update(storage)
 }
 
-const restrainRecentQueriesLength = _ => {
+const restrainRecentQueriesLength = () => {
 	let storage = appStorage.get()
 	const { disableRecentQueries, maxRecentQueriesLength } = storage.settings
 
@@ -27,7 +27,8 @@ const restrainRecentQueriesLength = _ => {
 
 	const { recentQueries } = storage
 
-	if (recentQueries.length > maxRecentQueriesLength) storage.recentQueries.length = maxRecentQueriesLength
+	if (recentQueries.length > maxRecentQueriesLength)
+		storage.recentQueries.length = maxRecentQueriesLength
 
 	appStorage.update(storage)
 }
@@ -49,10 +50,12 @@ const saveSearchQuery = query => {
 
 const getSearchResultsData = query => {
 	const { enableProxy, proxy } = appStorage.get().settings
-	return enableProxy ? API.scrapeSearchResultsProxy(query, proxy) : API.scrapeSearchResults(query, { pages: 2 })
+	return enableProxy
+		? API.scrapeSearchResultsProxy(query, proxy)
+		: API.scrapeSearchResults(query, { pages: 2 })
 }
 
-export const openWinSearchResults = async _ => {
+export const openWinSearchResults = async () => {
 	let searchBar = getSelector('.header').querySelector('.search__bar')
 	let data = null
 

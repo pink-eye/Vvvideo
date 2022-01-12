@@ -5,7 +5,7 @@ const removeSkeleton = skeleton => {
 
 	if (!givenSkeleton.classList.contains('_active')) givenSkeleton.classList.add('_removing')
 
-	const onRemoveSkeleton = _ => {
+	const onRemoveSkeleton = () => {
 		givenSkeleton.hidden ||= true
 		givenSkeleton = null
 	}

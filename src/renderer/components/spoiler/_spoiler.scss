@@ -84,7 +84,10 @@
 
 		background-color: var(--color-bg-third);
 
-		transition: color var(--trns), border-color var(--trns), background-color var(--trns);
+		transition:
+			color var(--trns),
+			border-color var(--trns),
+			background-color var(--trns);
 
 		border-inline: 3px solid transparent;
 

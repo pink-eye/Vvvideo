@@ -39,8 +39,13 @@ export const handleKeyDown = event => {
 	if (event.shiftKey && (event.keyCode === 75 || event.keyCode === 74)) {
 		let winActive = getSelector('.main__content').querySelector('.win._active')
 
-		if (winActive && !winActive.classList.contains('settings') && !winActive.classList.contains('video')) {
-			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } = scrapeInfoToSwitchPage(winActive)
+		if (
+			winActive &&
+			!winActive.classList.contains('settings') &&
+			!winActive.classList.contains('video')
+		) {
+			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } =
+				scrapeInfoToSwitchPage(winActive)
 
 			tabContentActive && (winActive = tabContentActive)
 

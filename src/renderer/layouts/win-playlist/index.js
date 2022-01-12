@@ -91,7 +91,7 @@ const openWinPlaylist = data => {
 	authorCard = null
 }
 
-export const resetWinPlaylist = _ => {
+export const resetWinPlaylist = () => {
 	let playlist = getSelector('.playlist')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let playlistViews = playlist.querySelector('.playlist__views')

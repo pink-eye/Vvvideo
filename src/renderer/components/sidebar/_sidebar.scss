@@ -4,7 +4,11 @@
 
 	background-color: var(--color-bg-form);
 
-	transition: transform var(--trns), background-color var(--trns), box-shadow var(--trns), visibility var(--trns);
+	transition:
+		transform var(--trns),
+		background-color var(--trns),
+		box-shadow var(--trns),
+		visibility var(--trns);
 
 	&__nav {
 		height: 100%;
@@ -155,7 +159,11 @@
 		font-size: var(--caption-font-size);
 		white-space: nowrap;
 
-		transition: color var(--trns), opacity var(--trns), margin-left var(--trns), visibility var(--trns);
+		transition:
+			color var(--trns),
+			opacity var(--trns),
+			margin-left var(--trns),
+			visibility var(--trns);
 	}
 
 	@media (min-width: 48em) {

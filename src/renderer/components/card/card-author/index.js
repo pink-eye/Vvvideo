@@ -16,7 +16,7 @@ export const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) 
 	if (!isEmpty(avatarSrc)) {
 		authorAvatar.src = avatarSrc
 
-		const onLoadImage = _ => {
+		const onLoadImage = () => {
 			removeSkeleton(avatarSkeleton)
 
 			authorAvatar = null

@@ -217,7 +217,9 @@
 
 		background-color: var(--color-bg);
 
-		transition: background-color var(--trns), border-color var(--trns);
+		transition:
+			background-color var(--trns),
+			border-color var(--trns);
 	}
 
 	&__tip {

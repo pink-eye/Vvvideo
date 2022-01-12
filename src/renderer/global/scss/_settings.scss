@@ -85,7 +85,9 @@ a {
 a:not(.btn-primary) {
 	color: var(--color-link);
 
-	transition: color var(--trns), border-color var(--trns);
+	transition:
+		color var(--trns),
+		border-color var(--trns);
 
 	&:visited {
 		color: var(--color-link-visited);
@@ -146,7 +148,11 @@ input[type='text'] {
 	background-color: var(--color-bg-field);
 	outline: 0;
 
-	transition: border-radius var(--trns), border-color var(--trns), color var(--trns), background-color var(--trns);
+	transition:
+		border-radius var(--trns),
+		border-color var(--trns),
+		color var(--trns),
+		background-color var(--trns);
 
 	&:not(:focus-visible) {
 		border: var(--width-line) solid transparent;

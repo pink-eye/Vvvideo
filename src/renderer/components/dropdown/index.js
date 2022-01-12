@@ -44,7 +44,7 @@ export function hideLastDropdown(currentDropdown = null) {
 }
 
 function toggleDropdown(dropdown) {
-	const onOpenDropdown = _ => focusCurrentChoice(dropdown)
+	const onOpenDropdown = () => focusCurrentChoice(dropdown)
 
 	if (dropdown.classList.contains('_active')) dropdown.classList.remove('_active')
 	else {
@@ -60,7 +60,9 @@ export const initDropdown = (dropdown, callback, options = null) => {
 	if (!dropdownList) return
 
 	const handleClickBtn = ({ target }) => {
-		let dropdownBtn = target.classList.contains('dropdown__btn') ? target : target.closest('.dropdown__btn')
+		let dropdownBtn = target.classList.contains('dropdown__btn')
+			? target
+			: target.closest('.dropdown__btn')
 
 		if (!dropdownBtn) return
 
@@ -75,7 +77,7 @@ export const initDropdown = (dropdown, callback, options = null) => {
 	dropdownList.addEventListener('click', handleClickBtn)
 }
 
-export const startDropdowns = _ => {
+export const startDropdowns = () => {
 	const dropdownAll = document.querySelectorAll('.dropdown')
 
 	if (dropdownAll.length === 0) return
@@ -85,7 +87,7 @@ export const startDropdowns = _ => {
 		const dropdownHead = dropdown.querySelector('.dropdown__head')
 
 		if (dropdownHead) {
-			const handleClickHead = _ => toggleDropdown(dropdown)
+			const handleClickHead = () => toggleDropdown(dropdown)
 
 			dropdownHead.addEventListener('click', handleClickHead)
 		}

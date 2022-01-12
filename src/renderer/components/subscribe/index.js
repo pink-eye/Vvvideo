@@ -48,7 +48,7 @@ const transformBtn = (btn, btnText, isSubscribed) => {
 
 	givenBtnText.style.opacity = '0'
 
-	const onChangeState = _ => {
+	const onChangeState = () => {
 		givenBtnText.textContent = !isSubscribed ? 'Unsubscribe' : 'Subscribe'
 		givenBtnText.removeAttribute('style')
 

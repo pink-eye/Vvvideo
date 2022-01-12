@@ -70,9 +70,11 @@ const openWinVideo = data => {
 
 	if (videoDetails.thumbnails) videoPoster.src = videoDetails.thumbnails.at(-1).url
 
-	if (videoViews.textContent === '...') videoViews.textContent = normalizeCount(videoDetails.viewCount)
+	if (videoViews.textContent === '...')
+		videoViews.textContent = normalizeCount(videoDetails.viewCount)
 
-	if (videoDate.textContent === '...') videoDate.textContent = formatDate(videoDetails.publishDate)
+	if (videoDate.textContent === '...')
+		videoDate.textContent = formatDate(videoDetails.publishDate)
 
 	if (videoDate.textContent === 'Premiere') {
 		const { reason: datePremiere } = data.player_response.playabilityStatus
@@ -127,7 +129,7 @@ const openWinVideo = data => {
 	video = null
 }
 
-export const resetWinVideo = _ => {
+export const resetWinVideo = () => {
 	let video = getSelector('.video')
 	let videoPoster = video.querySelector('.video__poster img')
 	let skeletonAll = video.querySelectorAll('.skeleton')

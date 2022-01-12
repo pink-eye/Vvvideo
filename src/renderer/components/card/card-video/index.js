@@ -28,7 +28,7 @@ export const fillVideoCard = (video, index, data) => {
 
 	videoImage.src = thumbnail.url
 
-	const onLoadImage = _ => {
+	const onLoadImage = () => {
 		removeSkeleton(imageSkeleton)
 
 		videoImage = null

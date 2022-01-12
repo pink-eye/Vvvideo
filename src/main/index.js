@@ -27,7 +27,7 @@ const handleReadyToShow = () => {
 	mainWindow.focus()
 }
 
-const createWindow = _ => {
+const createWindow = () => {
 	const icon = getIconByPlatform()
 
 	mainWindow = new BrowserWindow({
@@ -47,14 +47,14 @@ const createWindow = _ => {
 
 	mainWindow.once('ready-to-show', handleReadyToShow)
 
-	globalShortcut.register('CmdOrCtrl + Alt + Y', _ =>
+	globalShortcut.register('CmdOrCtrl + Alt + Y', () =>
 		mainWindow.isMinimized() ? mainWindow.show() : mainWindow.minimize()
 	)
 
-	mainWindow.on('close', _ => mainWindow.destroy())
+	mainWindow.on('close', () => mainWindow.destroy())
 }
 
-const checkProxy = _ => {
+const checkProxy = () => {
 	fs.readFile(STORAGE_PATH, 'utf-8', (error, data) => {
 		if (error) throw error
 

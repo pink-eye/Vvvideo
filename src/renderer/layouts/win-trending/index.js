@@ -16,7 +16,9 @@ export const openWinTrending = async (geoLocation = 'US', page = 'default') => {
 	try {
 		const data = await API.scrapeTrending(parameters)
 
-		data.length > videoAll.length ? initPages(trending, data, videoAll, 'video') : disablePages(trending)
+		data.length > videoAll.length
+			? initPages(trending, data, videoAll, 'video')
+			: disablePages(trending)
 
 		for (let index = 0, { length } = videoAll; index < length; index += 1) {
 			const video = videoAll[index]
