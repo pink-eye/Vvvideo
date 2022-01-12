@@ -199,6 +199,9 @@ const getVideoFormatsByDefaultFormat = (formats, defaultVideoFormat) => {
 
 const prepareVideoPlayer = async data => {
 	const { formats, videoDetails } = data
+
+	if (formats.length === 0) return
+
 	const { disableSeparatedStreams, enableProxy, proxy, defaultVideoFormat } = storage.settings
 
 	if (videoDetails.isLive || disableSeparatedStreams) disableAudio()
@@ -1000,6 +1003,7 @@ const handleMouseMove = () => {
 }
 
 export const initVideoPlayer = async data => {
+	console.log('file: index.js ~ line 1003 ~ data', data)
 	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
 	const controlsSwitch = controls.querySelector('.controls__switch')
