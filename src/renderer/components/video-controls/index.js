@@ -6,7 +6,6 @@ import {
 	scrollToTop,
 	convertDurationToSeconds,
 	hasFocus,
-	handleClickLink,
 } from 'Global/utils'
 import {
 	getMin,
@@ -826,19 +825,24 @@ const handleError = ({ target }) => {
 	video = null
 }
 
-const handleClickTimecode = ({ target }) => {
-	if (!target.classList.contains('timecode')) return
+export const handleClickTimecode = ({ target }) => {
+	let video = getSelector('video')
+
+	if (!video.src) {
+		video = null
+
+		return
+	}
 
 	let { textContent } = target
-	getSelector('video').currentTime = convertDurationToSeconds(textContent)
+	if (!target.classList.contains('timecode')) return
+
+	video.currentTime = convertDurationToSeconds(textContent)
 	isSync = false
 	document.activeElement.blur()
 	scrollToTop()
-}
 
-const handleClickContent = event => {
-	handleClickLink(event)
-	handleClickTimecode(event)
+	video = null
 }
 
 const handleInputVolumeSeek = () => {
@@ -1003,7 +1007,6 @@ const handleMouseMove = () => {
 }
 
 export const initVideoPlayer = async data => {
-	console.log('file: index.js ~ line 1003 ~ data', data)
 	const controls = getSelector('.controls')
 	const controlDecorations = controls.querySelector('.controls__decorations')
 	const controlsSwitch = controls.querySelector('.controls__switch')
@@ -1015,7 +1018,6 @@ export const initVideoPlayer = async data => {
 	const controlsScreen = controls.querySelector('.controls__screen')
 	const videoParent = getSelector('.video')
 	const videoWrapper = videoParent.querySelector('.video__wrapper')
-	const spoilerContent = videoParent.querySelector('.spoiler__content')
 	let videoSkeleton = videoParent.querySelector('.video-skeleton')
 	let hasCaptions = false
 
@@ -1125,8 +1127,6 @@ export const initVideoPlayer = async data => {
 
 	volumeSeek.addEventListener('input', handleInputVolumeSeek)
 
-	spoilerContent.addEventListener('click', handleClickContent)
-
 	progressSeek.addEventListener('input', skipAhead)
 
 	controlsSwitch.addEventListener('click', togglePlay)
@@ -1226,7 +1226,6 @@ export const resetVideoPlayer = () => {
 	let seekTooltipChapter = controls.querySelector('.seek-tooltip__chapter')
 	let speed = controls.querySelector('.controls__speed')
 	let speedCurrent = speed.querySelector('.dropdown__head')
-	let spoilerContent = videoParent.querySelector('.spoiler__content')
 
 	isFirstPlay ||= true
 	isSync &&= false
@@ -1305,8 +1304,6 @@ export const resetVideoPlayer = () => {
 
 	volumeSeek.removeEventListener('input', handleInputVolumeSeek)
 
-	spoilerContent.removeEventListener('click', handleClickContent)
-
 	progressSeek.removeEventListener('input', skipAhead)
 
 	controlsSwitch.removeEventListener('click', togglePlay)
@@ -1363,5 +1360,4 @@ export const resetVideoPlayer = () => {
 	timeElapsed = null
 	speed = null
 	speedCurrent = null
-	spoilerContent = null
 }

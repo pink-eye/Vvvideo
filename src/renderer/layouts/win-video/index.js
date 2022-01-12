@@ -7,8 +7,9 @@ import { showToast } from 'Components/toast'
 import { resetSkeleton, removeSkeleton } from 'Components/skeleton'
 import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
 import { AppStorage } from 'Global/app-storage'
-import { initVideoPlayer } from 'Components/video-controls'
+import { initVideoPlayer, handleClickTimecode } from 'Components/video-controls'
 import { normalizeVideoDescription, roundNum } from 'Layouts/win-video/helper'
+import { handleClickLink } from 'Global/utils'
 
 const appStorage = new AppStorage()
 let storage = null
@@ -18,6 +19,11 @@ const getVideoData = id => {
 
 	const { enableProxy, proxy } = storage.settings
 	return enableProxy ? API.scrapeVideoProxy(id, proxy) : API.scrapeVideo(id)
+}
+
+const handleClickContent = event => {
+	handleClickLink(event)
+	handleClickTimecode(event)
 }
 
 const openWinVideo = data => {
@@ -55,6 +61,8 @@ const openWinVideo = data => {
 	video.dataset.id = videoDetails.videoId
 
 	prepareSubscribeBtn(subscribeBtn, videoDetails.author.id, videoDetails.author.name)
+
+	spoilerContent.addEventListener('click', handleClickContent)
 
 	// FILL VIDEO INFO
 
@@ -145,6 +153,7 @@ export const resetWinVideo = () => {
 
 	let subscribeBtn = videoInfo.querySelector('.subscribe')
 	destroySubscribeBtn(subscribeBtn)
+	spoilerContent.removeEventListener('click', handleClickContent)
 
 	if (video.classList.contains('_live')) video.classList.remove('_live')
 
