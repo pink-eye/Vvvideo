@@ -1210,7 +1210,9 @@ export const resetVideoPlayer = () => {
 	let sponsorblock = controls.querySelector('.sponsorblock')
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock')
 	let progress = controls.querySelector('.progress')
-	let storyboard = controls.querySelector('.seek-tooltip__storyboard')
+	let seekTooltip = controls.querySelector('.seek-tooltip')
+	let storyboard = seekTooltip.querySelector('.seek-tooltip__storyboard')
+	let seekTooltipChapter = seekTooltip.querySelector('.seek-tooltip__chapter')
 	let timeDuration = controls.querySelector('.time__duration')
 	let barChapter = controls.querySelector('.time__chapter')
 	let quality = controls.querySelector('.controls__quality')
@@ -1223,7 +1225,6 @@ export const resetVideoPlayer = () => {
 	let controlsSwitch = controls.querySelector('.controls__switch')
 	let controlsScreen = controls.querySelector('.controls__screen')
 	let timeElapsed = controls.querySelector('.time__elapsed')
-	let seekTooltipChapter = controls.querySelector('.seek-tooltip__chapter')
 	let speed = controls.querySelector('.controls__speed')
 	let speedCurrent = speed.querySelector('.dropdown__head')
 
@@ -1266,7 +1267,7 @@ export const resetVideoPlayer = () => {
 	const { disableStoryboard } = storage.settings
 
 	if (!disableStoryboard && !storyboard)
-		progress.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
+		seekTooltip.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
 
 	video.removeEventListener('playing', handlePlaying)
 
@@ -1345,6 +1346,7 @@ export const resetVideoPlayer = () => {
 	sponsorblock = null
 	sponsorblockBtn = null
 	progress = null
+	seekTooltip = null
 	storyboard = null
 	barChapter = null
 	timeDuration = null

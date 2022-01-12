@@ -182,6 +182,7 @@ export const resetWinVideo = () => {
 	videoInfo = null
 	skeletonAll = null
 	videoDislikes = null
+	spoiler = null
 	spoilerContent = null
 	videoViews = null
 	videoTitle = null
