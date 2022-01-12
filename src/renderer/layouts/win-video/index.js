@@ -41,7 +41,6 @@ const openWinVideo = data => {
 	let titleSkeleton = videoInfo.querySelector('.title-skeleton')
 	let partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton')
 	let videoLikes = videoInfo.querySelector('.video-info__likes')
-	let videoDislikes = videoInfo.querySelector('.video-info__dislikes')
 	let authorCard = videoInfo.querySelector('.author')
 	let subscribeBtn = videoInfo.querySelector('.subscribe')
 	let { settings } = storage
@@ -90,7 +89,6 @@ const openWinVideo = data => {
 		controls.hidden = true
 	}
 
-	videoDislikes.textContent = normalizeCount(videoDetails.dislikes)
 	videoLikes.textContent = normalizeCount(videoDetails.likes)
 
 	if (partSkeletonAll.length > 0) {
@@ -127,7 +125,6 @@ const openWinVideo = data => {
 	videoLikes = null
 	topBarTitle = null
 	topBarAuthor = null
-	videoDislikes = null
 	storyboard = null
 	partSkeletonAll = null
 	titleSkeleton = null
@@ -144,7 +141,6 @@ export const resetWinVideo = () => {
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
 	let videoLikes = videoInfo.querySelector('.video-info__likes')
-	let videoDislikes = videoInfo.querySelector('.video-info__dislikes')
 	let spoilerContent = videoInfo.querySelector('.spoiler__content')
 	let videoViews = videoInfo.querySelector('.video-info__views')
 	let videoDate = videoInfo.querySelector('.video-info__date')
@@ -161,7 +157,6 @@ export const resetWinVideo = () => {
 	videoPoster.closest('.video__poster').classList.remove('_hidden')
 	videoTitle.textContent = '...'
 	videoLikes.textContent = '...'
-	videoDislikes.textContent = '...'
 	videoViews.textContent = '...'
 	videoDate.textContent = '...'
 	spoilerContent.textContent = '...'
@@ -181,7 +176,6 @@ export const resetWinVideo = () => {
 	videoLikes = null
 	videoInfo = null
 	skeletonAll = null
-	videoDislikes = null
 	spoiler = null
 	spoilerContent = null
 	videoViews = null
