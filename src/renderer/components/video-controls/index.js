@@ -28,6 +28,7 @@ import { showToast } from 'Components/toast'
 import { getWatchedTime, rememberWatchedTime } from 'Layouts/win-history/helper'
 import { initDialogSB, recordSegmentSB } from 'Components/dialog-sb'
 import { AppStorage } from 'Global/app-storage'
+import { required } from 'joi'
 
 let hasListeners = false
 let isFirstPlay = true
@@ -37,6 +38,8 @@ let hls = null
 let segmentsSB = []
 let videoFormats = null
 let chapters = null
+let currentChapter = null
+let lastSeekTooltipChapter = null
 
 const appStorage = new AppStorage()
 let storage = null
@@ -328,7 +331,7 @@ const syncMedia = () => {
 	video = null
 }
 
-const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState >= 2
+const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2
 
 const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime > 0
 
@@ -481,14 +484,46 @@ const updateTimeElapsed = () => {
 const updateBarChapter = () => {
 	if (!chapters || chapters.length === 0) return
 
+	const { currentTime } = getSelector('video')
+	const { title, start_time } = getRequiredChapter(currentTime)
+
+	if (currentChapter && title === currentChapter) return
+
+	currentChapter = title
+
 	let controls = getSelector('.controls')
 	let barChapter = controls.querySelector('.time__chapter')
-	const { currentTime } = getSelector('video')
 
-	barChapter.textContent = getRequiredChapter(currentTime)
+	barChapter.textContent = title
+
+	highlightCurrentChapter(start_time)
 
 	controls = null
 	barChapter = null
+}
+
+const highlightCurrentChapter = time => {
+	console.log('highlight')
+	let videoParent = getSelector('.video')
+	let spoilerContent = videoParent.querySelector('.spoiler__content')
+	let lastHighlightedTimecode = spoilerContent.querySelector('.timecode.btn-accent')
+	let timecodeAll = spoilerContent.querySelectorAll('.timecode')
+
+	lastHighlightedTimecode?.classList.remove('btn-accent')
+
+	for (let index = 0, { length } = timecodeAll; index < length; index++) {
+		const timecode = timecodeAll[index]
+
+		if (timecode.textContent.includes(convertSecondsToDuration(time))) {
+			timecode.classList.add('btn-accent')
+			break
+		}
+	}
+
+	videoParent = null
+	spoilerContent = null
+	timecodeAll = null
+	lastHighlightedTimecode = null
 }
 
 const updateVolumeEl = el => {
@@ -573,16 +608,16 @@ const updateProgress = () => {
 }
 
 const getRequiredChapter = time => {
-	let chapterTitle = null
+	let requiredChapter = null
 
-	chapters.forEach(({ title, start_time }) => {
-		if (start_time < time) {
-			chapterTitle = title
+	chapters.forEach(chapter => {
+		if (chapter.start_time < time) {
+			requiredChapter = chapter
 			return
 		}
 	})
 
-	return chapterTitle
+	return requiredChapter
 }
 
 const updateSeekTooltipChapters = params => {
@@ -590,10 +625,15 @@ const updateSeekTooltipChapters = params => {
 
 	if (!chapters || chapters.length === 0 || (skipTo < 0 && skipTo > Math.floor(duration))) return
 
+	const { title } = getRequiredChapter(skipTo)
+
+	if (lastSeekTooltipChapter === title) return
+
+	lastSeekTooltipChapter = title
 	let controls = getSelector('.controls')
 	let seekTooltipChapter = controls.querySelector('.seek-tooltip__chapter')
 
-	seekTooltipChapter.textContent = getRequiredChapter(skipTo)
+	seekTooltipChapter.textContent = title
 
 	controls = null
 	seekTooltipChapter = null
@@ -1234,6 +1274,8 @@ export const resetVideoPlayer = () => {
 	segmentsSB.length = 0
 	chapters = null
 	videoFormats = null
+	currentChapter = null
+	lastSeekTooltipChapter = null
 
 	captions.hidden ||= true
 

@@ -16,11 +16,11 @@ export const normalizeVideoDescription = text => {
 		.replace(patternEmail, address => `<a href='mailto:${address}'>${address}</a>`)
 		.replace(
 			patternTimecodeHHMMSS,
-			timecode => `<button class='timecode btn-reset'>${timecode}</button>`
+			timecode => `<button class='timecode onclick-effect btn-reset'>${timecode}</button>`
 		)
 		.replace(
 			patternTimecodeMMSS,
-			timecode => `<button class='timecode btn-reset'>${timecode}</button>`
+			timecode => `<button class='timecode onclick-effect btn-reset'>${timecode}</button>`
 		)
 		.replace(/\n/gi, '<br>')
 }

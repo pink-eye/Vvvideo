@@ -58,12 +58,12 @@ const checkProxy = () => {
 	fs.readFile(STORAGE_PATH, 'utf-8', (error, data) => {
 		if (error) throw error
 
-		let { enableProxy, proxy } = JSON.parse(data).settings
+		const { enableProxy, proxy } = JSON.parse(data).settings
 
-		if (enableProxy) {
-			let { protocol, host, port } = proxy
-			app.commandLine.appendSwitch('proxy-server', `${protocol}://${host}:${port}`)
-		}
+		if (!enableProxy) return
+
+		const { protocol, host, port } = proxy
+		app.commandLine.appendSwitch('proxy-server', `${protocol}://${host}:${port}`)
 	})
 }
 

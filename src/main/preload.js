@@ -16,38 +16,33 @@ const https = require('https')
 const STORAGE_PATH = path.resolve(__dirname, 'storage.json')
 
 const makeAgent = obj => {
-	let agent = null
-
 	switch (obj.protocol) {
 		case 'http':
-			agent = new HttpProxyAgent({
+			return new HttpProxyAgent({
 				host: obj.host,
 				port: obj.port,
 			})
-			break
+
 		case 'https':
-			agent = new HttpsProxyAgent({
+			return new HttpsProxyAgent({
 				host: obj.host,
 				port: obj.port,
 			})
-			break
+
 		case 'socks4':
-			agent = new SocksProxyAgent({
+			return new SocksProxyAgent({
 				host: obj.host,
 				port: obj.port,
 				type: 4,
 			})
-			break
+
 		case 'socks5':
-			agent = new SocksProxyAgent({
+			return new SocksProxyAgent({
 				host: obj.host,
 				port: obj.port,
 				type: 5,
 			})
-			break
 	}
-
-	return agent
 }
 
 contextBridge.exposeInMainWorld('API', {
