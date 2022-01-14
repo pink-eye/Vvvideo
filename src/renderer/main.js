@@ -3,7 +3,7 @@ import { AppStorage } from 'Global/app-storage'
 import { manageWin } from 'Global/win-manager'
 import { handleKeyDown } from 'Global/shortcuts'
 import { openWinLatest } from 'Layouts/win-latest'
-import { fillWinSettings, setTheme } from 'Layouts/win-settings'
+import { applySettingsOnStart } from 'Layouts/win-settings'
 import {
 	initSuggestions,
 	hideSuggestions,
@@ -12,7 +12,7 @@ import {
 	showRecentQueries,
 } from 'Components/suggestions'
 import { showOverlay, hideOverlay } from 'Components/overlay'
-import { initDropdown, hideLastDropdown, startDropdowns } from 'Components/dropdown'
+import { hideLastDropdown, startDropdowns } from 'Components/dropdown'
 import { toggleMenu } from 'Components/burger'
 import { showToast } from 'Components/toast'
 
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		return
 	}
 
-	fillWinSettings()
+	applySettingsOnStart()
 	openWinLatest()
 	initSuggestions()
 
@@ -103,35 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	searchBar.addEventListener('keydown', handleKeyDownSearch)
 
 	window.addEventListener('click', handleClickWindow)
-
-	// INIT DROPDOWNS
-
-	const settings = getSelector('.settings')
-	const themeDropdown = settings.querySelector('.option__theme')
-	const protocolDropdown = settings.querySelector('.option__protocol')
-	const qualityDropdown = settings.querySelector('.option__quality')
-	const formatDropdown = settings.querySelector('.option__format')
-
-	initDropdown(themeDropdown, btn => {
-		setTheme(btn.dataset.choice)
-		storage.settings.theme = btn.dataset.choice
-		appStorage.update(storage)
-	})
-
-	initDropdown(qualityDropdown, btn => {
-		storage.settings.defaultQuality = btn.dataset.choice
-		appStorage.update(storage)
-	})
-
-	initDropdown(protocolDropdown, btn => {
-		storage.settings.proxy.protocol = btn.textContent.toLowerCase()
-		appStorage.update(storage)
-	})
-
-	initDropdown(formatDropdown, btn => {
-		storage.settings.defaultVideoFormat = btn.textContent
-		appStorage.update(storage)
-	})
 
 	// INIT SHORTCUTS
 	document.addEventListener('keydown', handleKeyDown)

@@ -5,9 +5,11 @@ import { AppStorage } from 'Global/app-storage'
 import { showToast } from 'Components/toast'
 import { clearHistory, disableHistory } from 'Layouts/win-history/helper'
 import { clearRecentQueries } from 'Layouts/win-search-results'
+import { initDropdown } from 'Components/dropdown'
 
 const appStorage = new AppStorage()
 let storage = null
+let isFilledWin = false
 
 const makeResultImport = (classResult, tip) => {
 	let settings = getSelector('.settings')
@@ -215,13 +217,17 @@ const handleChangeCheckbox = event => {
 export const openWinSettings = () => {
 	const settings = getSelector('.settings')
 
+	fillWinSettings()
+
+	const btnClearHistory = settings.querySelector('#clear-history')
+	btnClearHistory.addEventListener('click', clearHistory)
+
 	// IMPLEMENT IMPORT
 
-	const impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
 	const impExpField = settings.querySelector('.imp-exp__field')
-
 	impExpField.addEventListener('change', handleFile)
 
+	const impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
 	impExpBtn.addEventListener('click', handleClickImport)
 
 	// CHECKBOXES
@@ -248,12 +254,15 @@ export const openWinSettings = () => {
 export const resetWinSettings = () => {
 	let settings = getSelector('.settings')
 
+	let btnClearHistory = settings.querySelector('#clear-history')
+	btnClearHistory.removeEventListener('click', clearHistory)
+
 	// RESET IMPORT
 
-	let impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
 	let impExpField = settings.querySelector('.imp-exp__field')
-
 	impExpField.removeEventListener('change', handleFile)
+
+	let impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
 	impExpBtn.removeEventListener('click', handleClickImport)
 
 	// RESET CHECKBOXES
@@ -281,6 +290,7 @@ export const resetWinSettings = () => {
 	inputAll = null
 	impExpBtn = null
 	impExpField = null
+	btnClearHistory = null
 }
 
 export const setTheme = themeOption => {
@@ -289,13 +299,25 @@ export const setTheme = themeOption => {
 	if (themeOption === 'system') theme.setMode(theme.getSystemScheme())
 }
 
+export const applySettingsOnStart = () => {
+	storage = appStorage.get()
+	const { settings } = storage
+
+	setTheme(settings.theme)
+
+	if (settings.disableTransition) toggleTransition(settings.disableTransition)
+
+	if (settings.disableHistory) disableHistory()
+}
+
 export const fillWinSettings = () => {
+	if (isFilledWin) return
+
+	isFilledWin = true
+
 	storage = appStorage.get()
 	const { settings: ss } = storage
 	const settings = getSelector('.settings')
-	const btnClearHistory = settings.querySelector('#clear-history')
-
-	btnClearHistory.addEventListener('click', clearHistory)
 
 	let themeDropdown = settings.querySelector('.option__theme')
 	let themeDropdownHead = themeDropdown.querySelector('.dropdown__head')
@@ -303,7 +325,14 @@ export const fillWinSettings = () => {
 	themeDropdownHead.childNodes[0].data =
 		ss.theme === 'system' ? 'System default' : ss.theme === 'light' ? 'Light' : 'Dark'
 
-	setTheme(ss.theme)
+	initDropdown(themeDropdown, btn => {
+		setTheme(btn.dataset.choice)
+		storage.settings.theme = btn.dataset.choice
+		appStorage.update(storage)
+	})
+
+	themeDropdown = null
+	themeDropdownHead = null
 
 	const settingsArray = Object.entries(ss)
 
@@ -314,10 +343,6 @@ export const fillWinSettings = () => {
 
 		checkbox = null
 	}
-
-	if (ss.disableTransition) toggleTransition(ss.disableTransition)
-
-	if (ss.disableHistory) disableHistory()
 
 	if (ss.defaultQuality !== '1080p') {
 		let qualityDropdown = settings.querySelector('.option__quality')
@@ -366,6 +391,24 @@ export const fillWinSettings = () => {
 		inputRegionTrending = null
 	}
 
-	themeDropdown = null
-	themeDropdownHead = null
+	// INIT DROPDOWNS
+
+	const protocolDropdown = settings.querySelector('.option__protocol')
+	const qualityDropdown = settings.querySelector('.option__quality')
+	const formatDropdown = settings.querySelector('.option__format')
+
+	initDropdown(qualityDropdown, btn => {
+		storage.settings.defaultQuality = btn.dataset.choice
+		appStorage.update(storage)
+	})
+
+	initDropdown(protocolDropdown, btn => {
+		storage.settings.proxy.protocol = btn.textContent.toLowerCase()
+		appStorage.update(storage)
+	})
+
+	initDropdown(formatDropdown, btn => {
+		storage.settings.defaultVideoFormat = btn.textContent
+		appStorage.update(storage)
+	})
 }
