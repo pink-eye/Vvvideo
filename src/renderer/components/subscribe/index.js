@@ -28,6 +28,7 @@ const hasSubscription = (channelId, name) => {
 
 const addSubscription = obj => {
 	storage.subscriptions.push(obj)
+	storage.subscriptions = storage.subscriptions.sort((a, b) => a.name.localeCompare(b.name))
 	appStorage.update(storage)
 }
 
