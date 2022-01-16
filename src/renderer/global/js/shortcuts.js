@@ -13,7 +13,17 @@ export const handleKeyDown = event => {
 		hideSuggestions()
 
 		let winActive = getSelector('.main__content').querySelector('.win._active')
-		let firstCard = winActive.querySelector('.card')
+		let firstCard = null
+
+		if (winActive.classList.contains('subscriptions')) {
+			firstCard = winActive.querySelector('.author')
+		} else if (winActive.classList.contains('channel')) {
+			let tabContentActive = winActive.querySelector('.tab-content._active')
+
+			firstCard = tabContentActive.querySelector('.card')
+
+			tabContentActive = null
+		} else firstCard = winActive.querySelector('.card')
 
 		firstCard ? firstCard.focus() : document.activeElement.blur()
 
