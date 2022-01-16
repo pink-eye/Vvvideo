@@ -37,6 +37,7 @@
 					"^(/__tests__$)",
 					"^(/.husky$)",
 					"^(/gulp$)",
+					"^(/.yarn$)",
 					"^(/src$)",
 					"webpack\\.\\w+\\.js",
 					"gulpfile.js"
@@ -122,6 +123,8 @@
 		"gulp-uglify-es": "^3.0.0",
 		"husky": "^7.0.4",
 		"jest": "^27.3.1",
+		"node-gyp": "^8.4.1",
+		"node-gyp-build": "^4.3.0",
 		"node-sass": "^6.0.1",
 		"prettier": "2.4.1",
 		"stylelint": "^14.1.0",
