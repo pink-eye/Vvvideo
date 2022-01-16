@@ -28,7 +28,6 @@ import { showToast } from 'Components/toast'
 import { getWatchedTime, rememberWatchedTime } from 'Layouts/win-history/helper'
 import { initDialogSB, recordSegmentSB } from 'Components/dialog-sb'
 import { AppStorage } from 'Global/app-storage'
-import { required } from 'joi'
 
 let hasListeners = false
 let isFirstPlay = true
@@ -40,6 +39,7 @@ let videoFormats = null
 let chapters = null
 let currentChapter = null
 let lastSeekTooltipChapter = null
+let intervalWatchedProgress = null
 
 const appStorage = new AppStorage()
 let storage = null
@@ -503,7 +503,6 @@ const updateBarChapter = () => {
 }
 
 const highlightCurrentChapter = time => {
-	console.log('highlight')
 	let videoParent = getSelector('.video')
 	let spoilerContent = videoParent.querySelector('.spoiler__content')
 	let lastHighlightedTimecode = spoilerContent.querySelector('.timecode.btn-accent')
@@ -1114,6 +1113,12 @@ export const initVideoPlayer = async data => {
 		volumeBar.value = volumeSeek.value
 
 		doesSkipSegments ||= true
+
+		intervalWatchedProgress = setInterval(() => {
+			if (!isPlaying(video)) return
+
+			rememberWatchedTime()
+		}, 90000)
 	}
 
 	// MEDIA LISTENERS
@@ -1276,6 +1281,8 @@ export const resetVideoPlayer = () => {
 	videoFormats = null
 	currentChapter = null
 	lastSeekTooltipChapter = null
+	intervalWatchedProgress && clearInterval(intervalWatchedProgress)
+	intervalWatchedProgress = null
 
 	captions.hidden ||= true
 
@@ -1309,7 +1316,7 @@ export const resetVideoPlayer = () => {
 	const { disableStoryboard } = storage.settings
 
 	if (!disableStoryboard && !storyboard)
-		seekTooltip.insertAdjacentHTML('beforeEnd', createStoryboardHTML())
+		seekTooltip.insertAdjacentHTML('afterBegin', createStoryboardHTML())
 
 	video.removeEventListener('playing', handlePlaying)
 

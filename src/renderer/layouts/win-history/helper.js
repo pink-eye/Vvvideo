@@ -102,7 +102,7 @@ export const rememberWatchedTime = () => {
 	for (let index = 0, { length } = storage.history; index < length; index += 1) {
 		if (storage.history[index].id === id) {
 			storage.history[index].watchedTime = currentTime
-			appStorage.update(storage)
+			appStorage.update(storage, { isLocal: true })
 			return
 		}
 	}

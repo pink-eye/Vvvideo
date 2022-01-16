@@ -31,9 +31,11 @@ export class AppStorage {
 		return storage
 	}
 
-	update(data) {
+	update(data, options = null) {
 		this.set(data)
-		API.writeStorage(data)
+
+		if (!options) return
+		!options.isLocal && API.writeStorage(data)
 	}
 
 	clearLocalStorage() {
