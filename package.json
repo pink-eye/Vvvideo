@@ -10,18 +10,8 @@
 		"make": "electron-forge make",
 		"publish": "electron-forge publish",
 		"format": "prettier src/ gulp/ gulpfile.js --write",
-		"test": "jest",
+		"test": "jest -c='./jest.config.js' --colors",
 		"stylelint": "stylelint src/renderer/**/*.scss --fix"
-	},
-	"jest": {
-		"moduleFileExtensions": [
-			"js"
-		],
-		"moduleNameMapper": {
-			"^Global/(.*)$": "<rootDir>/src/renderer/global/js/$1",
-			"^Components/(.*)$": "<rootDir>/src/renderer/components/$1",
-			"^Layouts/(.*)$": "<rootDir>/src/renderer/layouts/$1"
-		}
 	},
 	"keywords": [],
 	"author": {
@@ -29,44 +19,7 @@
 	},
 	"license": "GPL-3.0",
 	"config": {
-		"forge": {
-			"packagerConfig": {
-				"name": "Vvvideo",
-				"icon": "./assets/icons/icon.ico",
-				"ignore": [
-					"^(/__tests__$)",
-					"^(/.husky$)",
-					"^(/gulp$)",
-					"^(/.yarn$)",
-					"^(/src$)",
-					"webpack\\.\\w+\\.js",
-					"gulpfile.js"
-				]
-			},
-			"makers": [
-				{
-					"name": "@electron-forge/maker-squirrel",
-					"config": {
-						"name": "Vvvideo",
-						"iconUrl": "https://raw.githubusercontent.com/pink-eye/Vvvideo/main/src/res/assets/icons/icon.ico"
-					}
-				},
-				{
-					"name": "@electron-forge/maker-zip",
-					"platforms": [
-						"darwin"
-					]
-				},
-				{
-					"name": "@electron-forge/maker-deb",
-					"config": {}
-				},
-				{
-					"name": "@electron-forge/maker-rpm",
-					"config": {}
-				}
-			]
-		}
+		"forge": "./forge.config.js"
 	},
 	"dependencies": {
 		"@freetube/yt-trending-scraper": "^2.0.1",
