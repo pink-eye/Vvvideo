@@ -9,8 +9,6 @@ jobs:
             - uses: actions/setup-node@master
               with:
                   node-version: 16
-            - name: install libimagequant
-              run: sudo apt-get install libimagequant-dev
             - name: install dependencies
               run: yarn --frozen-lockfile
             - name: build
@@ -23,8 +21,6 @@ jobs:
             - uses: actions/setup-node@master
               with:
                   node-version: 16
-            - name: install libimagequant
-              run: brew install libimagequant
             - name: install dependencies
               run: yarn --frozen-lockfile
             - name: build
