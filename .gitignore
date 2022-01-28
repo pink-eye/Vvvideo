@@ -88,6 +88,9 @@ typings/
 # Electron-Forge
 out/
 
+# Bundled src
+bundle/
+
 # Yarn2
 .pnp.*
 .yarn/*
