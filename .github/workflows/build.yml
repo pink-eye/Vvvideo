@@ -24,6 +24,8 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: yarn --frozen-lockfile
+      - if: contains(matrix.os, 'macos')
+        run: npm i gulp -g
       - name: Bundle src
         run: gulp --prod
       - name: Make
