@@ -1,7 +1,17 @@
 module.exports = {
+	publishers: [
+		{
+			name: '@electron-forge/publisher-github',
+			config: {
+				repository: {
+					owner: 'pink-eye',
+					name: 'Vvvideo',
+				},
+			},
+		},
+	],
 	packagerConfig: {
-		name: 'Vvvideo',
-		icon: './assets/icons/icon.',
+		name: 'vvvideo',
 		ignore: [
 			'^(/__tests__$)',
 			'^(/.husky$)',
@@ -32,11 +42,21 @@ module.exports = {
 		},
 		{
 			name: '@electron-forge/maker-deb',
-			config: {},
+			config: {
+				options: {
+					icon: './assets/icon.png',
+					homepage: 'https://github.com/pink-eye/notfie-react',
+				},
+			},
 		},
 		{
 			name: '@electron-forge/maker-rpm',
-			config: {},
+			config: {
+				options: {
+					icon: './assets/icon.png',
+					homepage: 'https://github.com/pink-eye/notfie-react',
+				},
+			},
 		},
 	],
 }
