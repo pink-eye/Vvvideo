@@ -1,0 +1,31 @@
+.preloader {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  display: grid;
+  place-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-accent-s);
+  transition: transform var(--trns), opacity var(--trns), visibility var(--trns); }
+  .preloader._hidden {
+    transform: scale(15);
+    visibility: hidden;
+    opacity: 0; }
+  .preloader__el {
+    width: 80px;
+    height: 80px;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 100px solid #d0d4dc;
+    animation: pulsate 1s ease-in-out infinite both; }
+
+@keyframes pulsate {
+  0% {
+    transform: scale(1); }
+  50% {
+    transform: scale(1.1); }
+  100% {
+    transform: scale(1); } }
+
+/*# sourceMappingURL=preloader.css.map */

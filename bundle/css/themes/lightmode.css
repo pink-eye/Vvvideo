@@ -1,0 +1,43 @@
+:root {
+  --color-bg: hsl(230, 10%, 90%);
+  --color-bg-form: hsl(0, 0%, 100%);
+  --color-bg-secondary: hsl(230, 10%, 97%);
+  --color-bg-third: hsl(230, 10%, 94%);
+  --color-title: hsl(220, 20%, 35%);
+  --color-text: hsl(245, 5%, 45%);
+  --color-descr: hsl(0, 0%, 40%);
+  --color-bg-field: var(--color-bg);
+  --color-text-field: var(--color-text);
+  --color-icon: var(--color-text);
+  --color-bg-skeleton: var(--color-bg);
+  --color-bg-skeleton-item: hsl(0, 0%, 95%);
+  --color-bg-btn: var(--color-bg);
+  --bg-btn: hsl(0, 0%, 100%);
+  --bg-btn-hover: hsl(0, 0%, 70%);
+  --color-bg-btn-disabled: hsl(230, 10%, 80%);
+  --color-bg-btn-primary-hover: hsl(230, 10%, 92%);
+  --color-box-shadow-s: hsla(210, 10%, 55%, 0.25);
+  --color-box-shadow-m: hsla(210, 10%, 45%, 0.4);
+  --color-box-shadow-l: hsla(210, 10%, 35%, 0.55);
+  --color-box-shadow-xl: hsl(0, 0%, 10%);
+  --color-error: hsl(350, 100%, 60%);
+  --color-good: hsl(138, 100%, 50%);
+  --color-info: hsl(229, 82%, 58%);
+  --color-switch: hsl(0, 0%, 100%);
+  --color-switch-highlight: hsl(0, 0%, 0%, 0.25);
+  --color-track-inactive: hsl(80, 0%, 80%);
+  --color-track-active: hsl(125, 70%, 48%);
+  --color-bg-unsubscribe: hsl(230, 10%, 50%);
+  --color-link: hsl(240, 75%, 55%);
+  --color-link-hover: hsl(255, 70%, 30%);
+  --color-link-visited: var(--color-accent-s);
+  --color-bg-suggest-selected: hsl(0, 0%, 100%);
+  --color-bg-suggest-hover: hsl(0, 0%, 95%);
+  --color-text-suggest-selected: var(--color-title);
+  --color-bg-toast: var(--color-bg-form);
+  --color-text-toast: var(--color-title); }
+
+img {
+  filter: brightness(100%); }
+
+/*# sourceMappingURL=lightmode.css.map */

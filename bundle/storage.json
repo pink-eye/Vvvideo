@@ -1,0 +1,31 @@
+{
+	"recentQueries": [],
+	"subscriptions": [],
+	"history": [],
+	"settings": {
+		"theme": "system",
+		"disableTransition": false,
+		"enableProxy": false,
+		"proxy": {
+			"protocol": "socks5",
+			"host": "127.0.0.1",
+			"port": 9050
+		},
+		"disableSponsorblock": false,
+		"notifySkipSegment": true,
+		"disableHistory": false,
+		"dontRememberWatchedTime": false,
+		"maxHistoryLength": 30,
+		"defaultQuality": "1080p",
+		"autoplay": true,
+		"disableSeparatedStreams": false,
+		"disableStoryboard": false,
+		"defaultVideoFormat": "webm",
+		"disableSearchSuggestions": false,
+		"regionTrending": "US",
+		"notAdaptContent": false,
+		"disableRecentQueries": false,
+		"dontShowRecentQueriesOnTyping": true,
+		"maxRecentQueriesLength": 10
+	}
+}

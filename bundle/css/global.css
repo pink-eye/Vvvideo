@@ -1,0 +1,267 @@
+:root {
+  --ff:
+		'Commissioner',
+		sans-serif;
+  --accent-hue: 330;
+  --accent-saturation: 70%;
+  --accent-lightness: 48%;
+  --accent-alpha-l: 0.1;
+  --accent-alpha-m: 0.55;
+  --accent-alpha-s: 1;
+  --color-accent-s: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), var(--accent-alpha-s));
+  --color-accent-m: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), var(--accent-alpha-m));
+  --color-accent-l: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), var(--accent-alpha-l));
+  --color-buffered: hsl(250, 15%, 90%);
+  --width-line: 0.1875rem;
+  --color-line: var(--color-accent-s);
+  --color-bg-duration: hsla(0, 0%, 0%, 0.75);
+  --color-bg-edge: var(--color-accent-s);
+  --caption-font-size: 1rem;
+  --video-title: 2.25rem;
+  --brs-s: 5px;
+  --brs-m: 10px;
+  --brs-l: 15px;
+  --brs-xl: 20px;
+  --box-shadow-s: var(--color-box-shadow-s) 0 2px 48px;
+  --box-shadow-m: var(--color-box-shadow-m) 0 2px 12px;
+  --box-shadow-l: var(--color-box-shadow-l) 0 2px 12px;
+  --box-shadow-xl: var(--color-box-shadow-xl) 0 2px 12px;
+  --trns-timing-func: ease;
+  --ease-out-back: cubic-bezier(0.175, 0.885, 0.32, 1.175);
+  --ease-in-back: cubic-bezier(0.6, -0.18, 0.735, 0.045);
+  --ease-in-sine: cubic-bezier(0.47, 0, 0.745, 0.715);
+  --ease-out-sine: cubic-bezier(0.39, 0.575, 0.565, 1);
+  --trns: var(--trns-time-default) var(--trns-timing-func);
+  --trns-fast: var(--trns-time-fast) var(--trns-timing-func);
+  --trns-slow: var(--trns-time-slow) var(--trns-timing-func); }
+  @media screen and (prefers-reduced-motion: no-preference) {
+    :root {
+      --trns-time-default: 0.3s;
+      --trns-time-fast: 0.2s;
+      --trns-time-slow: 1s; } }
+  @media screen and (prefers-reduced-motion: reduce) {
+    :root {
+      --trns-time-default: 0.1s;
+      --trns-time-fast: 0s;
+      --trns-time-slow: 0.5s; } }
+
+@font-face {
+  font-weight: 400;
+  font-family: 'Commissioner';
+  font-style: normal;
+  src: url(../fonts/Commissioner-Regular.woff2) format("woff2");
+  font-display: swap; }
+
+@font-face {
+  font-weight: 500;
+  font-family: 'Commissioner';
+  font-style: normal;
+  src: url(../fonts/Commissioner-Medium.woff2) format("woff2");
+  font-display: swap; }
+
+* {
+  word-spacing: 3px; }
+
+body {
+  position: relative;
+  min-width: 320px;
+  overflow-x: hidden;
+  font-family: var(--ff);
+  background-color: var(--color-bg-form);
+  transition: background-color var(--trns); }
+  @media (min-width: 48em) {
+    body::-webkit-scrollbar {
+      width: 14px; }
+    body::-webkit-scrollbar-thumb {
+      border: 3px solid var(--color-bg-form);
+      border-radius: var(--brs-m);
+      background-color: var(--color-bg-field); }
+    body::-webkit-scrollbar-track {
+      background-color: var(--color-bg-form); } }
+  @media (max-width: 47.9375em) {
+    body::-webkit-scrollbar {
+      width: 0; } }
+
+.list-reset {
+  margin: 0;
+  padding: 0;
+  text-indent: 0;
+  list-style-type: none; }
+
+button,
+a,
+input {
+  border: var(--width-line) solid transparent;
+  outline: 0;
+  transition: border-color var(--trns); }
+
+@media (hover: hover) and (pointer: fine) {
+  input:focus-visible {
+    border: var(--width-line) solid var(--color-accent-s); } }
+
+@media (hover: hover) and (pointer: fine) {
+  button:focus-visible:not(:is(._active, .btn-accent)),
+  a:focus-visible:not(:is(._active, .btn-accent)) {
+    border: var(--width-line) solid var(--color-accent-s); }
+  button:focus-visible:is(._active, .btn-accent),
+  a:focus-visible:is(._active, .btn-accent) {
+    border: var(--width-line) solid var(--color-title); } }
+
+a:not(.btn-primary) {
+  color: var(--color-link);
+  transition: color var(--trns), border-color var(--trns); }
+  a:not(.btn-primary):visited {
+    color: var(--color-link-visited); }
+  @media (hover: hover) and (pointer: fine) {
+    a:not(.btn-primary):hover {
+      color: var(--color-link-hover);
+      text-decoration: none; } }
+  @media (hover: hover) and (pointer: fine) {
+    a:not(.btn-primary):focus {
+      outline: 0; } }
+
+.btn-reset {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  background-color: transparent;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit; }
+  .btn-reset::-moz-focus-inner {
+    padding: 0;
+    border: 0; }
+
+label {
+  cursor: pointer; }
+
+input[type='text'] {
+  width: 100%;
+  height: 100%;
+  padding: 12.5px 23px;
+  border-radius: var(--brs-m);
+  color: var(--color-text-field);
+  font-weight: 400;
+  font-size: var(--caption-font-size);
+  background-color: var(--color-bg-field);
+  outline: 0;
+  transition: border-radius var(--trns), border-color var(--trns), color var(--trns), background-color var(--trns); }
+  input[type='text']:not(:focus-visible) {
+    border: var(--width-line) solid transparent; }
+    input[type='text']:not(:focus-visible)::placeholder {
+      opacity: 0.8; }
+  input[type='text']:focus-visible {
+    border: var(--width-line) solid var(--color-accent-s); }
+    input[type='text']:focus-visible::placeholder {
+      opacity: 0; }
+  @media (hover: hover) and (pointer: fine) {
+    input[type='text']:not(:focus-visible):hover {
+      border: var(--width-line) solid var(--color-accent-m); } }
+
+::selection {
+  color: white;
+  background-color: var(--color-accent-s); }
+
+.outter-container {
+  width: clamp(320px, 100%, 1600px);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 0.6818rem + 1.5909vw, 1.875rem); }
+  @media (min-width: 48em) {
+    .outter-container:is(.header__outter-container) {
+      padding-inline: unset; } }
+
+svg {
+  transition: stroke var(--trns), fill var(--trns);
+  fill: var(--color-icon);
+  stroke: var(--color-icon); }
+
+.title {
+  color: var(--color-title);
+  font-weight: 500;
+  line-height: 126.92308%;
+  transition: color var(--trns); }
+
+img {
+  transition: filter var(--trns); }
+
+.btn-accent,
+.btn-primary {
+  display: inline-block;
+  width: 100%;
+  padding-block: 19px;
+  border-radius: var(--brs-m);
+  text-align: center; }
+
+.btn-accent {
+  border: 3px solid var(--color-accent-s);
+  transition: background-color var(--trns), border-color var(--trns), transform var(--trns-fast), color var(--trns); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-accent:not(:focus-visible):hover {
+      border: 3px solid var(--color-accent-m); }
+    .btn-accent:not(:hover) {
+      color: white;
+      background-color: var(--color-accent-s); }
+    .btn-accent:hover {
+      color: var(--color-accent-s);
+      background-color: var(--color-accent-l); } }
+
+.btn-primary {
+  border: 3px solid var(--color-bg-btn);
+  transition: background-color var(--trns), color var(--trns), transform var(--trns-fast), border-color var(--trns); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:not(:hover) {
+      color: var(--color-title);
+      background-color: var(--color-bg-btn); }
+    .btn-primary:focus {
+      outline: 0; }
+    .btn-primary:hover {
+      color: var(--color-text);
+      text-decoration: none;
+      background-color: var(--color-bg-btn-primary-hover); } }
+
+.btn-secondary {
+  border-radius: var(--brs-s);
+  font-size: 0;
+  transition: background-color var(--trns), transform var(--trns-fast), border-color var(--trns); }
+  .btn-secondary:not([disabled]) {
+    background-color: var(--color-bg-form); }
+    .btn-secondary:not([disabled]) svg {
+      fill: var(--color-title);
+      stroke: var(--color-title); }
+  .btn-secondary[disabled] {
+    background-color: var(--color-bg-btn-disabled); }
+    .btn-secondary[disabled] svg {
+      fill: var(--color-text);
+      stroke: var(--color-text); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn-secondary:not([disabled]):hover {
+      background-color: var(--color-title); }
+      .btn-secondary:not([disabled]):hover svg {
+        fill: var(--color-bg-form);
+        stroke: var(--color-bg-form); } }
+
+.onclick-effect:active {
+  transform: scale(0.97); }
+
+.arrow {
+  display: flex; }
+  .arrow:before, .arrow:after {
+    position: relative;
+    top: 9px;
+    display: block;
+    width: 10px;
+    height: 2px;
+    background-color: var(--color-descr);
+    transition: transform var(--trns), background-color var(--trns);
+    content: ''; }
+  .arrow:before {
+    left: 2px;
+    transform: rotate(45deg); }
+  .arrow:after {
+    right: 2px;
+    transform: rotate(-45deg); }
+
+/*# sourceMappingURL=global.css.map */
