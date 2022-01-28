@@ -65,6 +65,8 @@
 		animation: toast-indicator-delay 4.2s linear .6s forwards;
 
 		content: '';
+
+		will-change: transform;
 	}
 
 	&._visible {
@@ -262,10 +264,10 @@
 @keyframes toast-indicator-delay {
 
 	from {
-		width: 100%;
+		transform: translateX(0%);
 	}
 
 	to {
-		width: 0%;
+		transform: translateX(-100%);
 	}
 }

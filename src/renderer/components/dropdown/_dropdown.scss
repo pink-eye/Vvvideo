@@ -73,6 +73,7 @@
 		width: auto;
 		max-height: 125px;
 		padding: 5px;
+		border: 3px solid var(--color-bg-form);
 		border-radius: var(--brs-m);
 		overflow-y: auto;
 
@@ -81,7 +82,7 @@
 		white-space: nowrap;
 		text-align: right;
 
-		background-color: var(--color-bg-form);
+		background-color: var(--color-bg-field);
 		box-shadow: var(--box-shadow-m);
 
 		transition:
@@ -139,7 +140,7 @@
 			&:not(._current):hover {
 				color: var(--color-title);
 
-				background-color: var(--color-bg);
+				background-color: var(--color-bg-suggest-hover);
 			}
 		}
 	}
