@@ -22,10 +22,6 @@ jobs:
             - uses: actions/setup-node@master
               with:
                   node-version: 16
-<<<<<<< HEAD
-=======
-            - name install libimagequant
->>>>>>> de993bf57f17af1e8d1d7cf0f3b8784f296b552b
               run: brew install libimagequant
             - name: install dependencies
               run: yarn --frozen-lockfile
