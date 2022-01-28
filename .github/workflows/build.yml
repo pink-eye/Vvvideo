@@ -18,10 +18,10 @@ jobs:
         run: sudo apt-get install libimagequant-dev
       - if: contains(matrix.os, 'macos')
         run: brew install libimagequant
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node-version }}
-      - name: install dependencies
+      - name: Install dependencies
         run: yarn --frozen-lockfile
-      - name: start maker
+      - name: Make
         run: yarn run make
