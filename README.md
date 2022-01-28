@@ -10,36 +10,52 @@
 </a>
 </p>
 
+## 📄 About
+
+Vvvideo is an open source desktop application you can use to watch videos from YouTube without ad. Youtube won't indentify you because it doesn't require Google account. The data belongs only to you. Also, you have ability to enable proxy in settings to increase anonimity.
+
 ## 📷 Screenshots
-![Screenshot-Latest](./assets/screenshots/screenshot(2).png)
 
-![Screenshot-Video](./assets/screenshots/screenshot(3).png)
+![Screenshot-Latest](<./assets/screenshots/screenshot(2).png>)
 
-![Screenshot-Channel](./assets/screenshots/screenshot(4).png)
+<p align="center"><em>Latest videos uploaded by channels you subscribe</em></p>
 
-![Screenshot-Trending](./assets/screenshots/screenshot(1).png)
+![Screenshot-Video](<./assets/screenshots/screenshot(3).png>)
 
-![Screenshot-Settings](./assets/screenshots/screenshot(5).png)
+<p align="center"><em>Page of video</em></p>
 
+![Screenshot-Channel](<./assets/screenshots/screenshot(4).png>)
+
+<p align="center"><em>Also page of video but bottom part</em></p>
+
+![Screenshot-Trending](<./assets/screenshots/screenshot(1).png>)
+
+<p align="center"><em>Search results</em></p>
+
+![Screenshot-Settings](<./assets/screenshots/screenshot(5).png>)
+
+<p align="center"><em>Settings</em></p>
 
 ## 💥 Features
-* Watch videos without ads
-* Navigate the app using the keyboard
-* Sponsorblock integration (you can record and skip sponsor segments of video)
-* Subscribe to channels and get their latest uploads
-* Display general info about videos, channels and playlists
-* Search videos, channels and playlists
-* Saves search queries (optional)
-* History of watched videos (optional)
-* Remember time point of watched video (optional)
-* Responsive layout (it means the app looks good on the each device)
-* Supports live streams
-* Proxy configuration
-* System, dark and light themes
-* Import and export subscriptions
-* Hot keys
+
+-   Watch videos without ads
+-   Navigate the app using the keyboard
+-   Sponsorblock integration (you can record and skip sponsor segments of video)
+-   Subscribe to channels and get their latest uploads
+-   Display general info about videos, channels and playlists
+-   Search videos, channels and playlists
+-   Saves search queries (optional)
+-   History of watched videos (optional)
+-   Remember time point of watched video (optional)
+-   Responsive layout (it means the app looks good on the each device)
+-   Supports live streams
+-   Proxy configuration
+-   System, dark and light themes
+-   Import and export subscriptions
+-   Hot keys
 
 ## 🛠️ Building
+
 ```
 # Clone this repo
 git clone https://github.com/pink-eye/Vvvideo
@@ -58,13 +74,11 @@ yarn run make
 ```
 
 ## 🙏 Issues
+
 Feel free to open an issue for suggestions or any unexpected behavior encountered.
 
 ## 😜 License
+
 [![GNU GPLv3 Image](https://www.gnu.org/graphics/gplv3-127x51.png)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-Vvvideo is Free Software: You can use, study share and improve it at your
-will. Specifically you can redistribute and/or modify it under the terms of the
-[GNU General Public License](https://www.gnu.org/licenses/gpl.html) as
-published by the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+See [LICENSE](https://github.com/pink-eye/Vvvideo/blob/main/LICENSE)
