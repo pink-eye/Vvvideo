@@ -11,8 +11,6 @@ jobs:
                   node-version: 16
             - name: install dependencies
               run: yarn --frozen-lockfile
-            - name: bundle
-              run: gulp --prod
             - name: build
               run: yarn run make
 
@@ -25,8 +23,6 @@ jobs:
                   node-version: 16
             - name: install dependencies
               run: yarn --frozen-lockfile
-            - name: bundle
-              run: gulp --prod
             - name: build
               run: yarn run make
 
@@ -39,7 +35,5 @@ jobs:
                   node-version: 16
             - name: install dependencies
               run: yarn --frozen-lockfile
-            - name: bundle
-              run: gulp --prod
             - name: build
               run: yarn run make
