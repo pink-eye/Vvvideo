@@ -44,8 +44,8 @@ module.exports = {
 			name: '@electron-forge/maker-deb',
 			config: {
 				options: {
-					icon: './assets/icon.png',
-					homepage: 'https://github.com/pink-eye/notfie-react',
+					icon: './assets/icon/icon.png',
+					homepage: 'https://github.com/pink-eye/Vvvideo',
 				},
 			},
 		},
@@ -53,8 +53,8 @@ module.exports = {
 			name: '@electron-forge/maker-rpm',
 			config: {
 				options: {
-					icon: './assets/icon.png',
-					homepage: 'https://github.com/pink-eye/notfie-react',
+					icon: './assets/icon/icon.png',
+					homepage: 'https://github.com/pink-eye/Vvvideo',
 				},
 			},
 		},
