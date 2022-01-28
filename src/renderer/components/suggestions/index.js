@@ -30,6 +30,8 @@ const addSuggestion = (data, isRecent) => {
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
 	let searchBar = headerSearch.querySelector('.search__bar')
 
+	lastSelected = null
+
 	for (let index = 0; index < 10; index += 1) {
 		const query = searchBar.value.trim()
 
@@ -161,7 +163,6 @@ const initSuggestions = () => {
 
 		target = null
 		el = null
-		lastSelected = null
 	}
 
 	suggestionList.addEventListener('click', handleClickSuggestion)
@@ -170,7 +171,6 @@ const initSuggestions = () => {
 		showOverlay()
 
 		suggestionListLength = 0
-		lastSelected = null
 		let query = searchBar.value.trim()
 
 		if (query.length > 0) {
