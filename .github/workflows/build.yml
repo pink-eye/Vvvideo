@@ -22,9 +22,9 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Bundle src
-        run: gulp --prod
       - name: Install dependencies
         run: yarn --frozen-lockfile
+      - name: Bundle src
+        run: gulp --prod
       - name: Make
         run: yarn run make
