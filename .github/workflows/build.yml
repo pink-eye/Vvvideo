@@ -14,7 +14,6 @@ jobs:
           - macos-latest
           - windows-latest
     steps:
-      - uses: actions/checkout@v2
       - if: contains(matrix.os, 'ubuntu')
         run: sudo apt-get install libimagequant-dev
       - if: contains(matrix.os, 'macos')
