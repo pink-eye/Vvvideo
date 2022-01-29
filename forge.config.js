@@ -29,9 +29,7 @@ module.exports = {
 		{
 			name: '@electron-forge/maker-squirrel',
 			config: {
-				exe: APP_NAME,
 				setupIcon: path.join(__dirname, 'assets', 'icons', 'icon.ico'),
-				skipUpdateIcon: true,
 				iconUrl:
 					'https://raw.githubusercontent.com/pink-eye/Vvvideo/main/assets/icons/icon.ico',
 			},
