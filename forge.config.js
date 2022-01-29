@@ -15,7 +15,6 @@ module.exports = {
 	],
 	packagerConfig: {
 		name: 'vvvideo',
-		executableName: APP_NAME,
 		ignore: [
 			'^(/__tests__$)',
 			'^(/.husky$)',
@@ -30,6 +29,7 @@ module.exports = {
 		{
 			name: '@electron-forge/maker-squirrel',
 			config: {
+				exe: APP_NAME,
 				setupIcon: path.join(__dirname, 'assets', 'icons', 'icon.ico'),
 				skipUpdateIcon: true,
 				iconUrl:
