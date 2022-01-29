@@ -15,6 +15,8 @@ module.exports = {
 	],
 	packagerConfig: {
 		name: 'vvvideo',
+		icon: path.resolve(__dirname, 'assets/icons/icon'),
+		platform: 'all',
 		ignore: [
 			'^(/__tests__$)',
 			'^(/.husky$)',
@@ -29,7 +31,6 @@ module.exports = {
 		{
 			name: '@electron-forge/maker-squirrel',
 			config: {
-				setupIcon: path.join(__dirname, 'assets', 'icons', 'icon.ico'),
 				iconUrl:
 					'https://raw.githubusercontent.com/pink-eye/Vvvideo/main/assets/icons/icon.ico',
 			},
@@ -37,8 +38,7 @@ module.exports = {
 		{
 			name: '@electron-forge/maker-dmg',
 			config: {
-				name: APP_NAME,
-				icon: path.join(__dirname, 'assets', 'icons', 'icon.icns'),
+				icon: path.resolve(__dirname, 'assets/icons/icon.icns'),
 			},
 		},
 		{
@@ -49,7 +49,7 @@ module.exports = {
 			name: '@electron-forge/maker-deb',
 			config: {
 				options: {
-					icon: path.join(__dirname, 'assets', 'icons', 'icon.png'),
+					icon: path.resolve(__dirname, 'assets/icons/icon.png'),
 					homepage: 'https://github.com/pink-eye/Vvvideo',
 				},
 			},
@@ -58,7 +58,7 @@ module.exports = {
 			name: '@electron-forge/maker-rpm',
 			config: {
 				options: {
-					icon: path.join(__dirname, 'assets', 'icons', 'icon.png'),
+					icon: path.resolve(__dirname, 'assets/icons/icon.png'),
 					homepage: 'https://github.com/pink-eye/Vvvideo',
 				},
 			},
