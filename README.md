@@ -18,23 +18,23 @@ Vvvideo is an open source desktop application you can use to watch videos from Y
 
 ![Screenshot-Latest](<./assets/screenshots/screenshot(2).png>)
 
-<p align="center"><em>Latest videos uploaded by channels you subscribe</em></p>
+<p align="center">🏠 <em>Latest videos uploaded by channels you subscribe</em></p>
 
 ![Screenshot-Video](<./assets/screenshots/screenshot(3).png>)
 
-<p align="center"><em>Page of video</em></p>
+<p align="center">📺 <em>Page of video</em></p>
 
 ![Screenshot-Channel](<./assets/screenshots/screenshot(4).png>)
 
-<p align="center"><em>Also page of video but bottom part</em></p>
+<p align="center">📺 <em>Also page of video but bottom part</em></p>
 
 ![Screenshot-Trending](<./assets/screenshots/screenshot(1).png>)
 
-<p align="center"><em>Search results</em></p>
+<p align="center">🔍 <em>Search results</em></p>
 
 ![Screenshot-Settings](<./assets/screenshots/screenshot(5).png>)
 
-<p align="center"><em>Settings</em></p>
+<p align="center">🔧 <em>Settings</em></p>
 
 ## 💥 Features
 
