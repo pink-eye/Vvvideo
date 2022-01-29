@@ -2,7 +2,7 @@
 	"name": "vvvideo",
 	"productName": "Vvvideo",
 	"version": "1.0.0",
-	"description": "to watch yt videos",
+	"description": "The open-source app to watch YT videos. Licensed GPLv3",
 	"main": "bundle/index.js",
 	"scripts": {
 		"start": "electron-forge start",
