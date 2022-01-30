@@ -1,5 +1,5 @@
 require('v8-compile-cache')
-const { app, BrowserWindow, globalShortcut } = require('electron')
+const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('fs')
 
@@ -84,3 +84,12 @@ app.on('window-all-closed', () => {
 		app.quit()
 	}
 })
+
+ipcMain.handle(
+	'app-version',
+	(event, arg) =>
+		new Promise(resolve => {
+			const appVersion = app.getVersion()
+			resolve(appVersion)
+		})
+)

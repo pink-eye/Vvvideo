@@ -1,0 +1,92 @@
+.update {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	z-index: 100;
+
+	padding: 3px;
+
+	border-radius: var(--brs-s);
+	overflow: hidden;
+
+	transition:
+		opacity var(--trns),
+		visibility var(--trns),
+		transform var(--trns);
+
+	&:before {
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		width: 200%;
+		height: 100%;
+
+		background: linear-gradient(115deg, hsl(135, 57%, 56%), hsl(48, 95%, 63%), hsl(270, 71%, 65%), hsl(197, 99%, 53%), hsl(144, 58%, 54%));
+		background-size: 50% 100%;
+
+		animation: bg-gradient .75s linear infinite;
+
+		content: '';
+	}
+
+	&:not(._active) {
+		transform: translateX(200%);
+		visibility: hidden;
+		opacity: 0;
+	}
+
+	&._active {
+		transform: translateX(0%);
+		visibility: visible;
+		opacity: 1;
+	}
+
+	&__content {
+		position: relative;
+		z-index: 2;
+
+		display: flex;
+		align-items: center;
+		height: 100%;
+		margin: 0;
+		padding: 15px;
+		border-radius: 3px;
+
+		color: var(--color-title);
+		font-size: 1.1rem;
+		white-space: nowrap;
+
+		background-color: var(--color-bg);
+
+		aside > svg {
+			fill: var(--color-title);
+		}
+	}
+}
+
+@keyframes bg-gradient {
+
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+@keyframes icon-gradient {
+
+	0% {
+		fill: hsl(135, 57%, 56%);
+	}
+
+	30% {
+		fill: hsl(197, 99%, 53%);
+	}
+
+	60% {
+		fill: hsl(270, 71%, 65%);
+	}
+
+	100% {
+		fill: hsl(48, 95%, 63%);
+	}
+}
