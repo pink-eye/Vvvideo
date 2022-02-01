@@ -8,27 +8,23 @@
 	width: 100%;
 	height: 100%;
 
-	background-color: var(--color-accent-s);
+	background-color: hsl(240, 15%, 10%);
 
 	transition:
-		transform var(--trns),
-		opacity var(--trns),
-		visibility var(--trns);
+		transform .3s ease-in-out,
+		opacity .3s ease-in-out,
+		visibility .3s ease-in-out;
+
+	svg {
+		animation: pulsate 1s ease-in-out infinite both;
+
+		fill: hsl(0, 0%, 100%);
+	}
 
 	&._hidden {
 		transform: scale(15);
 		visibility: hidden;
 		opacity: 0;
-	}
-
-	&__el {
-		width: 80px;
-		height: 80px;
-		border-top: 50px solid transparent;
-		border-bottom: 50px solid transparent;
-		border-left: 100px solid hsl(220, 15%, 84%);
-
-		animation: pulsate 1s ease-in-out infinite both;
 	}
 }
 
