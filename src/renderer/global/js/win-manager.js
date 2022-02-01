@@ -52,7 +52,7 @@ const resetWin = win => {
 	}
 }
 
-const startFillingWin = ({ win, btnWin, id }) => {
+const startFillingWin = ({ win, btnWin, id, lastWin }) => {
 	const appStorage = new AppStorage()
 	const { settings } = appStorage.get()
 
@@ -70,7 +70,7 @@ const startFillingWin = ({ win, btnWin, id }) => {
 			break
 
 		case 'video':
-			prepareWinVideo(btnWin, id)
+			prepareWinVideo(btnWin, id, lastWin)
 
 			break
 
@@ -99,10 +99,18 @@ const startFillingWin = ({ win, btnWin, id }) => {
 	}
 }
 
-const showWin = win => {
-	win.classList.add('_active')
+const showWin = ({ win, winSelector, id }) => {
+	let mainContent = getSelector('.main__content')
 
-	const afterActiveWin = () => win.classList.add('_anim-win')
+	mainContent.dataset.activeWin = win
+	mainContent.dataset.activeWinId = id
+	winSelector.classList.add('_active')
+
+	const afterActiveWin = () => {
+		winSelector.classList.add('_anim-win')
+
+		mainContent = null
+	}
 
 	setTimeout(afterActiveWin, 15)
 }
@@ -131,6 +139,9 @@ export const manageWin = async ({ target }) => {
 		let { win, id } = btnWin.dataset
 		let mainContent = getSelector('.main__content')
 		let winSelector = mainContent.querySelector(`.${win}`)
+		let lastWinSelector = mainContent.querySelector(`.win._active`)
+		let lastWin = mainContent.dataset.activeWin
+		let lastWinId = mainContent.dataset.activeWinId
 
 		if (win === 'search-results') {
 			let searchBar = getSelector('.search__bar')
@@ -159,22 +170,24 @@ export const manageWin = async ({ target }) => {
 			searchBar = null
 		}
 
-		let lastWin = mainContent.querySelector('.win._active._anim-win')
-
 		if (winSelector.classList.contains('_active')) {
-			resetWin(lastWin)
+			resetWin(lastWinSelector)
 			startFillingWin({
 				win,
 				id,
 				btnWin,
+				lastWin: {
+					type: lastWin,
+					id: lastWinId,
+				},
 			})
 
 			mainContent = null
 			winSelector = null
-			lastWin = null
+			lastWinSelector = null
 			btnWin &&= null
 		} else {
-			hideWin(lastWin)
+			hideWin(lastWinSelector)
 
 			if (btnWin?.classList.contains('sidebar__btn')) {
 				deactivateLastSidebarBtn()
@@ -188,13 +201,17 @@ export const manageWin = async ({ target }) => {
 					win,
 					id,
 					btnWin,
+					lastWin: {
+						type: lastWin,
+						id: lastWinId,
+					},
 				})
 
-				showWin(winSelector)
+				showWin({ win, winSelector, id })
 
 				mainContent = null
 				winSelector = null
-				lastWin = null
+				lastWinSelector = null
 				btnWin &&= null
 			}
 
