@@ -82,7 +82,7 @@ a {
 	}
 }
 
-a:not(.btn-primary) {
+a:not(.btn-primary, .update) {
 	color: var(--color-link);
 
 	transition:

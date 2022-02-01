@@ -10,9 +10,9 @@
 	overflow: hidden;
 
 	transition:
-		opacity var(--trns),
-		visibility var(--trns),
-		transform var(--trns);
+		opacity .3s ease-in-out,
+		visibility .3s ease-in-out,
+		transform .3s ease-in-out;
 
 	&:before {
 		position: absolute;
@@ -22,10 +22,8 @@
 		width: 200%;
 		height: 100%;
 
-		background: linear-gradient(115deg, hsl(135, 57%, 56%), hsl(48, 95%, 63%), hsl(270, 71%, 65%), hsl(197, 99%, 53%), hsl(144, 58%, 54%));
+		background-image: linear-gradient(115deg, hsl(135, 57%, 56%), hsl(48, 95%, 63%), hsl(270, 71%, 65%), hsl(197, 99%, 53%), hsl(144, 58%, 54%));
 		background-size: 50% 100%;
-
-		animation: bg-gradient .75s linear infinite;
 
 		content: '';
 	}
@@ -40,6 +38,10 @@
 		transform: translateX(0%);
 		visibility: visible;
 		opacity: 1;
+
+		&:before {
+			animation: bg-gradient .75s linear infinite;
+		}
 	}
 
 	&__content {
@@ -59,8 +61,17 @@
 
 		background-color: var(--color-bg);
 
+		transition: background-color var(--trns);
+
 		aside > svg {
 			fill: var(--color-title);
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+
+			&:hover {
+				background-color: var(--color-bg-form);
+			}
 		}
 	}
 }
@@ -69,24 +80,5 @@
 
 	to {
 		transform: translateX(-50%);
-	}
-}
-
-@keyframes icon-gradient {
-
-	0% {
-		fill: hsl(135, 57%, 56%);
-	}
-
-	30% {
-		fill: hsl(197, 99%, 53%);
-	}
-
-	60% {
-		fill: hsl(270, 71%, 65%);
-	}
-
-	100% {
-		fill: hsl(48, 95%, 63%);
 	}
 }
