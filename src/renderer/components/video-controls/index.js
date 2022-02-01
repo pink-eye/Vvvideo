@@ -391,6 +391,16 @@ const playVideoPlayer = async () => {
 		isFirstPlay = false
 	}
 
+	intervalWatchedProgress = setInterval(() => {
+		let video = getSelector('video')
+
+		if (!isPlaying(video)) return
+
+		rememberWatchedTime()
+
+		video = null
+	}, 90000)
+
 	audio = null
 	video = null
 }
@@ -402,6 +412,8 @@ const pauseVideoPlayer = () => {
 	pauseEl(audio)
 
 	showDecoration('pause', true)
+
+	intervalWatchedProgress && clearInterval(intervalWatchedProgress)
 
 	audio = null
 	video = null
@@ -1113,12 +1125,6 @@ export const initVideoPlayer = async data => {
 		volumeBar.value = volumeSeek.value
 
 		doesSkipSegments ||= true
-
-		intervalWatchedProgress = setInterval(() => {
-			if (!isPlaying(video)) return
-
-			rememberWatchedTime()
-		}, 90000)
 	}
 
 	// MEDIA LISTENERS
