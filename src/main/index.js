@@ -1,11 +1,16 @@
 require('v8-compile-cache')
-const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron')
+const { app, BrowserWindow, globalShortcut, ipcMain, Tray, Menu, shell } = require('electron')
 const path = require('path')
 const fs = require('fs')
 
 if (require('electron-squirrel-startup')) app.quit()
 
+const APP_NAME = 'Vvvideo'
+const URL_HOMEPAGE = 'https://github.com/pink-eye/vvvideo'
+
 let mainWindow = null
+let tray = null
+let icon = null
 
 const STORAGE_PATH = path.resolve(__dirname, 'storage.json')
 
@@ -22,13 +27,33 @@ const getIconByPlatform = () => {
 	}
 }
 
+const createTray = () => {
+	if (!tray) {
+		tray = new Tray(icon)
+
+		tray.setToolTip(APP_NAME)
+		tray.on('click', () =>
+			mainWindow.isMinimized() ? mainWindow.show() : mainWindow.minimize()
+		)
+
+		const contextMenu = Menu.buildFromTemplate([
+			{ label: `Open ${APP_NAME}`, click: () => mainWindow.show() },
+			{ label: 'Help', click: () => shell.openExternal(URL_HOMEPAGE) },
+			{ type: 'separator' },
+			{ label: `Quit ${APP_NAME}`, click: () => app.exit() },
+		])
+
+		tray.setContextMenu(contextMenu)
+	}
+}
+
 const handleReadyToShow = () => {
 	mainWindow.show()
 	mainWindow.focus()
 }
 
 const createWindow = () => {
-	const icon = getIconByPlatform()
+	icon = getIconByPlatform()
 
 	mainWindow = new BrowserWindow({
 		icon,
@@ -44,6 +69,8 @@ const createWindow = () => {
 	})
 
 	mainWindow.loadFile(path.join(__dirname, 'index.html'))
+
+	createTray()
 
 	mainWindow.once('ready-to-show', handleReadyToShow)
 
