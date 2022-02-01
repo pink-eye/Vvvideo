@@ -1,5 +1,4 @@
 bundle
 node_modules
 **/*.scss
-**/*.html
 src/renderer/lib
