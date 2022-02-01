@@ -29,7 +29,14 @@
 				</aside>
 			</div>
 			<div class="video-info__actions actions">
-				<button class="actions__playlist btn-primary btn-reset" data-win="playlist" hidden>Back to playlist</button>
+				<button class="actions__playlist btn-primary onclick-effect btn-reset" data-win="playlist" hidden>
+					<aside>
+						<svg width="23px" height="23px">
+							<use xlink:href="img/svg/actions.svg#playlist"></use>
+						</svg>
+					</aside>
+					Back to playlist
+				</button>
 			</div>
 			<div class="video-info__about">
 				@include('../../../components/card/card-author/card-author.html')

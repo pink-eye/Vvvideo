@@ -186,7 +186,10 @@
 
 .actions {
 
-	&__playlist {
+	button {
+		display: flex;
+		align-items: center;
 		width: auto;
+		padding: 10px;
 	}
 }
