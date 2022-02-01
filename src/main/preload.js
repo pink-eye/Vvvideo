@@ -126,7 +126,10 @@ contextBridge.exposeInMainWorld('API', {
 			const track = tracks.find(item => item.languageCode === requiredLanguage)
 
 			const outputFolder = 'temp'
+			const absolutePathOutputFolder = path.resolve(__dirname, outputFolder)
 			const outputFile = `${info.videoDetails.videoId}.${track.languageCode}.${format}`
+
+			if (!fs.existsSync(absolutePathOutputFolder)) fs.mkdirSync(absolutePathOutputFolder)
 
 			return new Promise(resolve =>
 				https.get(`${track.baseUrl}&fmt=${format}`, res => {
