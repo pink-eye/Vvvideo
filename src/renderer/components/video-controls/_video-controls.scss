@@ -362,17 +362,16 @@
 	}
 
 	&__chapter {
-		display: -webkit-box;
 		max-width: 25ch;
 		margin: 0;
 		margin-top: 5px;
 		overflow: hidden;
 
 		line-height: 2;
+		white-space: nowrap;
 
 		text-align: center;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 1;
+		text-overflow: ellipsis;
 
 		&:empty {
 			display: none;
