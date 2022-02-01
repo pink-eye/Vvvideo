@@ -100,9 +100,12 @@ export const resetWinPlaylist = () => {
 	let playlistDuration = playlist.querySelector('.playlist__duration')
 	let titleSkeleton = playlist.querySelector('.title-skeleton')
 	let partSkeletonAll = playlist.querySelectorAll('.part-skeleton')
+	let authorCard = playlist.querySelector('.author')
 
 	resetSkeleton(titleSkeleton)
 	playlistName.textContent = '...'
+
+	resetAuthorCard(authorCard)
 
 	if (partSkeletonAll.length > 0) {
 		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
@@ -121,6 +124,7 @@ export const resetWinPlaylist = () => {
 	playlist = null
 	playlistViews = null
 	playlistVideoCount = null
+	authorCard = null
 	playlistLastUpdated = null
 	playlistDuration = null
 	playlistName = null
@@ -130,16 +134,14 @@ export const resetWinPlaylist = () => {
 
 const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
 	let playlist = getSelector('.playlist')
-	let authorCard = playlist.querySelector('.author')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let titleSkeleton = playlist.querySelector('.title-skeleton')
+	let authorCard = playlist.querySelector('.author')
 
 	if (!isEmpty(title) && title !== '...') {
 		playlistName.textContent = title
 		removeSkeleton(titleSkeleton)
 	}
-
-	resetAuthorCard(authorCard)
 
 	let authorParams = {
 		parent: authorCard,
