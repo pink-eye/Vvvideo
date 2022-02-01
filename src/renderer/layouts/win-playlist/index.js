@@ -102,7 +102,7 @@ export const resetWinPlaylist = () => {
 	let partSkeletonAll = playlist.querySelectorAll('.part-skeleton')
 
 	resetSkeleton(titleSkeleton)
-	playlistName.textContent = ''
+	playlistName.textContent = '...'
 
 	if (partSkeletonAll.length > 0) {
 		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
@@ -159,15 +159,15 @@ const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
 export const prepareWinPlaylist = async (btnWin, id) => {
 	let params = {}
 
-	if (btnWin) {
+	if (btnWin?.classList.contains('card')) {
 		params = {
 			title: btnWin.querySelector('.card__title span').textContent,
 			author: btnWin.querySelector('.card__channel').dataset.name,
 			id: btnWin.querySelector('.card__channel').dataset.id,
 		}
-	}
 
-	fillSomeInfoPlaylist(params)
+		fillSomeInfoPlaylist(params)
+	}
 
 	let data = null
 

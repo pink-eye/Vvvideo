@@ -34,6 +34,8 @@
 	}
 
 	&__name {
+		position: relative;
+
 		font-weight: 700;
 		font-size: unquote('clamp(1.25rem, 1.0500rem + 1.0000vw, 2.25rem)');
 		word-break: break-all;
