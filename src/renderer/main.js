@@ -1,6 +1,7 @@
 import { getSelector, hideOnScroll, isEmpty, reloadApp, closeApp } from 'Global/utils'
 import { AppStorage } from 'Global/app-storage'
 import { manageWin } from 'Global/win-manager'
+import { checkForUpdate } from 'Global/checkForUpdate'
 import { handleKeyDown } from 'Global/shortcuts'
 import { openWinLatest } from 'Layouts/win-latest'
 import { applySettingsOnStart } from 'Layouts/win-settings'
@@ -15,6 +16,7 @@ import { showOverlay, hideOverlay } from 'Components/overlay'
 import { hideLastDropdown, startDropdowns } from 'Components/dropdown'
 import { toggleMenu } from 'Components/burger'
 import { showToast } from 'Components/toast'
+import { initUpdateComponent } from './components/update'
 
 const handleFocus = () => {
 	hideSuggestions()
@@ -34,7 +36,7 @@ const handleClickWindow = ({ target }) => {
 
 document.addEventListener('DOMContentLoaded', startDropdowns)
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
 
@@ -118,4 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	// INIT BTN TO CLOSE APP
 	const btnExit = sidebar.querySelector('.btn-exit')
 	btnExit.addEventListener('click', closeApp)
+
+	checkForUpdate().then(([latestVersion, currentVersion]) => {
+		if (latestVersion === currentVersion) return
+
+		initUpdateComponent()
+	})
 })
