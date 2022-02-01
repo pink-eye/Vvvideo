@@ -144,6 +144,7 @@ export const resetWinVideo = () => {
 	let spoilerContent = videoInfo.querySelector('.spoiler__content')
 	let videoViews = videoInfo.querySelector('.video-info__views')
 	let videoDate = videoInfo.querySelector('.video-info__date')
+	let actionsPlaylist = videoInfo.querySelector('.actions__playlist')
 
 	video.dataset.id = ''
 
@@ -170,6 +171,8 @@ export const resetWinVideo = () => {
 
 	let spoiler = videoInfo.querySelector('.spoiler')
 	destroySpoiler(spoiler)
+
+	actionsPlaylist.hidden ||= true
 
 	video = null
 	videoPoster = null
@@ -232,7 +235,7 @@ const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', aut
 	authorCard = null
 }
 
-export const prepareWinVideo = async (btnWin, id) => {
+export const prepareWinVideo = async (btnWin, id, lastWin) => {
 	let params = {}
 
 	if (btnWin) {
@@ -243,9 +246,10 @@ export const prepareWinVideo = async (btnWin, id) => {
 			author: btnWin.querySelector('.card__channel').dataset.name,
 			authorId: btnWin.querySelector('.card__channel').dataset.id,
 		}
+		
+		fillSomeInfoVideo(params)
 	}
 
-	fillSomeInfoVideo(params)
 
 	if (!API.isYTVideoURL(`https://www.youtube.com/watch?v=${id}`)) return
 
@@ -261,6 +265,15 @@ export const prepareWinVideo = async (btnWin, id) => {
 	let videoParent = getSelector('.video')
 
 	if (videoParent.classList.contains('_active')) {
+		if (lastWin.type === 'playlist') {
+			let actionsPlaylist = videoParent.querySelector('.actions__playlist')
+
+			actionsPlaylist.hidden &&= false
+			actionsPlaylist.dataset.id = lastWin.id
+
+			actionsPlaylist = null
+		}
+
 		openWinVideo(data)
 
 		initVideoPlayer(data)

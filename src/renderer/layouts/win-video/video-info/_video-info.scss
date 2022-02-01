@@ -91,14 +91,6 @@
 		@media (min-width: 71.9375em) {
 			align-items: center;
 		}
-
-		@media (min-width: 48em) {
-			margin-top: 25px;
-		}
-
-		@media (max-width: 47.9375em) and (min-width: 20em) {
-			margin-top: 15px;
-		}
 	}
 
 	&__part {
@@ -178,5 +170,23 @@
 
 			background-color: var(--color-title);
 		}
+	}
+}
+
+.actions,
+.video-info__details {
+	@media (min-width: 48em) {
+		margin-top: 25px;
+	}
+
+	@media (max-width: 47.9375em) and (min-width: 20em) {
+		margin-top: 15px;
+	}
+}
+
+.actions {
+
+	&__playlist {
+		width: auto;
 	}
 }
