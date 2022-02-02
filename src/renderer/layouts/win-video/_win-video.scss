@@ -201,14 +201,16 @@
 	}
 
 	&__title {
+		display: -webkit-box;
 		overflow: hidden;
 
 		color: hsl(0, 0%, 100%);
 		font-size: 1.5rem;
-		white-space: nowrap;
-		text-overflow: ellipsis;
 
 		opacity: 0.8;
+
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
 	}
 
 	&__author {

@@ -235,10 +235,10 @@
 
 	&__channel,
 	&__details {
+		display: -webkit-box;
 		overflow: hidden;
-
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
 
 		@media (min-width:48em) {
 			font-size: 1rem;

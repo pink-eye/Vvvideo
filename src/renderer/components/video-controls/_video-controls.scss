@@ -201,12 +201,12 @@
 	color: hsl(0, 0%, 100%);
 
 	&__chapter {
+		display: -webkit-box;
 		margin: 0;
 		margin-left: 35px;
 		overflow: hidden;
-
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
 
 		&:empty {
 			display: none;
