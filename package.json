@@ -1,7 +1,7 @@
 {
 	"name": "vvvideo",
 	"productName": "Vvvideo",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"description": "The open-source app to watch YT videos. Licensed GPLv3",
 	"main": "bundle/index.js",
 	"scripts": {
