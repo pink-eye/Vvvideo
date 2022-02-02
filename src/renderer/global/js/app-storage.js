@@ -11,7 +11,7 @@ export class AppStorage {
 
 		if (storageFromLS) return storageFromLS
 
-		return this.#getFromFile()
+		return this.getFromFile()
 	}
 
 	#getFromLocalStorage() {
@@ -19,7 +19,7 @@ export class AppStorage {
 		return JSON.parse(dataJSON)
 	}
 
-	async #getFromFile() {
+	async getFromFile() {
 		const storageJSON = await API.readStorage()
 
 		if (!storageJSON) return

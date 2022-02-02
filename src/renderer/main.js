@@ -46,6 +46,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 		return
 	}
 
+	const currentAppVersion = await API.getAppVersion()
+	const savedAppVersion = storage?.appVersion
+
+	if (!savedAppVersion || currentAppVersion !== savedAppVersion) {
+		const storageFromFile = await appStorage.getFromFile()
+
+		if (storageFromFile?.appVersion === currentAppVersion) {
+			appStorage.clearLocalStorage()
+			storage.appVersion = currentAppVersion
+			storage.settings = storageFromFile.settings
+			appStorage.update(storage)
+
+			showToast('info', 'The list of options has been updated so it has been reset. Check it out')
+		}
+	}
+
 	applySettingsOnStart()
 	openWinLatest()
 	initSuggestions()
