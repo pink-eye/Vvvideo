@@ -165,11 +165,10 @@ const toggleTransition = isDisabled => {
 		document.documentElement.style.setProperty('--trns-time-default', '0')
 		document.documentElement.style.setProperty('--trns-time-fast', '0')
 		document.documentElement.style.setProperty('--trns-time-slow', '0')
+		document.documentElement.style.setProperty('--trns-timing-func', 'unset')
 		modalContainer.dataset.graphSpeed = 0
 	} else {
-		document.documentElement.style.setProperty('--trns-time-default', '.3s')
-		document.documentElement.style.setProperty('--trns-time-fast', '.1s')
-		document.documentElement.style.setProperty('--trns-time-slow', '1s')
+		document.documentElement.removeAttribute('style')
 		modalContainer.dataset.graphSpeed = 300
 	}
 

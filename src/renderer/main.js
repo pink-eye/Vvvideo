@@ -121,9 +121,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const btnExit = sidebar.querySelector('.btn-exit')
 	btnExit.addEventListener('click', closeApp)
 
-	checkForUpdate().then(([latestVersion, currentVersion]) => {
-		if (latestVersion === currentVersion) return
+	if (!storage.settings.checkForUpdate) {
+		checkForUpdate().then(([latestVersion, currentVersion]) => {
+			if (latestVersion === currentVersion) return
 
-		initUpdateComponent()
-	})
+			initUpdateComponent()
+		})
+	}
 })
