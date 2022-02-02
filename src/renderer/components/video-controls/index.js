@@ -51,8 +51,8 @@ const resetMediaEl = el => {
 }
 
 const getMedia = () => {
-	const audio = getSelector('.video').querySelector('audio')
-	const video = getSelector('video')
+	let audio = getSelector('.video').querySelector('audio')
+	let video = getSelector('video')
 
 	return { video, audio }
 }
@@ -83,7 +83,7 @@ const insertQualityList = videoFormats => {
 
 	for (let index = 0, { length } = videoFormats; index < length; index += 1) {
 		const { qualityLabel } = videoFormats[index]
-		qualityList.insertAdjacentHTML('afterBegin', createQualityItemHTML(qualityLabel))
+		qualityList.insertAdjacentHTML('beforeEnd', createQualityItemHTML(qualityLabel))
 	}
 
 	controls = null
@@ -217,7 +217,11 @@ const prepareVideoPlayer = async data => {
 			videoFormats = filterVideoAndAudio(formats)
 	}
 
-	const currentQualityVideo = getPreferredQuality(videoFormats) ?? videoFormats.at(-1)
+	if ('width' in videoFormats[0]) {
+		videoFormats.sort((a, b) => b.width - a.width)
+	}
+
+	const currentQualityVideo = getPreferredQuality(videoFormats) ?? videoFormats[0]
 	const currentQualityAudio = getHighestAudio(formats)
 
 	let urlRequests = null
@@ -303,20 +307,20 @@ const showDecoration = (action, doHide) => {
 	let controls = getSelector('.controls')
 	let icon = controls.querySelector(`#${action}`)
 
-	if (icon.hidden) {
-		icon.hidden = false
+	if (!icon.hidden) return
 
-		const activeDecoration = () => {
-			if (!icon.classList.contains('_active')) icon.classList.add('_active')
+	icon.hidden = false
 
-			controls = null
-			icon = null
-		}
+	const startDecoration = () => {
+		if (!icon.classList.contains('_active')) icon.classList.add('_active')
 
-		setTimeout(activeDecoration, 15)
-
-		doHide && hideDecoration(action)
+		controls = null
+		icon = null
 	}
+
+	setTimeout(startDecoration, 15)
+
+	doHide && hideDecoration(action)
 }
 
 const syncMedia = () => {
@@ -391,7 +395,7 @@ const playVideoPlayer = async () => {
 		isFirstPlay = false
 	}
 
-	intervalWatchedProgress = setInterval(() => {
+	intervalWatchedProgress ||= setInterval(() => {
 		let video = getSelector('video')
 
 		if (!isPlaying(video)) return
@@ -636,7 +640,11 @@ const updateSeekTooltipChapters = params => {
 
 	if (!chapters || chapters.length === 0 || (skipTo < 0 && skipTo > Math.floor(duration))) return
 
-	const { title } = getRequiredChapter(skipTo)
+	const requiredChapter = getRequiredChapter(skipTo)
+
+	if (!requiredChapter) return
+
+	const { title } = requiredChapter
 
 	if (lastSeekTooltipChapter === title) return
 
@@ -809,8 +817,8 @@ const skipSegmentSB = () => {
 }
 
 const handlePlaying = () => {
-	playVideoPlayer()
 	hideDecoration('load')
+	playVideoPlayer()
 }
 
 const handleLoadingVideo = () => {
@@ -843,6 +851,7 @@ const handleTimeUpdate = () => {
 	updateTimeElapsed()
 	updateProgress()
 	updateBarChapter()
+	toggleIconPlayPause()
 
 	doesSkipSegments && skipSegmentSB()
 
@@ -1051,24 +1060,72 @@ const visualizeSegmentsSB = segments => {
 
 let timeout = null
 
-const handleMouseMove = () => {
+const handleMouseMoveControls = () => {
 	clearTimeout(timeout)
 	timeout = setTimeout(hideBars, 3000)
 	showBars()
 }
 
+const match = (target, className) =>
+	target.classList.contains(className) || target.closest(`.${className}`)
+
+const handleClickVideoPlayer = event => {
+	let { target } = event
+
+	if (match(target, 'controls__switch') || match(target, 'controls__decorations')) {
+		togglePlay()
+		return
+	}
+
+	if (match(target, 'controls__screen')) {
+		toggleFullscreen()
+		return
+	}
+
+	target = null
+}
+
+const handleMouseMoveVideoPlayer = event => {
+	let { target } = event
+
+	if (match(target, 'progress__seek')) {
+		handleMouseMoveProgressSeek(event)
+		return
+	}
+
+	if (match(target, 'controls')) {
+		handleMouseMoveControls()
+		return
+	}
+
+	target = null
+}
+
+const handleInputVideoPlayer = event => {
+	let { target } = event
+
+	if (match(target, 'volume__seek')) {
+		handleInputVolumeSeek()
+		return
+	}
+
+	if (match(target, 'progress__seek')) {
+		skipAhead(event)
+		return
+	}
+
+	target = null
+}
+
 export const initVideoPlayer = async data => {
 	const controls = getSelector('.controls')
-	const controlDecorations = controls.querySelector('.controls__decorations')
-	const controlsSwitch = controls.querySelector('.controls__switch')
-	const timeDuration = controls.querySelector('.time__duration')
-	const progress = controls.querySelector('.progress')
-	const progressSeek = progress.querySelector('.progress__seek')
-	const volumeSeek = controls.querySelector('.volume__seek')
-	const volumeBar = controls.querySelector('.volume__bar')
-	const controlsScreen = controls.querySelector('.controls__screen')
 	const videoParent = getSelector('.video')
 	const videoWrapper = videoParent.querySelector('.video__wrapper')
+	let timeDuration = controls.querySelector('.time__duration')
+	let volumeBar = controls.querySelector('.volume__bar')
+	let progress = controls.querySelector('.progress')
+	let volumeSeek = controls.querySelector('.volume__seek')
+	let progressSeek = progress.querySelector('.progress__seek')
 	let videoSkeleton = videoParent.querySelector('.video-skeleton')
 	let hasCaptions = false
 
@@ -1125,6 +1182,12 @@ export const initVideoPlayer = async data => {
 		volumeBar.value = volumeSeek.value
 
 		doesSkipSegments ||= true
+
+		progressSeek = null
+		progress = null
+		volumeSeek = null
+		volumeBar = null
+		timeDuration = null
 	}
 
 	// MEDIA LISTENERS
@@ -1148,51 +1211,33 @@ export const initVideoPlayer = async data => {
 
 	video.addEventListener('waiting', handleLoadingVideo)
 
-	video.addEventListener('stalled', handleLoadingVideo)
-
 	if (audio) {
 		audio.addEventListener('playing', handlePlaying)
 
 		audio.addEventListener('waiting', handleLoadingAudio)
-
-		audio.addEventListener('stalled', handleLoadingAudio)
 	}
 
 	video.addEventListener('progress', updateBuffered)
 
 	video.addEventListener('timeupdate', handleTimeUpdate)
 
-	video.addEventListener('timeupdate', toggleIconPlayPause)
-
-	video.addEventListener('abort', handleAbort)
-
 	video.addEventListener('error', handleError)
 
 	if (audio) {
 		audio.addEventListener('error', handleError)
-
-		audio.addEventListener('abort', handleAbort)
 	}
 
 	video.addEventListener('ended', handleEnd)
 
-	volumeSeek.addEventListener('input', handleInputVolumeSeek)
+	videoParent.addEventListener('input', handleInputVideoPlayer)
 
-	progressSeek.addEventListener('input', skipAhead)
+	videoParent.addEventListener('click', handleClickVideoPlayer)
 
-	controlsSwitch.addEventListener('click', togglePlay)
-
-	controlsScreen.addEventListener('click', toggleFullscreen)
-
-	controlDecorations.addEventListener('click', togglePlay)
+	videoParent.addEventListener('mousemove', handleMouseMoveVideoPlayer)
 
 	controls.addEventListener('mouseleave', hideBars)
 
-	progressSeek.addEventListener('mousemove', handleMouseMoveProgressSeek)
-
 	videoWrapper.addEventListener('fullscreenchange', toggleIconFullscreen)
-
-	controls.addEventListener('mousemove', handleMouseMove)
 
 	// HOT KEYS
 
@@ -1267,14 +1312,9 @@ export const resetVideoPlayer = () => {
 	let timeDuration = controls.querySelector('.time__duration')
 	let barChapter = controls.querySelector('.time__chapter')
 	let quality = controls.querySelector('.controls__quality')
-	let progressSeek = progress.querySelector('.progress__seek')
 	let qualityList = quality.querySelector('.dropdown__list')
 	let captions = controls.querySelector('.controls__captions')
 	let captionList = captions.querySelector('.dropdown__list')
-	let volumeSeek = controls.querySelector('.volume__seek')
-	let controlDecorations = controls.querySelector('.controls__decorations')
-	let controlsSwitch = controls.querySelector('.controls__switch')
-	let controlsScreen = controls.querySelector('.controls__screen')
 	let timeElapsed = controls.querySelector('.time__elapsed')
 	let speed = controls.querySelector('.controls__speed')
 	let speedCurrent = speed.querySelector('.dropdown__head')
@@ -1358,23 +1398,9 @@ export const resetVideoPlayer = () => {
 
 	video.removeEventListener('ended', handleEnd)
 
-	volumeSeek.removeEventListener('input', handleInputVolumeSeek)
-
-	progressSeek.removeEventListener('input', skipAhead)
-
-	controlsSwitch.removeEventListener('click', togglePlay)
-
-	controlsScreen.removeEventListener('click', toggleFullscreen)
-
-	controlDecorations.removeEventListener('click', togglePlay)
-
-	controls.removeEventListener('mouseleave', hideBars)
-
-	progressSeek.removeEventListener('mousemove', handleMouseMoveProgressSeek)
+	videoParent.removeEventListener('click', handleClickVideoPlayer)
 
 	document.removeEventListener('keydown', handleKeyDownWithinVideo)
-
-	controls.removeEventListener('mousemove', handleMouseMove)
 
 	resetMediaEl(video)
 
@@ -1408,12 +1434,7 @@ export const resetVideoPlayer = () => {
 	quality = null
 	captionList = null
 	captions = null
-	progressSeek = null
 	qualityList = null
-	volumeSeek = null
-	controlDecorations = null
-	controlsSwitch = null
-	controlsScreen = null
 	timeElapsed = null
 	speed = null
 	speedCurrent = null
