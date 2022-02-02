@@ -179,7 +179,7 @@
 		align-items: center;
 
 		&:not(:first-child) {
-			margin-top: 10px;
+			margin-top: 5px;
 		}
 	}
 
@@ -238,6 +238,8 @@
 		display: -webkit-box;
 		overflow: hidden;
 		-webkit-box-orient: vertical;
+
+		line-height: 1.5;
 		-webkit-line-clamp: 1;
 
 		@media (min-width:48em) {
@@ -252,7 +254,7 @@
 	&__channel {
 		position: relative;
 
-		margin-top: 15px;
+		margin-top: 10px;
 		margin-bottom: 0;
 		padding-block: 6px;
 		padding-inline: 5px 15px;

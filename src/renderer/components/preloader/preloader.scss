@@ -15,6 +15,11 @@
 		opacity .3s ease-in-out,
 		visibility .3s ease-in-out;
 
+	will-change:
+		transform
+		opacity
+		visibility;
+
 	svg {
 		animation: pulsate 1s ease-in-out infinite both;
 
