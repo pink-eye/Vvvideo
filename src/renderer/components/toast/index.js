@@ -7,6 +7,7 @@ const isExistSimilarToast = text => getSelector('.toast__list').textContent.incl
 
 const showToast = (type, text) => {
 	if (!isExistSimilarToast(text)) {
+		let animationStep = 0
 		let toastList = getSelector('.toast__list')
 
 		toastList.insertAdjacentHTML('afterBegin', createToastItemHTML(type, text))
@@ -14,11 +15,7 @@ const showToast = (type, text) => {
 		let toastItemAll = toastList.querySelectorAll('.toast__item')
 		let firstToastItem = toastItemAll[0]
 
-		const afterAddToast = () => {
-			firstToastItem.classList.add('_visible')
-		}
-
-		const onRemoveToast = () => {
+		const removeToast = () => {
 			firstToastItem.remove()
 
 			toastItemAll = null
@@ -26,15 +23,17 @@ const showToast = (type, text) => {
 			firstToastItem = null
 		}
 
-		const beforeRemoveToast = () => {
-			firstToastItem.classList.remove('_visible')
+		const hideToast = () => firstToastItem.classList.remove('_visible')
 
-			setTimeout(onRemoveToast, 2000)
-		}
+		firstToastItem.classList.add('_visible')
 
-		setTimeout(afterAddToast, 5)
+		firstToastItem.addEventListener('animationend', () => {
+			animationStep += 1
 
-		setTimeout(beforeRemoveToast, 5000)
+			if (animationStep === 2) hideToast()
+
+			if (animationStep === 3) removeToast()
+		})
 	}
 }
 
