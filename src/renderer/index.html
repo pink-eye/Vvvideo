@@ -6,16 +6,17 @@
 			const handleLoadWindow = () => {
 				let preloader = document.querySelector('.preloader')
 
-				preloader.classList.add('_hidden')
-
 				const removePreloader = () => {
 					preloader.remove()
 					preloader = null
 				}
-				setTimeout(removePreloader, 300)
+
+				preloader.addEventListener('transitionend', removePreloader, { once: true })
+
+				preloader.classList.add('_hidden')
 			}
 
-			window.addEventListener('load', handleLoadWindow)
+			window.addEventListener('load', handleLoadWindow, { once: true })
 		</script>
 
 		<meta charset="utf-8" />
@@ -29,11 +30,9 @@
 	</head>
 
 	<body>
-
 		@include('./components/indicator/indicator.html')
 		@include('./components/preloader/preloader.html')
-		@include('./components/overlay/overlay.html')
-		@include('./components/header/header.html')
+		@include('./components/overlay/overlay.html') @include('./components/header/header.html')
 		@include('./components/sidebar/sidebar.html')
 
 		<main class="main">
@@ -52,8 +51,7 @@
 			</div>
 		</main>
 
-		@include('./components/footer/footer.html')
-		@include('./components/toast/toast.html')
+		@include('./components/footer/footer.html') @include('./components/toast/toast.html')
 
 		<div class="modal">
 			<div

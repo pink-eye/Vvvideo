@@ -1,4 +1,4 @@
-import { getSelector, scrollToTop, getDurationTimeout, invokeFunctionByTimeout } from 'Global/utils'
+import { getSelector, scrollToTop, getDurationTimeout } from 'Global/utils'
 import { AppStorage } from 'Global/app-storage'
 import { YoutubeHelper } from 'Global/youtube-helper'
 import { resetGrid, resetGridAuthorCard } from 'Components/grid'
@@ -71,22 +71,18 @@ const startFillingWin = ({ win, btnWin, id, lastWin }) => {
 
 		case 'video':
 			prepareWinVideo(btnWin, id, lastWin)
-
 			break
 
 		case 'channel':
 			prepareWinChannel(btnWin, id)
-
 			break
 
 		case 'playlist':
 			prepareWinPlaylist(btnWin, id)
-
 			break
 
 		case 'search-results':
 			openWinSearchResults()
-
 			break
 
 		case 'history':
@@ -116,20 +112,21 @@ const showWin = ({ win, winSelector, id }) => {
 }
 
 const hideWin = win => {
-	if (win) {
-		win.classList.remove('_anim-win')
+	let givenWin = win
 
-		const onHideLastWin = () => {
-			win.classList.remove('_active')
+	if (!givenWin) return
 
-			const afterOpenWin = () => resetWin(win)
+	const timeout = getDurationTimeout()
 
-			setTimeout(afterOpenWin, 200)
-		}
+	const closeWin = () => {
+		givenWin.classList.remove('_active')
 
-		const timeout = getDurationTimeout(200)
-		invokeFunctionByTimeout(onHideLastWin, timeout)
+		givenWin = null
 	}
+
+	givenWin.classList.remove('_anim-win')
+
+	timeout > 0 ? givenWin.addEventListener('transitionend', closeWin, { once: true }) : closeWin()
 }
 
 export const manageWin = async ({ target }) => {
@@ -142,6 +139,7 @@ export const manageWin = async ({ target }) => {
 		let lastWinSelector = mainContent.querySelector(`.win._active`)
 		let lastWin = mainContent.dataset.activeWin
 		let lastWinId = mainContent.dataset.activeWinId
+		const timeout = getDurationTimeout()
 
 		if (win === 'search-results') {
 			let searchBar = getSelector('.search__bar')
@@ -187,14 +185,12 @@ export const manageWin = async ({ target }) => {
 			lastWinSelector = null
 			btnWin &&= null
 		} else {
-			hideWin(lastWinSelector)
-
 			if (btnWin?.classList.contains('sidebar__btn')) {
 				deactivateLastSidebarBtn()
 				activateSidebarBtn(btnWin)
 			} else deactivateLastSidebarBtn()
 
-			const afterHideLastWin = () => {
+			const openWin = () => {
 				scrollToTop()
 
 				startFillingWin({
@@ -209,14 +205,26 @@ export const manageWin = async ({ target }) => {
 
 				showWin({ win, winSelector, id })
 
+				const resetLastWin = () => {
+					resetWin(lastWinSelector)
+
+					lastWinSelector = null
+					winSelector = null
+				}
+
+				timeout > 0
+					? winSelector.addEventListener('transitionend', resetLastWin, { once: true })
+					: resetLastWin()
+
 				mainContent = null
-				winSelector = null
-				lastWinSelector = null
 				btnWin &&= null
 			}
 
-			const timeout = getDurationTimeout(200)
-			invokeFunctionByTimeout(afterHideLastWin, timeout)
+			hideWin(lastWinSelector)
+
+			timeout > 0
+				? lastWinSelector.addEventListener('transitionend', openWin, { once: true })
+				: openWin()
 		}
 	}
 }

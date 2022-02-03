@@ -6,6 +6,7 @@ import {
 	scrollToTop,
 	convertDurationToSeconds,
 	hasFocus,
+	getDurationTimeout,
 } from 'Global/utils'
 import {
 	getMin,
@@ -40,14 +41,19 @@ let chapters = null
 let currentChapter = null
 let lastSeekTooltipChapter = null
 let intervalWatchedProgress = null
+let timeout = null
 
 const appStorage = new AppStorage()
 let storage = null
 
 const resetMediaEl = el => {
+	let givenEl = el
+
 	el.pause()
 	el.removeAttribute('src')
 	el.load()
+
+	givenEl = null
 }
 
 const getMedia = () => {
@@ -282,30 +288,23 @@ const changeVideoSrc = (url, currentTime) => {
 }
 
 const hideDecoration = action => {
-	let controls = getSelector('.controls')
-	let icon = controls.querySelector(`#${action}`)
+	let icon = getSelector(`#${action}`)
 
 	if (!icon.hidden) {
-		const afterRemoveDecoration = () => {
+		const endAnimation = () => {
 			icon.hidden ||= true
 
-			controls = null
 			icon = null
 		}
 
-		const removeDecoration = () => {
-			if (icon.classList.contains('_active')) icon.classList.remove('_active')
+		if (icon.classList.contains('_active')) icon.classList.remove('_active')
 
-			setTimeout(afterRemoveDecoration, 300)
-		}
-
-		setTimeout(removeDecoration, 300)
+		setTimeout(endAnimation, 300)
 	}
 }
 
 const showDecoration = (action, doHide) => {
-	let controls = getSelector('.controls')
-	let icon = controls.querySelector(`#${action}`)
+	let icon = getSelector(`#${action}`)
 
 	if (!icon.hidden) return
 
@@ -314,13 +313,20 @@ const showDecoration = (action, doHide) => {
 	const startDecoration = () => {
 		if (!icon.classList.contains('_active')) icon.classList.add('_active')
 
-		controls = null
-		icon = null
+		if (doHide) {
+			icon.addEventListener(
+				'transitionend',
+				() => {
+					hideDecoration(action)
+
+					icon = null
+				},
+				{ once: true }
+			)
+		}
 	}
 
 	setTimeout(startDecoration, 15)
-
-	doHide && hideDecoration(action)
 }
 
 const syncMedia = () => {
@@ -340,35 +346,43 @@ const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && e
 const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime > 0
 
 const pauseEl = el => {
-	if (isPlayingLight(el)) {
-		el.pause()
+	let givenEl = el
+
+	if (isPlayingLight(givenEl)) {
+		givenEl.pause()
 		hideDecoration('load')
 	}
+
+	givenEl = null
 }
 
 const playEl = async el => {
-	if (el) {
-		let playPromise = el.play()
+	let givenEl = el
 
-		if (playPromise !== undefined && !isPlaying(el)) {
-			try {
-				await playPromise
-				let audio = getSelector('.video').querySelector('audio')
+	if (!givenEl) return
 
-				if (audio) {
-					let video = getSelector('video')
+	let playPromise = givenEl.play()
 
-					if (isPlaying(video) && isPlaying(audio)) syncMedia()
+	if (playPromise !== undefined && !isPlaying(givenEl)) {
+		try {
+			await playPromise
+			let audio = getSelector('.video').querySelector('audio')
 
-					video = null
-				}
+			if (audio) {
+				let video = getSelector('video')
 
-				audio = null
-			} catch ({ message }) {
-				showToast('error', message)
+				if (isPlaying(video) && isPlaying(audio)) syncMedia()
+
+				video = null
 			}
+
+			audio = null
+		} catch ({ message }) {
+			showToast('error', message)
 		}
 	}
+
+	givenEl = null
 }
 
 const startVideoFromLastPoint = () => {
@@ -485,15 +499,13 @@ const toggleIconFullscreen = () =>
 	document.fullscreenElement ? showIconCloseFullscreen() : showIconOpenFullscreen()
 
 const updateTimeElapsed = () => {
-	let controls = getSelector('.controls')
-	let timeElapsed = controls.querySelector('.time__elapsed')
+	let timeElapsed = getSelector('.time__elapsed')
 	const { currentTime } = getSelector('video')
 	const time = convertSecondsToDuration(~~currentTime)
 
 	timeElapsed.textContent = time
 	timeElapsed.setAttribute('datetime', time)
 
-	controls = null
 	timeElapsed = null
 }
 
@@ -607,7 +619,7 @@ const updateStoryboard = params => {
 }
 
 const updateProgress = () => {
-	let progress = getSelector('.controls').querySelector('.progress')
+	let progress = getSelector('.progress')
 	let progressSeek = progress.querySelector('.progress__seek')
 	let video = getSelector('video')
 
@@ -699,7 +711,7 @@ const updateSeekTooltipPosition = params => {
 }
 
 const updateBuffered = () => {
-	let progress = getSelector('.controls').querySelector('.progress')
+	let progress = getSelector('.progress')
 	let { video, audio } = getMedia()
 
 	if (isEmpty(hls)) {
@@ -725,7 +737,7 @@ const updateBuffered = () => {
 }
 
 const skipAhead = event => {
-	let progress = getSelector('.controls').querySelector('.progress')
+	let progress = getSelector('.progress')
 	let progressSeek = progress.querySelector('.progress__seek')
 	let video = getSelector('video')
 	const skipTo = event.target.dataset.seek ? event.target.dataset.seek : event.target.value
@@ -1058,11 +1070,11 @@ const visualizeSegmentsSB = segments => {
 	sponsorblockItemAll = null
 }
 
-let timeout = null
+let timeoutMouseMove = null
 
 const handleMouseMoveControls = () => {
-	clearTimeout(timeout)
-	timeout = setTimeout(hideBars, 3000)
+	clearTimeout(timeoutMouseMove)
+	timeoutMouseMove = setTimeout(hideBars, 3000)
 	showBars()
 }
 
@@ -1123,13 +1135,14 @@ export const initVideoPlayer = async data => {
 	const videoWrapper = videoParent.querySelector('.video__wrapper')
 	let timeDuration = controls.querySelector('.time__duration')
 	let volumeBar = controls.querySelector('.volume__bar')
-	let progress = controls.querySelector('.progress')
+	let progress = getSelector('.progress')
 	let volumeSeek = controls.querySelector('.volume__seek')
 	let progressSeek = progress.querySelector('.progress__seek')
 	let videoSkeleton = videoParent.querySelector('.video-skeleton')
 	let hasCaptions = false
 
 	storage = appStorage.get()
+	timeout = storage.settings.disableTransition ? 1 : 0
 
 	const currentQuality = await prepareVideoPlayer(data)
 
@@ -1305,7 +1318,7 @@ export const resetVideoPlayer = () => {
 	let controls = getSelector('.controls')
 	let sponsorblock = controls.querySelector('.sponsorblock')
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock')
-	let progress = controls.querySelector('.progress')
+	let progress = getSelector('.progress')
 	let seekTooltip = controls.querySelector('.seek-tooltip')
 	let storyboard = seekTooltip.querySelector('.seek-tooltip__storyboard')
 	let seekTooltipChapter = seekTooltip.querySelector('.seek-tooltip__chapter')

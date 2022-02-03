@@ -1,5 +1,5 @@
 import { AppStorage } from 'Global/app-storage'
-import { getDurationTimeout, isEmpty, invokeFunctionByTimeout } from 'Global/utils'
+import { getDurationTimeout, isEmpty } from 'Global/utils'
 import { showToast } from 'Components/toast'
 
 const appStorage = new AppStorage()
@@ -42,16 +42,14 @@ const removeSubscription = obj => {
 const transformBtn = (btn, btnText, isSubscribed) => {
 	let givenBtn = btn
 	let givenBtnText = btnText
+	const timeout = getDurationTimeout()
 
 	givenBtn.disabled = true
 
 	!isSubscribed ? givenBtn.classList.add('_subscribed') : givenBtn.classList.remove('_subscribed')
 
-	givenBtnText.style.opacity = '0'
-
-	const onChangeState = () => {
+	const changeState = () => {
 		givenBtnText.textContent = !isSubscribed ? 'Unsubscribe' : 'Subscribe'
-		givenBtnText.removeAttribute('style')
 
 		givenBtn.disabled = false
 
@@ -59,8 +57,9 @@ const transformBtn = (btn, btnText, isSubscribed) => {
 		givenBtnText = null
 	}
 
-	const timeout = getDurationTimeout(200)
-	invokeFunctionByTimeout(onChangeState, timeout)
+	timeout > 0
+		? givenBtn.addEventListener('transitionend', changeState(), { once: true })
+		: changeState()
 }
 
 const handleClickSubscribeBtn = ({ currentTarget }) => {
