@@ -34,8 +34,6 @@ const handleClickWindow = ({ target }) => {
 	}
 }
 
-document.addEventListener('DOMContentLoaded', startDropdowns)
-
 document.addEventListener('DOMContentLoaded', async () => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
@@ -136,6 +134,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 	// INIT BTN TO CLOSE APP
 	const btnExit = sidebar.querySelector('.btn-exit')
 	btnExit.addEventListener('click', closeApp)
+
+	startDropdowns()
 
 	if (!storage.settings.checkForUpdate) {
 		checkForUpdate().then(([latestVersion, currentVersion]) => {
