@@ -43,24 +43,22 @@ export const hideOnScroll = (selector, mq) => {
 	let lastScrollValue = 0
 
 	const handleScroll = () => {
-		if (window.innerWidth <= mq || mq === 0) {
-			let scrollDistance = window.scrollY
+		let scrollDistance = window.scrollY
 
-			if (sidebar.classList.contains('_active')) return
+		if (sidebar.classList.contains('_active')) return
 
-			if (selector === header && hasFocus(searchBar)) return
+		if (selector === header && hasFocus(searchBar)) return
 
-			if (scrollDistance === 0) selector.classList.remove('_hidden')
+		if (scrollDistance === 0) selector.classList.remove('_hidden')
 
-			scrollDistance > lastScrollValue
-				? selector.classList.add('_hidden')
-				: selector.classList.remove('_hidden')
+		scrollDistance > lastScrollValue
+			? selector.classList.add('_hidden')
+			: selector.classList.remove('_hidden')
 
-			lastScrollValue = scrollDistance
-		}
+		lastScrollValue = scrollDistance
 	}
 
-	window.addEventListener('scroll', handleScroll)
+	if (window.innerWidth <= mq || mq === 0) window.addEventListener('scroll', handleScroll)
 }
 
 export const normalizeCount = count => {
