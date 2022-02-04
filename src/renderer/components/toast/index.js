@@ -12,27 +12,29 @@ const showToast = (type, text) => {
 
 		toastList.insertAdjacentHTML('afterBegin', createToastItemHTML(type, text))
 
-		let toastItemAll = toastList.querySelectorAll('.toast__item')
-		let firstToastItem = toastItemAll[0]
+		queueMicrotask(() => {
+			let toastItemAll = toastList.querySelectorAll('.toast__item')
+			let firstToastItem = toastItemAll[0]
 
-		const removeToast = () => {
-			firstToastItem.remove()
+			const removeToast = () => {
+				firstToastItem.remove()
 
-			toastItemAll = null
-			toastList = null
-			firstToastItem = null
-		}
+				toastItemAll = null
+				toastList = null
+				firstToastItem = null
+			}
 
-		const hideToast = () => firstToastItem.classList.remove('_visible')
+			const hideToast = () => firstToastItem.classList.remove('_visible')
 
-		firstToastItem.classList.add('_visible')
+			firstToastItem.classList.add('_visible')
 
-		firstToastItem.addEventListener('animationend', () => {
-			animationStep += 1
+			firstToastItem.addEventListener('animationend', () => {
+				animationStep += 1
 
-			if (animationStep === 2) hideToast()
+				if (animationStep === 2) hideToast()
 
-			if (animationStep === 3) removeToast()
+				if (animationStep === 3) removeToast()
+			})
 		})
 	}
 }

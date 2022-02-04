@@ -291,15 +291,19 @@ const hideDecoration = action => {
 	let icon = getSelector(`#${action}`)
 
 	if (!icon.hidden) {
+		const startAnimation = () => {
+			if (icon.classList.contains('_active')) icon.classList.remove('_active')
+
+			setTimeout(endAnimation, 300)
+		}
+
 		const endAnimation = () => {
 			icon.hidden ||= true
 
 			icon = null
 		}
 
-		if (icon.classList.contains('_active')) icon.classList.remove('_active')
-
-		setTimeout(endAnimation, 300)
+		setTimeout(startAnimation, 300)
 	}
 }
 
@@ -310,23 +314,15 @@ const showDecoration = (action, doHide) => {
 
 	icon.hidden = false
 
-	const startDecoration = () => {
+	const startAnimation = () => {
 		if (!icon.classList.contains('_active')) icon.classList.add('_active')
 
-		if (doHide) {
-			icon.addEventListener(
-				'transitionend',
-				() => {
-					hideDecoration(action)
-
-					icon = null
-				},
-				{ once: true }
-			)
-		}
+		icon = null
 	}
 
-	setTimeout(startDecoration, 15)
+	setTimeout(startAnimation, 15)
+
+	doHide && hideDecoration(action)
 }
 
 const syncMedia = () => {
@@ -476,13 +472,15 @@ const togglePlay = () => {
 }
 
 const changeIcon = (className, iconPath) => {
-	let controls = getSelector('.controls')
-	let controlsSwitchIcon = controls.querySelector(`.controls__${className} svg use`)
+	queueMicrotask(() => {
+		let controls = getSelector('.controls')
+		let controlsSwitchIcon = controls.querySelector(`.controls__${className} svg use`)
 
-	controlsSwitchIcon.setAttribute('xlink:href', iconPath)
+		controlsSwitchIcon.setAttribute('xlink:href', iconPath)
 
-	controls = null
-	controlsSwitchIcon = null
+		controls = null
+		controlsSwitchIcon = null
+	})
 }
 
 const showIconPlay = () => changeIcon('switch', 'img/svg/controls.svg#play')
@@ -1331,6 +1329,19 @@ export const resetVideoPlayer = () => {
 	let timeElapsed = controls.querySelector('.time__elapsed')
 	let speed = controls.querySelector('.controls__speed')
 	let speedCurrent = speed.querySelector('.dropdown__head')
+
+	const decorationArray = ['play', 'pause', 'load']
+
+	for (let index = 0, { length } = decorationArray; index < length; index++) {
+		const decoration = decorationArray[index]
+
+		let decorationSelector = getSelector(`#${decoration}`)
+		decorationSelector.hidden ||= true
+		if (decorationSelector.classList.contains('_active'))
+			decorationSelector.classList.remove('_active')
+
+		decorationSelector = null
+	}
 
 	isFirstPlay ||= true
 	isSync &&= false
