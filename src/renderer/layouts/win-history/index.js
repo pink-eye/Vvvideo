@@ -19,11 +19,15 @@ export const openWinHistory = () => {
 		: disablePages(historyWin)
 
 	for (let index = 0, { length } = videoAll; index < length; index += 1) {
-		const video = videoAll[index]
+		let video = videoAll[index]
 
 		video.classList.add('_history-video')
 
+		if ('playlistId' in history[index]) video.dataset.playlistId = history[index].playlistId
+
 		history[index] ? fillVideoCard(video, index, history) : (video.hidden = true)
+
+		video = null
 	}
 
 	videoAll = null

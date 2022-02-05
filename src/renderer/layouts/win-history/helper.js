@@ -30,7 +30,7 @@ const restrainHistoryLength = () => {
 const scrapeVideoInfoFromData = data => {
 	const { videoDetails } = data
 
-	return {
+	const videoObj = {
 		id: videoDetails.videoId,
 		title: videoDetails.title,
 		author: videoDetails.author.name,
@@ -40,6 +40,10 @@ const scrapeVideoInfoFromData = data => {
 		},
 		lengthSeconds: convertSecondsToDuration(videoDetails.lengthSeconds),
 	}
+
+	if ('playlistId' in videoDetails) videoObj.playlistId = videoDetails.playlistId
+
+	return videoObj
 }
 
 export const saveVideoInHistory = data => {

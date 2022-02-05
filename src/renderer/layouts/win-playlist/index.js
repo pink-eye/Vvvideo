@@ -25,7 +25,7 @@ const openWinPlaylist = data => {
 	let partSkeletonAll = playlist.querySelectorAll('.part-skeleton')
 	let authorCard = playlist.querySelector('.author')
 
-	const { title, estimatedItemCount, views, lastUpdated, items, author, continuation } = data
+	const { title, estimatedItemCount, views, lastUpdated, items, author, continuation, id } = data
 
 	if (playlistName.textContent !== title) playlistName.textContent = title
 
@@ -47,8 +47,11 @@ const openWinPlaylist = data => {
 
 	if (partSkeletonAll.length > 0) {
 		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
-			const partSkeleton = partSkeletonAll[index]
+			let partSkeleton = partSkeletonAll[index]
+
 			removeSkeleton(partSkeleton)
+
+			partSkeleton = null
 		}
 	}
 
@@ -73,6 +76,7 @@ const openWinPlaylist = data => {
 		let video = videoAll[index]
 
 		video.classList.add('_playlist-video')
+		video.dataset.playlistId = id
 
 		items[index] ? fillVideoCard(video, index, items) : (video.hidden = true)
 
@@ -109,8 +113,11 @@ export const resetWinPlaylist = () => {
 
 	if (partSkeletonAll.length > 0) {
 		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
-			const partSkeleton = partSkeletonAll[index]
+			let partSkeleton = partSkeletonAll[index]
+
 			resetSkeleton(partSkeleton)
+
+			partSkeleton = null
 		}
 	}
 

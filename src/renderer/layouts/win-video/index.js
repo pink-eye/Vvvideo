@@ -26,7 +26,7 @@ const handleClickContent = event => {
 	handleClickTimecode(event)
 }
 
-const openWinVideo = data => {
+const openWinVideo = (data, lastWin) => {
 	let video = getSelector('.video')
 	let videoPoster = video.querySelector('.video__poster img')
 	let topBarTitle = video.querySelector('.top-bar__title')
@@ -93,8 +93,11 @@ const openWinVideo = data => {
 
 	if (partSkeletonAll.length > 0) {
 		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
-			const partSkeleton = partSkeletonAll[index]
+			let partSkeleton = partSkeletonAll[index]
+
 			removeSkeleton(partSkeleton)
+
+			partSkeleton = null
 		}
 	}
 
@@ -164,8 +167,11 @@ export const resetWinVideo = () => {
 
 	if (skeletonAll.length > 0) {
 		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
-			const skeleton = skeletonAll[index]
+			let skeleton = skeletonAll[index]
+
 			resetSkeleton(skeleton)
+
+			skeleton = null
 		}
 	}
 
@@ -187,7 +193,9 @@ export const resetWinVideo = () => {
 	subscribeBtn = null
 }
 
-const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', authorId = '' }) => {
+const fillSomeInfoVideo = params => {
+	const { title = '', views = '', date = '', author = '', authorId = '' } = params
+
 	let video = getSelector('.video')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
@@ -210,6 +218,8 @@ const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', aut
 		videoDate.textContent = date
 		removeSkeleton(partSkeletonAll[1])
 	}
+
+	if ('playlistId' in params) displayPlaylistBtn(params.playlistId)
 
 	resetAuthorCard(authorCard)
 
@@ -235,7 +245,18 @@ const fillSomeInfoVideo = ({ title = '', views = '', date = '', author = '', aut
 	authorCard = null
 }
 
-export const prepareWinVideo = async (btnWin, id, lastWin) => {
+const displayPlaylistBtn = playlistId => {
+	let videoParent = getSelector('.video')
+	let actionsPlaylist = videoParent.querySelector('.actions__playlist')
+
+	actionsPlaylist.hidden &&= false
+	actionsPlaylist.dataset.id = playlistId
+
+	actionsPlaylist = null
+	videoParent = null
+}
+
+export const prepareWinVideo = async (btnWin, id) => {
 	let params = {}
 
 	if (btnWin) {
@@ -246,10 +267,11 @@ export const prepareWinVideo = async (btnWin, id, lastWin) => {
 			author: btnWin.querySelector('.card__channel').dataset.name,
 			authorId: btnWin.querySelector('.card__channel').dataset.id,
 		}
-		
+
+		if (btnWin?.dataset?.playlistId) params.playlistId = btnWin.dataset.playlistId
+
 		fillSomeInfoVideo(params)
 	}
-
 
 	if (!API.isYTVideoURL(`https://www.youtube.com/watch?v=${id}`)) return
 
@@ -265,14 +287,7 @@ export const prepareWinVideo = async (btnWin, id, lastWin) => {
 	let videoParent = getSelector('.video')
 
 	if (videoParent.classList.contains('_active')) {
-		if (lastWin.type === 'playlist') {
-			let actionsPlaylist = videoParent.querySelector('.actions__playlist')
-
-			actionsPlaylist.hidden &&= false
-			actionsPlaylist.dataset.id = lastWin.id
-
-			actionsPlaylist = null
-		}
+		if ('playlistId' in params) data.videoDetails.playlistId = params.playlistId
 
 		openWinVideo(data)
 

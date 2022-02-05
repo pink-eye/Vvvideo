@@ -72,7 +72,7 @@ const startFillingWin = ({ win, btnWin, id, lastWin }) => {
 			break
 
 		case 'video':
-			prepareWinVideo(btnWin, id, lastWin)
+			prepareWinVideo(btnWin, id)
 			break
 
 		case 'channel':
