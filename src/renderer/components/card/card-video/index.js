@@ -103,6 +103,8 @@ export const resetVideoCard = card => {
 
 	if (videoImg.hasAttribute('style')) videoImg.removeAttribute('style')
 
+	if (videoImg.hasAttribute('data-playlist-id')) videoImg.removeAttribute('data-playlist-id')
+
 	videoViews.textContent = ''
 	videoDate.textContent = ''
 	videoChannel.textContent = ''

@@ -115,8 +115,11 @@ export const resetWinChannel = () => {
 
 	if (skeletonAll.length > 0) {
 		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
-			const skeleton = skeletonAll[index]
+			let skeleton = skeletonAll[index]
+
 			resetSkeleton(skeleton)
+
+			skeleton = null
 		}
 	}
 

@@ -21,8 +21,11 @@ export const openWinTrending = async (geoLocation = 'US', page = 'default') => {
 			: disablePages(trending)
 
 		for (let index = 0, { length } = videoAll; index < length; index += 1) {
-			const video = videoAll[index]
+			let video = videoAll[index]
+
 			fillVideoCard(video, index, data)
+
+			video = null
 		}
 	} catch ({ message }) {
 		showToast('error', message)

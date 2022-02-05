@@ -537,12 +537,14 @@ const highlightCurrentChapter = time => {
 	lastHighlightedTimecode?.classList.remove('btn-accent')
 
 	for (let index = 0, { length } = timecodeAll; index < length; index++) {
-		const timecode = timecodeAll[index]
+		let timecode = timecodeAll[index]
 
 		if (timecode.textContent.includes(convertSecondsToDuration(time))) {
 			timecode.classList.add('btn-accent')
 			break
 		}
+
+		timecode = null
 	}
 
 	videoParent = null
@@ -1052,7 +1054,7 @@ const visualizeSegmentsSB = segments => {
 	let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item')
 
 	for (let index = 0, { length } = sponsorblockItemAll; index < length; index += 1) {
-		const sponsorblockItem = sponsorblockItemAll[index]
+		let sponsorblockItem = sponsorblockItemAll[index]
 		const { startTime, endTime, videoDuration } = segments[index]
 		const segmentLength = endTime - startTime
 		const vDuration = videoDuration !== 0 ? videoDuration : ~~video.duration
@@ -1061,6 +1063,8 @@ const visualizeSegmentsSB = segments => {
 
 		sponsorblockItem.style.setProperty('--width', `${sponsorblockItemWidth}%`)
 		sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`)
+
+		sponsorblockItem = null
 	}
 
 	video = null

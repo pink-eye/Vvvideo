@@ -59,7 +59,7 @@ export const openWinSubs = async () => {
 		: disablePages(subscriptions)
 
 	for (let index = 0, { length } = authorCardAll; index < length; index += 1) {
-		const authorCard = authorCardAll[index]
+		let authorCard = authorCardAll[index]
 		const sub = storage.subscriptions[index]
 
 		if (sub) {
@@ -76,6 +76,8 @@ export const openWinSubs = async () => {
 
 			authorParams = null
 		} else authorCard.hidden = true
+
+		authorCard = null
 	}
 
 	const updatedSubscriptions = await updateSubscriptionData(storage)

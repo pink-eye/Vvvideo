@@ -63,13 +63,15 @@ const showRequiredTab = async tab => {
 			: disablePages(reqTabContent)
 
 		for (let index = 0, { length } = cardAll; index < length; index += 1) {
-			const card = cardAll[index]
+			let card = cardAll[index]
 
 			items[index]
 				? typeCard === 'video'
 					? fillVideoCard(card, index, items)
 					: fillPlaylistCard(card, index, items)
 				: (card.hidden = true)
+
+			card = null
 		}
 
 		cardAll = null
@@ -114,9 +116,11 @@ export const destroyTabs = () => {
 	if (tabAll.length === 0) return
 
 	for (let index = 0, { length } = tabAll; index < length; index += 1) {
-		const tab = tabAll[index]
+		let tab = tabAll[index]
 
 		tab.removeEventListener('click', handleClickTab)
+
+		tab = null
 	}
 
 	tabAll = null

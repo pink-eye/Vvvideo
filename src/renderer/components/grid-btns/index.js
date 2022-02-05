@@ -31,7 +31,7 @@ const updateCount = parent => {
 
 const recycleDOM = async (cardAll, typeCard) => {
 	for (let index = 0, { length } = cardAll; index < length; index += 1) {
-		const card = cardAll[index]
+		let card = cardAll[index]
 		const nextIndex = index + increment
 		const nextItem = itemArray[nextIndex]
 
@@ -75,6 +75,8 @@ const recycleDOM = async (cardAll, typeCard) => {
 					break
 			}
 		} else card.hidden = true
+
+		card = null
 	}
 }
 

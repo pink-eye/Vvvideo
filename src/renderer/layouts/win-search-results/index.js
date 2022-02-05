@@ -111,6 +111,8 @@ export const openWinSearchResults = async () => {
 					fillChannelCard(card, index, items)
 					break
 			}
+
+			card = null
 		}
 
 		cardAll = null

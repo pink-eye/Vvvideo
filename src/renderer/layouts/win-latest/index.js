@@ -73,6 +73,8 @@ const openWinLatest = async () => {
 		let video = videoAll[index]
 
 		latestArray?.[index] ? fillVideoCard(video, index, latestArray) : (video.hidden = true)
+
+		video = null
 	}
 
 	videoAll = null

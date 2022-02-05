@@ -269,9 +269,11 @@ export const resetWinSettings = () => {
 	let checkboxAll = settings.querySelectorAll('input[type="checkbox"]')
 
 	for (let index = 0, { length } = checkboxAll; index < length; index += 1) {
-		const checkbox = checkboxAll[index]
+		let checkbox = checkboxAll[index]
 
 		checkbox.removeEventListener('change', handleChangeCheckbox)
+
+		checkbox = null
 	}
 
 	// RESET INPUTS
@@ -279,9 +281,11 @@ export const resetWinSettings = () => {
 	let inputAll = settings.querySelectorAll('input[type="text"]')
 
 	for (let index = 0, { length } = inputAll; index < length; index += 1) {
-		const input = inputAll[index]
+		let input = inputAll[index]
 
 		input.removeEventListener('input', handleInputField)
+
+		input = null
 	}
 
 	settings = null
