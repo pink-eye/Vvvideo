@@ -277,6 +277,21 @@
 
 		background: linear-gradient(90deg, var(--color-accent-s) var(--progress), var(--color-buffered) var(--progress), var(--color-buffered) var(--buffered), transparent var(--buffered));
 	}
+
+	&__chapter {
+		--left: 0%;
+		position: absolute;
+		top: 50%;
+		left: var(--left);
+
+		width: 3px;
+
+		height: 100%;
+
+		background-color: var(--color-bg);
+
+		transform: translateX(3px) translateY(-50%);
+	}
 }
 
 .bar {
@@ -352,6 +367,8 @@
 	opacity: 0;
 
 	transition: opacity var(--trns);
+
+	pointer-events: none;
 
 	&__chapter,
 	&__time {

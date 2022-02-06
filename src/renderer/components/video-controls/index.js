@@ -49,9 +49,9 @@ let storage = null
 const resetMediaEl = el => {
 	let givenEl = el
 
-	el.pause()
-	el.removeAttribute('src')
-	el.load()
+	givenEl.pause()
+	givenEl.removeAttribute('src')
+	givenEl.load()
 
 	givenEl = null
 }
@@ -405,16 +405,6 @@ const playVideoPlayer = async () => {
 		isFirstPlay = false
 	}
 
-	intervalWatchedProgress ||= setInterval(() => {
-		let video = getSelector('video')
-
-		if (!isPlaying(video)) return
-
-		rememberWatchedTime()
-
-		video = null
-	}, 90000)
-
 	audio = null
 	video = null
 }
@@ -426,8 +416,6 @@ const pauseVideoPlayer = () => {
 	pauseEl(audio)
 
 	showDecoration('pause', true)
-
-	intervalWatchedProgress && clearInterval(intervalWatchedProgress)
 
 	audio = null
 	video = null
@@ -634,6 +622,26 @@ const updateProgress = () => {
 	video = null
 }
 
+const createProgressBarChapter = left =>
+	`<div class="progress__chapter" style="--left: ${left}px"></div>`
+
+const insertProgressBarChapters = () => {
+	if (!chapters || chapters.length === 0) return
+
+	let progress = getSelector('.progress')
+	let progressBar = progress.querySelector('.progress__bar')
+	const { duration, offsetWidth } = getSelector('video')
+
+	for (let index = 0, { length } = chapters; index < length; index++) {
+		const { start_time } = chapters[index]
+		const pxChapter = ((offsetWidth - 40) * start_time) / ~~duration
+		progressBar.insertAdjacentHTML('beforeEnd', createProgressBarChapter(pxChapter))
+	}
+
+	progress = null
+	progressBar = null
+}
+
 const getRequiredChapter = time => {
 	let requiredChapter = null
 
@@ -812,9 +820,10 @@ const skipSegmentSB = () => {
 		for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
 			const { startTime, endTime } = segmentsSB[index]
 
-			if (currentTime >= startTime && currentTime <= endTime) {
+			if (currentTime > startTime && currentTime < endTime) {
 				setTimeout(() => {
 					video.currentTime = endTime
+
 					isSync = false
 
 					if (notifySkipSegment) showToast('info', 'Segment is skipped!')
@@ -1135,11 +1144,6 @@ export const initVideoPlayer = async data => {
 	const controls = getSelector('.controls')
 	const videoParent = getSelector('.video')
 	const videoWrapper = videoParent.querySelector('.video__wrapper')
-	let timeDuration = controls.querySelector('.time__duration')
-	let volumeBar = controls.querySelector('.volume__bar')
-	let progress = getSelector('.progress')
-	let volumeSeek = controls.querySelector('.volume__seek')
-	let progressSeek = progress.querySelector('.progress__seek')
 	let videoSkeleton = videoParent.querySelector('.video-skeleton')
 	let hasCaptions = false
 
@@ -1187,6 +1191,11 @@ export const initVideoPlayer = async data => {
 	loadSegmentsSB(data, handleSegmentsSB)
 
 	const initVideo = () => {
+		let progress = getSelector('.progress')
+		let progressSeek = progress.querySelector('.progress__seek')
+		let timeDuration = controls.querySelector('.time__duration')
+		let volumeBar = controls.querySelector('.volume__bar')
+		let volumeSeek = controls.querySelector('.volume__seek')
 		const videoDuration = ~~video.duration
 		const time = convertSecondsToDuration(videoDuration)
 
@@ -1197,6 +1206,18 @@ export const initVideoPlayer = async data => {
 		volumeBar.value = volumeSeek.value
 
 		doesSkipSegments ||= true
+
+		insertProgressBarChapters()
+
+		intervalWatchedProgress = setInterval(() => {
+			let video = getSelector('video')
+
+			if (!isPlaying(video)) return
+
+			rememberWatchedTime()
+
+			video = null
+		}, 90000)
 
 		progressSeek = null
 		progress = null
@@ -1321,6 +1342,7 @@ export const resetVideoPlayer = () => {
 	let sponsorblock = controls.querySelector('.sponsorblock')
 	let sponsorblockBtn = controls.querySelector('.controls__sponsorblock')
 	let progress = getSelector('.progress')
+	let progressBar = progress.querySelector('.progress__bar')
 	let seekTooltip = controls.querySelector('.seek-tooltip')
 	let storyboard = seekTooltip.querySelector('.seek-tooltip__storyboard')
 	let seekTooltipChapter = seekTooltip.querySelector('.seek-tooltip__chapter')
@@ -1361,6 +1383,8 @@ export const resetVideoPlayer = () => {
 	captions.hidden ||= true
 
 	while (sponsorblock.firstChild) sponsorblock.firstChild.remove()
+
+	while (progressBar.firstChild) progressBar.firstChild.remove()
 
 	if (sponsorblockBtn.classList.contains('_record')) sponsorblockBtn.classList.remove('_record')
 
@@ -1457,6 +1481,7 @@ export const resetVideoPlayer = () => {
 	progress = null
 	seekTooltip = null
 	storyboard = null
+	progressBar = null
 	barChapter = null
 	timeDuration = null
 	quality = null
