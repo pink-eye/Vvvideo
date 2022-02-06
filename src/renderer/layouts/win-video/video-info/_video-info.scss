@@ -27,19 +27,6 @@
 		}
 	}
 
-	&__item {
-		display: grid;
-		place-items: center;
-
-		@media (min-width: 48em) {
-			padding-inline: 40px;
-
-			padding-top: 40px;
-
-			transition: padding var(--trns);
-		}
-	}
-
 	&__wrapper {
 		display: grid;
 		place-items: center;

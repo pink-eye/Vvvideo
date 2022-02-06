@@ -92,7 +92,6 @@
 
 	&__content {
 		--margin: 0;
-		transition: margin var(--trns);
 
 		.outter-container {
 			@media (max-width: 28.0625em) {
@@ -102,6 +101,10 @@
 
 		@media (min-width: 48em) {
 			margin-left: var(--margin);
+
+			transition: margin var(--trns);
+
+			will-change: margin;
 		}
 	}
 }

@@ -7,8 +7,7 @@
 	transition:
 		transform var(--trns),
 		background-color var(--trns),
-		box-shadow var(--trns),
-		visibility var(--trns);
+		box-shadow var(--trns);
 
 	&__nav {
 		height: 100%;
@@ -181,7 +180,6 @@
 
 		&._closed {
 			transform: translateX(-100%);
-			visibility: hidden;
 		}
 	}
 
