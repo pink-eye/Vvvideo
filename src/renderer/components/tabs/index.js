@@ -93,7 +93,7 @@ const handleClickTab = async ({ currentTarget }) => {
 }
 
 export const initTabs = primary => {
-	const tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
+	let tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
 
 	if (tabAll.length === 0) return
 
@@ -102,12 +102,15 @@ export const initTabs = primary => {
 	showRequiredTab(primaryTab)
 
 	for (let index = 0, { length } = tabAll; index < length; index += 1) {
-		const tab = tabAll[index]
+		let tab = tabAll[index]
 
 		tab.addEventListener('click', handleClickTab)
+
+		tab = null
 	}
 
 	primaryTab = null
+	tabAll = null
 }
 
 export const destroyTabs = () => {

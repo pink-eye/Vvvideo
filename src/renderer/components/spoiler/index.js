@@ -15,9 +15,11 @@ const toggleSpoiler = ({ currentTarget }) => {
 }
 
 export const initSpoiler = spoiler => {
-	const spoilerHead = spoiler.querySelector('.spoiler__head')
+	let spoilerHead = spoiler.querySelector('.spoiler__head')
 
 	spoilerHead.addEventListener('click', toggleSpoiler)
+
+	spoilerHead = null
 }
 
 export const destroySpoiler = spoiler => {

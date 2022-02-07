@@ -339,7 +339,7 @@ const syncMedia = () => {
 
 const isPlaying = el => el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2
 
-const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime > 0
+const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime >= 0
 
 const pauseEl = el => {
 	let givenEl = el
@@ -362,6 +362,9 @@ const playEl = async el => {
 	if (playPromise !== undefined && !isPlaying(givenEl)) {
 		try {
 			await playPromise
+
+			hideDecoration('load')
+
 			let audio = getSelector('.video').querySelector('audio')
 
 			if (audio) {
@@ -837,11 +840,6 @@ const skipSegmentSB = () => {
 	}
 }
 
-const handlePlaying = () => {
-	hideDecoration('load')
-	playVideoPlayer()
-}
-
 const handleLoadingVideo = () => {
 	let { video, audio } = getMedia()
 
@@ -1141,9 +1139,9 @@ const handleInputVideoPlayer = event => {
 }
 
 export const initVideoPlayer = async data => {
-	const controls = getSelector('.controls')
-	const videoParent = getSelector('.video')
-	const videoWrapper = videoParent.querySelector('.video__wrapper')
+	let controls = getSelector('.controls')
+	let videoParent = getSelector('.video')
+	let videoWrapper = videoParent.querySelector('.video__wrapper')
 	let videoSkeleton = videoParent.querySelector('.video-skeleton')
 	let hasCaptions = false
 
@@ -1224,9 +1222,12 @@ export const initVideoPlayer = async data => {
 		volumeSeek = null
 		volumeBar = null
 		timeDuration = null
+		controls = null
 	}
 
 	// MEDIA LISTENERS
+
+	video.addEventListener('loadeddata', initVideo, { once: true })
 
 	const { autoplay } = storage.settings
 
@@ -1237,19 +1238,19 @@ export const initVideoPlayer = async data => {
 		}
 
 		video.addEventListener('canplay', handleCanPlay, { once: true })
-
-		video.addEventListener('canplaythrough', playVideoPlayer, { once: true })
 	}
 
-	video.addEventListener('loadeddata', initVideo, { once: true })
+	const handleCanPlayThrough = () => {
+		if (!isPlayingLight(video)) {
+			playVideoPlayer()
+		}
+	}
 
-	video.addEventListener('playing', handlePlaying)
+	video.addEventListener('canplaythrough', handleCanPlayThrough)
 
 	video.addEventListener('waiting', handleLoadingVideo)
 
 	if (audio) {
-		audio.addEventListener('playing', handlePlaying)
-
 		audio.addEventListener('waiting', handleLoadingAudio)
 	}
 
@@ -1330,6 +1331,9 @@ export const initVideoPlayer = async data => {
 
 		initDialogSB()
 	}
+
+	videoParent = null
+	videoWrapper = null
 }
 
 export const resetVideoPlayer = () => {
@@ -1416,8 +1420,6 @@ export const resetVideoPlayer = () => {
 	if (!disableStoryboard && !storyboard)
 		seekTooltip.insertAdjacentHTML('afterBegin', createStoryboardHTML())
 
-	video.removeEventListener('playing', handlePlaying)
-
 	video.removeEventListener('waiting', handleLoadingVideo)
 
 	video.removeEventListener('stalled', handleLoadingVideo)
@@ -1425,8 +1427,6 @@ export const resetVideoPlayer = () => {
 	videoWrapper.removeEventListener('fullscreenchange', toggleIconFullscreen)
 
 	if (audio) {
-		audio.removeEventListener('playing', handlePlaying)
-
 		audio.removeEventListener('waiting', handleLoadingAudio)
 
 		audio.removeEventListener('stalled', handleLoadingAudio)

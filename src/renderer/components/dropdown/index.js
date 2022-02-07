@@ -57,7 +57,7 @@ function toggleDropdown(dropdown) {
 }
 
 export const initDropdown = (dropdown, callback, options = null) => {
-	const dropdownList = dropdown.querySelector('.dropdown__list')
+	let dropdownList = dropdown.querySelector('.dropdown__list')
 
 	if (!dropdownList) return
 
@@ -77,10 +77,12 @@ export const initDropdown = (dropdown, callback, options = null) => {
 	}
 
 	dropdownList.addEventListener('click', handleClickBtn)
+
+	dropdownList = null
 }
 
 export const startDropdowns = () => {
-	const dropdownAll = document.querySelectorAll('.dropdown')
+	let dropdownAll = document.querySelectorAll('.dropdown')
 
 	if (dropdownAll.length === 0) return
 
@@ -94,4 +96,6 @@ export const startDropdowns = () => {
 			dropdownHead.addEventListener('click', handleClickHead)
 		}
 	}
+
+	dropdownAll = null
 }

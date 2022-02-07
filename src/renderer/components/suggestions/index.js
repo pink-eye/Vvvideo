@@ -142,6 +142,38 @@ const showRecentQueries = () => {
 	addSuggestion(recentQueries, true)
 }
 
+const handleInput = async () => {
+	showOverlay()
+
+	suggestionListLength = 0
+	let query = searchBar.value.trim()
+
+	if (query.length > 0) {
+		let suggestions = null
+
+		try {
+			suggestions = enableProxy
+				? await API.scrapeSuggestsProxy(query, proxy)
+				: await API.scrapeSuggests(query)
+		} catch ({ message }) {
+			showToast('error', message)
+		}
+
+		hideSuggestions()
+
+		if (!dontShowRecentQueriesOnTyping) {
+			const relevantRecentQueries = getRelevantRecentQueries(query)
+
+			if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
+		}
+
+		if (suggestions?.length > 0) addSuggestion(suggestions, false)
+	} else {
+		hideSuggestions()
+		hideOverlay()
+	}
+}
+
 const initSuggestions = () => {
 	let headerSearch = getSelector('.search')
 	let searchBar = headerSearch.querySelector('.search__bar')
@@ -166,38 +198,6 @@ const initSuggestions = () => {
 	}
 
 	suggestionList.addEventListener('click', handleClickSuggestion)
-
-	const handleInput = async () => {
-		showOverlay()
-
-		suggestionListLength = 0
-		let query = searchBar.value.trim()
-
-		if (query.length > 0) {
-			let suggestions = null
-
-			try {
-				suggestions = enableProxy
-					? await API.scrapeSuggestsProxy(query, proxy)
-					: await API.scrapeSuggests(query)
-			} catch ({ message }) {
-				showToast('error', message)
-			}
-
-			hideSuggestions()
-
-			if (!dontShowRecentQueriesOnTyping) {
-				const relevantRecentQueries = getRelevantRecentQueries(query)
-
-				if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
-			}
-
-			if (suggestions?.length > 0) addSuggestion(suggestions, false)
-		} else {
-			hideSuggestions()
-			hideOverlay()
-		}
-	}
 
 	searchBar.addEventListener('input', handleInput)
 }

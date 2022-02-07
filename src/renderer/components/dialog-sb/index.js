@@ -46,11 +46,11 @@ const showDialogSB = () => {
 
 	hideInvalidUI()
 
-	const dialogSb = getSelector('.dialog-sb')
-	const dialogSbStart = dialogSb.querySelector('input#start')
-	const dialogSbEnd = dialogSb.querySelector('input#end')
-	const dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send')
-	const dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel')
+	let dialogSb = getSelector('.dialog-sb')
+	let dialogSbStart = dialogSb.querySelector('input#start')
+	let dialogSbEnd = dialogSb.querySelector('input#end')
+	let dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send')
+	let dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel')
 
 	dialogSbStart.addEventListener('input', handleInputDialogField)
 	dialogSbEnd.addEventListener('input', handleInputDialogField)
@@ -61,6 +61,11 @@ const showDialogSB = () => {
 
 	video = null
 	audio = null
+	dialogSb = null
+	dialogSbStart = null
+	dialogSbEnd = null
+	dialogSbBtnSend = null
+	dialogSbBtnCancel = null
 }
 
 export const recordSegmentSB = () => {
@@ -203,11 +208,13 @@ const handleCloseModal = () => {
 }
 
 export const initDialogSB = () => {
-	const controlsSponsorblock = getSelector('.controls').querySelector('.controls__sponsorblock')
+	let controlsSponsorblock = getSelector('.controls').querySelector('.controls__sponsorblock')
 
 	isRecording &&= false
 
 	modal = new GraphModal({ isClose: handleCloseModal })
 
 	controlsSponsorblock.addEventListener('click', recordSegmentSB)
+
+	controlsSponsorblock = null
 }

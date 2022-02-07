@@ -34,6 +34,24 @@ const handleClickWindow = ({ target }) => {
 	}
 }
 
+const handleKeyDownSearch = event => {
+	const { keyCode } = event
+
+	// ARROWS
+	if (keyCode === 40 || keyCode === 38) {
+		resetSelected()
+		chooseSuggestion(keyCode)
+	}
+
+	// ENTER
+	if (keyCode === 13) {
+		hideSuggestions()
+		hideOverlay()
+
+		if (!isEmpty(event.currentTarget.value)) manageWin(event)
+	}
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
@@ -56,7 +74,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 			storage.settings = storageFromFile.settings
 			appStorage.update(storage)
 
-			showToast('info', 'The list of options has been updated so it has been reset. Check it out')
+			showToast(
+				'info',
+				'The list of options has been updated so it has been reset. Check it out'
+			)
 		}
 	}
 
@@ -67,11 +88,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 	// MAIN SELECTORS
 	const header = getSelector('.header')
 	const sidebar = getSelector('.sidebar')
-	const mainContent = getSelector('.main__content')
+	let mainContent = getSelector('.main__content')
 
 	const headerSearch = getSelector('.search')
 	const searchBar = headerSearch.querySelector('.search__bar')
-	const searchBtn = headerSearch.querySelector('.search__btn')
+	let searchBtn = headerSearch.querySelector('.search__btn')
 
 	if (storage.settings.disableSearchSuggestions) {
 		searchBar.addEventListener('blur', hideOverlay)
@@ -85,6 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	// MANAGE WINDOWS
 
 	mainContent.addEventListener('click', manageWin)
+	mainContent = null
 
 	sidebar.addEventListener('click', manageWin)
 
@@ -93,28 +115,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 	}
 
 	searchBtn.addEventListener('click', handleClickSearch)
+	searchBtn = null
 
 	searchBar.addEventListener('focus', handleFocus)
-
-	// HOT KEYS ON SEARCH
-
-	const handleKeyDownSearch = event => {
-		const { keyCode } = event
-
-		// ARROWS
-		if (keyCode === 40 || keyCode === 38) {
-			resetSelected()
-			chooseSuggestion(keyCode)
-		}
-
-		// ENTER
-		if (keyCode === 13) {
-			hideSuggestions()
-			hideOverlay()
-
-			if (!isEmpty(searchBar.value)) manageWin(event)
-		}
-	}
 
 	searchBar.addEventListener('keydown', handleKeyDownSearch)
 
@@ -124,16 +127,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 	document.addEventListener('keydown', handleKeyDown)
 
 	// INIT BURGER
-	const burger = header.querySelector('.burger')
+	let burger = header.querySelector('.burger')
 	burger.addEventListener('click', toggleMenu)
+	burger = null
 
 	// INIT BTN TO RELOAD APP
-	const headerReload = header.querySelector('.header__btn')
+	let headerReload = header.querySelector('.header__btn')
 	headerReload.addEventListener('click', reloadApp)
+	headerReload = null
 
 	// INIT BTN TO CLOSE APP
-	const btnExit = sidebar.querySelector('.btn-exit')
+	let btnExit = sidebar.querySelector('.btn-exit')
 	btnExit.addEventListener('click', closeApp)
+	btnExit = null
 
 	startDropdowns()
 

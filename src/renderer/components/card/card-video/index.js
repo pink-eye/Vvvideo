@@ -32,6 +32,7 @@ export const fillVideoCard = (video, index, data) => {
 		removeSkeleton(imageSkeleton)
 
 		videoImage = null
+		imageSkeleton = null
 	}
 
 	videoImage.addEventListener('load', onLoadImage, { once: true })

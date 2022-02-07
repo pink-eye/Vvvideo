@@ -128,7 +128,7 @@ const handleFile = () => {
 
 const handleInputField = event => {
 	storage = appStorage.get()
-	const input = event.currentTarget
+	let input = event.currentTarget
 	const option = input.id
 
 	switch (option) {
@@ -155,6 +155,8 @@ const handleInputField = event => {
 			break
 	}
 
+	input = null
+
 	appStorage.update(storage)
 }
 
@@ -177,7 +179,7 @@ const toggleTransition = isDisabled => {
 
 const handleChangeCheckbox = event => {
 	storage = appStorage.get()
-	const checkbox = event.currentTarget
+	let checkbox = event.currentTarget
 	const option = checkbox.id
 
 	storage.settings[`${option}`] = checkbox.checked
@@ -210,44 +212,58 @@ const handleChangeCheckbox = event => {
 			break
 	}
 
+	checkbox = null
+
 	appStorage.update(storage)
 }
 
 export const openWinSettings = () => {
-	const settings = getSelector('.settings')
+	let settings = getSelector('.settings')
 
 	fillWinSettings()
 
-	const btnClearHistory = settings.querySelector('#clear-history')
+	let btnClearHistory = settings.querySelector('#clear-history')
 	btnClearHistory.addEventListener('click', clearHistory)
+	btnClearHistory = null
 
 	// IMPLEMENT IMPORT
 
-	const impExpField = settings.querySelector('.imp-exp__field')
+	let impExpField = settings.querySelector('.imp-exp__field')
 	impExpField.addEventListener('change', handleFile)
+	impExpField = null
 
-	const impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
+	let impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
 	impExpBtn.addEventListener('click', handleClickImport)
+	impExpBtn = null
 
 	// CHECKBOXES
 
-	const checkboxAll = settings.querySelectorAll('input[type="checkbox"]')
+	let checkboxAll = settings.querySelectorAll('input[type="checkbox"]')
 
 	for (let index = 0, { length } = checkboxAll; index < length; index += 1) {
-		const checkbox = checkboxAll[index]
+		let checkbox = checkboxAll[index]
 
 		checkbox.addEventListener('change', handleChangeCheckbox)
+
+		checkbox = null
 	}
+
+	checkboxAll = null
 
 	// INPUTS
 
-	const inputAll = settings.querySelectorAll('input[type="text"]')
+	let inputAll = settings.querySelectorAll('input[type="text"]')
 
 	for (let index = 0, { length } = inputAll; index < length; index += 1) {
-		const input = inputAll[index]
+		let input = inputAll[index]
 
 		input.addEventListener('input', handleInputField)
+
+		input = null
 	}
+
+	inputAll = null
+	settings = null
 }
 
 export const resetWinSettings = () => {

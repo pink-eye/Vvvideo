@@ -13,4 +13,6 @@ export const initUpdateComponent = () => {
 	let update = document.querySelector('.update')
 
 	update.addEventListener('click', handleClickUpdateComponent, { once: true })
+
+	update = null
 }

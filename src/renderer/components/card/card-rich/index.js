@@ -25,6 +25,7 @@ export const fillChannelCard = (channel, index, data) => {
 		removeSkeleton(imageSkeleton)
 
 		channelImage = null
+		imageSkeleton = null
 	}
 
 	channelImage.addEventListener('load', onLoadImage, { once: true })

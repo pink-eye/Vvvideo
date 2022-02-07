@@ -25,6 +25,7 @@ export const fillPlaylistCard = (playlist, index, data) => {
 		removeSkeleton(imageSkeleton)
 
 		playlistImage = null
+		imageSkeleton = null
 	}
 
 	playlistImage.addEventListener('load', onLoadImage, { once: true })
