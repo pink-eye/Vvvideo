@@ -1,4 +1,4 @@
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 
 export const cacheSelector = (key, value) => {
 	if (typeof value === 'undefined') return cacheSelector[key]
@@ -11,6 +11,9 @@ export const getSelector = selector => {
 
 	return cacheSelector(selector)
 }
+
+export const queryClosestByClass = (target, className) =>
+	target.classList.contains(className) ? target : target.closest(`.${className}`)
 
 export const reloadApp = () => window.location.reload()
 

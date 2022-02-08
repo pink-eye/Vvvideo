@@ -1,4 +1,4 @@
-import { getSelector } from 'Global/utils'
+import { getSelector, queryClosestByClass } from 'Global/utils'
 
 const changeHeadContent = (dropdown, dropdownBtn) => {
 	let dropdownHead = dropdown.querySelector('.dropdown__head')
@@ -62,9 +62,7 @@ export const initDropdown = (dropdown, callback, options = null) => {
 	if (!dropdownList) return
 
 	const handleClickBtn = ({ target }) => {
-		let dropdownBtn = target.classList.contains('dropdown__btn')
-			? target
-			: target.closest('.dropdown__btn')
+		let dropdownBtn = queryClosestByClass(target, 'dropdown__btn')
 
 		if (!dropdownBtn) return
 

@@ -1,4 +1,4 @@
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 import { getDurationTimeout, isEmpty } from 'Global/utils'
 import { showToast } from 'Components/toast'
 

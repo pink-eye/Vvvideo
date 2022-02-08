@@ -1,5 +1,5 @@
-import { isEmpty, hasFocus, getSelector } from 'Global/utils'
-import { AppStorage } from 'Global/app-storage'
+import { isEmpty, hasFocus, getSelector, queryClosestByClass } from 'Global/utils'
+import { AppStorage } from 'Global/AppStorage'
 import { showToast } from 'Components/toast'
 import { showOverlay, hideOverlay } from 'Components/overlay'
 
@@ -142,38 +142,6 @@ const showRecentQueries = () => {
 	addSuggestion(recentQueries, true)
 }
 
-const handleInput = async () => {
-	showOverlay()
-
-	suggestionListLength = 0
-	let query = searchBar.value.trim()
-
-	if (query.length > 0) {
-		let suggestions = null
-
-		try {
-			suggestions = enableProxy
-				? await API.scrapeSuggestsProxy(query, proxy)
-				: await API.scrapeSuggests(query)
-		} catch ({ message }) {
-			showToast('error', message)
-		}
-
-		hideSuggestions()
-
-		if (!dontShowRecentQueriesOnTyping) {
-			const relevantRecentQueries = getRelevantRecentQueries(query)
-
-			if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
-		}
-
-		if (suggestions?.length > 0) addSuggestion(suggestions, false)
-	} else {
-		hideSuggestions()
-		hideOverlay()
-	}
-}
-
 const initSuggestions = () => {
 	let headerSearch = getSelector('.search')
 	let searchBar = headerSearch.querySelector('.search__bar')
@@ -185,19 +153,51 @@ const initSuggestions = () => {
 	if (disableSearchSuggestions) return
 
 	const handleClickSuggestion = ({ target }) => {
-		let el = target.classList.contains('suggestion') ? target : target.closest('.suggestion')
+		let suggestion = queryClosestByClass(target, 'suggestion')
 
-		if (!el) return
+		if (!suggestion) return
 
-		insertSelectedSuggestion(el)
+		insertSelectedSuggestion(suggestion)
 		resetSelected()
 		searchBar.focus()
 
 		target = null
-		el = null
+		suggestion = null
 	}
 
 	suggestionList.addEventListener('click', handleClickSuggestion)
+
+	const handleInput = async ({ target }) => {
+		showOverlay()
+
+		suggestionListLength = 0
+		let query = target.value.trim()
+
+		if (query.length > 0) {
+			let suggestions = null
+
+			try {
+				suggestions = enableProxy
+					? await API.scrapeSuggestsProxy(query, proxy)
+					: await API.scrapeSuggests(query)
+			} catch ({ message }) {
+				showToast('error', message)
+			}
+
+			hideSuggestions()
+
+			if (!dontShowRecentQueriesOnTyping) {
+				const relevantRecentQueries = getRelevantRecentQueries(query)
+
+				if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
+			}
+
+			if (suggestions?.length > 0) addSuggestion(suggestions, false)
+		} else {
+			hideSuggestions()
+			hideOverlay()
+		}
+	}
 
 	searchBar.addEventListener('input', handleInput)
 }
