@@ -1,5 +1,5 @@
 import { getSelector } from 'Global/utils'
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { fillAuthorCard } from 'Components/card/card-author'
 import { showToast } from 'Components/toast'

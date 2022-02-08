@@ -1,5 +1,5 @@
 import { getSelector, convertDurationToSeconds, convertSecondsToDuration } from 'Global/utils'
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 import { showToast } from 'Components/toast'
 import { formatDuration } from 'Components/dialog-sb/helper'
 import { uuidv4 } from 'Components/video-controls/sponsorblock'

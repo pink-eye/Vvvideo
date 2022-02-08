@@ -1,4 +1,4 @@
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 import { showToast } from 'Components/toast'
 import {
 	getSelector,

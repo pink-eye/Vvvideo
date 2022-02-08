@@ -1,6 +1,6 @@
 import { getSelector, scrollToTop, getDurationTimeout } from 'Global/utils'
-import { AppStorage } from 'Global/app-storage'
-import { YoutubeHelper } from 'Global/youtube-helper'
+import { AppStorage } from 'Global/AppStorage'
+import { YoutubeHelper } from 'Global/YoutubeHelper'
 import { resetGrid, resetGridAuthorCard } from 'Components/grid'
 import { activateSidebarBtn, deactivateLastSidebarBtn } from 'Components/sidebar'
 import { openWinSettings, resetWinSettings } from 'Layouts/win-settings'
@@ -8,7 +8,6 @@ import { openWinHistory } from 'Layouts/win-history'
 import { openWinSubs } from 'Layouts/win-subscriptions'
 import { prepareWinVideo, resetWinVideo } from 'Layouts/win-video'
 import { prepareWinPlaylist, resetWinPlaylist } from 'Layouts/win-playlist'
-import { resetVideoPlayer } from 'Components/video-controls'
 import { prepareWinChannel, resetWinChannel } from 'Layouts/win-channel'
 import { openWinTrending } from 'Layouts/win-trending'
 import { openWinSearchResults } from 'Layouts/win-search-results'
@@ -32,7 +31,6 @@ const resetWin = win => {
 		}
 
 		if (win.classList.contains('video')) {
-			resetVideoPlayer()
 			resetWinVideo()
 			return
 		}

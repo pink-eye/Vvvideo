@@ -1,5 +1,5 @@
 import { getSelector, isEmpty, normalizeCount, convertSecondsToDuration } from 'Global/utils'
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 import { resetGrid } from 'Components/grid'
 import { showToast } from 'Components/toast'
 import { fillVideoCard } from 'Components/card/card-video'

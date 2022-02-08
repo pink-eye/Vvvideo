@@ -1,4 +1,4 @@
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 
 export const getMin = (a, b) => (a > b ? b : a)
 

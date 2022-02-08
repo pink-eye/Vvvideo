@@ -1,5 +1,5 @@
 import { getSelector } from 'Global/utils'
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 import { filterSearchResults } from 'Layouts/win-search-results/helper'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { showToast } from 'Components/toast'
