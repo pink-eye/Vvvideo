@@ -6,7 +6,6 @@ import {
 	scrollToTop,
 	convertDurationToSeconds,
 	hasFocus,
-	getDurationTimeout,
 } from 'Global/utils'
 import {
 	getMin,
@@ -28,7 +27,7 @@ import { removeSkeleton } from 'Components/skeleton'
 import { showToast } from 'Components/toast'
 import { getWatchedTime, rememberWatchedTime } from 'Layouts/win-history/helper'
 import { initDialogSB, recordSegmentSB } from 'Components/dialog-sb'
-import { AppStorage } from 'Global/app-storage'
+import { AppStorage } from 'Global/AppStorage'
 
 let hasListeners = false
 let isFirstPlay = true
@@ -360,25 +359,25 @@ const playEl = async el => {
 	let playPromise = givenEl.play()
 
 	if (playPromise !== undefined && !isPlaying(givenEl)) {
+		hideDecoration('load')
+
 		try {
 			await playPromise
-
-			hideDecoration('load')
-
-			let audio = getSelector('.video').querySelector('audio')
-
-			if (audio) {
-				let video = getSelector('video')
-
-				if (isPlaying(video) && isPlaying(audio)) syncMedia()
-
-				video = null
-			}
-
-			audio = null
 		} catch ({ message }) {
 			showToast('error', message)
 		}
+
+		let audio = getSelector('.video').querySelector('audio')
+
+		if (audio) {
+			let video = getSelector('video')
+
+			if (isPlaying(video) && isPlaying(audio)) syncMedia()
+
+			video = null
+		}
+
+		audio = null
 	}
 
 	givenEl = null
@@ -626,19 +625,19 @@ const updateProgress = () => {
 }
 
 const createProgressBarChapter = left =>
-	`<div class="progress__chapter" style="--left: ${left}px"></div>`
+	`<div class="progress__chapter" style="--left: ${left}"></div>`
 
 const insertProgressBarChapters = () => {
 	if (!chapters || chapters.length === 0) return
 
 	let progress = getSelector('.progress')
 	let progressBar = progress.querySelector('.progress__bar')
-	const { duration, offsetWidth } = getSelector('video')
+	const { duration } = getSelector('video')
 
 	for (let index = 0, { length } = chapters; index < length; index++) {
 		const { start_time } = chapters[index]
-		const pxChapter = ((offsetWidth - 40) * start_time) / ~~duration
-		progressBar.insertAdjacentHTML('beforeEnd', createProgressBarChapter(pxChapter))
+		const offsetLeft = `${convertToPercentage(start_time, duration)}%`
+		progressBar.insertAdjacentHTML('beforeEnd', createProgressBarChapter(offsetLeft))
 	}
 
 	progress = null
@@ -1138,6 +1137,14 @@ const handleInputVideoPlayer = event => {
 	target = null
 }
 
+const handleCanPlayThrough = ({ target }) => {
+	if (!isPlayingLight(target)) {
+		playVideoPlayer()
+	}
+}
+
+const handlePlaying = () => hideDecoration('load')
+
 export const initVideoPlayer = async data => {
 	let controls = getSelector('.controls')
 	let videoParent = getSelector('.video')
@@ -1240,18 +1247,16 @@ export const initVideoPlayer = async data => {
 		video.addEventListener('canplay', handleCanPlay, { once: true })
 	}
 
-	const handleCanPlayThrough = () => {
-		if (!isPlayingLight(video)) {
-			playVideoPlayer()
-		}
-	}
-
 	video.addEventListener('canplaythrough', handleCanPlayThrough)
 
 	video.addEventListener('waiting', handleLoadingVideo)
 
+	video.addEventListener('playing', handlePlaying)
+
 	if (audio) {
 		audio.addEventListener('waiting', handleLoadingAudio)
+
+		audio.addEventListener('playing', handlePlaying)
 	}
 
 	video.addEventListener('progress', updateBuffered)
@@ -1420,37 +1425,39 @@ export const resetVideoPlayer = () => {
 	if (!disableStoryboard && !storyboard)
 		seekTooltip.insertAdjacentHTML('afterBegin', createStoryboardHTML())
 
-	video.removeEventListener('waiting', handleLoadingVideo)
-
-	video.removeEventListener('stalled', handleLoadingVideo)
+	video.removeEventListener('canplaythrough', handleCanPlayThrough)
 
 	videoWrapper.removeEventListener('fullscreenchange', toggleIconFullscreen)
+
+	video.removeEventListener('waiting', handleLoadingVideo)
+
+	video.removeEventListener('playing', handlePlaying)
 
 	if (audio) {
 		audio.removeEventListener('waiting', handleLoadingAudio)
 
-		audio.removeEventListener('stalled', handleLoadingAudio)
+		audio.removeEventListener('playing', handlePlaying)
 	}
 
 	video.removeEventListener('progress', updateBuffered)
 
 	video.removeEventListener('timeupdate', handleTimeUpdate)
 
-	video.removeEventListener('timeupdate', toggleIconPlayPause)
-
-	video.removeEventListener('abort', handleAbort)
-
 	video.removeEventListener('error', handleError)
 
 	if (audio) {
 		audio.removeEventListener('error', handleError)
-
-		audio.removeEventListener('abort', handleAbort)
 	}
 
 	video.removeEventListener('ended', handleEnd)
 
 	videoParent.removeEventListener('click', handleClickVideoPlayer)
+
+	videoParent.removeEventListener('input', handleInputVideoPlayer)
+
+	videoParent.removeEventListener('mousemove', handleMouseMoveVideoPlayer)
+
+	controls.removeEventListener('mouseleave', hideBars)
 
 	document.removeEventListener('keydown', handleKeyDownWithinVideo)
 
