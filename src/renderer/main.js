@@ -1,6 +1,13 @@
-import { getSelector, hideOnScroll, isEmpty, reloadApp, closeApp } from 'Global/utils'
-import { AppStorage } from 'Global/app-storage'
-import { manageWin } from 'Global/win-manager'
+import {
+	getSelector,
+	hideOnScroll,
+	isEmpty,
+	reloadApp,
+	closeApp,
+	queryClosestByClass,
+} from 'Global/utils'
+import { AppStorage } from 'Global/AppStorage'
+import { manageWin } from 'Global/WinManager'
 import { checkForUpdate } from 'Global/checkForUpdate'
 import { handleKeyDown } from 'Global/shortcuts'
 import { openWinLatest } from 'Layouts/win-latest'
@@ -16,7 +23,10 @@ import { showOverlay, hideOverlay } from 'Components/overlay'
 import { hideLastDropdown, startDropdowns } from 'Components/dropdown'
 import { toggleMenu } from 'Components/burger'
 import { showToast } from 'Components/toast'
-import { initUpdateComponent } from './components/update'
+import { initUpdateComponent } from 'Components/update'
+import { handleLoadWindow } from 'Components/preloader'
+
+window.addEventListener('load', handleLoadWindow, { once: true })
 
 const handleFocus = () => {
 	hideSuggestions()
@@ -50,6 +60,19 @@ const handleKeyDownSearch = event => {
 
 		if (!isEmpty(event.currentTarget.value)) manageWin(event)
 	}
+}
+
+const handleClickSearchBtn = event => {
+	let search = queryClosestByClass(event.target, 'search')
+
+	if (!search) return
+
+	let searchBar = search.querySelector('.search__bar')
+
+	if (!isEmpty(searchBar.value)) manageWin(event)
+
+	search = null
+	searchBar = null
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -90,8 +113,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 	const sidebar = getSelector('.sidebar')
 	let mainContent = getSelector('.main__content')
 
-	const headerSearch = getSelector('.search')
-	const searchBar = headerSearch.querySelector('.search__bar')
+	let headerSearch = getSelector('.search')
+	let searchBar = headerSearch.querySelector('.search__bar')
 	let searchBtn = headerSearch.querySelector('.search__btn')
 
 	if (storage.settings.disableSearchSuggestions) {
@@ -110,16 +133,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	sidebar.addEventListener('click', manageWin)
 
-	const handleClickSearch = event => {
-		if (!isEmpty(searchBar.value)) manageWin(event)
-	}
-
-	searchBtn.addEventListener('click', handleClickSearch)
+	searchBtn.addEventListener('click', handleClickSearchBtn)
 	searchBtn = null
 
 	searchBar.addEventListener('focus', handleFocus)
 
 	searchBar.addEventListener('keydown', handleKeyDownSearch)
+	searchBar = null
+	headerSearch = null
 
 	window.addEventListener('click', handleClickWindow)
 

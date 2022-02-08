@@ -6,8 +6,8 @@ import { initSpoiler, destroySpoiler } from 'Components/spoiler'
 import { showToast } from 'Components/toast'
 import { resetSkeleton, removeSkeleton } from 'Components/skeleton'
 import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
-import { AppStorage } from 'Global/app-storage'
-import { initVideoPlayer, handleClickTimecode } from 'Components/video-controls'
+import { AppStorage } from 'Global/AppStorage'
+import { initVideoPlayer, handleClickTimecode, resetVideoPlayer } from 'Components/video-controls'
 import { normalizeVideoDescription, roundNum } from 'Layouts/win-video/helper'
 import { handleClickLink } from 'Global/utils'
 
@@ -138,6 +138,8 @@ const openWinVideo = (data, lastWin) => {
 }
 
 export const resetWinVideo = () => {
+	resetVideoPlayer()
+
 	let video = getSelector('.video')
 	let videoPoster = video.querySelector('.video__poster img')
 	let skeletonAll = video.querySelectorAll('.skeleton')
@@ -148,6 +150,7 @@ export const resetWinVideo = () => {
 	let videoViews = videoInfo.querySelector('.video-info__views')
 	let videoDate = videoInfo.querySelector('.video-info__date')
 	let actionsPlaylist = videoInfo.querySelector('.actions__playlist')
+	let authorCard = videoInfo.querySelector('.author')
 
 	video.dataset.id = ''
 
@@ -180,6 +183,8 @@ export const resetWinVideo = () => {
 
 	actionsPlaylist.hidden ||= true
 
+	resetAuthorCard(authorCard)
+
 	video = null
 	videoPoster = null
 	videoLikes = null
@@ -191,6 +196,7 @@ export const resetWinVideo = () => {
 	videoTitle = null
 	videoDate = null
 	subscribeBtn = null
+	authorCard = null
 }
 
 const fillSomeInfoVideo = params => {
@@ -220,8 +226,6 @@ const fillSomeInfoVideo = params => {
 	}
 
 	if ('playlistId' in params) displayPlaylistBtn(params.playlistId)
-
-	resetAuthorCard(authorCard)
 
 	let authorParams = {
 		parent: authorCard,
