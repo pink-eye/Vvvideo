@@ -562,6 +562,13 @@ const updateVolumeEl = el => {
 }
 
 const hideBars = () => {
+	let progress = getSelector('.progress')
+
+	if (progress.matches(':hover')) {
+		progress = null
+		return
+	}
+
 	let controls = getSelector('.controls')
 	let dropdownActive = controls.querySelector('.dropdown._active')
 	let topBar = getSelector('.video').querySelector('.top-bar')
@@ -574,6 +581,7 @@ const hideBars = () => {
 	dropdownActive = null
 	controls = null
 	topBar = null
+	progress = null
 }
 
 const showBars = () => {
