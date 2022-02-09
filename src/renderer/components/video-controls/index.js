@@ -1038,44 +1038,23 @@ const loadSegmentsSB = (data, callback) => {
 		)
 }
 
-const fillSegmentsSB = segments => {
-	let video = getSelector('.video')
-	let controlsProgress = video.querySelector('.controls__progress')
-	let progressSponsorblock = controlsProgress.querySelector('.sponsorblock')
-	let sponsorblockItemHTML = createSponsorblockItemHTML()
+const visualizeSegmentsSB = segments => {
+	let video = getSelector('video')
+	let progressSponsorblock = getSelector('.controls').querySelector('.progress__sponsorblock')
 
 	for (let index = 0, { length } = segments; index < length; index += 1) {
+		const { startTime, endTime, videoDuration } = segments[index]
+		const segmentLength = endTime - startTime
+		const vDuration = videoDuration !== 0 ? videoDuration : video.duration
+		const width = `${convertToPercentage(segmentLength, vDuration)}%`
+		const left = `${convertToPercentage(startTime, vDuration)}%`
+		const sponsorblockItemHTML = createSponsorblockItemHTML({ width, left })
+
 		progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML)
 	}
 
 	video = null
-	controlsProgress = null
 	progressSponsorblock = null
-	sponsorblockItemHTML = null
-}
-
-const visualizeSegmentsSB = segments => {
-	let video = getSelector('video')
-	let progressSponsorblock = getSelector('.controls').querySelector('.progress__sponsorblock')
-	let sponsorblockItemAll = progressSponsorblock.querySelectorAll('.sponsorblock__item')
-
-	for (let index = 0, { length } = sponsorblockItemAll; index < length; index += 1) {
-		let sponsorblockItem = sponsorblockItemAll[index]
-		const { startTime, endTime, videoDuration } = segments[index]
-		const segmentLength = endTime - startTime
-		const vDuration = videoDuration !== 0 ? videoDuration : ~~video.duration
-		const sponsorblockItemWidth = convertToPercentage(segmentLength, vDuration)
-		const sponsorblockItemLeft = convertToPercentage(startTime, vDuration)
-
-		sponsorblockItem.style.setProperty('--width', `${sponsorblockItemWidth}%`)
-		sponsorblockItem.style.setProperty('--left', `${sponsorblockItemLeft}%`)
-
-		sponsorblockItem = null
-	}
-
-	video = null
-	progressSponsorblock = null
-	sponsorblockItemAll = null
 }
 
 let timeoutMouseMove = null
