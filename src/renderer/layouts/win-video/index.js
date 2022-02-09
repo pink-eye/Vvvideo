@@ -77,10 +77,10 @@ const openWinVideo = (data, lastWin) => {
 
 	if (videoDetails.thumbnails) videoPoster.src = videoDetails.thumbnails.at(-1).url
 
-	if (videoViews.textContent === '...')
+	if (videoViews.textContent === 'Unknown')
 		videoViews.textContent = normalizeCount(videoDetails.viewCount)
 
-	if (videoDate.textContent === '...')
+	if (videoDate.textContent === 'Unknown')
 		videoDate.textContent = formatDate(videoDetails.publishDate)
 
 	if (videoDate.textContent === 'Premiere') {

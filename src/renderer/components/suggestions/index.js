@@ -161,7 +161,6 @@ const initSuggestions = () => {
 		resetSelected()
 		searchBar.focus()
 
-		target = null
 		suggestion = null
 	}
 
