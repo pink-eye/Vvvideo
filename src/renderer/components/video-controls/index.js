@@ -821,25 +821,24 @@ const skipSegmentSB = () => {
 
 	let video = getSelector('video')
 
-	if (isPlaying(video)) {
+	if (!isPlaying(video)) {
+		video = null
+		return
+	}
+
+	for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
+		const { startTime, endTime } = segmentsSB[index]
 		const { currentTime } = video
 
-		for (let index = 0, { length } = segmentsSB; index < length; index += 1) {
-			const { startTime, endTime } = segmentsSB[index]
+		if (currentTime > startTime && currentTime < endTime) {
+			video.currentTime = endTime
 
-			if (currentTime > startTime && currentTime < endTime) {
-				setTimeout(() => {
-					video.currentTime = endTime
+			isSync = false
 
-					isSync = false
+			if (notifySkipSegment) showToast('info', 'Segment is skipped!')
 
-					if (notifySkipSegment) showToast('info', 'Segment is skipped!')
-
-					video = null
-				}, 500)
-
-				return
-			}
+			video = null
+			return
 		}
 	}
 }
@@ -1195,7 +1194,7 @@ export const initVideoPlayer = async data => {
 
 		doesSkipSegments ||= true
 
-		insertProgressBarChapters()
+		visualizeProgressBarChapters()
 
 		intervalWatchedProgress = setInterval(() => {
 			let video = getSelector('video')
