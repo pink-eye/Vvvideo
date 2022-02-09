@@ -164,8 +164,8 @@ export const resetWinVideo = () => {
 	videoPoster.closest('.video__poster').classList.remove('_hidden')
 	videoTitle.textContent = '...'
 	videoLikes.textContent = '...'
-	videoViews.textContent = '...'
-	videoDate.textContent = '...'
+	videoViews.textContent = 'Unknown'
+	videoDate.textContent = 'Unknown'
 	spoilerContent.textContent = '...'
 
 	if (skeletonAll.length > 0) {
@@ -216,11 +216,11 @@ const fillSomeInfoVideo = params => {
 		videoTitle.textContent = title
 		removeSkeleton(titleSkeleton)
 	}
-	if (!isEmpty(views) && views !== '...') {
+	if (!isEmpty(views) && views !== 'Unknown') {
 		videoViews.textContent = views
 		removeSkeleton(partSkeletonAll[0])
 	}
-	if (!isEmpty(date) && date !== '...') {
+	if (!isEmpty(date) && date !== 'Unknown') {
 		videoDate.textContent = date
 		removeSkeleton(partSkeletonAll[1])
 	}

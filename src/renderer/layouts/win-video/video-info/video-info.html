@@ -11,14 +11,14 @@
 					<svg width="26px" height="17px">
 						<use xlink:href="img/svg/actions.svg#views"></use>
 					</svg>
-					<span class="video-info__views">...</span>
+					<span class="video-info__views">Unknown</span>
 				</aside>
 				<aside class="video-info__part">
 					<div class="skeleton part-skeleton"></div>
 					<svg width="26px" height="20px">
 						<use xlink:href="img/svg/actions.svg#date"></use>
 					</svg>
-					<span class="video-info__date">...</span>
+					<span class="video-info__date">Unknown</span>
 				</aside>
 				<aside class="video-info__part">
 					<div class="skeleton part-skeleton"></div>
@@ -29,7 +29,10 @@
 				</aside>
 			</div>
 			<div class="video-info__actions actions">
-				<button class="actions__playlist btn-primary onclick-effect btn-reset" data-win="playlist" hidden>
+				<button
+					class="actions__playlist btn-primary onclick-effect btn-reset"
+					data-win="playlist"
+					hidden>
 					<aside>
 						<svg width="23px" height="23px">
 							<use xlink:href="img/svg/actions.svg#playlist"></use>
@@ -40,12 +43,12 @@
 			</div>
 			<div class="video-info__about">
 				@include('../../../components/card/card-author/card-author.html')
-				<div class="video-info__wrapper">@include('../../../components/subscribe/subscribe.html')</div>
+				<div class="video-info__wrapper">
+					@include('../../../components/subscribe/subscribe.html')
+				</div>
 			</div>
 		</div>
-		@include('../../../components/spoiler/spoiler.html', {
-			"title": "Description",
-			"text": "Description will be here..."
-		})
+		@include('../../../components/spoiler/spoiler.html', { "title": "Description", "text":
+		"Description will be here..." })
 	</div>
 </section>
