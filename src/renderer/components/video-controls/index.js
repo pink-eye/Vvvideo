@@ -153,33 +153,34 @@ const disableAudio = () => {
 	audio = null
 }
 
+const handleErrorLive = (event, { fatal, type }) => {
+	if (fatal) {
+		switch (type) {
+			case Hls.ErrorTypes.NETWORK_ERROR:
+				showToast('error', 'Fatal network error encountered, try to recover...')
+				hls.startLoad()
+				break
+			case Hls.ErrorTypes.MEDIA_ERROR:
+				showToast('error', 'Fatal media error encountered, try to recover...')
+				hls.recoverMediaError()
+				break
+			default:
+				showToast('error', 'Fatal error was occurred. Cannot recover :(')
+				hls.destroy()
+				break
+		}
+	}
+}
+
 const startVideoLive = url => {
 	let video = getSelector('video')
 
 	hls = new Hls()
-	hls.loadSource(url)
 	hls.attachMedia(video)
 
-	const handleError = (event, { fatal, type }) => {
-		if (fatal) {
-			switch (type) {
-				case Hls.ErrorTypes.NETWORK_ERROR:
-					showToast('error', 'Fatal network error encountered, try to recover...')
-					hls.startLoad()
-					break
-				case Hls.ErrorTypes.MEDIA_ERROR:
-					showToast('error', 'Fatal media error encountered, try to recover...')
-					hls.recoverMediaError()
-					break
-				default:
-					showToast('error', 'Fatal error was occurred. Cannot recover :(')
-					hls.destroy()
-					break
-			}
-		}
-	}
+	hls.on(Hls.Events.MEDIA_ATTACHED, () => hls.loadSource(url))
 
-	hls.on(Hls.Events.ERROR, handleError)
+	hls.on(Hls.Events.ERROR, handleErrorLive)
 
 	video = null
 }
@@ -1242,13 +1243,15 @@ export const initVideoPlayer = async data => {
 
 	video.addEventListener('timeupdate', handleTimeUpdate)
 
-	video.addEventListener('error', handleError)
+	if (!hls) {
+		video.addEventListener('error', handleError)
 
-	if (audio) {
-		audio.addEventListener('error', handleError)
+		if (audio) {
+			audio.addEventListener('error', handleError)
+		}
+
+		video.addEventListener('ended', handleEnd)
 	}
-
-	video.addEventListener('ended', handleEnd)
 
 	videoParent.addEventListener('input', handleInputVideoPlayer)
 
