@@ -42,7 +42,8 @@ export const fillVideoCard = (video, index, data) => {
 
 	removeSkeleton(titleSkeleton)
 
-	videoViews.textContent = normalizeCount(info.viewCount) ?? normalizeCount(info.views) ?? '...'
+	videoViews.textContent =
+		normalizeCount(info.viewCount) ?? normalizeCount(info.views) ?? 'Unknown'
 
 	if (info.liveNow || info.premiere || info.isLive) videoCard.classList.add('_live')
 
@@ -56,7 +57,7 @@ export const fillVideoCard = (video, index, data) => {
 
 	if (info?.premiere || info?.viewCountText?.includes('wait')) date = 'Premiere'
 
-	videoDate.textContent = date
+	videoDate.textContent = date ?? 'Unknown'
 
 	videoChannel.textContent = info.author?.name ?? info.author
 

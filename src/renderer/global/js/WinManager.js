@@ -14,42 +14,40 @@ import { openWinSearchResults } from 'Layouts/win-search-results'
 import { openWinLatest } from 'Layouts/win-latest'
 
 const resetWin = win => {
-	queueMicrotask(() => {
-		if (
-			win.classList.contains('search-results') ||
-			win.classList.contains('trending') ||
-			win.classList.contains('history') ||
-			win.classList.contains('latest')
-		) {
-			resetGrid(win)
-			return
-		}
+	if (
+		win.classList.contains('search-results') ||
+		win.classList.contains('trending') ||
+		win.classList.contains('history') ||
+		win.classList.contains('latest')
+	) {
+		resetGrid(win)
+		return
+	}
 
-		if (win.classList.contains('subscriptions')) {
-			resetGridAuthorCard()
-			return
-		}
+	if (win.classList.contains('subscriptions')) {
+		resetGridAuthorCard()
+		return
+	}
 
-		if (win.classList.contains('video')) {
-			resetWinVideo()
-			return
-		}
+	if (win.classList.contains('video')) {
+		resetWinVideo()
+		return
+	}
 
-		if (win.classList.contains('playlist')) {
-			resetWinPlaylist()
-			return
-		}
+	if (win.classList.contains('playlist')) {
+		resetWinPlaylist()
+		return
+	}
 
-		if (win.classList.contains('channel')) {
-			resetWinChannel()
-			return
-		}
+	if (win.classList.contains('channel')) {
+		resetWinChannel()
+		return
+	}
 
-		if (win.classList.contains('settings')) {
-			resetWinSettings()
-			return
-		}
-	})
+	if (win.classList.contains('settings')) {
+		resetWinSettings()
+		return
+	}
 }
 
 const startFillingWin = ({ win, btnWin, id, lastWin }) => {

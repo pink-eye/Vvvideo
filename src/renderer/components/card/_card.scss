@@ -231,6 +231,10 @@
 		line-height: 18px / 14px * 100%;
 
 		background-color: var(--color-bg-duration);
+
+		&:empty {
+			display: none;
+		}
 	}
 
 	&__channel,

@@ -81,6 +81,9 @@ export const convertSecondsToDuration = lengthSeconds => {
 	if (typeof lengthSeconds === 'string' && lengthSeconds.includes(':')) return lengthSeconds
 
 	let seconds = +lengthSeconds
+
+	if (isNaN(seconds)) return ''
+
 	let minutes = Math.floor(seconds / 60)
 	let hours = ''
 
