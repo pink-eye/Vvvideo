@@ -197,3 +197,27 @@
 		transition: color var(--trns);
 	}
 }
+
+.about {
+	padding: 30px 20px;
+
+	background-color: var(--color-bg-form);
+
+	&__description {
+		width: 100%;
+		max-width: 85ch;
+		margin: 0;
+		padding-block: 15px;
+
+		color: var(--color-text);
+
+		@media (min-width: 48rem) {
+			padding-left: 25px;
+			border-left: 2px solid;
+		}
+	}
+
+	@media (min-width: 28.125em) {
+		border-radius: var(--brs-m);
+	}
+}

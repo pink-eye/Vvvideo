@@ -7,14 +7,14 @@ import { initPages, disablePages } from 'Components/grid-btns'
 
 export const hideLastTab = () => {
 	let channel = getSelector('.channel')
-	let tabContentActive = channel.querySelector('.tab-content._active')
+	let tabContentActive = channel.querySelector('.tabs__panel._active')
 
 	if (tabContentActive && tabContentActive.classList.contains('_active')) {
 		tabContentActive.classList.remove('_active')
 		resetGrid(tabContentActive)
 	}
 
-	let tabActive = channel.querySelector('.body-channel__tab._active')
+	let tabActive = channel.querySelector('.tabs__btn._active')
 
 	if (tabActive && tabActive.classList.contains('_active')) {
 		tabActive.classList.remove('_active')
@@ -31,7 +31,7 @@ const showRequiredTab = async tab => {
 
 	if (tab && !tab.classList.contains('_active')) tab.classList.add('_active')
 
-	let reqTabContent = channel.querySelector(`.tab-content[data-tab=${channelTab}]`)
+	let reqTabContent = channel.querySelector(`.tabs__panel[data-tab=${channelTab}]`)
 
 	if (reqTabContent && !reqTabContent.classList.contains('_active'))
 		reqTabContent.classList.add('_active')
@@ -93,7 +93,7 @@ const handleClickTab = async ({ currentTarget }) => {
 }
 
 export const initTabs = primary => {
-	let tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
+	let tabAll = getSelector('.channel').querySelectorAll('.tabs__btn')
 
 	if (tabAll.length === 0) return
 
@@ -114,7 +114,7 @@ export const initTabs = primary => {
 }
 
 export const destroyTabs = () => {
-	let tabAll = getSelector('.channel').querySelectorAll('.body-channel__tab')
+	let tabAll = getSelector('.channel').querySelectorAll('.tabs__btn')
 
 	if (tabAll.length === 0) return
 

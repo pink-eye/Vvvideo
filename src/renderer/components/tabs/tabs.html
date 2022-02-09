@@ -1,28 +1,24 @@
-<nav class="body-channel__nav">
-	<ul class="body-channel__list list-reset">
-		<li class="body-channel__item">
-			<button data-tab="Videos" class="body-channel__tab btn-reset">Videos</button>
+<div class="tabs">
+	<ul class="tabs__list list-reset">
+		<li class="tabs__item">
+			<button data-tab="Videos" class="tabs__btn btn-reset">Videos</button>
 		</li>
-		<li class="body-channel__item">
-			<button data-tab="Playlists" class="body-channel__tab btn-reset">Playlists</button>
+		<li class="tabs__item">
+			<button data-tab="Playlists" class="tabs__btn btn-reset">Playlists</button>
 		</li>
-		<li class="body-channel__item">
-			<button data-tab="About" class="body-channel__tab btn-reset">About</button>
+		<li class="tabs__item">
+			<button data-tab="About" class="tabs__btn btn-reset">About</button>
 		</li>
 	</ul>
-</nav>
-<div class="channel__wrapper outter-container">
-	<div class="channel__body body-channel">
-		<div class="body-channel__left">
-			<div data-tab="Videos" class="body-channel__videos videos tab-content">
-				<section class="main__grid grid">@include('../grid/grid-video.html')</section>
-			</div>
-			<div data-tab="Playlists" class="body-channel__playlists playlists tab-content">
-				<section class="main__grid grid">@include('../grid/grid-playlist.html')</section>
-			</div>
-			<div data-tab="About" class="body-channel__playlists about tab-content">
-				<p class="about__description">No information...</p>
-			</div>
+	<div class="tabs__content outter-container">
+		<div data-tab="Videos" class="videos tabs__panel">
+			<section class="main__grid grid">@include('../grid/grid-video.html')</section>
+		</div>
+		<div data-tab="Playlists" class="playlists tabs__panel">
+			<section class="main__grid grid">@include('../grid/grid-playlist.html')</section>
+		</div>
+		<div data-tab="About" class="about tabs__panel">
+			<p class="about__description">No information...</p>
 		</div>
 	</div>
 </div>
