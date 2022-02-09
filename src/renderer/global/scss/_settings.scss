@@ -72,11 +72,11 @@ button,
 a {
 	@media (hover: hover) and (pointer: fine) {
 
-		&:focus-visible:not(:is(._active,.btn-accent)) {
+		&:focus-visible:not(:is(._active,.btn-accent,._current)) {
 			border: var(--width-line) solid var(--color-accent-s);
 		}
 
-		&:focus-visible:is(._active,.btn-accent) {
+		&:focus-visible:is(._active,.btn-accent,._current) {
 			border: var(--width-line) solid var(--color-title);
 		}
 	}

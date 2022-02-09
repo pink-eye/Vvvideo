@@ -1,5 +1,5 @@
 .switch {
-	--track-size: calc(var(--thumb-size) * 2.5);
+	--track-size: calc(var(--thumb-size) * 2);
 
 	display: flex;
 
@@ -85,12 +85,12 @@
 	}
 
 	@media (min-width: 26.625em) {
-		--thumb-size: 1rem;
-		--track-padding: 4px;
+		--thumb-size: 1.4rem;
+		--track-padding: 0px;
 	}
 
 	@media (max-width: 26.5625em) {
-		--thumb-size: 0.8rem;
-		--track-padding: 3px;
+		--thumb-size: 1.3rem;
+		--track-padding: 0px;
 	}
 }

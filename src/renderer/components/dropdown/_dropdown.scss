@@ -126,13 +126,6 @@
 			color: hsl(0, 0%, 100%);
 
 			background-color: var(--color-accent-s);
-
-			@media (hover: hover) and (pointer: fine) {
-
-				&:focus-visible {
-					border: 3px solid var(--color-accent-m);
-				}
-			}
 		}
 
 		@media (hover: hover) and (pointer: fine) {
