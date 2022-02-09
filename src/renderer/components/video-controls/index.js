@@ -291,16 +291,16 @@ const hideDecoration = action => {
 	let icon = getSelector(`#${action}`)
 
 	if (!icon.hidden) {
-		const startAnimation = () => {
-			if (icon.classList.contains('_active')) icon.classList.remove('_active')
-
-			setTimeout(endAnimation, 300)
-		}
-
 		const endAnimation = () => {
 			icon.hidden ||= true
 
 			icon = null
+		}
+
+		const startAnimation = () => {
+			if (icon.classList.contains('_active')) icon.classList.remove('_active')
+
+			setTimeout(endAnimation, 300)
 		}
 
 		setTimeout(startAnimation, 300)
@@ -527,7 +527,7 @@ const highlightCurrentChapter = time => {
 
 	lastHighlightedTimecode?.classList.remove('btn-accent')
 
-	for (let index = 0, { length } = timecodeAll; index < length; index++) {
+	for (let index = 0, { length } = timecodeAll; index < length; index += 1) {
 		let timecode = timecodeAll[index]
 
 		if (timecode.textContent.includes(convertSecondsToDuration(time))) {
@@ -612,33 +612,29 @@ const updateStoryboard = params => {
 const updateProgress = () => {
 	let progress = getSelector('.progress')
 	let progressSeek = progress.querySelector('.progress__seek')
-	let video = getSelector('video')
+	const { currentTime, duration } = getSelector('video')
 
-	progressSeek.value = Math.floor(video.currentTime)
-	progress.style.setProperty(
-		'--progress',
-		`${convertToPercentage(Math.floor(video.currentTime), ~~video.duration)}%`
-	)
+	progressSeek.value = currentTime
+	progress.style.setProperty('--progress', `${convertToPercentage(currentTime, duration)}%`)
 
 	progress = null
 	progressSeek = null
-	video = null
 }
 
-const createProgressBarChapter = left =>
+const createProgressBarChapterHTML = left =>
 	`<div class="progress__chapter" style="--left: ${left}"></div>`
 
-const insertProgressBarChapters = () => {
+const visualizeProgressBarChapters = () => {
 	if (!chapters || chapters.length === 0) return
 
 	let progress = getSelector('.progress')
 	let progressBar = progress.querySelector('.progress__bar')
 	const { duration } = getSelector('video')
 
-	for (let index = 0, { length } = chapters; index < length; index++) {
+	for (let index = 0, { length } = chapters; index < length; index += 1) {
 		const { start_time } = chapters[index]
 		const offsetLeft = `${convertToPercentage(start_time, duration)}%`
-		progressBar.insertAdjacentHTML('beforeEnd', createProgressBarChapter(offsetLeft))
+		progressBar.insertAdjacentHTML('beforeEnd', createProgressBarChapterHTML(offsetLeft))
 	}
 
 	progress = null
@@ -661,7 +657,7 @@ const getRequiredChapter = time => {
 const updateSeekTooltipChapters = params => {
 	const { duration, skipTo } = params
 
-	if (!chapters || chapters.length === 0 || (skipTo < 0 && skipTo > Math.floor(duration))) return
+	if (!chapters || chapters.length === 0 || (skipTo < 0 && skipTo > duration)) return
 
 	const requiredChapter = getRequiredChapter(skipTo)
 
@@ -684,7 +680,7 @@ const updateSeekTooltipChapters = params => {
 const updateSeekTooltipTime = params => {
 	const { duration, skipTo } = params
 
-	if (skipTo < 0 && skipTo > Math.floor(duration)) return
+	if (skipTo < 0 && skipTo > duration) return
 
 	let controls = getSelector('.controls')
 	let progressSeek = controls.querySelector('.progress__seek')
@@ -947,9 +943,7 @@ const handleEnd = () => {
 const handleMouseMoveProgressSeek = event => {
 	let video = getSelector('video')
 
-	const duration = isEmpty(hls)
-		? +event.target.getAttribute('max')
-		: Math.floor(video.currentTime)
+	const duration = isEmpty(hls) ? +event.target.getAttribute('max') : video.currentTime
 	const skipTo = ~~((event.offsetX / event.target.clientWidth) * duration)
 	const rectVideo = video.getBoundingClientRect()
 	const widthProgressBar = video.offsetWidth - 40
@@ -1018,7 +1012,6 @@ const handleSegmentsSB = segments => {
 	if (!segments || segments.length === 0) return
 
 	segmentsSB = segments
-	fillSegmentsSB(segmentsSB)
 	visualizeSegmentsSB(segmentsSB)
 }
 
@@ -1163,8 +1156,10 @@ export const initVideoPlayer = async data => {
 	quality = null
 	qualityCurrent = null
 
-	if (data.player_response.captions) {
-		const { captionTracks } = data.player_response.captions.playerCaptionsTracklistRenderer
+	const captionsTracklist = data.player_response?.captions?.playerCaptionsTracklistRenderer
+
+	if (captionsTracklist) {
+		const { captionTracks } = captionsTracklist
 
 		if (captionTracks?.length > 0) {
 			hasCaptions = true
@@ -1349,7 +1344,7 @@ export const resetVideoPlayer = () => {
 
 	const decorationArray = ['play', 'pause', 'load']
 
-	for (let index = 0, { length } = decorationArray; index < length; index++) {
+	for (let index = 0, { length } = decorationArray; index < length; index += 1) {
 		const decoration = decorationArray[index]
 
 		let decorationSelector = getSelector(`#${decoration}`)
