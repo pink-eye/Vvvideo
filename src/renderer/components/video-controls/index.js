@@ -707,19 +707,11 @@ const updateSeekTooltipPosition = params => {
 	let controls = getSelector('.controls')
 	let seekTooltip = controls.querySelector('.seek-tooltip')
 
-	const { widthProgressBar, posCursor } = params
+	const { posCursor } = params
 
-	if (posCursor < widthProgressBar * 0.1) {
-		seekTooltip.style.left = `${widthProgressBar * 0.1}px`
-	}
+	let left = `${posCursor}px`
 
-	if (posCursor > widthProgressBar * 0.1 && posCursor < widthProgressBar * 0.9) {
-		seekTooltip.style.left = `${posCursor}px`
-	}
-
-	if (posCursor > widthProgressBar * 0.9) {
-		seekTooltip.style.left = `${widthProgressBar * 0.9}px`
-	}
+	seekTooltip.style.setProperty('--left', left)
 
 	controls = null
 	seekTooltip = null
@@ -951,12 +943,11 @@ const handleMouseMoveProgressSeek = event => {
 	let video = getSelector('video')
 
 	const duration = isEmpty(hls) ? +event.target.getAttribute('max') : video.currentTime
-	const skipTo = ~~((event.offsetX / event.target.clientWidth) * duration)
+	const skipTo = (event.offsetX / event.target.clientWidth) * duration
 	const rectVideo = video.getBoundingClientRect()
-	const widthProgressBar = video.offsetWidth - 40
 	const posCursor = event.pageX - rectVideo.left - 20
 
-	const params = { duration, skipTo, widthProgressBar, posCursor }
+	const params = { duration, skipTo, posCursor }
 
 	updateStoryboard(params)
 	updateSeekTooltipTime(params)
