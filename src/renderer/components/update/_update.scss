@@ -64,7 +64,7 @@
 		transition: background-color var(--trns);
 
 		aside > svg {
-			fill: var(--color-title);
+			stroke: var(--color-title);
 		}
 
 		@media (hover: hover) and (pointer: fine) {
