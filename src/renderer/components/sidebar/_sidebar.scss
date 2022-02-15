@@ -33,21 +33,10 @@
 			content: unset;
 		}
 
-		@media (min-width: 48em) {
-
-			&:last-child {
-				margin-top: auto;
-			}
-		}
-
 		@media (max-width: 47.9375em) {
 			display: flex;
 			flex: 0 1 25%;
 			justify-content: center;
-
-			&:last-child {
-				display: none;
-			}
 		}
 	}
 
@@ -79,14 +68,9 @@
 			padding-right: 10px;
 			padding-left: 20px;
 
-			background-image: linear-gradient(var(--wipe-dir), var(--color-accent-l), var(--color-accent-l));
-			background-repeat: no-repeat;
-			background-size: 0 100%;
-
 			transition:
 				border-color var(--trns),
-				background-color var(--trns),
-				background-size var(--trns-time-default) var(--ease-in-sine);
+				background-color var(--trns);
 		}
 
 		@media (max-width: 47.9375em) {
@@ -103,14 +87,12 @@
 		@media (hover: hover) and (pointer: fine) {
 
 			&:not(._active):hover {
-				text-decoration: none;
-
-				background-size: 100% 100%;
+				background-color: var(--color-accent-l);
 
 				.sidebar__caption {
-					margin-left: 5px;
-
 					color: var(--color-accent-s);
+
+					transform: translateX(5px);
 				}
 
 				.sidebar__icon svg {
@@ -161,7 +143,7 @@
 		transition:
 			color var(--trns),
 			opacity var(--trns),
-			margin-left var(--trns),
+			transform var(--trns),
 			visibility var(--trns);
 	}
 

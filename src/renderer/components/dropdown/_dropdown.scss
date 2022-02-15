@@ -23,17 +23,17 @@
 	&._active {
 
 		.dropdown__list {
-			--gap: 5px;
+			--gap: 10px;
 			visibility: visible;
 
 			opacity: 1;
 
 			&_top {
-				bottom: calc(100% + var(--gap));
+				transform: translateY(calc(-100% - var(--gap)));
 			}
 
 			&_bottom {
-				top: calc(100% + var(--gap));
+				transform: translateY(var(--gap));
 			}
 		}
 
@@ -90,8 +90,7 @@
 			visibility var(--trns),
 			background-color var(--trns),
 			box-shadow var(--trns),
-			bottom var(--trns),
-			top var(--trns);
+			transform var(--trns);
 
 		&::-webkit-scrollbar {
 			width: 0;

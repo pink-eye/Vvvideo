@@ -102,9 +102,9 @@
 		@media (min-width: 48em) {
 			margin-left: var(--margin);
 
-			transition: margin var(--trns);
+			transition: margin-left var(--trns);
 
-			will-change: margin;
+			will-change: margin-left;
 		}
 	}
 }

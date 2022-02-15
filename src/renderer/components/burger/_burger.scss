@@ -20,7 +20,7 @@
 	&._active > &__wrapper {
 
 		&:before {
-			left: 50%;
+			transform: translateX(100%);
 		}
 
 		&:before,
@@ -30,9 +30,7 @@
 		}
 
 		&:after {
-			left: 50%;
-
-			width: 50%;
+			transform: translateX(25%) scaleX(50%);
 		}
 	}
 
@@ -63,7 +61,7 @@
 			width: 50%;
 
 			transition:
-				left var(--trns),
+				transform var(--trns),
 				background-color var(--trns);
 
 			content: '';
@@ -73,8 +71,7 @@
 			bottom: 0;
 
 			transition:
-				left var(--trns),
-				width var(--trns),
+				transform var(--trns),
 				background-color var(--trns);
 
 			content: '';

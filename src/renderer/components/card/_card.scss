@@ -270,12 +270,13 @@
 			bottom: 0;
 			left: 0;
 
-			width: 0;
+			width: 100%;
 			height: 2px;
 
 			background-color: var(--color-text);
+			transform: scale(0%);
 
-			transition: width var(--trns);
+			transition: transform var(--trns);
 
 			content: '';
 		}
@@ -285,7 +286,7 @@
 			&:hover {
 
 				&:after {
-					width: 100%;
+					transform: scale(100%);
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 .header {
 	position: fixed;
+	top: 0;
 	right: 0;
 	z-index: 100;
 
@@ -10,12 +11,12 @@
 	box-shadow: var(--box-shadow-s);
 
 	transition:
-		top var(--trns),
+		transform var(--trns),
 		box-shadow var(--trns),
 		background-color var(--trns);
 
 	&:not(._hidden) {
-		top: 0;
+		transform: translateY(0%);
 	}
 
 	.burger {
@@ -27,7 +28,7 @@
 	}
 
 	&._hidden {
-		top: -84px;
+		transform: translateY(-100%);
 	}
 
 	// .header__outter-container
