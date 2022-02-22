@@ -1,11 +1,4 @@
-import {
-	getSelector,
-	hideOnScroll,
-	isEmpty,
-	reloadApp,
-	closeApp,
-	queryClosestByClass,
-} from 'Global/utils'
+import { getSelector, hideOnScroll, isEmpty, reloadApp, queryClosestByClass } from 'Global/utils'
 import { AppStorage } from 'Global/AppStorage'
 import { manageWin } from 'Global/WinManager'
 import { checkForUpdate } from 'Global/checkForUpdate'
@@ -156,11 +149,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 	let headerReload = header.querySelector('.header__btn')
 	headerReload.addEventListener('click', reloadApp)
 	headerReload = null
-
-	// INIT BTN TO CLOSE APP
-	let btnExit = sidebar.querySelector('.btn-exit')
-	btnExit.addEventListener('click', closeApp)
-	btnExit = null
 
 	startDropdowns()
 
