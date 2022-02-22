@@ -17,9 +17,7 @@ import { hideLastDropdown, startDropdowns } from 'Components/dropdown'
 import { toggleMenu } from 'Components/burger'
 import { showToast } from 'Components/toast'
 import { initUpdateComponent } from 'Components/update'
-import { handleLoadWindow } from 'Components/preloader'
-
-window.addEventListener('load', handleLoadWindow, { once: true })
+import { removePreloader } from 'Components/preloader'
 
 const handleFocus = () => {
 	hideSuggestions()
@@ -100,6 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 	applySettingsOnStart()
 	openWinLatest()
 	initSuggestions()
+	removePreloader()
 
 	// MAIN SELECTORS
 	const header = getSelector('.header')
