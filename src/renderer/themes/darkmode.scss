@@ -1,21 +1,22 @@
 :root {
-	--color-bg: hsl(240, 15%, 10%);
-	--color-bg-form: hsl(240, 15%, 15%);
-	--color-bg-secondary: hsl(240, 15%, 14%);
-	--color-bg-third: hsl(240, 15%, 12%);
+	--color-bg: hsl(240, 30%, 10%);
+	--color-bg-form: hsl(240, 30%, 15%);
+	--color-bg-secondary: hsl(240, 30%, 14%);
+	--color-bg-third: hsl(240, 30%, 12%);
 	--color-title: hsl(0, 0%, 100%);
 	--color-text: hsl(223, 4%, 55%);
 	--color-descr: hsl(240, 5%, 48%);
-	--color-bg-field: hsl(240, 15%, 25%);
+	--color-bg-field: hsl(240, 30%, 25%);
 	--color-text-field: hsl(225, 5%, 80%);
+	--color-border-field: hsl(240, 30%, 20%);
 	--color-icon: var(--color-text);
 	--color-bg-skeleton: var(--color-bg);
-	--color-bg-skeleton-item: hsl(240, 15%, 12%);
+	--color-bg-skeleton-item: hsl(240, 30%, 12%);
 	--color-bg-btn: var(--color-bg);
 	--bg-btn: hsl(0, 0%, 100%);
-	--bg-btn-hover: hsl(240, 15%, 35%);
-	--color-bg-btn-disabled: hsl(240, 15%, 5%);
-	--color-bg-btn-primary-hover: hsl(240, 15%, 12%);
+	--bg-btn-hover: hsl(240, 30%, 35%);
+	--color-bg-btn-disabled: hsl(240, 30%, 5%);
+	--color-bg-btn-primary-hover: hsl(240, 30%, 12%);
 	--color-box-shadow-s: hsla(0, 0%, 0%, 0.1);
 	--color-box-shadow-m: hsla(0, 0%, 0%, 0.3);
 	--color-box-shadow-l: hsla(0, 0%, 0%, 0.5);
@@ -26,16 +27,17 @@
 	--color-switch: hsl(0, 0%, 100%);
 	--color-switch-highlight: hsla(0, 0%, 70%, 0.25);
 	--color-track-inactive: var(--color-bg-field);
-	--color-track-active: hsl(125, 40%, 40%);
+	--color-track-active: hsl(125, 60%, 40%);
 	--color-bg-unsubscribe: hsl(230, 10%, 35%);
 	--color-link: hsl(200, 100%, 55%);
 	--color-link-hover: hsl(200, 100%, 35%);
 	--color-link-visited: var(--color-accent-s);
-	--color-bg-suggest-selected: hsl(240, 15%, 18%);
-	--color-bg-suggest-hover: hsl(240, 15%, 20%);
+	--color-bg-suggest-selected: hsl(240, 30%, 18%);
+	--color-bg-suggest-hover: hsl(240, 30%, 20%);
 	--color-text-suggest-selected: var(--color-title);
 	--color-bg-toast: var(--color-bg-field);
 	--color-text-toast: hsl(220, 5%, 85%);
+	--color-bg-chapter: hsl(240, 30%, 10%);
 }
 
 img {

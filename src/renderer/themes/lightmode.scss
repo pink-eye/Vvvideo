@@ -6,12 +6,13 @@
 	--color-title: hsl(220, 20%, 35%);
 	--color-text: hsl(245, 5%, 45%);
 	--color-descr: hsl(0, 0%, 40%);
-	--color-bg-field: var(--color-bg);
-	--color-text-field: var(--color-text);
-	--color-icon: var(--color-text);
-	--color-bg-skeleton: var(--color-bg);
+	--color-bg-field: hsl(230, 10%, 90%);
+	--color-text-field: hsl(245, 5%, 45%);
+	--color-border-field: hsl(230, 10%, 94%);
+	--color-icon: hsl(245, 5%, 45%);
+	--color-bg-skeleton: hsl(230, 10%, 90%);
 	--color-bg-skeleton-item: hsl(0, 0%, 95%);
-	--color-bg-btn: var(--color-bg);
+	--color-bg-btn: hsl(230, 10%, 90%);
 	--bg-btn: hsl(0, 0%, 100%);
 	--bg-btn-hover: hsl(0, 0%, 70%);
 	--color-bg-btn-disabled: hsl(230, 10%, 80%);
@@ -33,9 +34,10 @@
 	--color-link-visited: var(--color-accent-s);
 	--color-bg-suggest-selected: hsl(0, 0%, 100%);
 	--color-bg-suggest-hover: hsl(0, 0%, 95%);
-	--color-text-suggest-selected: var(--color-title);
+	--color-text-suggest-selected: hsl(220, 20%, 35%);
 	--color-bg-toast: var(--color-bg-form);
-	--color-text-toast: var(--color-title);
+	--color-text-toast: hsl(220, 20%, 20%);
+	--color-bg-chapter: hsl(240, 30%, 10%);
 }
 
 img {
