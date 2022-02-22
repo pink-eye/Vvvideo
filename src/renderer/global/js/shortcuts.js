@@ -18,11 +18,11 @@ export const handleKeyDown = event => {
 		if (winActive.classList.contains('subscriptions')) {
 			firstCard = winActive.querySelector('.author')
 		} else if (winActive.classList.contains('channel')) {
-			let tabContentActive = winActive.querySelector('.tab-content._active')
+			let tabsPanelActive = winActive.querySelector('.tabs__panel._active')
 
-			firstCard = tabContentActive.querySelector('.card')
+			firstCard = tabsPanelActive.querySelector('.card')
 
-			tabContentActive = null
+			tabsPanelActive = null
 		} else firstCard = winActive.querySelector('.card')
 
 		firstCard ? firstCard.focus() : document.activeElement.blur()
@@ -54,10 +54,10 @@ export const handleKeyDown = event => {
 			!winActive.classList.contains('settings') &&
 			!winActive.classList.contains('video')
 		) {
-			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive } =
+			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabsPanelActive } =
 				scrapeInfoToSwitchPage(winActive)
 
-			tabContentActive && (winActive = tabContentActive)
+			tabsPanelActive && (winActive = tabsPanelActive)
 
 			let btns = btnNextPage.closest('.btns')
 
