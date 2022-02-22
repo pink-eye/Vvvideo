@@ -99,9 +99,9 @@ export const rememberWatchedTime = () => {
 	if (isDisabledHistory && dontRememberWatchedTime) return
 
 	const { id } = getSelector('.video').dataset
-	const { currentTime } = getSelector('video')
+	const { currentTime, duration } = getSelector('video')
 
-	if (currentTime === 0) return
+	if (convertToPercentage(currentTime, duration) < 1) return
 
 	for (let index = 0, { length } = storage.history; index < length; index += 1) {
 		if (storage.history[index].id === id) {
