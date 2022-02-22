@@ -259,15 +259,15 @@ export const scrapeInfoToSwitchPage = winActive => {
 	let btnNextPage = null
 	let btnPrevPage = null
 	let typeCard = null
-	let tabContentActive = null
+	let tabsPanelActive = null
 
 	if (winActive.classList.contains('channel')) {
-		tabContentActive = winActive.querySelector('.tab-content._active')
+		tabsPanelActive = winActive.querySelector('.tab__panel._active')
 
-		if (tabContentActive) {
-			cardAll = tabContentActive.querySelectorAll('.card')
-			btnPrevPage = tabContentActive.querySelector('.btns__prev')
-			btnNextPage = tabContentActive.querySelector('.btns__next')
+		if (tabsPanelActive) {
+			cardAll = tabsPanelActive.querySelectorAll('.card')
+			btnPrevPage = tabsPanelActive.querySelector('.btns__prev')
+			btnNextPage = tabsPanelActive.querySelector('.btns__next')
 			typeCard = cardAll[0].dataset.win
 		}
 	} else {
@@ -283,5 +283,5 @@ export const scrapeInfoToSwitchPage = winActive => {
 		else typeCard = cardAll[0].dataset.win
 	}
 
-	return { cardAll, btnNextPage, btnPrevPage, typeCard, tabContentActive }
+	return { cardAll, btnNextPage, btnPrevPage, typeCard, tabsPanelActive }
 }
