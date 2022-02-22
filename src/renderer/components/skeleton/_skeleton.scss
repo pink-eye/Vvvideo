@@ -8,7 +8,9 @@
 
 	background-color: var(--color-bg-skeleton);
 
-	transition: opacity var(--trns);
+	transition:
+		opacity var(--trns-fast),
+		background-color var(--trns);
 
 	will-change: opacity;
 
@@ -28,14 +30,6 @@
 		content: '';
 
 		will-change: transform;
-	}
-
-	&:not(._removing) {
-		opacity: 1;
-	}
-
-	&._removing {
-		opacity: 0;
 	}
 }
 
