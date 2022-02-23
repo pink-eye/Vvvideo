@@ -11,11 +11,11 @@
 			opacity: 0;
 
 			&_top {
-				bottom: calc(100% + var(--gap));
+				transform: translateY(0%);
 			}
 
 			&_bottom {
-				top: calc(100% + var(--gap));
+				transform: translateY(0%);
 			}
 		}
 	}
@@ -24,8 +24,8 @@
 
 		.dropdown__list {
 			--gap: 10px;
-			visibility: visible;
 
+			visibility: visible;
 			opacity: 1;
 
 			&_top {
@@ -86,11 +86,12 @@
 		box-shadow: var(--box-shadow-m);
 
 		transition:
-			opacity var(--trns),
-			visibility var(--trns),
+			border-color var(--trns),
+			opacity var(--trns-fast),
+			visibility var(--trns-fast),
 			background-color var(--trns),
 			box-shadow var(--trns),
-			transform var(--trns);
+			transform var(--trns-fast);
 
 		&::-webkit-scrollbar {
 			width: 0;
@@ -107,8 +108,8 @@
 
 	&__btn {
 		width: 100%;
-		padding: 17px 30px;
-		border-radius: var(--brs-m);
+		padding: 15px 30px;
+		border-radius: 7px;
 
 		text-align: left;
 
@@ -119,6 +120,8 @@
 
 		&:not(._current) {
 			color: var(--color-text);
+
+			background-color: transparent;
 		}
 
 		&._current {
