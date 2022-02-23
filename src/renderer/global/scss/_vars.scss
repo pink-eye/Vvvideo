@@ -3,7 +3,7 @@
 		'Commissioner',
 		sans-serif;
 	--accent-hue: 330;
-	--accent-saturation: 70%;
+	--accent-saturation: 95%;
 	--accent-lightness: 48%;
 	--accent-alpha-l: 0.1;
 	--accent-alpha-m: 0.55;
@@ -37,7 +37,7 @@
 
 	@media screen and (prefers-reduced-motion: no-preference) {
 		--trns-time-default: 0.3s;
-		--trns-time-fast: 0.2s;
+		--trns-time-fast: 0.18s;
 		--trns-time-slow: 1s;
 	}
 

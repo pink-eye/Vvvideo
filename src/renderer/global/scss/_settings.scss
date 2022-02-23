@@ -56,7 +56,7 @@ input {
 
 	outline: 0;
 
-	transition: border-color var(--trns);
+	transition: border-color var(--trns-fast);
 }
 
 input {
@@ -123,12 +123,6 @@ a:not(.btn-primary, .update) {
 	background-color: transparent;
 
 	-webkit-font-smoothing: inherit;
-	-moz-osx-font-smoothing: inherit;
-
-	&::-moz-focus-inner {
-		padding: 0;
-		border: 0;
-	}
 }
 
 label {
@@ -149,13 +143,12 @@ input[type='text'] {
 	outline: 0;
 
 	transition:
-		border-radius var(--trns),
-		border-color var(--trns),
+		border-color var(--trns-fast),
 		color var(--trns),
 		background-color var(--trns);
 
 	&:not(:focus-visible) {
-		border: var(--width-line) solid transparent;
+		border: var(--width-line) solid var(--color-border-field);
 
 		&::placeholder {
 			opacity: 0.8;
@@ -167,13 +160,6 @@ input[type='text'] {
 
 		&::placeholder {
 			opacity: 0;
-		}
-	}
-
-	@media (hover: hover) and (pointer: fine) {
-
-		&:not(:focus-visible):hover {
-			border: var(--width-line) solid var(--color-accent-m);
 		}
 	}
 }

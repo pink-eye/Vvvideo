@@ -18,7 +18,7 @@ const createSuggestionHTML = textContent => `<button class="suggestion">
 
 const createRecentQueryHTML = textContent => `<button class="suggestion">
 											<aside class="suggestion__icon">
-												<svg width="21px" height="21px">
+												<svg width="19px" height="19px">
 													<use xlink:href='img/svg/actions.svg#date'></use>
 												</svg>
 											</aside>

@@ -7,11 +7,11 @@ import { initPages, disablePages } from 'Components/grid-btns'
 
 export const hideLastTab = () => {
 	let channel = getSelector('.channel')
-	let tabContentActive = channel.querySelector('.tabs__panel._active')
+	let tabsPanelActive = channel.querySelector('.tabs__panel._active')
 
-	if (tabContentActive && tabContentActive.classList.contains('_active')) {
-		tabContentActive.classList.remove('_active')
-		resetGrid(tabContentActive)
+	if (tabsPanelActive && tabsPanelActive.classList.contains('_active')) {
+		tabsPanelActive.classList.remove('_active')
+		resetGrid(tabsPanelActive)
 	}
 
 	let tabActive = channel.querySelector('.tabs__btn._active')
@@ -20,7 +20,7 @@ export const hideLastTab = () => {
 		tabActive.classList.remove('_active')
 	}
 
-	tabContentActive = null
+	tabsPanelActive = null
 	channel = null
 	tabActive = null
 }
