@@ -29,9 +29,9 @@
 		opacity: 1;
 
 		transition:
-			opacity var(--trns-time-default) var(--ease-out-back),
-			visibility var(--trns-time-default) var(--ease-out-back),
-			transform var(--trns-time-default) var(--ease-out-back);
+			opacity var(--trns-time-fast) var(--ease-out-back),
+			visibility var(--trns-time-fast) var(--ease-out-back),
+			transform var(--trns-time-fast) var(--ease-out-back);
 	}
 }
 

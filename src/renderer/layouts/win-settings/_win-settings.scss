@@ -159,17 +159,11 @@
 
 		color: var(--color-text);
 		font-weight: 300;
+
+		font-size: unquote('clamp(1rem, 0.9643rem + 0.1786vw, 1.125rem)');
 		line-height: 26px / 18px * 100%;
 
 		transition: color var(--trns);
-
-		@media (min-width: 36em) {
-			font-size: 1.125rem;
-		}
-
-		@media (max-width: 35.9375em) {
-			font-size: 1rem;
-		}
 
 		@media (max-width: 47.9375em) and (min-width: 20em) {
 			display: flex;

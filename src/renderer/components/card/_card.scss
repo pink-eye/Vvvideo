@@ -150,9 +150,7 @@
 
 		background-color: var(--color-bg-unsubscribe);
 
-		transition:
-			clip-path var(--trns-time-default) var(--ease-in-sine),
-			width var(--trns-time-default) var(--ease-in-sine);
+		transition: clip-path var(--trns-time-fast) var(--ease-in-sine);
 
 		clip-path: circle(40% at 110% 50%);
 

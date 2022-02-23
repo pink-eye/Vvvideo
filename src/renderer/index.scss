@@ -121,7 +121,7 @@
 		opacity: 0;
 
 		transition:
-			transform 0s var(--ease-out-sine) var(--trns-time-default),
+			transform 0s var(--ease-out-sine) var(--trns-time-fast),
 			opacity var(--trns-time-fast) var(--ease-out-sine),
 			visibility var(--trns-time-fast) var(--ease-out-sine);
 	}
@@ -136,9 +136,9 @@
 		opacity: 1;
 
 		transition:
-			transform var(--trns-time-default) var(--ease-in-sine),
-			opacity var(--trns-time-default) var(--ease-in-sine),
-			visibility var(--trns-time-default) var(--ease-in-sine);
+			transform var(--trns-time-fast) var(--ease-in-sine),
+			opacity var(--trns-time-fast) var(--ease-in-sine),
+			visibility var(--trns-time-fast) var(--ease-in-sine);
 	}
 
 	&__header {
