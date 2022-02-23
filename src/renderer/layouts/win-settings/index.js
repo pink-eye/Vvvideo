@@ -1,4 +1,4 @@
-import { getSelector, isEmpty, reloadApp } from 'Global/utils'
+import { getSelector, isEmpty, reloadApp, isChild } from 'Global/utils'
 import { YoutubeHelper } from 'Global/YoutubeHelper'
 import { formatIP, formatPort } from 'Layouts/win-settings/helper'
 import { AppStorage } from 'Global/AppStorage'
@@ -110,7 +110,7 @@ const handleClickImport = () => {
 	impExpField = null
 }
 
-const handleFile = () => {
+const handleFile = event => {
 	let settings = getSelector('.settings')
 	let impExpBody = settings.querySelector('.imp-exp')
 	let impExpTip = settings.querySelector('.imp-exp__tip')
@@ -128,7 +128,7 @@ const handleFile = () => {
 
 const handleInputField = event => {
 	storage = appStorage.get()
-	let input = event.currentTarget
+	let input = event.target
 	const option = input.id
 
 	switch (option) {
@@ -164,7 +164,7 @@ const toggleTransition = isDisabled => {
 	let modalContainer = document.querySelector('.modal__container')
 
 	if (isDisabled) {
-		document.documentElement.style.setProperty('--trns-time-default', '0')
+		document.documentElement.style.setProperty('--trns-time-default', '0s')
 		document.documentElement.style.setProperty('--trns-time-fast', '0')
 		document.documentElement.style.setProperty('--trns-time-slow', '0')
 		document.documentElement.style.setProperty('--trns-timing-func', 'unset')
@@ -179,7 +179,7 @@ const toggleTransition = isDisabled => {
 
 const handleChangeCheckbox = event => {
 	storage = appStorage.get()
-	let checkbox = event.currentTarget
+	let checkbox = event.target
 	const option = checkbox.id
 
 	storage.settings[`${option}`] = checkbox.checked
@@ -217,99 +217,64 @@ const handleChangeCheckbox = event => {
 	appStorage.update(storage)
 }
 
+const handleClickWin = event => {
+	let { target } = event
+
+	if (isChild(target, '.clear-history')) {
+		clearHistory()
+	}
+
+	if (isChild(target, '.imp-exp__btn.btn-accent')) {
+		handleClickImport()
+	}
+
+	target = null
+}
+
+const handleChangeWin = event => {
+	let { target } = event
+
+	if (target.matches('input[type="file"]')) {
+		handleFile(event)
+	}
+
+	if (target.matches('input[type="checkbox"]')) {
+		handleChangeCheckbox(event)
+	}
+
+	target = null
+}
+
+const handleInputWin = event => {
+	let { target } = event
+
+	if (target.matches('input[type="text"]')) {
+		handleInputField(event)
+	}
+
+	target = null
+}
+
 export const openWinSettings = () => {
 	let settings = getSelector('.settings')
 
 	fillWinSettings()
 
-	let btnClearHistory = settings.querySelector('#clear-history')
-	btnClearHistory.addEventListener('click', clearHistory)
-	btnClearHistory = null
+	settings.addEventListener('click', handleClickWin)
+	settings.addEventListener('change', handleChangeWin)
+	settings.addEventListener('input', handleInputWin)
 
-	// IMPLEMENT IMPORT
-
-	let impExpField = settings.querySelector('.imp-exp__field')
-	impExpField.addEventListener('change', handleFile)
-	impExpField = null
-
-	let impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
-	impExpBtn.addEventListener('click', handleClickImport)
-	impExpBtn = null
-
-	// CHECKBOXES
-
-	let checkboxAll = settings.querySelectorAll('input[type="checkbox"]')
-
-	for (let index = 0, { length } = checkboxAll; index < length; index += 1) {
-		let checkbox = checkboxAll[index]
-
-		checkbox.addEventListener('change', handleChangeCheckbox)
-
-		checkbox = null
-	}
-
-	checkboxAll = null
-
-	// INPUTS
-
-	let inputAll = settings.querySelectorAll('input[type="text"]')
-
-	for (let index = 0, { length } = inputAll; index < length; index += 1) {
-		let input = inputAll[index]
-
-		input.addEventListener('input', handleInputField)
-
-		input = null
-	}
-
-	inputAll = null
 	settings = null
 }
 
 export const resetWinSettings = () => {
 	let settings = getSelector('.settings')
 
-	let btnClearHistory = settings.querySelector('#clear-history')
-	btnClearHistory.removeEventListener('click', clearHistory)
-
-	// RESET IMPORT
-
-	let impExpField = settings.querySelector('.imp-exp__field')
-	impExpField.removeEventListener('change', handleFile)
-
-	let impExpBtn = settings.querySelector('.imp-exp__btn.btn-accent')
-	impExpBtn.removeEventListener('click', handleClickImport)
-
-	// RESET CHECKBOXES
-
-	let checkboxAll = settings.querySelectorAll('input[type="checkbox"]')
-
-	for (let index = 0, { length } = checkboxAll; index < length; index += 1) {
-		let checkbox = checkboxAll[index]
-
-		checkbox.removeEventListener('change', handleChangeCheckbox)
-
-		checkbox = null
-	}
-
-	// RESET INPUTS
-
-	let inputAll = settings.querySelectorAll('input[type="text"]')
-
-	for (let index = 0, { length } = inputAll; index < length; index += 1) {
-		let input = inputAll[index]
-
-		input.removeEventListener('input', handleInputField)
-
-		input = null
-	}
+	settings.removeEventListener('click', handleClickWin)
+	settings.removeEventListener('change', handleChangeWin)
+	settings.removeEventListener('input', handleInputWin)
 
 	settings = null
-	checkboxAll = null
-	inputAll = null
-	impExpBtn = null
-	impExpField = null
-	btnClearHistory = null
 }
 
 export const setTheme = themeOption => {
