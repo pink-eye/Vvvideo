@@ -2,12 +2,16 @@
 	position: fixed;
 	z-index: 20;
 
-	background-color: var(--color-bg-form);
+	background-color: var(--color-bg-sidebar);
 
 	transition:
 		transform var(--trns),
 		background-color var(--trns),
 		box-shadow var(--trns);
+
+	&::-webkit-scrollbar {
+		width: 0;
+	}
 
 	&__nav {
 		height: 100%;
@@ -43,16 +47,15 @@
 	&__btn {
 		position: relative;
 
+		display: grid;
+		place-items: center;
+
 		width: 100%;
 
 		background-color: transparent;
 
 		&._active {
 			background-color: var(--color-accent-s);
-
-			.sidebar__caption {
-				color: hsl(0, 0%, 100%);
-			}
 
 			.sidebar__icon svg {
 				fill: hsl(0, 0%, 100%);
@@ -62,21 +65,74 @@
 
 		@media (min-width: 48em) {
 			--wipe-dir: 90deg;
-			display: flex;
-			align-items: center;
-			padding-block: 19px;
-			padding-right: 10px;
-			padding-left: 20px;
+			aspect-ratio: 1 / 1;
 
 			transition:
 				border-color var(--trns),
 				background-color var(--trns);
+
+			&:before,
+			&:after {
+				position: absolute;
+				top: 50%;
+				left: 100%;
+
+				opacity: 0;
+
+				transition:
+					opacity var(--trns),
+					transform var(--trns);
+
+				content: '';
+
+				pointer-events: none;
+			}
+
+			&:before {
+				width: 0;
+				height: 0;
+				border-color: transparent var(--color-bg-sidebar-tooltip) transparent transparent;
+				border-style: solid;
+				border-width: 17px 10px 17px 0;
+
+				transform: translateY(-50%) translateX(0px);
+			}
+
+			&:after {
+				padding-block: 5px;
+				padding-inline: 10px 15px;
+				border-radius: 0 var(--brs-s) var(--brs-s) 0;
+
+				color: hsl(0, 0%, 100%);
+
+				background-color: var(--color-bg-sidebar-tooltip);
+				transform: translateY(-50%) translateX(10px);
+
+				content: attr(data-tooltip);
+			}
+
+			@media (hover: hover) and (pointer: fine) {
+
+				&:hover {
+
+					&:before,
+					&:after {
+						opacity: 1;
+					}
+
+					&:before {
+						transform: translateY(-50%) translateX(15px);
+					}
+
+					&:after {
+						transform: translateY(-50%) translateX(25px);
+					}
+				}
+			}
 		}
 
 		@media (max-width: 47.9375em) {
 			--middle-val-padbl: calc(7px + (15 - 7) * ((100vw - 320px) / (767 - 320)));
-			display: grid;
-			place-items: center;
 			justify-content: center;
 			padding-block: clamp(7px, var(--middle-val-padbl), 15px);
 			border-radius: var(--brs-m);
@@ -121,10 +177,6 @@
 			width: 30px;
 		}
 
-		@media (min-width: 48em) {
-			margin-right: 10px;
-		}
-
 		@media (max-width: 28.0625em) {
 
 			svg {
@@ -134,28 +186,14 @@
 		}
 	}
 
-	&__caption {
-		color: var(--color-icon);
-		font-weight: 400;
-		font-size: var(--caption-font-size);
-		white-space: nowrap;
-
-		transition:
-			color var(--trns),
-			opacity var(--trns),
-			transform var(--trns),
-			visibility var(--trns);
-	}
-
 	@media (min-width: 48em) {
 		top: 0;
 		left: 0;
 
-		width: 227px;
+		width: 86px;
 		height: 100vh;
 		padding-top: 114px;
 		padding-bottom: 10px;
-		overflow: hidden auto;
 		overscroll-behavior: contain;
 
 		box-shadow: var(--box-shadow-s);
@@ -186,38 +224,6 @@
 			bottom: 0;
 
 			transform: translateX(-50%) translateY(100%);
-		}
-	}
-
-	@media (min-width: 48em) {
-
-		&::-webkit-scrollbar {
-			width: 14px;
-		}
-
-		&::-webkit-scrollbar-thumb {
-			border: 3px solid var(--color-bg-form);
-			border-radius: var(--brs-m);
-
-			background-color: var(--color-bg-field);
-		}
-
-		&::-webkit-scrollbar-track {
-			background-color: var(--color-bg-form);
-		}
-	}
-
-	@media (max-width: 47.9375em) {
-
-		&::-webkit-scrollbar {
-			width: 0;
-		}
-	}
-
-	@media (max-width: 47.9375em) {
-
-		.sidebar__caption {
-			display: none;
 		}
 	}
 }
