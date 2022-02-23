@@ -15,6 +15,8 @@ export const getSelector = selector => {
 export const queryClosestByClass = (target, className) =>
 	target.classList.contains(className) ? target : target.closest(`.${className}`)
 
+export const isChild = (target, selector) => target.matches(selector) || target.closest(selector)
+
 export const reloadApp = () => window.location.reload()
 
 export const closeApp = () => window.close()

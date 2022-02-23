@@ -1,0 +1,82 @@
+<div class="controls__menu menu">
+	<ul class="menu__list list-reset">
+		<li class="menu__item">
+			<button data-panel="quality" class="menu__btn btn-reset">
+				<aside>
+					<svg width="23px" height="23px">
+						<use xlink:href="img/svg/controls.svg#quality"></use>
+					</svg>
+				</aside>
+				Quality
+				<span class="current"></span>
+			</button>
+		</li>
+		<li class="menu__item">
+			<button data-panel="captions" class="menu__btn btn-reset">
+				<aside>
+					<svg width="23px" height="23px">
+						<use xlink:href="img/svg/controls.svg#cc"></use>
+					</svg>
+				</aside>
+				Captions
+				<span class="current"></span>
+			</button>
+		</li>
+		<li class="menu__item">
+			<button data-panel="speed" class="menu__btn btn-reset">
+				<aside>
+					<svg width="23px" height="23px">
+						<use xlink:href="img/svg/controls.svg#speed"></use>
+					</svg>
+				</aside>
+				Speed
+				<span class="current"></span>
+			</button>
+		</li>
+	</ul>
+	<div class="menu__content">
+		<button data-panel="first" class="menu__btn menu__btn_back btn-reset">
+			<aside>
+				<svg width="17px" height="17px">
+					<use xlink:href="img/svg/controls.svg#back"></use>
+				</svg>
+			</aside>
+			Back
+		</button>
+		<small class="menu__separator"></small>
+		<div class="menu__panel panel" data-panel="quality">
+			<ul class="panel__list list-reset"></ul>
+		</div>
+		<div class="menu__panel panel" data-panel="captions">
+			<ul class="panel__list list-reset"></ul>
+		</div>
+		<div class="menu__panel panel" data-panel="speed">
+			<ul class="panel__list list-reset">
+				<li class="panel__item">
+					<button data-speed="0.5" class="panel__btn btn-reset">x0.50</button>
+				</li>
+				<li class="panel__item">
+					<button data-speed="0.75" class="panel__btn btn-reset">x0.75</button>
+				</li>
+				<li class="panel__item">
+					<button data-speed="1" class="panel__btn btn-reset">x1</button>
+				</li>
+				<li class="panel__item">
+					<button data-speed="1.25" class="panel__btn btn-reset">x1.25</button>
+				</li>
+				<li class="panel__item">
+					<button data-speed="1.5" class="panel__btn btn-reset">x1.5</button>
+				</li>
+				<li class="panel__item">
+					<button data-speed="1.75" class="panel__btn btn-reset">x1.75</button>
+				</li>
+				<li class="panel__item">
+					<button data-speed="2" class="panel__btn btn-reset">x2</button>
+				</li>
+				<li class="panel__item">
+					<button data-speed="2.25" class="panel__btn btn-reset">x2.25</button>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

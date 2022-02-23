@@ -1,7 +1,5 @@
 import { AppStorage } from 'Global/AppStorage'
 
-export const getMin = (a, b) => (a > b ? b : a)
-
 export const round = (n, d) => Number(~~(n + 'e' + d) + 'e-' + d)
 
 export const getPosStroryboard = (videoDuration, currentTime, count) => {
@@ -27,20 +25,18 @@ export const getPosStroryboard = (videoDuration, currentTime, count) => {
 	return { posX, posY }
 }
 
-export const getHighestVideo = formats => API.YTDLChooseFormat(formats, 'highestvideo')
-
 export const getHighestAudio = formats => API.YTDLChooseFormat(formats, 'highestaudio')
 
-export const filterFormats = (formats, fn) => Object.values(formats).filter(fn)
+const filterFormats = (formats, fn) => Object.values(formats).filter(fn)
 
-export const filterVideoWebm = formats =>
+const filterVideoWebm = formats =>
 	filterFormats(
 		formats,
 		format =>
 			format.container === 'webm' && format.hasVideo && !format.isDashMPD && !format?.type
 	)
 
-export const filterVideoMP4NoAudio = formats =>
+const filterVideoMP4NoAudio = formats =>
 	filterFormats(
 		formats,
 		format =>
@@ -67,4 +63,52 @@ export const getPreferredQuality = formats => {
 	return defaultQuality === 'highest'
 		? getHighestVideo(formats)
 		: formats.find(el => el.qualityLabel.includes(defaultQuality))
+}
+
+export const resetMediaEl = el => {
+	let givenEl = el
+
+	givenEl.pause()
+	givenEl.removeAttribute('src')
+	givenEl.load()
+
+	givenEl = null
+}
+
+export const isPlaying = el =>
+	el && !el.paused && !el.ended && el.currentTime > 0 && el.readyState > 2
+
+export const isPlayingLight = el => el && !el.paused && !el.ended && el.currentTime >= 0
+
+export const getVideoFormatsByDefaultFormat = (formats, defaultVideoFormat) => {
+	let requiredFormats = null
+
+	switch (defaultVideoFormat) {
+		case 'mp4':
+			requiredFormats = filterVideoMP4NoAudio(formats)
+
+			if (requiredFormats?.length > 0) break
+			else return getVideoFormatsByDefaultFormat(formats, 'webm')
+
+		case 'webm':
+			requiredFormats = filterVideoWebm(formats)
+
+			if (requiredFormats?.length > 0) break
+			else return getVideoFormatsByDefaultFormat(formats, 'mp4')
+	}
+
+	return requiredFormats
+}
+
+export const getRequiredChapter = (chapters, time) => {
+	let requiredChapter = null
+
+	chapters.forEach(chapter => {
+		if (chapter.start_time < time) {
+			requiredChapter = chapter
+			return
+		}
+	})
+
+	return requiredChapter
 }

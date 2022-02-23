@@ -29,10 +29,7 @@ const handleClickContent = event => {
 const openWinVideo = (data, lastWin) => {
 	let video = getSelector('.video')
 	let videoPoster = video.querySelector('.video__poster img')
-	let topBarTitle = video.querySelector('.top-bar__title')
-	let topBarAuthor = video.querySelector('.top-bar__author')
 	let controls = getSelector('.controls')
-	let storyboard = controls.querySelector('.seek-tooltip__storyboard')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
 	let videoViews = videoInfo.querySelector('.video-info__views')
@@ -43,13 +40,12 @@ const openWinVideo = (data, lastWin) => {
 	let videoLikes = videoInfo.querySelector('.video-info__likes')
 	let authorCard = videoInfo.querySelector('.author')
 	let subscribeBtn = videoInfo.querySelector('.subscribe')
-	let { settings } = storage
 
 	// SPOILER
 
-	const spoiler = videoInfo.querySelector('.spoiler')
-
+	let spoiler = videoInfo.querySelector('.spoiler')
 	initSpoiler(spoiler)
+	spoiler = null
 
 	// FILL WIN
 
@@ -65,13 +61,7 @@ const openWinVideo = (data, lastWin) => {
 
 	// FILL VIDEO INFO
 
-	if (settings.disableStoryboard || videoDetails.storyboards.length === 0) storyboard.remove()
-
-	if (storyboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
-		storyboard.style.setProperty('--url', `url(${videoDetails.storyboards.at(0).templateUrl})`)
-
 	if (videoDetails.title !== videoTitle.textContent) videoTitle.textContent = videoDetails.title
-	topBarTitle.textContent = videoDetails.title
 
 	removeSkeleton(titleSkeleton)
 
@@ -101,8 +91,6 @@ const openWinVideo = (data, lastWin) => {
 		}
 	}
 
-	topBarAuthor.textContent = videoDetails.author.name
-
 	let authorParams = {
 		parent: authorCard,
 		name: videoDetails.author.name,
@@ -126,9 +114,6 @@ const openWinVideo = (data, lastWin) => {
 	controls = null
 	spoilerContent = null
 	videoLikes = null
-	topBarTitle = null
-	topBarAuthor = null
-	storyboard = null
 	partSkeletonAll = null
 	titleSkeleton = null
 	authorCard = null
@@ -141,7 +126,6 @@ export const resetWinVideo = () => {
 	resetVideoPlayer()
 
 	let video = getSelector('.video')
-	let videoPoster = video.querySelector('.video__poster img')
 	let skeletonAll = video.querySelectorAll('.skeleton')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
@@ -149,7 +133,7 @@ export const resetWinVideo = () => {
 	let spoilerContent = videoInfo.querySelector('.spoiler__content')
 	let videoViews = videoInfo.querySelector('.video-info__views')
 	let videoDate = videoInfo.querySelector('.video-info__date')
-	let actionsPlaylist = videoInfo.querySelector('.actions__playlist')
+	let actionsPlaylist = videoInfo.querySelector('.info-actions__playlist')
 	let authorCard = videoInfo.querySelector('.author')
 
 	video.dataset.id = ''
@@ -160,8 +144,6 @@ export const resetWinVideo = () => {
 
 	if (video.classList.contains('_live')) video.classList.remove('_live')
 
-	videoPoster.removeAttribute('src')
-	videoPoster.closest('.video__poster').classList.remove('_hidden')
 	videoTitle.textContent = '...'
 	videoLikes.textContent = '...'
 	videoViews.textContent = 'Unknown'
@@ -186,7 +168,6 @@ export const resetWinVideo = () => {
 	resetAuthorCard(authorCard)
 
 	video = null
-	videoPoster = null
 	videoLikes = null
 	videoInfo = null
 	skeletonAll = null
@@ -251,7 +232,7 @@ const fillSomeInfoVideo = params => {
 
 const displayPlaylistBtn = playlistId => {
 	let videoParent = getSelector('.video')
-	let actionsPlaylist = videoParent.querySelector('.actions__playlist')
+	let actionsPlaylist = videoParent.querySelector('.info-actions__playlist')
 
 	actionsPlaylist.hidden &&= false
 	actionsPlaylist.dataset.id = playlistId

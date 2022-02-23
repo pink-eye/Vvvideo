@@ -1,106 +1,87 @@
 <div class="video__controls controls">
-	<div class="controls__decorations decorations">
-		<aside class="decorations__item" id="play" hidden>
-			<svg width="45px" height="45px">
-				<use xlink:href="img/svg/controls.svg#play"></use>
-			</svg>
-		</aside>
-		<aside class="decorations__item" id="pause" hidden>
-			<svg width="45px" height="45px">
-				<use xlink:href="img/svg/controls.svg#pause"></use>
-			</svg>
-		</aside>
-		<aside class="decorations__item" id="load" hidden>
-			<svg viewBox="0 0 50 50" class="spinner">
-				<circle class="ring" cx="25" cy="25" r="22.5" />
-				<circle class="line" cx="25" cy="25" r="22.5" />
-			</svg>
-		</aside>
+	<div class="controls__top top">
+		<h2 class="top__title"></h2>
+		<address class="top__author"></address>
 	</div>
+	<aside class="controls__state">
+		<svg width="50px" height="50px">
+			<use xlink:href="img/svg/controls.svg#play"></use>
+		</svg>
+	</aside>
+	@include('./partials/decorations/decorations.html')
 	<div class="controls__bar">
-		<div class="controls__progress progress">
-			<div class="progress__bar"></div>
-			<input class="progress__seek seek" value="0" min="0" type="range" step="1" />
-			<div class="progress__seek-tooltip seek-tooltip">
-				<div class="seek-tooltip__container">
-					<div class="seek-tooltip__storyboard"></div>
-					<time class="seek-tooltip__time">00:00</time>
-					<p class="seek-tooltip__chapter"></p>
-				</div>
-			</div>
-			<ul class="progress__sponsorblock sponsorblock list-reset"></ul>
-		</div>
+		@include('./partials/menu/menu.html')
+		@include('./partials/progress/progress.html')
 		<div class="controls__wrapper">
-			<button class="controls__switch onclick-effect btn-reset">
-				<svg width="20px" height="20px">
-					<use xlink:href="img/svg/controls.svg#play"></use>
-				</svg>
-			</button>
-			<button class="controls__volume onclick-effect volume btn-reset">
-				<svg width="27px" height="27px">
-					<use xlink:href="img/svg/controls.svg#volume"></use>
-				</svg>
-				<div class="volume__range">
-					<progress class="volume__bar bar" value="0" min="0"></progress>
-					<input class="volume__seek seek" value="1" type="range" max="1" min="0" step="0.01" />
-				</div>
-			</button>
-			<div class="controls__time time">
-				<time class="time__elapsed">00:00</time>
-				<small class="time__separator"> / </small>
-				<time class="time__duration">00:00</time>
-				<p class="time__chapter"></p>
-			</div>
-			<div class="controls__right">
-				<button class="controls__sponsorblock onclick-effect btn-reset">
-					<img width="27px" height="27px" src="img/sponsorblock.png" alt="" />
-				</button>
-				<div class="controls__captions dropdown" hidden>
-					<button class="dropdown__head btn-reset">
-						<svg width="28px" height="28px">
-							<use xlink:href="img/svg/controls.svg#cc"></use>
-						</svg>
-					</button>
-					<ul class="dropdown__list dropdown__list_top list-reset"></ul>
-				</div>
-				<div class="controls__speed dropdown">
-					<button class="dropdown__head btn-reset">x1</button>
-					<ul class="dropdown__list dropdown__list_top list-reset">
-						<li class="dropdown__item">
-							<button data-speed="0.5" class="dropdown__btn btn-reset">x0.50</button>
-						</li>
-						<li class="dropdown__item">
-							<button data-speed="0.75" class="dropdown__btn btn-reset">x0.75</button>
-						</li>
-						<li class="dropdown__item">
-							<button data-speed="1" class="dropdown__btn btn-reset">x1</button>
-						</li>
-						<li class="dropdown__item">
-							<button data-speed="1.25" class="dropdown__btn btn-reset">x1.25</button>
-						</li>
-						<li class="dropdown__item">
-							<button data-speed="1.5" class="dropdown__btn btn-reset">x1.5</button>
-						</li>
-						<li class="dropdown__item">
-							<button data-speed="1.75" class="dropdown__btn btn-reset">x1.75</button>
-						</li>
-						<li class="dropdown__item">
-							<button data-speed="2" class="dropdown__btn btn-reset">x2</button>
-						</li>
-						<li class="dropdown__item">
-							<button data-speed="2.25" class="dropdown__btn btn-reset">x2.25</button>
-						</li>
-					</ul>
-				</div>
-				<div class="controls__quality dropdown">
-					<button class="dropdown__head btn-reset"></button>
-					<ul class="dropdown__list dropdown__list_top list-reset"></ul>
-				</div>
-				<button class="controls__screen onclick-effect btn-reset">
-					<svg width="22px" height="22px">
-						<use xlink:href="img/svg/controls.svg#open-fullscreen"></use>
-					</svg>
-				</button>
+			<p class="controls__current-chapter"></p>
+			<div class="controls__actions controls-actions">
+				<ul class="controls-actions__list list-reset">
+					<li class="controls-actions__item">
+						<button
+							class="
+								controls-actions__btn controls-actions__btn_volume
+								onclick-effect
+								volume
+								btn-reset
+							"
+							data-tooltip="Mute (M)">
+							<aside>
+								<svg width="23px" height="23px">
+									<use xlink:href="img/svg/controls.svg#volume"></use>
+								</svg>
+							</aside>
+							<div class="volume__range">
+								<progress class="volume__bar bar" value="0" min="0"></progress>
+								<input
+									class="volume__seek seek"
+									value="1"
+									type="range"
+									max="1"
+									min="0"
+									step="0.01" />
+							</div>
+						</button>
+					</li>
+					<li class="controls-actions__item">
+						<button
+							class="
+								controls-actions__btn controls-actions__btn_sponsorblock
+								onclick-effect
+								btn-reset
+							"
+							data-tooltip="Start segment (S)">
+							<svg width="23px" height="23px">
+								<use xlink:href="img/svg/controls.svg#sponsorblock"></use>
+							</svg>
+						</button>
+					</li>
+					<li class="controls-actions__item">
+						<button
+							class="
+								controls-actions__btn controls-actions__btn_more
+								onclick-effect
+								btn-reset
+							"
+							data-tooltip="Open more">
+							<svg width="27px" height="27px">
+								<use xlink:href="img/svg/controls.svg#more"></use>
+							</svg>
+						</button>
+					</li>
+					<li class="controls-actions__item">
+						<button
+							class="
+								controls-actions__btn controls-actions__btn_screen
+								onclick-effect
+								btn-reset
+							"
+							data-tooltip="Fullscreen (F)">
+							<svg width="20px" height="20px">
+								<use xlink:href="img/svg/controls.svg#open-fullscreen"></use>
+							</svg>
+						</button>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>

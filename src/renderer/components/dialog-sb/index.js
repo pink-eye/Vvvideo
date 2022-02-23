@@ -1,4 +1,9 @@
-import { getSelector, convertDurationToSeconds, convertSecondsToDuration } from 'Global/utils'
+import {
+	getSelector,
+	convertDurationToSeconds,
+	convertSecondsToDuration,
+	isChild,
+} from 'Global/utils'
 import { AppStorage } from 'Global/AppStorage'
 import { showToast } from 'Components/toast'
 import { formatDuration } from 'Components/dialog-sb/helper'
@@ -25,7 +30,7 @@ const hideInvalidUI = () => {
 	dialogSbWarning = null
 }
 
-const handleInputDialogField = ({ target }) => {
+const handleInputField = ({ target }) => {
 	let dialogSbField = target
 
 	dialogSbField.value = formatDuration(dialogSbField.value)
@@ -33,6 +38,30 @@ const handleInputDialogField = ({ target }) => {
 	hideInvalidUI()
 
 	dialogSbField = null
+}
+
+const handleInputDialog = event => {
+	let { target } = event
+
+	if (target.matches('input[type="text"]')) {
+		handleInputField(event)
+	}
+
+	target = null
+}
+
+const handleClickDialog = event => {
+	let { target } = event
+
+	if (isChild(target, '.dialog-sb__btn_send')) {
+		sendSegmentSB()
+	}
+
+	if (isChild(target, '.dialog-sb__btn_cancel')) {
+		modal.close()
+	}
+
+	target = null
 }
 
 const showDialogSB = () => {
@@ -47,46 +76,36 @@ const showDialogSB = () => {
 	hideInvalidUI()
 
 	let dialogSb = getSelector('.dialog-sb')
-	let dialogSbStart = dialogSb.querySelector('input#start')
-	let dialogSbEnd = dialogSb.querySelector('input#end')
-	let dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send')
-	let dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel')
 
-	dialogSbStart.addEventListener('input', handleInputDialogField)
-	dialogSbEnd.addEventListener('input', handleInputDialogField)
-	dialogSbBtnSend.addEventListener('click', sendSegmentSB)
-	dialogSbBtnCancel.addEventListener('click', handleCancel)
+	dialogSb.addEventListener('click', handleClickDialog)
+	dialogSb.addEventListener('input', handleInputDialog)
 
 	modal.open('dialog-sb')
 
 	video = null
 	audio = null
 	dialogSb = null
-	dialogSbStart = null
-	dialogSbEnd = null
-	dialogSbBtnSend = null
-	dialogSbBtnCancel = null
 }
 
-export const recordSegmentSB = () => {
+export const recordSegmentSB = ({ onStart, onEnd }) => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
 	const { disableSponsorblock } = storage.settings
 
 	if (disableSponsorblock) return
 
+	modal = new GraphModal({ isClose: handleCloseModal })
+
 	let video = getSelector('video')
 
 	if (!video.paused || !video.ended) {
 		let dialogSb = getSelector('.dialog-sb')
-		let controlsSponsorblock = getSelector('.controls').querySelector('.controls__sponsorblock')
 
 		if (!isRecording) {
 			let dialogSbStart = dialogSb.querySelector('input#start')
 			dialogSbStart.value = convertSecondsToDuration(video.currentTime)
 
-			controlsSponsorblock.classList.add('_record')
-
+			onStart()
 			showToast('info', 'Recording of segment is started...')
 
 			dialogSbStart = null
@@ -94,8 +113,7 @@ export const recordSegmentSB = () => {
 			let dialogSbEnd = dialogSb.querySelector('input#end')
 			dialogSbEnd.value = convertSecondsToDuration(video.currentTime)
 
-			controlsSponsorblock.classList.remove('_record')
-
+			onEnd()
 			showDialogSB()
 
 			dialogSbEnd = null
@@ -103,33 +121,29 @@ export const recordSegmentSB = () => {
 
 		isRecording = !isRecording
 		dialogSb = null
-		controlsSponsorblock = null
 	} else showToast('error', 'You must play video!')
 
 	video = null
 }
 
-const handleCancel = () => modal.close()
-
 const resetDialogSB = () => {
 	let dialogSb = getSelector('.dialog-sb')
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
-	let dialogSbBtnSend = dialogSb.querySelector('.dialog-sb__btn_send')
-	let dialogSbBtnCancel = dialogSb.querySelector('.dialog-sb__btn_cancel')
 
 	hideInvalidUI()
 
-	dialogSbStart.removeEventListener('input', handleInputDialogField)
-	dialogSbEnd.removeEventListener('input', handleInputDialogField)
-	dialogSbBtnSend.removeEventListener('click', sendSegmentSB)
-	dialogSbBtnCancel.removeEventListener('click', handleCancel)
+	dialogSbStart.value = ''
+	dialogSbEnd.value = ''
+
+	dialogSb.removeEventListener('click', handleClickDialog)
+	dialogSb.removeEventListener('input', handleInputDialog)
+
+	isRecording &&= false
 
 	dialogSb = null
 	dialogSbStart = null
 	dialogSbEnd = null
-	dialogSbBtnSend = null
-	dialogSbBtnCancel = null
 }
 
 const isValidFields = () => {
@@ -205,16 +219,4 @@ const handleCloseModal = () => {
 	resetDialogSB()
 
 	video = null
-}
-
-export const initDialogSB = () => {
-	let controlsSponsorblock = getSelector('.controls').querySelector('.controls__sponsorblock')
-
-	isRecording &&= false
-
-	modal = new GraphModal({ isClose: handleCloseModal })
-
-	controlsSponsorblock.addEventListener('click', recordSegmentSB)
-
-	controlsSponsorblock = null
 }

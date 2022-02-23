@@ -1,0 +1,145 @@
+.menu {
+	position: relative;
+
+	width: 300px;
+	max-height: 180px;
+	border-radius: var(--brs-l);
+	overflow: hidden;
+
+	background-color: hsl(0, 0%, 5%);
+
+	box-shadow: var(--box-shadow-xl);
+
+	&__list {
+		padding: 10px;
+	}
+
+	&__item {
+
+		&:not(:first-child) {
+			margin-top: 5px;
+		}
+
+		&:not(:last-child) {
+			margin-bottom: 5px;
+		}
+	}
+
+	&__btn {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		width: 100%;
+		padding: 10px;
+		border-radius: var(--brs-m);
+
+		color: hsl(0, 0%, 100%);
+
+		transition: background-color var(--trns);
+
+		& svg {
+			fill: hsl(0, 0%, 100%);
+		}
+
+		& > .current {
+			max-width: 10ch;
+			margin-left: auto;
+			overflow: hidden;
+
+			color: var(--color-icon);
+			font-size: .9rem;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+
+			&:hover {
+				background-color: hsl(0, 0%, 20%);
+			}
+		}
+	}
+
+	&__content {
+		position: absolute;
+		inset: 0;
+
+		width: 100%;
+		padding: 10px;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+
+		background-color: hsl(0, 0%, 5%);
+
+		&:not(._opened) {
+			display: none;
+		}
+
+		&::-webkit-scrollbar {
+			width: 0;
+		}
+
+		&._opened {
+			display: block;
+		}
+	}
+
+	&__panel {
+		width: 100%;
+
+		&:not(._active) {
+			display: none;
+		}
+
+		&._active {
+			display: block;
+		}
+	}
+
+	&__separator {
+		display: block;
+		width: 100%;
+		height: 2px;
+		margin-block: 5px;
+
+		background-color: hsl(0, 0%, 10%);
+	}
+}
+
+.panel {
+
+	&__item {
+
+		&:not(:first-child) {
+			margin-top: 5px;
+		}
+	}
+
+	&__btn {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		width: 100%;
+		padding: 10px;
+		border-radius: var(--brs-m);
+
+		color: hsl(0, 0%, 100%);
+
+		transition: background-color var(--trns);
+
+		& svg {
+			fill: hsl(0, 0%, 100%);
+		}
+
+		&._current {
+			background-color: var(--color-accent-l);
+		}
+
+		@media (hover: hover) and (pointer: fine) {
+
+			&:not(._current):hover {
+				background-color: hsl(0, 0%, 20%);
+			}
+		}
+	}
+}
