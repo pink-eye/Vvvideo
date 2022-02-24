@@ -194,6 +194,7 @@
 		height: 100vh;
 		padding-top: 114px;
 		padding-bottom: 10px;
+		overflow-y: auto;
 		overscroll-behavior: contain;
 
 		box-shadow: var(--box-shadow-s);
