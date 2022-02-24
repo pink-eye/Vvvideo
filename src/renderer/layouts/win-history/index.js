@@ -23,9 +23,11 @@ export const openWinHistory = () => {
 
 		video.classList.add('_history-video')
 
-		if ('playlistId' in history[index]) video.dataset.playlistId = history[index].playlistId
+		if (history[index]) {
+			if ('playlistId' in history[index]) video.dataset.playlistId = history[index].playlistId
 
-		history[index] ? fillVideoCard(video, index, history) : (video.hidden = true)
+			fillVideoCard(video, index, history)
+		} else video.hidden = true
 
 		video = null
 	}

@@ -9,7 +9,7 @@ export class AppStorage {
 	get() {
 		const storageFromLS = this.#getFromLocalStorage()
 
-		if (storageFromLS) return storageFromLS
+		if (storageFromLS && 'subscriptions' in storageFromLS) return storageFromLS
 
 		return this.getFromFile()
 	}
