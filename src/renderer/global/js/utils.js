@@ -63,7 +63,8 @@ export const hideOnScroll = (selector, mq) => {
 		lastScrollValue = scrollDistance
 	}
 
-	if (window.innerWidth <= mq || mq === 0) window.addEventListener('scroll', handleScroll)
+	if (window.innerWidth <= mq || mq === 0)
+		window.addEventListener('scroll', handleScroll, { passive: true })
 }
 
 export const normalizeCount = count => {
