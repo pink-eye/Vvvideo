@@ -718,12 +718,12 @@ const handleMouseMoveProgressSeek = event => {
 	updateSeekTooltipPosition(params)
 
 	if (chapters?.length) {
-		const { title } = getRequiredChapter(chapters, skipTo)
+		const requiredChapter = getRequiredChapter(chapters, skipTo)
 
-		if (lastSeekTooltipChapter !== title) {
-			lastSeekTooltipChapter = title
+		if (lastSeekTooltipChapter !== title && requiredChapter?.title) {
+			lastSeekTooltipChapter = requiredChapter.title
 
-			params.chapter = title
+			params.chapter = requiredChapter.title
 			updateSeekTooltipChapter(params)
 		}
 	}
