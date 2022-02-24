@@ -1,12 +1,8 @@
 const handleClickUpdateComponent = event => {
-	event.preventDefault()
+	const RELEASE_LATEST_URL = 'https://github.com/pink-eye/vvvideo/releases/latest'
 
-	let { currentTarget } = event
-
-	API.openExternalLink(currentTarget.href)
-	currentTarget.classList.remove('_active')
-
-	currentTarget = null
+	API.openExternalLink(RELEASE_LATEST_URL)
+	event.currentTarget.classList.remove('_active')
 }
 
 export const initUpdateComponent = () => {
