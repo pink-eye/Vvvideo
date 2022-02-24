@@ -49,6 +49,7 @@ let state = {
 }
 
 let isFirstPlay = true
+let isPaused = false
 let isSync = false
 let doesSkipSegments = true
 let hls = null
@@ -376,9 +377,11 @@ const togglePlay = () => {
 	let conditionTogglePlay = audio ? video.paused && audio.paused : video.paused
 
 	if (conditionTogglePlay) {
+		isPaused = false
 		showDecoration('play', true)
 		playVideoPlayer()
 	} else {
+		isPaused = true
 		showDecoration('pause', true)
 		pauseVideoPlayer()
 	}
@@ -870,6 +873,8 @@ const handleInputVideoPlayer = event => {
 }
 
 const handleCanPlayThroughVideo = () => {
+	if (isPaused) return
+
 	let { video, audio } = getMedia()
 
 	if (!isPlaying(audio)) playVideoPlayer()
@@ -879,6 +884,8 @@ const handleCanPlayThroughVideo = () => {
 }
 
 const handleCanPlayThroughAudio = () => {
+	if (isPaused) return
+
 	let { video, audio } = getMedia()
 
 	if (!isPlaying(video)) playVideoPlayer()
@@ -1020,7 +1027,7 @@ export const initVideoPlayer = async data => {
 		}
 
 		video.addEventListener('canplay', handleCanPlay, { once: true })
-	}
+	} else isPaused = true
 
 	video.addEventListener('canplaythrough', handleCanPlayThroughVideo)
 	video.addEventListener('waiting', handleWaitingVideo)
@@ -1075,6 +1082,7 @@ export const resetVideoPlayer = () => {
 	state.captions.length = 0
 	state.formats = null
 	isFirstPlay ||= true
+	isPaused &&= false
 	isSync &&= false
 	doesSkipSegments ||= true
 	segmentsSB.length = 0
