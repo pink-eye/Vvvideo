@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	startDropdowns()
 
-	if (!storage.settings.checkForUpdate) {
+	if (!storage.settings.dontCheckForUpdate) {
 		checkForUpdate().then(([latestVersion, currentVersion]) => {
 			if (latestVersion === currentVersion) return
 
