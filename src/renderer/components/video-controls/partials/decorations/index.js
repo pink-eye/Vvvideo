@@ -5,39 +5,28 @@ const decorationArray = ['play', 'pause', 'load']
 export const hideDecoration = action => {
 	let icon = getSelector(`#${action}`)
 
-	if (!icon.hidden) {
-		const endAnimation = () => {
-			icon.hidden ||= true
-
-			icon = null
-		}
-
-		const startAnimation = () => {
-			if (icon.classList.contains('_active')) icon.classList.remove('_active')
-
-			setTimeout(endAnimation, 300)
-		}
-
-		setTimeout(startAnimation, 300)
-	}
+	if (icon.classList.contains('_active')) {
+		icon.addEventListener(
+			'transitionend',
+			() => {
+				icon.classList.remove('_active')
+				icon = null
+			},
+			{ once: true }
+		)
+	} else icon = null
 }
 
 export const showDecoration = (action, doHide) => {
 	let icon = getSelector(`#${action}`)
 
-	if (!icon.hidden) return
+	if (!icon.classList.contains('_active')) {
+		icon.classList.add('_active')
 
-	icon.hidden = false
-
-	const startAnimation = () => {
-		if (!icon.classList.contains('_active')) icon.classList.add('_active')
-
-		icon = null
+		doHide && hideDecoration(action)
 	}
 
-	setTimeout(startAnimation, 15)
-
-	doHide && hideDecoration(action)
+	icon = null
 }
 
 export const resetDecorations = () => {
@@ -45,7 +34,6 @@ export const resetDecorations = () => {
 		const decoration = decorationArray[index]
 
 		let decorationSelector = getSelector(`#${decoration}`)
-		decorationSelector.hidden ||= true
 
 		if (decorationSelector.classList.contains('_active'))
 			decorationSelector.classList.remove('_active')

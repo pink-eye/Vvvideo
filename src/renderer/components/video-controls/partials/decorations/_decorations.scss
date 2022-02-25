@@ -14,7 +14,6 @@
 		position: absolute;
 
 		display: grid;
-
 		place-items: center;
 		width: 100px;
 		height: 100px;
@@ -27,8 +26,7 @@
 			fill: hsl(0, 0%, 100%);
 		}
 
-		&:not(._active),
-		&:not(._active) > svg {
+		&:not(._active) {
 			transform: scale(1);
 			opacity: 0;
 
@@ -37,9 +35,8 @@
 				opacity 0.3s var(--ease-in-sine);
 		}
 
-		&._active,
-		&._active > svg {
-			transform: scale(1.25);
+		&._active {
+			transform: scale(1.3);
 			opacity: 1;
 
 			transition:
@@ -48,3 +45,4 @@
 		}
 	}
 }
+
