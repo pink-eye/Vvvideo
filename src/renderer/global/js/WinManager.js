@@ -98,15 +98,25 @@ const showWin = ({ win, winSelector, id }) => {
 
 	mainContent.dataset.activeWin = win
 	mainContent.dataset.activeWinId = id
-	winSelector.classList.add('_active')
 
-	const afterActiveWin = () => {
-		winSelector.classList.add('_anim-win')
-
-		mainContent = null
+	const config = {
+		attributes: true,
+		attributeFilter: ['class'],
 	}
 
-	setTimeout(afterActiveWin, 15)
+	const handleDisplayWin = (mutationsList, observer) => {
+		observer.disconnect()
+
+		setTimeout(() => {
+			winSelector.classList.add('_anim-win')
+			mainContent = null
+		}, 0)
+	}
+
+	const observer = new MutationObserver(handleDisplayWin)
+	observer.observe(winSelector, config)
+
+	winSelector.classList.add('_active')
 }
 
 const hideWin = win => {
@@ -134,7 +144,7 @@ export const manageWin = async ({ target }) => {
 		let { win, id } = btnWin.dataset
 		let mainContent = getSelector('.main__content')
 		let winSelector = mainContent.querySelector(`.${win}`)
-		let lastWinSelector = mainContent.querySelector(`.win._active`)
+		let lastWinSelector = mainContent.querySelector('.win._active._anim-win')
 		let lastWin = mainContent.dataset.activeWin
 		let lastWinId = mainContent.dataset.activeWinId
 		const timeout = getDurationTimeout()
@@ -218,11 +228,13 @@ export const manageWin = async ({ target }) => {
 				btnWin &&= null
 			}
 
-			hideWin(lastWinSelector)
-
-			timeout > 0
-				? lastWinSelector.addEventListener('transitionend', openWin, { once: true })
-				: openWin()
+			if (timeout > 0) {
+				lastWinSelector.addEventListener('transitionend', openWin, { once: true })
+				hideWin(lastWinSelector)
+			} else {
+				hideWin(lastWinSelector)
+				openWin()
+			}
 		}
 	}
 }
