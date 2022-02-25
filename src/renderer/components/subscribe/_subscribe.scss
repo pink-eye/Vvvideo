@@ -19,8 +19,8 @@
 		box-shadow: 0 35px 15px -35px var(--color-box-shadow-xl);
 
 		transition:
-			transform var(--trns),
-			background-color var(--trns);
+			background-color .3s ease,
+			transform var(--trns-fast);
 
 		content: '';
 	}
@@ -58,7 +58,7 @@
 
 			&::after,
 			&::before {
-				transform: scale(1.1);
+				transform: scale(1.08);
 			}
 		}
 	}
