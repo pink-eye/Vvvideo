@@ -46,6 +46,7 @@ export const hideOnScroll = (selector, mq) => {
 	const searchBar = header.querySelector('.search__bar')
 
 	let lastScrollValue = 0
+	let isHidden = false
 
 	const handleScroll = () => {
 		let scrollDistance = window.scrollY
@@ -56,9 +57,17 @@ export const hideOnScroll = (selector, mq) => {
 
 		if (scrollDistance === 0) selector.classList.remove('_hidden')
 
-		scrollDistance > lastScrollValue
-			? selector.classList.add('_hidden')
-			: selector.classList.remove('_hidden')
+		if (scrollDistance > lastScrollValue) {
+			if (!isHidden) {
+				selector.classList.add('_hidden')
+				isHidden = true
+			}
+		} else {
+			if (isHidden) {
+				selector.classList.remove('_hidden')
+				isHidden = false
+			}
+		}
 
 		lastScrollValue = scrollDistance
 	}
@@ -125,9 +134,6 @@ export const convertDurationToSeconds = duration => {
 
 export const getDurationTimeout = (timeout = 300) =>
 	new AppStorage().get().settings.disableTransition ? 0 : timeout
-
-export const invokeFunctionByTimeout = (callback, timeout) =>
-	timeout > 0 ? setTimeout(callback, timeout) : callback()
 
 export const handleClickLink = event => {
 	event.preventDefault()
