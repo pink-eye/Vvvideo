@@ -25,7 +25,7 @@
 		transform: translateX(-100%);
 		opacity: 0.2;
 
-		transition: transform var(--trns-time-default) var(--ease-in-sine);
+		transition: transform var(--trns-time-fast) var(--ease-in-sine);
 
 		content: '';
 	}
