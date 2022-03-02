@@ -576,6 +576,8 @@ const skipSegmentSB = () => {
 	}
 
 	segmentsSB.forEach(({ startTime, endTime }) => {
+		if (!video?.currentTime) return
+
 		const { currentTime } = video
 
 		if (currentTime > startTime && currentTime < endTime) {
@@ -720,7 +722,7 @@ const handleMouseMoveProgressSeek = event => {
 	if (chapters?.length) {
 		const requiredChapter = getRequiredChapter(chapters, skipTo)
 
-		if (lastSeekTooltipChapter !== title && requiredChapter?.title) {
+		if (requiredChapter?.title && lastSeekTooltipChapter !== requiredChapter.title) {
 			lastSeekTooltipChapter = requiredChapter.title
 
 			params.chapter = requiredChapter.title
