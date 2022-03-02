@@ -53,19 +53,6 @@ const handleKeyDownSearch = event => {
 	}
 }
 
-const handleClickSearchBtn = event => {
-	let search = queryClosestByClass(event.target, 'search')
-
-	if (!search) return
-
-	let searchBar = search.querySelector('.search__bar')
-
-	if (!isEmpty(searchBar.value)) manageWin(event)
-
-	search = null
-	searchBar = null
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
@@ -107,7 +94,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	let headerSearch = getSelector('.search')
 	let searchBar = headerSearch.querySelector('.search__bar')
-	let searchBtn = headerSearch.querySelector('.search__btn')
 
 	if (storage.settings.disableSearchSuggestions) {
 		searchBar.addEventListener('blur', hideOverlay)
@@ -124,9 +110,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 	mainContent = null
 
 	sidebar.addEventListener('click', manageWin)
-
-	searchBtn.addEventListener('click', handleClickSearchBtn)
-	searchBtn = null
 
 	searchBar.addEventListener('focus', handleFocus)
 

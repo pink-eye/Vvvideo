@@ -9,20 +9,17 @@
 
 	background-color: transparent;
 
-	// .search__btn
+	// & > aside {
+	// 	position: absolute;
+	// 	top: 50%;
+	// 	left: 14px;
+	// 	z-index: 10;
 
-	&__btn {
-		position: absolute;
-		top: 50%;
-		right: 7.5px;
-		z-index: 10;
+	// 	display: grid;
+	// 	place-items: center;
 
-		display: grid;
-		place-items: center;
-		padding: 4px;
-
-		transform: translateY(-50%);
-	}
+	// 	transform: translateY(-50%);
+	// }
 
 	@media (min-width: 48em) {
 		max-width: 830px;
