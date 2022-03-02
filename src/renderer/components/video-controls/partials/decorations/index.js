@@ -5,15 +5,15 @@ const decorationArray = ['play', 'pause', 'load']
 export const hideDecoration = action => {
 	let icon = getSelector(`#${action}`)
 
+	const removeActive = () => {
+		icon.classList.remove('_active')
+		icon = null
+	}
+
 	if (icon.classList.contains('_active')) {
-		icon.addEventListener(
-			'transitionend',
-			() => {
-				icon.classList.remove('_active')
-				icon = null
-			},
-			{ once: true }
-		)
+		icon.id === 'load'
+			? removeActive()
+			: icon.addEventListener('transitionend', removeActive, { once: true })
 	} else icon = null
 }
 
