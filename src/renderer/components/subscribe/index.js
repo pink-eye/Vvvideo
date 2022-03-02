@@ -1,29 +1,26 @@
+import { isEmpty } from 'Global/utils'
 import { AppStorage } from 'Global/AppStorage'
-import { getDurationTimeout, isEmpty } from 'Global/utils'
 import { showToast } from 'Components/toast'
 
 const appStorage = new AppStorage()
 let storage = null
 
-const hasSubscription = (channelId, name) => {
+const hasSubscription = ({ channelId, name }) => {
 	storage = appStorage.get()
 
 	const { subscriptions } = storage
 
 	if (subscriptions.length === 0) return false
 
-	let isSubscribed = false
-
 	for (let index = 0, { length } = subscriptions; index < length; index += 1) {
 		const subscription = subscriptions[index]
 
 		if (subscription.channelId === channelId || subscription.name === name) {
-			isSubscribed = true
-			break
+			return true
 		}
 	}
 
-	return isSubscribed
+	return false
 }
 
 const addSubscription = obj => {
@@ -39,27 +36,25 @@ const removeSubscription = obj => {
 	appStorage.update(storage)
 }
 
-const transformBtn = (btn, btnText, isSubscribed) => {
-	let givenBtn = btn
-	let givenBtnText = btnText
-	const timeout = getDurationTimeout()
+const visualizeStateBtn = ({ selector, subscriptionObj, interaction = true }) => {
+	let givenBtn = selector
 
-	givenBtn.disabled = true
+	if (interaction) {
+		givenBtn.disabled = true
 
-	!isSubscribed ? givenBtn.classList.add('_subscribed') : givenBtn.classList.remove('_subscribed')
-
-	const changeState = () => {
-		givenBtnText.textContent = !isSubscribed ? 'Unsubscribe' : 'Subscribe'
-
-		givenBtn.disabled = false
-
-		givenBtn = null
-		givenBtnText = null
+		setTimeout(() => {
+			givenBtn.disabled = false
+			givenBtn = null
+		}, 300)
 	}
 
-	timeout > 0
-		? givenBtn.addEventListener('transitionend', changeState(), { once: true })
-		: changeState()
+	const isSubscribed = hasSubscription(subscriptionObj)
+
+	isSubscribed ? givenBtn.classList.add('_subscribed') : givenBtn.classList.remove('_subscribed')
+
+	let btnText = givenBtn.querySelector('.subscribe__text')
+	btnText.textContent = isSubscribed ? 'Unsubscribe' : 'Subscribe'
+	btnText = null
 }
 
 const handleClickSubscribeBtn = ({ currentTarget }) => {
@@ -68,16 +63,11 @@ const handleClickSubscribeBtn = ({ currentTarget }) => {
 	const { channelId, name } = btn.dataset
 
 	if (!isEmpty(channelId) && !isEmpty(name)) {
-		const isSubscribed = hasSubscription(channelId, name)
-		const subObj = { channelId, name }
+		const subscriptionObj = { channelId, name }
+		const isSubscribed = hasSubscription(subscriptionObj)
+		isSubscribed ? removeSubscription(subscriptionObj) : addSubscription(subscriptionObj)
 
-		let btnText = btn.querySelector('.subscribe__text')
-
-		transformBtn(btn, btnText, isSubscribed)
-
-		isSubscribed ? removeSubscription(subObj) : addSubscription(subObj)
-
-		btnText = null
+		visualizeStateBtn({ selector: btn, subscriptionObj })
 	} else {
 		showToast('error', 'Did not get data about the channel')
 		btn.removeEventListener('click', handleClickSubscribeBtn)
@@ -86,13 +76,13 @@ const handleClickSubscribeBtn = ({ currentTarget }) => {
 	btn = null
 }
 
-export const prepareSubscribeBtn = (btn, channelId, name) => {
-	let givenBtn = btn
-	let btnText = givenBtn.querySelector('.subscribe__text')
+export const prepareSubscribeBtn = (selector, channelId, name) => {
+	let givenBtn = selector
 
 	if (!isEmpty(channelId) && isEmpty(givenBtn.dataset.channelId)) {
 		givenBtn.dataset.channelId = channelId
-		transformBtn(givenBtn, btnText, !hasSubscription(channelId, name))
+		const subscriptionObj = { channelId, name }
+		visualizeStateBtn({ selector, subscriptionObj, interaction: false })
 	}
 
 	if (!isEmpty(name) && isEmpty(givenBtn.dataset.name)) givenBtn.dataset.name = name
@@ -100,12 +90,11 @@ export const prepareSubscribeBtn = (btn, channelId, name) => {
 	givenBtn.addEventListener('click', handleClickSubscribeBtn)
 
 	givenBtn = null
-	btnText = null
 }
 
-export const destroySubscribeBtn = btn => {
-	let givenBtn = btn
-	let btnText = btn.querySelector('.subscribe__text')
+export const destroySubscribeBtn = selector => {
+	let givenBtn = selector
+	let btnText = givenBtn.querySelector('.subscribe__text')
 
 	givenBtn.removeAttribute('data-channel-id')
 	givenBtn.removeAttribute('data-name')
