@@ -11,27 +11,22 @@
 	}
 
 	&__list {
-		position: relative;
-
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
+		gap: 10px;
+		padding-inline: 15px;
+		overflow-y: auto;
 
 		background-color: var(--color-bg-third);
 	}
 
 	&__item {
-		position: relative;
 
-		display: flex;
-		align-items: center;
-
-		&:not(:first-child) {
-			margin-left: 10px;
+		&:first-child {
+			margin-left: auto;
 		}
 
-		&:not(:last-child) {
-			margin-right: 10px;
+		&:last-child {
+			margin-right: auto;
 		}
 	}
 
@@ -52,7 +47,7 @@
 			border-color var(--trns);
 
 		&:not(._active) {
-			color: var(--color-icon);
+			color: var(--color-text);
 
 			&::before {
 				transform: translateX(50%) scale(0%);
