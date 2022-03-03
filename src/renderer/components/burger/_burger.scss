@@ -1,11 +1,7 @@
 .burger {
-	--height-buger: 17px;
-	--height-line: 3px;
-	position: relative;
-
-	box-sizing: content-box;
-	width: 20px;
-	height: var(--height-buger);
+	display: grid;
+	place-items: center;
+	aspect-ratio: 1 / 1;
 
 	background-color: transparent;
 
@@ -35,10 +31,14 @@
 	}
 
 	&__wrapper {
+		--height-buger: 17px;
+		--height-line: 3px;
 		position: relative;
 
-		width: 100%;
-		height: 100%;
+		box-sizing: content-box;
+		width: 20px;
+
+		height: var(--height-buger);
 
 		&:before,
 		&:after,

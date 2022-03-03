@@ -69,13 +69,11 @@
 @import './layouts/win-settings/win-settings';
 
 .main {
-	--middle-val-pt: calc(84px + (114 - 84) * ((100vw - 320px) / (1200 - 320)));
-
 	position: relative;
 
 	min-height: 100vh;
 
-	padding-top: clamp(84px, var(--middle-val-pt), 114px);
+	padding-top: 86px;
 	padding-bottom: 50px;
 
 	background-color: var(--color-bg);
@@ -110,6 +108,7 @@
 }
 
 .win {
+	padding-top: 30px;
 
 	&:not(._active) {
 		display: none;
