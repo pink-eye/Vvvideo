@@ -6,7 +6,7 @@
 		}
 
 		@media (min-width: 62em) {
-			max-width: 85vw;
+			max-width: unquote('min(85vw, 1200px)');
 			margin-inline: auto;
 		}
 	}
