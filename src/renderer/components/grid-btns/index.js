@@ -262,7 +262,7 @@ export const scrapeInfoToSwitchPage = winActive => {
 	let tabsPanelActive = null
 
 	if (winActive.classList.contains('channel')) {
-		tabsPanelActive = winActive.querySelector('.tab__panel._active')
+		tabsPanelActive = winActive.querySelector('.tabs__panel._active')
 
 		if (tabsPanelActive) {
 			cardAll = tabsPanelActive.querySelectorAll('.card')
