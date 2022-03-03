@@ -1,6 +1,6 @@
 import { getSelector, isEmpty, reloadApp, isChild } from 'Global/utils'
 import { YoutubeHelper } from 'Global/YoutubeHelper'
-import { formatIP, formatPort } from 'Layouts/win-settings/helper'
+import { formatPort } from 'Layouts/win-settings/helper'
 import { AppStorage } from 'Global/AppStorage'
 import { showToast } from 'Components/toast'
 import { clearHistory, disableHistory } from 'Layouts/win-history/helper'
@@ -133,7 +133,6 @@ const handleInputField = event => {
 
 	switch (option) {
 		case 'host':
-			input.value = formatIP(input.value)
 			storage.settings.proxy.host = isEmpty(input.value) ? '127.0.0.1' : input.value
 			break
 
