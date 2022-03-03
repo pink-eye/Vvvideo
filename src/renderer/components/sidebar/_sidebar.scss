@@ -24,7 +24,6 @@
 			flex-direction: column;
 			height: 100%;
 		}
-
 		@media (max-width: 47.9375em) {
 			flex-direction: row;
 			justify-content: space-between;
@@ -95,7 +94,7 @@
 				border-style: solid;
 				border-width: 17px 10px 17px 0;
 
-				transform: translateY(-50%) translateX(0px);
+				transform: translateY(-50%) translateX(15px);
 			}
 
 			&:after {
@@ -106,7 +105,7 @@
 				color: hsl(0, 0%, 100%);
 
 				background-color: var(--color-bg-sidebar-tooltip);
-				transform: translateY(-50%) translateX(10px);
+				transform: translateY(-50%) translateX(25px);
 
 				content: attr(data-tooltip);
 			}
@@ -119,18 +118,9 @@
 					&:after {
 						opacity: 1;
 					}
-
-					&:before {
-						transform: translateY(-50%) translateX(15px);
-					}
-
-					&:after {
-						transform: translateY(-50%) translateX(25px);
-					}
 				}
 			}
 		}
-
 		@media (max-width: 47.9375em) {
 			--middle-val-padbl: calc(7px + (15 - 7) * ((100vw - 320px) / (767 - 320)));
 			justify-content: center;
@@ -139,7 +129,6 @@
 
 			transition: background-color var(--trns);
 		}
-
 		@media (hover: hover) and (pointer: fine) {
 
 			&:not(._active):hover {
@@ -176,7 +165,6 @@
 		@media (min-width: 48em) {
 			width: 30px;
 		}
-
 		@media (max-width: 28.0625em) {
 
 			svg {
@@ -202,7 +190,6 @@
 			transform: translateX(-100%);
 		}
 	}
-
 	@media (max-width: 47.9375em) {
 		left: 50%;
 

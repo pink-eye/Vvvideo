@@ -4,7 +4,6 @@
 		@media (min-width: 36em) {
 			grid-template-columns: 1fr;
 		}
-
 		@media (min-width: 62em) {
 			max-width: unquote('min(85vw, 1200px)');
 			margin-inline: auto;
@@ -18,13 +17,11 @@
 
 			column-gap: 20px;
 		}
-
 		@media (max-width: 47.9375em) and (min-width: 36em) {
 			grid-template-columns: 56% auto;
 
 			column-gap: 15px;
 		}
-
 		@media (max-width: 35.9375em) {
 			grid-template-rows: auto 1fr;
 		}
@@ -34,7 +31,6 @@
 		@media (min-width: 48em) {
 			font-size: 1.375rem;
 		}
-
 		@media (min-width: 36em) {
 			margin: 0;
 		}

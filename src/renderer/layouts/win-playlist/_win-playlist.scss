@@ -23,7 +23,6 @@
 		@media (min-width: 84.375em) {
 			align-items: flex-start;
 		}
-
 		@media (max-width: 84.3125em) {
 			align-items: center;
 		}
@@ -65,13 +64,12 @@
 			border-radius: var(--brs-m);
 			overflow: hidden;
 
-			background-color: var(--color-bg);
+			background-color: var(--color-bg-third);
 		}
 
 		@media (min-width: 84.375em) {
 			justify-content: flex-start;
 		}
-
 		@media (max-width: 84.3125em) and (min-width: 20em) {
 			justify-content: center;
 		}

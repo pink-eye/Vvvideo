@@ -1,9 +1,5 @@
 .video {
 
-	.video-skeleton {
-		border-radius: 0;
-	}
-
 	&._live {
 
 		.controls__speed,
@@ -19,22 +15,18 @@
 
 		position: relative;
 
-		display: grid;
-		place-items: center;
-
 		aspect-ratio: 16 / 9;
-		margin: auto;
-		overflow: hidden;
+		margin-inline: auto;
+		border-radius: var(--brs-s);
 
 		background-color: var(--color-bg);
 		box-shadow: var(--box-shadow-s);
 
 		video {
-			position: absolute;
-			inset: 0;
-
 			width: 100%;
 			height: 100%;
+			border-radius: inherit;
+
 			object-fit: contain;
 
 			background-color: var(--color-bg-duration);
@@ -49,15 +41,9 @@
 			}
 		}
 
-		@media (min-width: 78.1875em) {
-			flex: 1 1 100%;
-		}
-
 		@media (min-width: 48em) {
 			width: 80%;
-			border-radius: var(--brs-l);
 		}
-
 		@media (hover: hover) and (pointer: fine) {
 
 			&:hover {
@@ -67,7 +53,6 @@
 				}
 			}
 		}
-
 		@media (max-width: 47.9375em) {
 			width: 100%;
 
@@ -83,15 +68,20 @@
 		}
 	}
 
+	&__wrapper > .skeleton {
+		border-radius: 0;
+	}
+
 	&__poster {
 		position: absolute;
 		inset: 0;
-
 		z-index: 1;
 
 		width: 100%;
 		height: 100%;
 		margin-bottom: 0;
+		border-radius: var(--brs-s);
+		overflow: hidden;
 
 		img {
 			width: 100%;

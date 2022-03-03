@@ -14,11 +14,9 @@
 	@media (min-width: 48em) {
 		bottom: 30px;
 	}
-
 	@media (max-width: 47.9375em) {
 		top: 60px;
 	}
-
 	@media (max-width: 35.9375em) {
 		width: 100%;
 	}
@@ -184,11 +182,9 @@
 	@media (min-width: 36em) {
 		font-size: 1rem;
 	}
-
 	@media (max-width: 35.9375em) {
 		font-size: 0.9rem;
 	}
-
 	@media (min-width: 36em) {
 		border-radius: var(--brs-s);
 	}
@@ -262,7 +258,6 @@
 		opacity: 0;
 	}
 }
-
 @keyframes toast-indicator-delay {
 
 	from {

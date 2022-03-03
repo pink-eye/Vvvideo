@@ -12,7 +12,7 @@
 	--color-accent-m: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), var(--accent-alpha-m));
 	--color-accent-l: hsla(var(--accent-hue), var(--accent-saturation), var(--accent-lightness), var(--accent-alpha-l));
 	--color-buffered: hsl(250, 15%, 90%);
-	--width-line: 0.1875rem;
+	--width-line: 3px;
 	--color-line: var(--color-accent-s);
 	--color-bg-duration: hsla(0, 0%, 0%, 0.75);
 	--color-bg-edge: var(--color-accent-s);
@@ -38,7 +38,6 @@
 		--trns-time-fast: 0.18s;
 		--trns-time-slow: 1s;
 	}
-
 	@media screen and (prefers-reduced-motion: reduce) {
 		--trns-time-default: 0.1s;
 		--trns-time-fast: 0s;

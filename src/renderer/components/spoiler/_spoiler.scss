@@ -71,7 +71,6 @@
 				content: '';
 			}
 		}
-
 		@media (max-width: 47.9375em) {
 			padding: 25px 15px;
 		}
@@ -105,7 +104,6 @@
 		@media (max-width: 47.9375em) {
 			justify-content: space-between;
 		}
-
 		@media (hover: hover) and (pointer: fine) {
 
 			&:not(._active):hover {
@@ -124,7 +122,6 @@
 	@media (min-width: 36em) {
 		margin-top: 20px;
 	}
-
 	@media (max-width: 35.9375em) {
 		margin-top: 15px;
 	}

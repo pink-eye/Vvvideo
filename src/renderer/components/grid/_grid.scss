@@ -9,12 +9,10 @@
 		@media (min-width: 48em) {
 			grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 		}
-
 		@media (max-width: 47.9375em) and (min-width: 36em) {
 			grid-template-columns: 1fr 1fr;
 			justify-content: space-between;
 		}
-
 		@media (max-width: 35.9375em) {
 			grid-template-columns: 1fr;
 			justify-content: center;
@@ -54,7 +52,6 @@
 				}
 			}
 		}
-
 		@media (max-width: 28.0625em) {
 
 			.author {
