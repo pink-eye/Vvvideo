@@ -58,13 +58,23 @@
 	}
 
 	&__time {
-		min-width: 8ch;
+		position: absolute;
+		top: 0;
 
 		color: hsl(0, 0%, 100%);
-		text-align: center;
+
+		transform: translateY(-150%);
 
 		&:empty {
 			display: none;
+		}
+
+		&_elapsed {
+			left: 15px;
+		}
+
+		&_duration {
+			right: 15px;
 		}
 
 		@media (max-width: 31.25em) {

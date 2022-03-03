@@ -9,14 +9,14 @@
 	--color-bg-field: hsl(240, 30%, 25%);
 	--color-text-field: hsl(225, 5%, 80%);
 	--color-border-field: hsl(240, 30%, 20%);
-	--color-icon: var(--color-text);
+	--color-icon: hsl(223, 4%, 55%);
 	--color-bg-skeleton: var(--color-bg);
 	--color-bg-skeleton-item: hsl(240, 30%, 12%);
 	--color-bg-btn: var(--color-bg);
 	--bg-btn: hsl(0, 0%, 100%);
 	--bg-btn-hover: hsl(240, 30%, 35%);
 	--color-bg-btn-disabled: hsl(240, 30%, 5%);
-	--color-bg-btn-primary-hover: hsl(240, 30%, 12%);
+	--color-bg-btn-primary-hover: hsl(240, 30%, 13%);
 	--color-box-shadow-s: hsla(0, 0%, 0%, 0.1);
 	--color-box-shadow-m: hsla(0, 0%, 0%, 0.3);
 	--color-box-shadow-l: hsla(0, 0%, 0%, 0.5);
@@ -35,11 +35,13 @@
 	--color-bg-suggest-selected: hsl(240, 30%, 18%);
 	--color-bg-suggest-hover: hsl(240, 30%, 20%);
 	--color-text-suggest-selected: var(--color-title);
-	--color-bg-toast: var(--color-bg-field);
+	--color-bg-toast: hsl(240, 30%, 25%);
 	--color-text-toast: hsl(220, 5%, 85%);
 	--color-bg-chapter: hsl(240, 30%, 10%);
 	--color-bg-sidebar: hsl(240, 30%, 5%);
 	--color-bg-sidebar-tooltip: hsl(0, 0%, 0%);
+	--color-bg-overlay: hsl(0, 0%, 0%, 0.6);
+	--color-bg-range: hsl(245, 5%, 40%);
 }
 
 img {
