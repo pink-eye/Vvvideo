@@ -5,7 +5,7 @@
 @import './global/scss/settings';
 
 .outter-container {
-	width: clamp(320px, 100%, 1600px);
+	width: unquote('max(320px, 100%)');
 	margin-inline: auto;
 	padding-inline: unquote('clamp(1rem, 0.6818rem + 1.5909vw, 1.875rem)');
 

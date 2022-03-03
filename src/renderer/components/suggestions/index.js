@@ -9,7 +9,7 @@ const appStorage = new AppStorage()
 
 const createSuggestionHTML = textContent => `<button class="suggestion">
 											<aside class="suggestion__icon">
-												<svg width="23px" height="23px">
+												<svg width="21px" height="21px">
 													<use xlink:href='img/svg/actions.svg#search'></use>
 												</svg>
 											</aside>
@@ -18,7 +18,7 @@ const createSuggestionHTML = textContent => `<button class="suggestion">
 
 const createRecentQueryHTML = textContent => `<button class="suggestion">
 											<aside class="suggestion__icon">
-												<svg width="19px" height="19px">
+												<svg width="18px" height="18px">
 													<use xlink:href='img/svg/actions.svg#date'></use>
 												</svg>
 											</aside>

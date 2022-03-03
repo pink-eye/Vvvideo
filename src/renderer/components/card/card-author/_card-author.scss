@@ -4,7 +4,7 @@
 	display: flex;
 	align-items: center;
 	padding-block: 15px;
-	padding-inline: 15px 20px;
+	padding-inline: 15px 25px;
 	border-radius: var(--brs-m);
 	overflow: hidden;
 
@@ -51,8 +51,6 @@
 		margin-bottom: 0;
 		border-radius: 50%;
 		overflow: hidden;
-
-		box-shadow: var(--box-shadow-s);
 
 		img {
 			width: 100%;
