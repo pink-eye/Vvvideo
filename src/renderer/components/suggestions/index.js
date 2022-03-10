@@ -1,6 +1,7 @@
 import { isEmpty, hasFocus, getSelector, queryClosestByClass } from 'Global/utils'
 import { AppStorage } from 'Global/AppStorage'
 import { showToast } from 'Components/toast'
+import { manageWin } from 'Global/WinManager'
 import { showOverlay, hideOverlay } from 'Components/overlay'
 
 let lastSelected = null
@@ -73,7 +74,6 @@ const hideSuggestions = () => {
 	resetSelected()
 
 	let headerSearch = getSelector('.search')
-
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
 
 	suggestionListLength = 0
@@ -142,15 +142,88 @@ const showRecentQueries = () => {
 	addSuggestion(recentQueries, true)
 }
 
+const handleInput = async ({ currentTarget }) => {
+	showOverlay()
+
+	const { enableProxy, proxy, dontShowRecentQueriesOnTyping } = appStorage.get().settings
+
+	suggestionListLength = 0
+	let query = currentTarget.value.trim()
+
+	if (query.length > 0) {
+		let suggestions = null
+
+		try {
+			suggestions = enableProxy
+				? await API.scrapeSuggestsProxy(query, proxy)
+				: await API.scrapeSuggests(query)
+		} catch ({ message }) {
+			showToast('error', message)
+		}
+
+		hideSuggestions()
+
+		if (!dontShowRecentQueriesOnTyping) {
+			const relevantRecentQueries = getRelevantRecentQueries(query)
+
+			if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
+		}
+
+		if (suggestions?.length > 0) addSuggestion(suggestions, false)
+	} else {
+		hideSuggestions()
+		hideOverlay()
+	}
+}
+
+const handleKeyDownSearch = event => {
+	const { keyCode } = event
+
+	// ARROWS
+	if (keyCode === 40 || keyCode === 38) {
+		resetSelected()
+		chooseSuggestion(keyCode)
+	}
+
+	// ENTER
+	if (keyCode === 13) {
+		hideSuggestions()
+		hideOverlay()
+
+		if (!isEmpty(event.currentTarget.value)) manageWin(event)
+		else showToast('info', 'The search field is empty')
+	}
+}
+
+const handleFocus = ({ currentTarget }) => {
+	hideSuggestions()
+	showOverlay()
+	showRecentQueries()
+
+	currentTarget.addEventListener('keydown', handleKeyDownSearch)
+	currentTarget.addEventListener('input', handleInput)
+}
+
+const handleBlur = ({ currentTarget }) => {
+	currentTarget.removeEventListener('keydown', handleKeyDownSearch)
+	currentTarget.removeEventListener('input', handleInput)
+}
+
 const initSuggestions = () => {
+	const { settings } = appStorage.get()
+
 	let headerSearch = getSelector('.search')
 	let searchBar = headerSearch.querySelector('.search__bar')
+
+	if (settings.disableSearchSuggestions) {
+		searchBar.addEventListener('blur', hideOverlay)
+
+		headerSearch = null
+		searchBar = null
+		return
+	}
+
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
-
-	const { disableSearchSuggestions, enableProxy, proxy, dontShowRecentQueriesOnTyping } =
-		appStorage.get().settings
-
-	if (disableSearchSuggestions) return
 
 	const handleClickSuggestion = ({ target }) => {
 		let suggestion = queryClosestByClass(target, 'suggestion')
@@ -165,40 +238,12 @@ const initSuggestions = () => {
 	}
 
 	suggestionList.addEventListener('click', handleClickSuggestion)
+	suggestionList = null
 
-	const handleInput = async ({ target }) => {
-		showOverlay()
-
-		suggestionListLength = 0
-		let query = target.value.trim()
-
-		if (query.length > 0) {
-			let suggestions = null
-
-			try {
-				suggestions = enableProxy
-					? await API.scrapeSuggestsProxy(query, proxy)
-					: await API.scrapeSuggests(query)
-			} catch ({ message }) {
-				showToast('error', message)
-			}
-
-			hideSuggestions()
-
-			if (!dontShowRecentQueriesOnTyping) {
-				const relevantRecentQueries = getRelevantRecentQueries(query)
-
-				if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
-			}
-
-			if (suggestions?.length > 0) addSuggestion(suggestions, false)
-		} else {
-			hideSuggestions()
-			hideOverlay()
-		}
-	}
-
-	searchBar.addEventListener('input', handleInput)
+	searchBar.addEventListener('focus', handleFocus)
+	searchBar.addEventListener('blur', handleBlur)
+	headerSearch = null
+	searchBar = null
 }
 
-export { initSuggestions, chooseSuggestion, hideSuggestions, resetSelected, showRecentQueries }
+export { initSuggestions, hideSuggestions }
