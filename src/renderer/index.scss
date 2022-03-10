@@ -74,14 +74,13 @@
 }
 
 .win {
-	padding-top: 30px;
 
 	&:not(._active) {
 		display: none;
 	}
 
 	&:not(._anim-win) {
-		transform: scaleY(0.97);
+		transform: scale(1.01);
 		visibility: hidden;
 		opacity: 0;
 
@@ -112,7 +111,7 @@
 	}
 
 	&__title {
-		margin-bottom: 20px;
+		margin-block: 30px 20px;
 
 		font-weight: 700;
 		font-size: unquote('clamp(1.375rem, 1.0462rem + 1.4615vw, 2.8rem)');
