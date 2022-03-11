@@ -1,0 +1,121 @@
+.shortcuts {
+
+	&__list {
+		width: unquote('min(100%, 900px)');
+
+		@media (min-width: 48em) {
+			margin-inline: auto;
+		}
+		@media (max-width: 47.9375em) {
+			margin: 30px auto;
+		}
+		@media (min-width: 36em) {
+			padding-inline: 15px;
+		}
+	}
+
+	&__cell {
+		color: var(--color-text);
+		line-height: 1.6;
+
+		transition:
+			border-color var(--trns),
+			color var(--trns);
+
+		&:is(dd) {
+			margin-bottom: 0;
+		}
+
+		&:is(dt) > small {
+			margin-inline: 5px;
+		}
+
+		@media (min-width: 768px) {
+			display: inline-block;
+			width: 50%;
+		}
+	}
+
+	&__row {
+
+		&:not(:last-child) {
+			margin-bottom: 10px;
+		}
+
+		&:nth-child(even) {
+			background-color: var(--color-bg-table-row-even);
+
+			transition: background-color var(--trns);
+		}
+
+		&:nth-child(odd) {
+			background-color: var(--color-bg-form);
+
+			transition: background-color var(--trns);
+		}
+
+		@media (min-width: 768px) {
+			display: flex;
+			align-items: center;
+			padding: 25px;
+
+			border: 2px solid var(--color-border-card);
+			border-radius: 10px;
+		}
+		@media (max-width: 767px) {
+			padding: 15px;
+
+			& > dd {
+				margin-top: 15px;
+			}
+		}
+	}
+}
+
+.keyboard-btn {
+	position: relative;
+
+	padding: 5px 10px;
+	border: 3px solid transparent;
+	border-radius: 5px;
+
+	color: var(--color-text-kbtn);
+	font-weight: 400;
+	font-size: 16px;
+	font-family: var(--ff);
+	text-align: center;
+
+	background-color: var(--color-bg-kbtn);
+
+	box-shadow:
+		0 0 1px 1px var(--color-bs-kbtn),
+		0 3px 0 var(--color-bs-kbtn),
+		0 1px 0 var(--color-bs-kbtn);
+
+	transform: translate3d(0, 0, 3px);
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+	cursor: pointer;
+
+	transition:
+		background-color var(--trns),
+		border-color var(--trns),
+		box-shadow var(--trns),
+		transform var(--trns);
+
+	&:hover,
+	&:focus {
+		background-color: var(--color-bg-kbtn-active);
+		outline: none;
+	}
+
+	&:active {
+		background-color: var(--color-bg-kbtn-active);
+		box-shadow:
+			0 0 1px 1px var(--color-bs-kbtn),
+			0 1px 0 var(--color-bs-kbtn),
+			0 1px 0 var(--color-bs-kbtn);
+
+		transform: translateY(2px);
+	}
+}

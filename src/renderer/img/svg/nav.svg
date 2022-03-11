@@ -52,4 +52,24 @@
 			fill="inherit"
 			d="M60.6 30.6a2 2 0 010 2.8l-10 10a3 3 0 01-4.2-4.3l4.1-4.1H6a3 3 0 010-6h44.5l-4-4a3 3 0 014.2-4.3z" />
 	</symbol>
+	<symbol
+		fill="inherit"
+		stroke-width="0"
+		xmlns="http://www.w3.org/2000/svg"
+		xml:space="preserve"
+		id="shortcuts"
+		x="0"
+		y="0"
+		style="enable-background: new 0 0 454.519 454.519"
+		version="1.1"
+		viewBox="0 0 454.5 454.5">
+		<path
+			fill="inherit"
+			stroke-width="0"
+			d="M207.3 141.3a20 20 0 0 0 40 0v-37.7a20 20 0 0 0-40 0v37.7z" />
+		<path
+			fill="inherit"
+			stroke-width="0"
+			d="M242.3 0v55.9a50 50 0 0 1 35 47.7v37.7a50 50 0 0 1-35 47.7v37.3h-30V189a50 50 0 0 1-35-47.7v-37.7a50 50 0 0 1 35-47.7V0c-97 6.4-122.5 74.6-122.5 120.8v212.5c0 48.4 28 121.2 137.5 121.2s137.4-72.8 137.4-121.2V120.8C364.7 74.6 339.3 6.4 242.3 0z" />
+	</symbol>
 </svg>
