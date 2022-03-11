@@ -1,4 +1,4 @@
-import { AppStorage } from 'Global/AppStorage'
+import AppStorage from 'Global/AppStorage'
 
 export const round = (n, d) => Number(~~(n + 'e' + d) + 'e-' + d)
 

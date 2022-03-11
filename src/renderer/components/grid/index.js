@@ -1,5 +1,5 @@
 import { getSelector } from 'Global/utils'
-import { resetCard } from 'Components/card'
+import resetCard from 'Components/card'
 import { resetAuthorCard } from 'Components/card/card-author'
 
 const resetGridAuthorCard = () => {

@@ -1,5 +1,5 @@
 import { getDurationTimeout, getSelector } from 'Global/utils'
-import { AppStorage } from 'Global/AppStorage'
+import AppStorage from 'Global/AppStorage'
 
 const appStorage = new AppStorage()
 

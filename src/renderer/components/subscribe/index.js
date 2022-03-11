@@ -1,6 +1,6 @@
 import { isEmpty } from 'Global/utils'
-import { AppStorage } from 'Global/AppStorage'
-import { showToast } from 'Components/toast'
+import AppStorage from 'Global/AppStorage'
+import showToast from 'Components/toast'
 
 const appStorage = new AppStorage()
 let storage = null

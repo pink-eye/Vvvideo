@@ -1,7 +1,7 @@
 import { getSelector } from 'Global/utils'
 import { openSidebar, closeSidebar } from 'Components/sidebar'
 
-export const toggleMenu = () => {
+const toggleMenu = () => {
 	let burger = getSelector('.header').querySelector('.burger')
 
 	if (!burger.classList.contains('_active')) {
@@ -16,3 +16,5 @@ export const toggleMenu = () => {
 
 	burger = null
 }
+
+export default toggleMenu

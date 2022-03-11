@@ -39,4 +39,4 @@ const showToast = (type, text) => {
 	}
 }
 
-export { showToast }
+export default showToast

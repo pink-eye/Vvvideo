@@ -1,4 +1,4 @@
-export class YoutubeHelper {
+export default class YoutubeHelper {
 	hasBaseDomain(url) {
 		const regExp = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/
 		return url.match(regExp) && url.match(regExp).length > 0

@@ -1,9 +1,9 @@
-import { AppStorage } from 'Global/AppStorage'
+import AppStorage from 'Global/AppStorage'
 import { getSelector } from 'Global/utils'
 import { fillVideoCard } from 'Components/card/card-video'
 import { initPages, disablePages } from 'Components/grid-btns'
 
-export const openWinHistory = () => {
+const openWinHistory = () => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
 
@@ -34,3 +34,5 @@ export const openWinHistory = () => {
 
 	videoAll = null
 }
+
+export default openWinHistory

@@ -1,7 +1,7 @@
 import { scrollToElem, getCoordY } from 'Global/utils'
 import { filterSearchResults } from 'Layouts/win-search-results/helper'
 import { resetGrid, resetGridAuthorCard } from 'Components/grid'
-import { showToast } from 'Components/toast'
+import showToast from 'Components/toast'
 import { fillAuthorCard } from 'Components/card/card-author'
 import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'

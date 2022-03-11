@@ -1,4 +1,4 @@
-export class AppStorage {
+export default class AppStorage {
 	KEY_STORAGE = 'storage'
 
 	set(data) {

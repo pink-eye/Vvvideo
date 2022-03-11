@@ -1,8 +1,7 @@
 .settings {
 
 	&__list {
-		width: 100%;
-		max-width: 900px;
+		width: unquote('min(100%, 900px)');
 
 		@media (min-width: 48em) {
 			margin-inline: auto;

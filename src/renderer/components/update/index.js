@@ -5,10 +5,12 @@ const handleClickUpdateComponent = event => {
 	event.currentTarget.classList.remove('_active')
 }
 
-export const initUpdateComponent = () => {
+const initUpdateComponent = () => {
 	let update = document.querySelector('.update')
 
 	update.addEventListener('click', handleClickUpdateComponent, { once: true })
 
 	update = null
 }
+
+export default initUpdateComponent

@@ -1,8 +1,8 @@
 import { getSelector, isEmpty, reloadApp, isChild } from 'Global/utils'
-import { YoutubeHelper } from 'Global/YoutubeHelper'
+import YoutubeHelper from 'Global/YoutubeHelper'
 import { formatPort } from 'Layouts/win-settings/helper'
-import { AppStorage } from 'Global/AppStorage'
-import { showToast } from 'Components/toast'
+import AppStorage from 'Global/AppStorage'
+import showToast from 'Components/toast'
 import { clearHistory, disableHistory } from 'Layouts/win-history/helper'
 import { clearRecentQueries } from 'Layouts/win-search-results'
 import { initDropdown } from 'Components/dropdown'
@@ -276,7 +276,7 @@ export const resetWinSettings = () => {
 	settings = null
 }
 
-export const setTheme = themeOption => {
+const setTheme = themeOption => {
 	if (themeOption === 'light') theme.setMode('light')
 	if (themeOption === 'dark') theme.setMode('dark')
 	if (themeOption === 'system') theme.setMode(theme.getSystemScheme())
@@ -293,7 +293,7 @@ export const applySettingsOnStart = () => {
 	if (settings.disableHistory) disableHistory()
 }
 
-export const fillWinSettings = () => {
+const fillWinSettings = () => {
 	if (isFilledWin) return
 
 	isFilledWin = true

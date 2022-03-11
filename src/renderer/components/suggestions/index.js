@@ -1,7 +1,7 @@
 import { isEmpty, hasFocus, getSelector, queryClosestByClass } from 'Global/utils'
-import { AppStorage } from 'Global/AppStorage'
-import { showToast } from 'Components/toast'
-import { manageWin } from 'Global/WinManager'
+import AppStorage from 'Global/AppStorage'
+import showToast from 'Components/toast'
+import manageWin from 'Global/WinManager'
 import { showOverlay, hideOverlay } from 'Components/overlay'
 
 let lastSelected = null

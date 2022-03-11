@@ -1,4 +1,4 @@
-export const removePreloader = () => {
+const removePreloader = () => {
 	let preloader = document.querySelector('.preloader')
 
 	const handleTransitionEnd = () => {
@@ -10,3 +10,5 @@ export const removePreloader = () => {
 
 	preloader.classList.add('_hidden')
 }
+
+export default removePreloader

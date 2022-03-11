@@ -1,8 +1,8 @@
 import { getSelector } from 'Global/utils'
-import { AppStorage } from 'Global/AppStorage'
+import AppStorage from 'Global/AppStorage'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { fillAuthorCard } from 'Components/card/card-author'
-import { showToast } from 'Components/toast'
+import showToast from 'Components/toast'
 import { startIndicator, resetIndicator } from 'Components/indicator'
 
 const updateSubscriptionData = async storage => {
@@ -48,7 +48,7 @@ const updateSubscriptionData = async storage => {
 	return subscriptions
 }
 
-export const openWinSubs = async () => {
+const openWinSubs = async () => {
 	const appStorage = new AppStorage()
 	let storage = appStorage.get()
 	let subscriptions = getSelector('.subscriptions')
@@ -91,3 +91,5 @@ export const openWinSubs = async () => {
 	subscriptions = null
 	authorCardAll = null
 }
+
+export default openWinSubs

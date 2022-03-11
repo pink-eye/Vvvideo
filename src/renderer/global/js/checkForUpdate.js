@@ -1,4 +1,4 @@
-export const checkForUpdate = async () => {
+const checkForUpdate = async () => {
 	const RELEASE_URL = 'https://api.github.com/repos/pink-eye/vvvideo/releases/latest'
 
 	const dataJson = await fetch(RELEASE_URL)
@@ -8,3 +8,5 @@ export const checkForUpdate = async () => {
 
 	return [data.tag_name, `v${appVersion}`, data]
 }
+
+export default checkForUpdate

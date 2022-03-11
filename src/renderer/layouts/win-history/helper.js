@@ -1,5 +1,5 @@
-import { AppStorage } from 'Global/AppStorage'
-import { showToast } from 'Components/toast'
+import AppStorage from 'Global/AppStorage'
+import showToast from 'Components/toast'
 import {
 	getSelector,
 	convertSecondsToDuration,

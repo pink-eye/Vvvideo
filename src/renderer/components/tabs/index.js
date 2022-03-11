@@ -2,7 +2,7 @@ import { getSelector } from 'Global/utils'
 import { resetGrid } from 'Components/grid'
 import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'
-import { showToast } from 'Components/toast'
+import showToast from 'Components/toast'
 import { initPages, disablePages } from 'Components/grid-btns'
 
 export const hideLastTab = () => {

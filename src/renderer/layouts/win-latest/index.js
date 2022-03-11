@@ -1,6 +1,6 @@
 import { getSelector } from 'Global/utils'
-import { AppStorage } from 'Global/AppStorage'
-import { showToast } from 'Components/toast'
+import AppStorage from 'Global/AppStorage'
+import showToast from 'Components/toast'
 import { fillVideoCard } from 'Components/card/card-video'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { calculatePublishedDate } from 'Layouts/win-latest/helper'
@@ -81,4 +81,4 @@ const openWinLatest = async () => {
 	latest = null
 }
 
-export { openWinLatest }
+export default openWinLatest

@@ -1,17 +1,17 @@
 import { getSelector, scrollToTop, getDurationTimeout } from 'Global/utils'
-import { AppStorage } from 'Global/AppStorage'
-import { YoutubeHelper } from 'Global/YoutubeHelper'
+import AppStorage from 'Global/AppStorage'
+import YoutubeHelper from 'Global/YoutubeHelper'
 import { resetGrid, resetGridAuthorCard } from 'Components/grid'
 import { activateSidebarBtn, deactivateLastSidebarBtn } from 'Components/sidebar'
 import { openWinSettings, resetWinSettings } from 'Layouts/win-settings'
-import { openWinHistory } from 'Layouts/win-history'
-import { openWinSubs } from 'Layouts/win-subscriptions'
+import openWinHistory from 'Layouts/win-history'
+import openWinSubs from 'Layouts/win-subscriptions'
 import { prepareWinVideo, resetWinVideo } from 'Layouts/win-video'
 import { prepareWinPlaylist, resetWinPlaylist } from 'Layouts/win-playlist'
 import { prepareWinChannel, resetWinChannel } from 'Layouts/win-channel'
-import { openWinTrending } from 'Layouts/win-trending'
+import openWinTrending from 'Layouts/win-trending'
 import { openWinSearchResults } from 'Layouts/win-search-results'
-import { openWinLatest } from 'Layouts/win-latest'
+import openWinLatest from 'Layouts/win-latest'
 
 const resetWin = win => {
 	if (
@@ -137,13 +137,20 @@ const hideWin = win => {
 	timeout > 0 ? givenWin.addEventListener('transitionend', closeWin, { once: true }) : closeWin()
 }
 
-export const manageWin = async ({ target }) => {
+const manageWin = async ({ target }) => {
 	let btnWin = target.dataset.win ? target : target.closest('[data-win]')
 
 	if (btnWin && !btnWin.disabled) {
 		let { win, id } = btnWin.dataset
 		let mainContent = getSelector('.main__content')
 		let winSelector = mainContent.querySelector(`.${win}`)
+
+		if (!winSelector) {
+			mainContent = null
+			btnWin = null
+			return
+		}
+
 		let lastWinSelector = mainContent.querySelector('.win._active._anim-win')
 		let lastWin = mainContent.dataset.activeWin
 		let lastWinId = mainContent.dataset.activeWinId
@@ -238,3 +245,5 @@ export const manageWin = async ({ target }) => {
 		}
 	}
 }
+
+export default manageWin

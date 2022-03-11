@@ -1,4 +1,4 @@
-import { YoutubeHelper } from 'Global/YoutubeHelper'
+import YoutubeHelper from 'Global/YoutubeHelper'
 
 const yh = new YoutubeHelper()
 

@@ -4,8 +4,8 @@ import {
 	convertSecondsToDuration,
 	isChild,
 } from 'Global/utils'
-import { AppStorage } from 'Global/AppStorage'
-import { showToast } from 'Components/toast'
+import AppStorage from 'Global/AppStorage'
+import showToast from 'Components/toast'
 import { formatDuration } from 'Components/dialog-sb/helper'
 import { uuidv4 } from 'Components/video-controls/sponsorblock'
 
@@ -87,7 +87,7 @@ const showDialogSB = () => {
 	dialogSb = null
 }
 
-export const recordSegmentSB = ({ onStart, onEnd }) => {
+const recordSegmentSB = ({ onStart, onEnd }) => {
 	const appStorage = new AppStorage()
 	const storage = appStorage.get()
 	const { disableSponsorblock } = storage.settings
@@ -220,3 +220,5 @@ const handleCloseModal = () => {
 
 	video = null
 }
+
+export default recordSegmentSB

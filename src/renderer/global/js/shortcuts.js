@@ -1,10 +1,10 @@
 import { hideOverlay } from 'Components/overlay'
-import { toggleMenu } from 'Components/burger'
+import toggleMenu from 'Components/burger'
 import { getSelector, hasFocus } from 'Global/utils'
 import { scrapeInfoToSwitchPage, nextPage, prevPage } from 'Components/grid-btns'
 import { hideSuggestions } from 'Components/suggestions'
 
-export const handleKeyDown = event => {
+const handleKeyDown = event => {
 	// ESC
 	if (event.keyCode === 27) {
 		document.activeElement.blur()
@@ -93,3 +93,5 @@ export const handleKeyDown = event => {
 		winActive = null
 	}
 }
+
+export default handleKeyDown

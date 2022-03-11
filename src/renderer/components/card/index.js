@@ -3,7 +3,7 @@ import { resetChannelCard } from 'Components/card/card-rich'
 import { resetPlaylistCard } from 'Components/card/card-playlist'
 import { resetSkeleton } from 'Components/skeleton'
 
-export const resetCard = card => {
+const resetCard = card => {
 	let givenCard = card
 	let skeletonAll = givenCard.querySelectorAll('.skeleton')
 	let cardTitle = givenCard.querySelector('.card__title span')
@@ -59,3 +59,5 @@ export const resetCard = card => {
 	cardTitle = null
 	cardImg = null
 }
+
+export default resetCard

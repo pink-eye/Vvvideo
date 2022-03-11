@@ -1,5 +1,5 @@
 import { getSelector, isEmpty, handleClickLink } from 'Global/utils'
-import { showToast } from 'Components/toast'
+import showToast from 'Components/toast'
 import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
 import { resetGrid } from 'Components/grid'
 import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'

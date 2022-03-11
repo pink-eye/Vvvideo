@@ -1,4 +1,4 @@
-import { AppStorage } from 'Global/AppStorage'
+import AppStorage from 'Global/AppStorage'
 
 export const cacheSelector = (key, value) => {
 	if (typeof value === 'undefined') return cacheSelector[key]
