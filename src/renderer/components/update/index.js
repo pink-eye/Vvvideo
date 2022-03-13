@@ -8,6 +8,7 @@ const handleClickUpdateComponent = event => {
 const initUpdateComponent = () => {
 	let update = document.querySelector('.update')
 
+	update.classList.add('_active')
 	update.addEventListener('click', handleClickUpdateComponent, { once: true })
 
 	update = null
