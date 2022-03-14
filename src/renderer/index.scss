@@ -39,8 +39,6 @@
 	position: relative;
 
 	min-height: 100vh;
-
-	padding-top: 86px;
 	padding-bottom: 50px;
 
 	background-color: var(--color-bg);
@@ -71,6 +69,13 @@
 
 			will-change: margin-left;
 		}
+	}
+
+	@media (min-width: 48em) {
+		padding-top: 86px;
+	}
+	@media (max-width: 47.9375rem) {
+		padding-top: 70px;
 	}
 }
 

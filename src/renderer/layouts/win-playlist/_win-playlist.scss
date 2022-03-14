@@ -11,7 +11,8 @@
 	&__heading {
 		width: 100%;
 		margin-bottom: 30px;
-		padding-block: 20px;
+		padding-block: 50px 20px;
+		padding-inline: 15px;
 
 		background-color: var(--color-bg-form);
 	}

@@ -126,7 +126,7 @@
 			--middle-val-padbl: calc(7px + (15 - 7) * ((100vw - 320px) / (767 - 320)));
 			justify-content: center;
 			padding-block: clamp(7px, var(--middle-val-padbl), 15px);
-			border-radius: var(--brs-m);
+			border-radius: var(--brs-s);
 
 			transition: background-color var(--trns);
 		}

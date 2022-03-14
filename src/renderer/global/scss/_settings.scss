@@ -167,3 +167,7 @@ input[type='text'] {
 
 	background-color: var(--color-accent-s);
 }
+
+svg {
+	pointer-events: none;
+}
