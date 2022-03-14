@@ -1,0 +1,7 @@
+{
+	"path-intellisense.mappings": {
+		"Global": "${workspaceRoot}/src/renderer/global/js",
+		"Components": "${workspaceRoot}/src/renderer/components",
+		"Layouts": "${workspaceRoot}/src/renderer/global/js"
+	}
+}
