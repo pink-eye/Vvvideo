@@ -1,4 +1,4 @@
-import { getSelector, hideOnScroll, reloadApp } from 'Global/utils'
+import { getSelector, reloadApp } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import manageWin from 'Global/WinManager'
 import checkForUpdate from 'Global/checkForUpdate'
@@ -12,6 +12,7 @@ import toggleMenu from 'Components/burger'
 import showToast from 'Components/toast'
 import initUpdateComponent from 'Components/update'
 import removePreloader from 'Components/preloader'
+import HideOnScroll from 'Global/HideOnScroll'
 
 const handleClickWindow = ({ target }) => {
 	if (!target.closest('.dropdown')) {
@@ -58,14 +59,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 	removePreloader()
 
 	// MAIN SELECTORS
-	const header = getSelector('.header')
-	const sidebar = getSelector('.sidebar')
+	let header = getSelector('.header')
+	let sidebar = getSelector('.sidebar')
 	let mainContent = getSelector('.main__content')
 
 	// HIDE ON SCROLL
 
-	hideOnScroll(header, 0)
-	hideOnScroll(sidebar, 767)
+	new HideOnScroll({ selector: header })
+	new HideOnScroll({ selector: sidebar, maxWidth: 767 })
 
 	// MANAGE WINDOWS
 
@@ -89,13 +90,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 	headerReload.addEventListener('click', reloadApp)
 	headerReload = null
 
+	header = null
+	sidebar = null
+
 	startDropdowns()
 
 	if (!storage.settings.dontCheckForUpdate) {
-		checkForUpdate().then(([latestVersion, currentVersion]) => {
-			if (latestVersion === currentVersion) return
+		checkForUpdate()
+			.then(([latestVersion, currentVersion]) => {
+				if (latestVersion === currentVersion) return
 
-			initUpdateComponent()
-		})
+				initUpdateComponent()
+			})
+			.catch(console.error)
 	}
 })

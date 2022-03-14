@@ -40,42 +40,6 @@ export const isEmpty = el =>
 
 export const convertToPercentage = (firstNum, secondNum) => (firstNum * 100) / secondNum
 
-export const hideOnScroll = (selector, mq) => {
-	const sidebar = getSelector('.sidebar')
-	const header = getSelector('.header')
-	const searchBar = header.querySelector('.search__bar')
-
-	let lastScrollValue = 0
-	let isHidden = false
-
-	const handleScroll = () => {
-		let scrollDistance = window.scrollY
-
-		if (sidebar.classList.contains('_active')) return
-
-		if (selector === header && hasFocus(searchBar)) return
-
-		if (scrollDistance === 0) selector.classList.remove('_hidden')
-
-		if (scrollDistance > lastScrollValue) {
-			if (!isHidden) {
-				selector.classList.add('_hidden')
-				isHidden = true
-			}
-		} else {
-			if (isHidden) {
-				selector.classList.remove('_hidden')
-				isHidden = false
-			}
-		}
-
-		lastScrollValue = scrollDistance
-	}
-
-	if (window.innerWidth <= mq || mq === 0)
-		window.addEventListener('scroll', handleScroll, { passive: true })
-}
-
 export const normalizeCount = count => {
 	if (typeof count === 'string') return count.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
 
