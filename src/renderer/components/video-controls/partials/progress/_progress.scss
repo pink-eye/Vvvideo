@@ -18,6 +18,32 @@
 		translateY(-100%)
 		translateX(-50%);
 
+	&:before {
+		left: 15px;
+
+		content: attr(data-time-elapsed);
+	}
+
+	&:before,
+	&:after {
+		position: absolute;
+		top: 0;
+
+		color: hsl(0, 0%, 100%);
+
+		transform: translateY(-150%);
+
+		@media (max-width: 31.25em) {
+			font-size: 0.875rem;
+		}
+	}
+
+	&:after {
+		right: 15px;
+
+		content: attr(data-time-duration);
+	}
+
 	&__sponsorblock {
 		position: absolute;
 		inset: 0;
@@ -54,31 +80,6 @@
 					transition: opacity var(--trns);
 				}
 			}
-		}
-	}
-
-	&__time {
-		position: absolute;
-		top: 0;
-
-		color: hsl(0, 0%, 100%);
-
-		transform: translateY(-150%);
-
-		&:empty {
-			display: none;
-		}
-
-		&_elapsed {
-			left: 15px;
-		}
-
-		&_duration {
-			right: 15px;
-		}
-
-		@media (max-width: 31.25em) {
-			font-size: 0.875rem;
 		}
 	}
 
@@ -132,45 +133,13 @@
 
 	pointer-events: none;
 
-	&__container {
-		--limit: 13ch;
-
-		position: relative;
-		top: 0;
-		left: clamp(var(--limit), var(--left), calc(100% - var(--limit)));
-
-		display: flex;
-		flex-direction: column;
-		gap: 5px;
-		align-items: center;
-
-		transform: translateX(-50%);
-	}
-
 	&__chapter,
-	&__time {
+	&__container:before {
 		padding: 2px 10px;
 		border-radius: var(--brs-m);
 
 		background-color: var(--color-bg-duration);
 	}
-
-	&__chapter {
-		max-width: 25ch;
-		margin: 0;
-		overflow: hidden;
-
-		line-height: 2;
-		white-space: nowrap;
-
-		text-align: center;
-		text-overflow: ellipsis;
-
-		&:empty {
-			display: none;
-		}
-	}
-
 
 	&__storyboard {
 		--url: none;
@@ -187,7 +156,43 @@
 		background-repeat: no-repeat;
 		background-position: var(--posX) var(--posY);
 		background-size: 1000%;
+	}
 
-		content: '';
+	&__container {
+		--limit: 13ch;
+
+		position: relative;
+		top: 0;
+		left: clamp(var(--limit), var(--left), calc(100% - var(--limit)));
+
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		align-items: center;
+
+		transform: translateX(-50%);
+
+		&:before {
+			order: 2;
+
+			content: attr(data-time);
+		}
+	}
+
+	&__chapter {
+		order: 3;
+		max-width: 25ch;
+		margin: 0;
+		overflow: hidden;
+
+		line-height: 2;
+		white-space: nowrap;
+
+		text-align: center;
+		text-overflow: ellipsis;
+
+		&:empty {
+			display: none;
+		}
 	}
 }

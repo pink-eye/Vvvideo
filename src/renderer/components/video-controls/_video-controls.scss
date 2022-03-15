@@ -128,7 +128,7 @@
 		}
 	}
 
-	&__top {
+	&__heading {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -381,29 +381,36 @@
 }
 
 
-.top {
+.heading {
 	width: 100%;
 	margin-inline: auto;
 	padding-block: 30px;
 	padding-inline: 20px;
 
-	&__title {
+	&:before {
 		display: -webkit-box;
+		margin-bottom: 10px;
 		overflow: hidden;
 
 		color: hsl(0, 0%, 100%);
+		font-weight: 700;
 		font-size: 1.5rem;
 
 		opacity: 0.8;
+
+		content: attr(data-title);
 
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 1;
 	}
 
-	&__author {
+	&:after {
 		color: hsl(0, 0%, 100%);
+		font-style: italic;
 
 		opacity: 0.6;
+
+		content: attr(data-author);
 	}
 }
 

@@ -18,15 +18,15 @@ export const updateSeekTooltipTime = params => {
 
 	let progress = getSelector('.progress')
 	let progressSeek = progress.querySelector('.progress__seek')
-	let seekTooltipTime = progress.querySelector('.seek-tooltip__time')
+	let seekTooltipContainer = progress.querySelector('.seek-tooltip__container')
 
 	const skipToTime = convertSecondsToDuration(skipTo)
 	progressSeek.setAttribute('data-seek', skipTo)
-	seekTooltipTime.textContent = skipToTime
+	seekTooltipContainer.dataset.time = skipToTime
 
 	progress = null
 	progressSeek = null
-	seekTooltipTime = null
+	seekTooltipContainer = null
 }
 
 export const updateSeekTooltipPosition = params => {
@@ -55,15 +55,12 @@ export const updateSeekTooltipChapter = params => {
 
 export const updateTimeElapsed = () => {
 	let progress = getSelector('.progress')
-	let timeElapsed = progress.querySelector('.progress__time_elapsed')
 	const { currentTime } = getSelector('video')
 	const time = convertSecondsToDuration(currentTime)
 
-	timeElapsed.textContent = time
-	timeElapsed.setAttribute('datetime', time)
+	progress.dataset.timeElapsed = time
 
 	progress = null
-	timeElapsed = null
 }
 
 export const updateProgress = () => {
@@ -80,7 +77,7 @@ export const updateProgress = () => {
 
 const progressBarChapterHTML = left => `<li class="progress__chapter" style="--left: ${left}"></li>`
 
-export const visualizeProgressBarChapters = (chapters) => {
+export const visualizeProgressBarChapters = chapters => {
 	let progress = getSelector('.progress')
 	let progressChapters = progress.querySelector('.progress__chapters')
 	const { duration } = getSelector('video')
@@ -161,16 +158,14 @@ export const visualizeSegmentsSB = segments => {
 
 export const setProgress = config => {
 	const { duration } = getSelector('video')
-	const timeDurationContent = convertSecondsToDuration(duration)
+	const timeDuration = convertSecondsToDuration(duration)
 
 	let progress = getSelector('.progress')
 	let progressSeek = progress.querySelector('.progress__seek')
-	let timeDuration = progress.querySelector('.progress__time_duration')
 	let storyboard = progress.querySelector('.seek-tooltip__storyboard')
 
 	progressSeek.setAttribute('max', duration)
-	timeDuration.textContent = timeDurationContent
-	timeDuration.setAttribute('datetime', timeDurationContent)
+	progress.dataset.timeDuration = timeDuration
 
 	if ('storyboard' in config) {
 		if ('display' in config.storyboard) storyboard.style.display = config.storyboard.display
@@ -180,38 +175,32 @@ export const setProgress = config => {
 
 	progress = null
 	progressSeek = null
-	timeDuration = null
 	storyboard = null
 }
 
 export const resetProgress = () => {
 	let progress = getSelector('.progress')
 	let progressChapters = progress.querySelector('.progress__chapters')
-	let seekTooltip = progress.querySelector('.seek-tooltip')
-	let seekTooltipChapter = seekTooltip.querySelector('.seek-tooltip__chapter')
-	let timeDuration = progress.querySelector('.progress__time_duration')
-	let timeElapsed = progress.querySelector('.progress__time_elapsed')
+	let seekTooltipContainer = progress.querySelector('.seek-tooltip__container')
+	let seekTooltipChapter = progress.querySelector('.seek-tooltip__chapter')
 	let storyboard = progress.querySelector('.seek-tooltip__storyboard')
 	let sponsorblock = progress.querySelector('.sponsorblock')
 
 	while (sponsorblock.firstChild) sponsorblock.firstChild.remove()
 	while (progressChapters.firstChild) progressChapters.firstChild.remove()
 
-	timeDuration.textContent = '0:00'
-	timeElapsed.textContent = '0:00'
-	timeDuration.removeAttribute('datetime')
-	timeElapsed.removeAttribute('datetime')
+	progress.removeAttribute('data-time-elapsed')
+	progress.removeAttribute('data-time-duration')
 	progress.removeAttribute('style')
 	seekTooltipChapter.textContent = ''
+	seekTooltipContainer.removeAttribute('data-time')
 
 	if (storyboard.hasAttribute('style')) storyboard.removeAttribute('style')
 
 	progress = null
 	progressChapters = null
-	seekTooltip = null
+	seekTooltipContainer = null
 	seekTooltipChapter = null
-	timeDuration = null
-	timeElapsed = null
 	storyboard = null
 	sponsorblock = null
 }

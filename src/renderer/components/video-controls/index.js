@@ -508,28 +508,28 @@ const hideBars = () => {
 
 	let controls = getSelector('.controls')
 	let dropdownActive = controls.querySelector('.dropdown._active')
-	let top = getSelector('.video').querySelector('.top')
+	let heading = getSelector('.video').querySelector('.heading')
 
 	if (!dropdownActive) {
 		controls.classList.remove('_opened')
-		top.classList.remove('_opened')
+		heading.classList.remove('_opened')
 	}
 
 	dropdownActive = null
 	controls = null
-	top = null
+	heading = null
 	progress = null
 }
 
 const showBars = () => {
-	let top = getSelector('.video').querySelector('.top')
+	let heading = getSelector('.video').querySelector('.heading')
 	let controls = getSelector('.controls')
 
 	controls.classList.add('_opened')
-	top.classList.add('_opened')
+	heading.classList.add('_opened')
 
 	controls = null
-	top = null
+	heading = null
 }
 
 const toggleFullscreen = () => {
@@ -953,13 +953,12 @@ export const initVideoPlayer = async data => {
 	const initVideo = () => {
 		let volumeBar = controls.querySelector('.volume__bar')
 		let volumeSeek = controls.querySelector('.volume__seek')
-		let topTitle = videoParent.querySelector('.top__title')
-		let topAuthor = videoParent.querySelector('.top__author')
+		let heading = videoParent.querySelector('.heading')
 		let storyboard = controls.querySelector('.seek-tooltip__storyboard')
 		const { videoDetails } = data
 
-		topTitle.textContent = videoDetails.title
-		topAuthor.textContent = videoDetails.author.name
+		heading.dataset.title = videoDetails.title
+		heading.dataset.author = videoDetails.author.name
 
 		let configProgress = { storyboard: {} }
 
@@ -1003,8 +1002,7 @@ export const initVideoPlayer = async data => {
 
 		volumeSeek = null
 		volumeBar = null
-		topTitle = null
-		topAuthor = null
+		heading = null
 		storyboard = null
 		videoParent = null
 		controls = null
