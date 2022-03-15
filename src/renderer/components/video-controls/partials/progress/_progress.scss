@@ -143,8 +143,8 @@
 
 	&__storyboard {
 		--url: none;
-		--posX: 0;
-		--posY: 0;
+		--pos-x: 0;
+		--pos-y: 0;
 		z-index: -1;
 
 		width: 160px;
@@ -154,7 +154,7 @@
 
 		background-image: var(--url);
 		background-repeat: no-repeat;
-		background-position: var(--posX) var(--posY);
+		background-position: var(--pos-x) var(--pos-y);
 		background-size: 1000%;
 	}
 

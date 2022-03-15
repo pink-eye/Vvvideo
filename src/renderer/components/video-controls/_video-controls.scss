@@ -30,7 +30,8 @@
 		.controls__progress {
 			height: 4px;
 
-			& > time {
+			&:before,
+			&:after {
 				opacity: 0;
 
 				transition: opacity var(--trns-slow) var(--trns-time-default);
@@ -81,7 +82,8 @@
 		.controls__progress {
 			height: 7px;
 
-			& > time {
+			&:before,
+			&:after {
 				opacity: 1;
 
 				transition: opacity var(--trns);
@@ -191,7 +193,7 @@
 		z-index: 10;
 
 		width: 100%;
-		padding-inline: 25px;
+		padding-inline: 15px;
 
 		cursor: unset;
 

@@ -8,7 +8,6 @@ import {
 	isChild,
 } from 'Global/utils'
 import {
-	getPosStroryboard,
 	filterHLS,
 	filterVideoAndAudio,
 	getPreferredQuality,
@@ -25,23 +24,10 @@ import showToast from 'Components/toast'
 import { getWatchedTime, rememberWatchedTime } from 'Layouts/win-history/helper'
 import recordSegmentSB from 'Components/dialog-sb'
 import AppStorage from 'Global/AppStorage'
-import { setMenu, toggleMenu, resetMenu, isOpenedMenu } from './partials/menu'
 import { showDecoration, hideDecoration, resetDecorations } from './partials/decorations'
 import { hidePoster, resetPoster } from './partials/poster'
-import {
-	updateStoryboard,
-	updateSeekTooltipTime,
-	updateSeekTooltipPosition,
-	updateSeekTooltipChapter,
-	updateTimeElapsed,
-	updateProgress,
-	visualizeProgressBarChapters,
-	updateBuffered,
-	skipAhead,
-	setProgress,
-	resetProgress,
-	visualizeSegmentsSB,
-} from './partials/progress'
+import Menu from './partials/menu'
+import Progress from './partials/progress'
 
 let state = {
 	formats: null,
@@ -78,6 +64,8 @@ const configDialogSB = {
 	},
 }
 
+const menu = new Menu()
+const progress = new Progress()
 const appStorage = new AppStorage()
 let storage = null
 
@@ -504,18 +492,14 @@ const hideBars = () => {
 		return
 	}
 
-	if (isOpenedMenu()) return
+	if (menu.isOpened) return
 
 	let controls = getSelector('.controls')
-	let dropdownActive = controls.querySelector('.dropdown._active')
 	let heading = getSelector('.video').querySelector('.heading')
 
-	if (!dropdownActive) {
-		controls.classList.remove('_opened')
-		heading.classList.remove('_opened')
-	}
+	controls.classList.remove('_opened')
+	heading.classList.remove('_opened')
 
-	dropdownActive = null
 	controls = null
 	heading = null
 	progress = null
@@ -634,13 +618,14 @@ const handleWaitingAudio = () => {
 const handleTimeUpdate = () => {
 	let { video, audio } = getMedia()
 
-	if (audio) {
-		const diff = Math.abs(video.currentTime - audio.currentTime)
-		if (diff > 0.5) syncMedia()
+	const { currentTime } = video
+
+	if (audio && !video.paused && !audio.paused) {
+		const diff = Math.abs(currentTime - audio.currentTime)
+		if (diff > 0.3) syncMedia()
 	}
 
-	updateTimeElapsed()
-	updateProgress()
+	progress.update({ currentTime })
 	updateBarChapter()
 	toggleIconPlayPause()
 
@@ -703,21 +688,11 @@ const handleEnd = () => {
 
 const handleMouseMoveProgressSeek = event => {
 	let video = getSelector('video')
-	let progress = getSelector('.progress')
-	let progressBar = progress.querySelector('.progress__bar')
 
-	const duration = isEmpty(hls) ? video.duration : video.currentTime
+	const duration = !hls ? video.duration : video.currentTime
 	const skipTo = (event.offsetX / event.target.offsetParent.clientWidth) * duration
-	const rectProgressBar = progressBar.getBoundingClientRect()
-	const posCursor = event.pageX - rectProgressBar.left
-	const { posX, posY } = getPosStroryboard(video.duration, skipTo, 100)
 
-	const params = { duration, skipTo, posCursor, storyboard: { posX, posY } }
-
-	if (isEmpty(hls)) updateStoryboard(params)
-
-	updateSeekTooltipTime(params)
-	updateSeekTooltipPosition(params)
+	const seekTooltipParams = { duration, skipTo, pageX: event.pageX }
 
 	if (chapters?.length) {
 		const requiredChapter = getRequiredChapter(chapters, skipTo)
@@ -725,24 +700,21 @@ const handleMouseMoveProgressSeek = event => {
 		if (requiredChapter?.title && lastSeekTooltipChapter !== requiredChapter.title) {
 			lastSeekTooltipChapter = requiredChapter.title
 
-			params.chapter = requiredChapter.title
-			updateSeekTooltipChapter(params)
+			seekTooltipParams.chapter = requiredChapter.title
 		}
 	}
 
+	progress.updateSeekTooltip(seekTooltipParams)
+
 	video = null
-	progress = null
-	progressBar = null
 }
 
 const forwardTime = () => {
 	getSelector('video').currentTime += 10
-	isSync = false
 }
 
 const backwardTime = () => {
 	getSelector('video').currentTime -= 10
-	isSync = false
 }
 
 const handleKeyDownWithinVideo = ({ keyCode }) => {
@@ -788,7 +760,7 @@ const handleSegmentsSB = segments => {
 	if (!segments || segments.length === 0) return
 
 	segmentsSB = segments
-	visualizeSegmentsSB(segmentsSB)
+	progress.visualizeSegmentsSB(segmentsSB)
 }
 
 const loadSegmentsSB = (data, callback) => {
@@ -859,12 +831,11 @@ const handleInputVideoPlayer = event => {
 	}
 
 	if (isChild(target, '.progress__seek')) {
-		const seekedTime = skipAhead(event)
+		const seekedTime = progress.skipAhead(event)
 
 		let { video, audio } = getMedia()
 
 		video.currentTime = seekedTime
-		isSync = false
 
 		audio = null
 		video = null
@@ -903,11 +874,13 @@ const handleProgress = () => {
 
 	let { video, audio } = getMedia()
 
-	updateBuffered({ video, audio })
+	progress.updateBuffered({ video, audio })
 
 	video = null
 	audio = null
 }
+
+const handleClickMore = () => (menu.isOpened ? menu.close() : menu.open())
 
 export const initVideoPlayer = async data => {
 	let controls = getSelector('.controls')
@@ -960,7 +933,7 @@ export const initVideoPlayer = async data => {
 		heading.dataset.title = videoDetails.title
 		heading.dataset.author = videoDetails.author.name
 
-		let configProgress = { storyboard: {} }
+		let configProgress = { storyboard: {}, duration: video.duration, isLive: !!hls }
 
 		if (settings.disableStoryboard || videoDetails.storyboards.length === 0)
 			configProgress.storyboard.display = 'none'
@@ -968,14 +941,14 @@ export const initVideoPlayer = async data => {
 		if (storyboard && videoDetails?.storyboards && videoDetails.storyboards.length > 0)
 			configProgress.storyboard.url = videoDetails.storyboards.at(0).templateUrl
 
-		setProgress(configProgress)
+		progress.init(configProgress)
 
 		chapters = videoDetails.chapters
 		volumeBar.value = volumeSeek.value
 
 		doesSkipSegments ||= true
 
-		if (chapters?.length) visualizeProgressBarChapters(chapters)
+		if (chapters?.length) progress.visualizeChapters({ chapters })
 
 		intervalWatchedProgress = setInterval(() => {
 			let video = getSelector('video')
@@ -987,7 +960,7 @@ export const initVideoPlayer = async data => {
 			video = null
 		}, 90000)
 
-		setMenu({
+		menu.init({
 			formats: state.formats,
 			captions: state.captions,
 			handleClickQuality: url => switchQuality(url),
@@ -1011,7 +984,7 @@ export const initVideoPlayer = async data => {
 	controls.addEventListener('mouseleave', hideBars)
 
 	let actionsMore = controls.querySelector('.controls-actions__btn_more')
-	actionsMore.addEventListener('click', toggleMenu)
+	actionsMore.addEventListener('click', handleClickMore)
 	actionsMore = null
 
 	// MEDIA LISTENERS
@@ -1073,17 +1046,16 @@ export const resetVideoPlayer = () => {
 	let barChapter = controls.querySelector('.controls__current-chapter')
 	let actionsMore = controls.querySelector('.controls-actions__btn_more')
 
-	actionsMore.removeEventListener('click', toggleMenu)
+	actionsMore.removeEventListener('click', handleClickMore)
 
 	resetDecorations()
-	resetMenu()
-	resetProgress()
+	menu.reset()
+	progress.reset()
 
 	state.captions.length = 0
 	state.formats = null
 	isFirstPlay ||= true
 	isPaused &&= false
-	isSync &&= false
 	doesSkipSegments ||= true
 	segmentsSB.length = 0
 	chapters = null

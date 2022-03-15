@@ -1,206 +1,169 @@
 import { getSelector, convertSecondsToDuration, convertToPercentage } from 'Global/utils'
+import { getPosStroryboard, progressBarChapterHTML, sponsorblockItemHTML } from './helper'
 
-export const updateStoryboard = params => {
-	let seekTooltipStoryboard = getSelector('.progress').querySelector('.seek-tooltip__storyboard')
-
-	const { storyboard } = params
-
-	seekTooltipStoryboard.style.setProperty('--posX', `-${storyboard.posX}px`)
-	seekTooltipStoryboard.style.setProperty('--posY', `-${storyboard.posY}px`)
-
-	seekTooltipStoryboard = null
-}
-
-export const updateSeekTooltipTime = params => {
-	const { duration, skipTo } = params
-
-	if (skipTo < 0 || skipTo > duration) return
-
-	let progress = getSelector('.progress')
-	let progressSeek = progress.querySelector('.progress__seek')
-	let seekTooltipContainer = progress.querySelector('.seek-tooltip__container')
-
-	const skipToTime = convertSecondsToDuration(skipTo)
-	progressSeek.setAttribute('data-seek', skipTo)
-	seekTooltipContainer.dataset.time = skipToTime
-
-	progress = null
-	progressSeek = null
-	seekTooltipContainer = null
-}
-
-export const updateSeekTooltipPosition = params => {
-	let progress = getSelector('.progress')
-	let seekTooltip = progress.querySelector('.seek-tooltip')
-
-	const { posCursor } = params
-
-	seekTooltip.style.setProperty('--left', `${posCursor}px`)
-
-	progress = null
-	seekTooltip = null
-}
-
-export const updateSeekTooltipChapter = params => {
-	const { duration, skipTo, chapter } = params
-
-	if (skipTo < 0 && skipTo > duration) return
-
-	let seekTooltipChapter = getSelector('.progress').querySelector('.seek-tooltip__chapter')
-
-	seekTooltipChapter.textContent = chapter
-
-	seekTooltipChapter = null
-}
-
-export const updateTimeElapsed = () => {
-	let progress = getSelector('.progress')
-	const { currentTime } = getSelector('video')
-	const time = convertSecondsToDuration(currentTime)
-
-	progress.dataset.timeElapsed = time
-
-	progress = null
-}
-
-export const updateProgress = () => {
-	let progress = getSelector('.progress')
-	let progressSeek = progress.querySelector('.progress__seek')
-	const { currentTime, duration } = getSelector('video')
-
-	progressSeek.value = currentTime
-	progress.style.setProperty('--progress', `${convertToPercentage(currentTime, duration)}%`)
-
-	progress = null
-	progressSeek = null
-}
-
-const progressBarChapterHTML = left => `<li class="progress__chapter" style="--left: ${left}"></li>`
-
-export const visualizeProgressBarChapters = chapters => {
-	let progress = getSelector('.progress')
-	let progressChapters = progress.querySelector('.progress__chapters')
-	const { duration } = getSelector('video')
-
-	for (let index = 0, { length } = chapters; index < length; index += 1) {
-		const { start_time } = chapters[index]
-		const offsetLeft = `${convertToPercentage(start_time, duration)}%`
-		progressChapters.insertAdjacentHTML('beforeEnd', progressBarChapterHTML(offsetLeft))
+export default class Progress {
+	constructor() {
+		this.progress = getSelector('.progress')
+		this.progressBar = this.progress.querySelector('.progress__bar')
+		this.progressChapters = this.progress.querySelector('.progress__chapters')
+		this.progressSeek = this.progress.querySelector('.progress__seek')
+		this.progressSponsorblock = this.progress.querySelector('.progress__sponsorblock')
+		this.seekTooltip = this.progress.querySelector('.seek-tooltip')
+		this.storyboard = this.seekTooltip.querySelector('.seek-tooltip__storyboard')
+		this.seekTooltipContainer = this.seekTooltip.querySelector('.seek-tooltip__container')
+		this.seekTooltipChapter = this.seekTooltip.querySelector('.seek-tooltip__chapter')
 	}
 
-	progress = null
-	progressChapters = null
-}
+	init(config) {
+		this.isLive = config.isLive
+		this.duration = config.duration
 
-const getMinBuffered = ({ video, audio }) => {
-	const vBuffered = video.buffered
-	const aBuffered = audio?.buffered
+		if (this.isLive) return
 
-	const videoLastBuffered = vBuffered.end(vBuffered.length - 1)
-	const audioLastBuffered = aBuffered?.length ? aBuffered.end(aBuffered.length - 1) : null
+		const timeDuration = convertSecondsToDuration(this.duration)
+		this.progress.dataset.timeDuration = timeDuration
+		this.progressSeek.setAttribute('max', this.duration)
 
-	const minBuffered = audioLastBuffered
-		? Math.min(videoLastBuffered, audioLastBuffered)
-		: videoLastBuffered
+		if ('storyboard' in config) {
+			const { storyboard } = config
 
-	return minBuffered
-}
+			if ('display' in storyboard) {
+				this.storyboard.style.display = storyboard.display
+			}
 
-export const updateBuffered = ({ video, audio }) => {
-	if (!video.buffered.length) return
-
-	let progress = getSelector('.progress')
-
-	const minBuffered = getMinBuffered({ video, audio })
-	progress.style.setProperty('--buffered', `${convertToPercentage(minBuffered, video.duration)}%`)
-
-	progress = null
-}
-
-export const skipAhead = ({ target }) => {
-	let progress = getSelector('.progress')
-	let progressSeek = progress.querySelector('.progress__seek')
-	let video = getSelector('video')
-	const skipTo = target.dataset.seek ? target.dataset.seek : target.value
-
-	progress.style.setProperty('--progress', `${convertToPercentage(skipTo, video.duration)}%`)
-	progressSeek.value = skipTo
-
-	document.activeElement.blur()
-
-	progress = null
-	progressSeek = null
-	video = null
-
-	return skipTo
-}
-
-const sponsorblockItemHTML = ({ left, width }) =>
-	`<li class="sponsorblock__item" style="--left:${left};--width:${width};"></li>`
-
-export const visualizeSegmentsSB = segments => {
-	let video = getSelector('video')
-	let progressSponsorblock = getSelector('.progress').querySelector('.progress__sponsorblock')
-
-	for (let index = 0, { length } = segments; index < length; index += 1) {
-		const { startTime, endTime, videoDuration } = segments[index]
-		const segmentLength = endTime - startTime
-		const vDuration = videoDuration !== 0 ? videoDuration : video.duration
-		const width = `${convertToPercentage(segmentLength, vDuration)}%`
-		const left = `${convertToPercentage(startTime, vDuration)}%`
-
-		progressSponsorblock.insertAdjacentHTML('beforeEnd', sponsorblockItemHTML({ width, left }))
+			if ('url' in storyboard) {
+				this.storyboard.style.setProperty('--url', `url(${storyboard.url})`)
+			}
+		}
 	}
 
-	video = null
-	progressSponsorblock = null
-}
+	#moveStoryboardImageSprite(skipTo) {
+		const { posX, posY } = getPosStroryboard(this.duration, skipTo, 100)
 
-export const setProgress = config => {
-	const { duration } = getSelector('video')
-	const timeDuration = convertSecondsToDuration(duration)
-
-	let progress = getSelector('.progress')
-	let progressSeek = progress.querySelector('.progress__seek')
-	let storyboard = progress.querySelector('.seek-tooltip__storyboard')
-
-	progressSeek.setAttribute('max', duration)
-	progress.dataset.timeDuration = timeDuration
-
-	if ('storyboard' in config) {
-		if ('display' in config.storyboard) storyboard.style.display = config.storyboard.display
-		if ('url' in config.storyboard)
-			storyboard.style.setProperty('--url', `url(${config.storyboard.url})`)
+		this.storyboard.style.setProperty('--pos-x', `-${posX}px`)
+		this.storyboard.style.setProperty('--pos-y', `-${posY}px`)
 	}
 
-	progress = null
-	progressSeek = null
-	storyboard = null
-}
+	#updateSeekTooltipTime(skipTo) {
+		const timeSkipTo = convertSecondsToDuration(skipTo)
 
-export const resetProgress = () => {
-	let progress = getSelector('.progress')
-	let progressChapters = progress.querySelector('.progress__chapters')
-	let seekTooltipContainer = progress.querySelector('.seek-tooltip__container')
-	let seekTooltipChapter = progress.querySelector('.seek-tooltip__chapter')
-	let storyboard = progress.querySelector('.seek-tooltip__storyboard')
-	let sponsorblock = progress.querySelector('.sponsorblock')
+		this.progressSeek.setAttribute('data-seek', skipTo)
+		this.seekTooltipContainer.dataset.time = timeSkipTo
+	}
 
-	while (sponsorblock.firstChild) sponsorblock.firstChild.remove()
-	while (progressChapters.firstChild) progressChapters.firstChild.remove()
+	#moveSeekTooltip(pageX) {
+		const rectProgressBar = this.progressBar.getBoundingClientRect()
+		const posCursor = pageX - rectProgressBar.left
 
-	progress.removeAttribute('data-time-elapsed')
-	progress.removeAttribute('data-time-duration')
-	progress.removeAttribute('style')
-	seekTooltipChapter.textContent = ''
-	seekTooltipContainer.removeAttribute('data-time')
+		this.seekTooltip.style.setProperty('--left', `${posCursor}px`)
+	}
 
-	if (storyboard.hasAttribute('style')) storyboard.removeAttribute('style')
+	#updateSeekTooltipChapter(chapter) {
+		this.seekTooltipChapter.textContent = chapter
+	}
 
-	progress = null
-	progressChapters = null
-	seekTooltipContainer = null
-	seekTooltipChapter = null
-	storyboard = null
-	sponsorblock = null
+	updateSeekTooltip(params) {
+		const { pageX, chapter, skipTo } = params
+
+		this.#moveSeekTooltip(pageX)
+		this.#updateSeekTooltipTime(skipTo)
+
+		if (this.isLive) return
+
+		this.#moveStoryboardImageSprite(skipTo)
+		this.#updateSeekTooltipChapter(chapter)
+	}
+
+	updateTimeElapsed(params) {
+		this.progress.dataset.timeElapsed = convertSecondsToDuration(params.currentTime)
+	}
+
+	update(params) {
+		const { currentTime } = params
+
+		this.updateTimeElapsed(params)
+
+		if (this.isLive) return
+
+		const progressValue = convertToPercentage(currentTime, this.duration)
+		this.progress.style.setProperty('--progress', `${progressValue}%`)
+
+		this.progressSeek.value = currentTime
+	}
+
+	visualizeChapters({ chapters }) {
+		for (let index = 0, { length } = chapters; index < length; index += 1) {
+			const { start_time } = chapters[index]
+			const offsetLeft = `${convertToPercentage(start_time, this.duration)}%`
+			this.progressChapters.insertAdjacentHTML(
+				'beforeEnd',
+				progressBarChapterHTML(offsetLeft)
+			)
+		}
+	}
+
+	#getMinBuffered({ video, audio }) {
+		const vBuffered = video.buffered
+		const aBuffered = audio?.buffered
+
+		const videoLastBuffered = vBuffered.end(vBuffered.length - 1)
+		const audioLastBuffered = aBuffered?.length ? aBuffered.end(aBuffered.length - 1) : null
+
+		const minBuffered = audioLastBuffered
+			? Math.min(videoLastBuffered, audioLastBuffered)
+			: videoLastBuffered
+
+		return minBuffered
+	}
+
+	updateBuffered({ video, audio }) {
+		if (!video.buffered.length) return
+
+		const minBuffered = this.#getMinBuffered({ video, audio })
+		this.progress.style.setProperty(
+			'--buffered',
+			`${convertToPercentage(minBuffered, this.duration)}%`
+		)
+	}
+
+	skipAhead({ target }) {
+		const skipTo = target.dataset.seek ? target.dataset.seek : target.value
+
+		this.progress.style.setProperty(
+			'--progress',
+			`${convertToPercentage(skipTo, this.duration)}%`
+		)
+		this.progressSeek.value = skipTo
+
+		queueMicrotask(() => document.activeElement.blur())
+
+		return skipTo
+	}
+
+	visualizeSegmentsSB({ segments }) {
+		for (let index = 0, { length } = segments; index < length; index += 1) {
+			const { startTime, endTime } = segments[index]
+			const segmentLength = endTime - startTime
+			const width = `${convertToPercentage(segmentLength, this.duration)}%`
+			const left = `${convertToPercentage(startTime, this.duration)}%`
+
+			this.progressSponsorblock.insertAdjacentHTML(
+				'beforeEnd',
+				sponsorblockItemHTML({ width, left })
+			)
+		}
+	}
+
+	reset() {
+		while (this.progressSponsorblock.firstChild) this.progressSponsorblock.firstChild.remove()
+		while (this.progressChapters.firstChild) this.progressChapters.firstChild.remove()
+
+		this.progress.removeAttribute('data-time-elapsed')
+		this.progress.removeAttribute('data-time-duration')
+		this.progress.removeAttribute('style')
+		this.seekTooltipChapter.textContent = ''
+		this.seekTooltipContainer.removeAttribute('data-time')
+
+		if (this.storyboard.hasAttribute('style')) this.storyboard.removeAttribute('style')
+	}
 }
