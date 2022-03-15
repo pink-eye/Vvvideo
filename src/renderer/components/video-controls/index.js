@@ -36,7 +36,6 @@ let state = {
 
 let isFirstPlay = true
 let isPaused = false
-let isSync = false
 let doesSkipSegments = true
 let hls = null
 let segmentsSB = []
@@ -226,7 +225,6 @@ const changeVideoSrc = (url, currentTime) => {
 	} else hls.loadSource(url)
 
 	video.currentTime = currentTime
-	isSync = false
 
 	video = null
 }
@@ -234,10 +232,7 @@ const changeVideoSrc = (url, currentTime) => {
 const syncMedia = () => {
 	let { video, audio } = getMedia()
 
-	// if (!isSync) {
 	audio.currentTime = video.currentTime
-	isSync = true
-	// }
 
 	audio = null
 	video = null
@@ -254,36 +249,20 @@ const pauseEl = el => {
 	givenEl = null
 }
 
-const playEl = async el => {
-	let givenEl = el
+const playEl = el => {
+	return new Promise((resolve, reject) => {
+		let givenEl = el
 
-	if (!givenEl) return
+		if (!givenEl) return
 
-	let playPromise = givenEl.play()
+		let playPromise = givenEl.play()
 
-	if (playPromise !== undefined && !isPlaying(givenEl)) {
-		hideDecoration('load')
+		if (playPromise !== undefined) {
+			resolve(playPromise)
+		} else reject('Error! MediaElement is not played...')
 
-		try {
-			await playPromise
-
-			let audio = getSelector('.video').querySelector('audio')
-
-			if (audio) {
-				let video = getSelector('video')
-
-				if (isPlaying(video) && isPlaying(audio)) syncMedia()
-
-				video = null
-			}
-
-			audio = null
-		} catch ({ message }) {
-			showToast('error', message)
-		}
-	}
-
-	givenEl = null
+		givenEl = null
+	})
 }
 
 const startVideoFromLastPoint = () => {
@@ -295,11 +274,10 @@ const startVideoFromLastPoint = () => {
 
 	if (videoWatchedTime) {
 		getSelector('video').currentTime = videoWatchedTime
-		isSync = false
 	}
 }
 
-const playVideoPlayer = async () => {
+const playVideoPlayer = () => {
 	let { video, audio } = getMedia()
 
 	if (isFirstPlay) {
@@ -307,8 +285,11 @@ const playVideoPlayer = async () => {
 		isFirstPlay = false
 	}
 
-	await playEl(video)
-	await playEl(audio)
+	playEl(video).then().catch(console.error)
+
+	playEl(audio)
+		.then(() => hideDecoration('load'))
+		.catch(console.error)
 
 	audio = null
 	video = null
@@ -362,9 +343,9 @@ const switchCaption = ({ label, srclang, src }) => {
 const togglePlay = () => {
 	let { video, audio } = getMedia()
 
-	let conditionTogglePlay = audio ? video.paused && audio.paused : video.paused
+	let condition = audio ? video.paused && audio.paused : video.paused
 
-	if (conditionTogglePlay) {
+	if (condition) {
 		isPaused = false
 		showDecoration('play', true)
 		playVideoPlayer()
@@ -375,7 +356,6 @@ const togglePlay = () => {
 	}
 
 	hidePoster()
-	isSync = false
 
 	audio = null
 	video = null
@@ -566,7 +546,6 @@ const skipSegmentSB = () => {
 
 		if (currentTime > startTime && currentTime < endTime) {
 			video.currentTime = endTime
-			isSync = false
 
 			if (notifySkipSegment) showToast('info', 'Segment is skipped!')
 
@@ -659,7 +638,6 @@ export const handleClickTimecode = ({ target }) => {
 	if (!target.classList.contains('timecode')) return
 
 	video.currentTime = convertDurationToSeconds(textContent)
-	isSync = false
 	document.activeElement.blur()
 	scrollToTop()
 
@@ -679,7 +657,6 @@ const handleEnd = () => {
 	let { video } = getMedia()
 
 	video.currentTime = 0
-	isSync = false
 
 	pauseVideoPlayer()
 
@@ -845,26 +822,19 @@ const handleInputVideoPlayer = event => {
 	target = null
 }
 
-const handleCanPlayThroughVideo = () => {
+const handleCanPlayThrough = event => {
 	if (isPaused) return
 
 	let { video, audio } = getMedia()
 
-	if (!isPlaying(audio)) playVideoPlayer()
+	const condition = audio
+		? audio.readyState === 4 && video.readyState === 4
+		: video.readyState === 4
+
+	if (condition) playVideoPlayer()
 
 	audio = null
 	video = null
-}
-
-const handleCanPlayThroughAudio = () => {
-	if (isPaused) return
-
-	let { video, audio } = getMedia()
-
-	if (!isPlaying(video)) playVideoPlayer()
-
-	video = null
-	audio = null
 }
 
 const handlePlaying = () => hideDecoration('load')
@@ -1002,12 +972,12 @@ export const initVideoPlayer = async data => {
 		video.addEventListener('canplay', handleCanPlay, { once: true })
 	} else isPaused = true
 
-	video.addEventListener('canplaythrough', handleCanPlayThroughVideo)
+	video.addEventListener('canplaythrough', handleCanPlayThrough)
 	video.addEventListener('waiting', handleWaitingVideo)
 	video.addEventListener('playing', handlePlaying)
 
 	if (audio) {
-		audio.addEventListener('canplaythrough', handleCanPlayThroughAudio)
+		audio.addEventListener('canplaythrough', handleCanPlayThrough)
 		audio.addEventListener('waiting', handleWaitingAudio)
 	}
 
@@ -1076,12 +1046,12 @@ export const resetVideoPlayer = () => {
 
 	resetPoster()
 
-	video.removeEventListener('canplaythrough', handleCanPlayThroughVideo)
+	video.removeEventListener('canplaythrough', handleCanPlayThrough)
 	video.removeEventListener('waiting', handleWaitingVideo)
 	video.removeEventListener('playing', handlePlaying)
 
 	if (audio) {
-		audio.removeEventListener('canplaythrough', handleCanPlayThroughAudio)
+		audio.removeEventListener('canplaythrough', handleCanPlayThrough)
 		audio.removeEventListener('waiting', handleWaitingAudio)
 		audio.removeEventListener('error', handleError)
 	}

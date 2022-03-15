@@ -1,5 +1,7 @@
 export default class AppStorage {
-	KEY_STORAGE = 'storage'
+	constructor() {
+		this.KEY_STORAGE = 'storage'
+	}
 
 	set(data) {
 		const dataJSON = JSON.stringify(data)

@@ -62,17 +62,17 @@ export const openWinSearchResults = async () => {
 	const query = searchBar.value
 
 	if (lastSearchResult?.originalQuery !== query) {
+		document.activeElement.blur()
+		saveSearchQuery(query)
+		setTimeout(restrainRecentQueriesLength, 15)
+
 		try {
-			document.activeElement.blur()
-			saveSearchQuery(query)
-			setTimeout(restrainRecentQueriesLength, 15)
-
 			data = await getSearchResultsData(query)
-
-			lastSearchResult = data
 		} catch ({ message }) {
 			showToast('error', message)
 		}
+
+		if (data) lastSearchResult = data
 	}
 
 	let searchResults = getSelector('.search-results')
