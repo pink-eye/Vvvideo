@@ -3,9 +3,15 @@
 	&._live {
 
 		.controls__speed,
+		.progress__bar,
 		.progress__time_duration,
 		.time__separator {
 			display: none;
+		}
+
+		.progress:before {
+			right: 15px;
+			left: unset;
 		}
 	}
 	// .video__wrapper
