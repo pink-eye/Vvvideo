@@ -110,15 +110,9 @@
 		-webkit-line-clamp: 1;
 
 		&:before {
-			width: 5px;
-			height: 5px;
+			margin-right: 5px;
 
-			margin-inline: 5px;
-			border-radius: 50%;
-
-			background-color: hsl(0, 0%, 100%);
-
-			content: '';
+			content: '-';
 		}
 
 		&:empty {
