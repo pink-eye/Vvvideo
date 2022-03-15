@@ -1,4 +1,5 @@
-import { getSelector, normalizeCount, isEmpty } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { normalizeCount, isEmpty } from 'Global/utils'
 import { formatDate } from 'Layouts/win-video/helper'
 import { fillAuthorCard, resetAuthorCard } from 'Components/card/card-author'
 import { saveVideoInHistory } from 'Layouts/win-history/helper'
@@ -27,9 +28,9 @@ const handleClickContent = event => {
 }
 
 const openWinVideo = (data, lastWin) => {
-	let video = getSelector('.video')
+	let video = cs.get('.video')
 	let videoPoster = video.querySelector('.video__poster img')
-	let controls = getSelector('.controls')
+	let controls = cs.get('.controls')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
 	let videoViews = videoInfo.querySelector('.video-info__views')
@@ -125,7 +126,7 @@ const openWinVideo = (data, lastWin) => {
 export const resetWinVideo = () => {
 	resetVideoPlayer()
 
-	let video = getSelector('.video')
+	let video = cs.get('.video')
 	let skeletonAll = video.querySelectorAll('.skeleton')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
@@ -183,7 +184,7 @@ export const resetWinVideo = () => {
 const fillSomeInfoVideo = params => {
 	const { title = '', views = '', date = '', author = '', authorId = '' } = params
 
-	let video = getSelector('.video')
+	let video = cs.get('.video')
 	let videoInfo = video.querySelector('.video-info')
 	let videoTitle = videoInfo.querySelector('.video-info__title span')
 	let videoViews = videoInfo.querySelector('.video-info__views')
@@ -231,7 +232,7 @@ const fillSomeInfoVideo = params => {
 }
 
 const displayPlaylistBtn = playlistId => {
-	let videoParent = getSelector('.video')
+	let videoParent = cs.get('.video')
 	let actionsPlaylist = videoParent.querySelector('.info-actions__playlist')
 
 	actionsPlaylist.hidden &&= false
@@ -269,7 +270,7 @@ export const prepareWinVideo = async (btnWin, id) => {
 		return
 	}
 
-	let videoParent = getSelector('.video')
+	let videoParent = cs.get('.video')
 
 	if (videoParent.classList.contains('_active')) {
 		if ('playlistId' in params) data.videoDetails.playlistId = params.playlistId

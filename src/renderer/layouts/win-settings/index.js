@@ -1,4 +1,5 @@
-import { getSelector, isEmpty, reloadApp, isChild } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { isEmpty, reloadApp, isChild } from 'Global/utils'
 import YoutubeHelper from 'Global/YoutubeHelper'
 import { formatPort } from 'Layouts/win-settings/helper'
 import AppStorage from 'Global/AppStorage'
@@ -12,7 +13,7 @@ let storage = null
 let isFilledWin = false
 
 const makeResultImport = (classResult, tip) => {
-	let settings = getSelector('.settings')
+	let settings = cs.get('.settings')
 	let impExpBody = settings.querySelector('.imp-exp')
 	let impExpTip = settings.querySelector('.imp-exp__tip')
 
@@ -73,7 +74,7 @@ const readInputFile = () => {
 	const validTip = 'Successfully! Wait for refresh...'
 	const failTip = 'Fail... :('
 
-	let settings = getSelector('.settings')
+	let settings = cs.get('.settings')
 	let impExpField = settings.querySelector('.imp-exp__field')
 
 	const reader = new FileReader()
@@ -99,7 +100,7 @@ const readInputFile = () => {
 
 const handleClickImport = () => {
 	const invalidTip = "I've not found a JSON file.\n Ensure you interacted this area"
-	let settings = getSelector('.settings')
+	let settings = cs.get('.settings')
 	let impExpField = settings.querySelector('.imp-exp__field')
 
 	impExpField.value === '' || /\.(json)$/i.test(impExpField.files[0].name) === false
@@ -111,7 +112,7 @@ const handleClickImport = () => {
 }
 
 const handleFile = event => {
-	let settings = getSelector('.settings')
+	let settings = cs.get('.settings')
 	let impExpBody = settings.querySelector('.imp-exp')
 	let impExpTip = settings.querySelector('.imp-exp__tip')
 	let impExpField = settings.querySelector('.imp-exp__field')
@@ -200,7 +201,7 @@ const handleChangeCheckbox = event => {
 			break
 
 		case 'notAdaptContent':
-			if (checkbox.checked) getSelector('.main__content').style.setProperty('--margin', '0')
+			if (checkbox.checked) cs.get('.main__content').style.setProperty('--margin', '0')
 			break
 
 		case 'disableSearchSuggestions':
@@ -255,7 +256,7 @@ const handleInputWin = event => {
 }
 
 export const openWinSettings = () => {
-	let settings = getSelector('.settings')
+	let settings = cs.get('.settings')
 
 	fillWinSettings()
 
@@ -267,7 +268,7 @@ export const openWinSettings = () => {
 }
 
 export const resetWinSettings = () => {
-	let settings = getSelector('.settings')
+	let settings = cs.get('.settings')
 
 	settings.removeEventListener('click', handleClickWin)
 	settings.removeEventListener('change', handleChangeWin)
@@ -300,7 +301,7 @@ const fillWinSettings = () => {
 
 	storage = appStorage.get()
 	const { settings: ss } = storage
-	const settings = getSelector('.settings')
+	const settings = cs.get('.settings')
 
 	let themeDropdown = settings.querySelector('.option__theme')
 	let themeDropdownHead = themeDropdown.querySelector('.dropdown__head')

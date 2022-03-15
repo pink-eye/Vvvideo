@@ -1,4 +1,4 @@
-import { getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
 
 export const uuidv4 = () =>
 	'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -10,9 +10,7 @@ export const uuidv4 = () =>
 export const getSegmentsSB = id => API.getSponsorblockInfo(id, uuidv4())
 
 export const toggleSponsorblock = option => {
-	let sponsorblockBtn = getSelector('.controls').querySelector(
-		'.controls-actions__btn_sponsorblock'
-	)
+	let sponsorblockBtn = cs.get('.controls').querySelector('.controls-actions__btn_sponsorblock')
 
 	sponsorblockBtn.hidden = option
 

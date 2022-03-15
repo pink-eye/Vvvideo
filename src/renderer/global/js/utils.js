@@ -1,17 +1,5 @@
 import AppStorage from 'Global/AppStorage'
 
-export const cacheSelector = (key, value) => {
-	if (typeof value === 'undefined') return cacheSelector[key]
-
-	cacheSelector[key] = value
-}
-
-export const getSelector = selector => {
-	if (!cacheSelector(selector)) cacheSelector(selector, document.querySelector(selector))
-
-	return cacheSelector(selector)
-}
-
 export const queryClosestByClass = (target, className) =>
 	target.classList.contains(className) ? target : target.closest(`.${className}`)
 
@@ -24,7 +12,7 @@ export const closeApp = () => window.close()
 export const scrollToTop = () => window.scrollTo(0, 0)
 
 export const scrollToElem = y => {
-	let header = getSelector('.header')
+	let header = cs.get('.header')
 
 	header && window.scrollTo(0, y - header.offsetHeight - 20)
 

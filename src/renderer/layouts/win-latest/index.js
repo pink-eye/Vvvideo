@@ -1,4 +1,4 @@
-import { getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
 import { fillVideoCard } from 'Components/card/card-video'
@@ -28,7 +28,7 @@ const getChannelVideosLocalScraper = channelId =>
 	})
 
 const openWinLatest = async () => {
-	let latest = getSelector('.latest')
+	let latest = cs.get('.latest')
 	let promises = []
 	let videoAll = latest.querySelectorAll('.card')
 

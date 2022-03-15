@@ -1,8 +1,7 @@
-import { getSelector } from 'Global/utils'
-
+import cs from 'Global/cacheSelectors'
 const resetIndicator = () => {
 	queueMicrotask(() => {
-		let indicator = getSelector('.indicator')
+		let indicator = cs.get('.indicator')
 
 		if (indicator.classList.contains('_visible')) {
 			indicator.classList.remove('_visible')
@@ -14,7 +13,7 @@ const resetIndicator = () => {
 
 const startIndicator = () => {
 	queueMicrotask(() => {
-		let indicator = getSelector('.indicator')
+		let indicator = cs.get('.indicator')
 
 		if (!indicator.classList.contains('_visible')) {
 			indicator.classList.add('_visible')

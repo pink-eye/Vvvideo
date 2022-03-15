@@ -1,5 +1,5 @@
 import AppStorage from 'Global/AppStorage'
-import { getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
 import { fillVideoCard } from 'Components/card/card-video'
 import { initPages, disablePages } from 'Components/grid-btns'
 
@@ -11,7 +11,7 @@ const openWinHistory = () => {
 
 	const { history } = storage
 
-	const historyWin = getSelector('.history')
+	const historyWin = cs.get('.history')
 	let videoAll = historyWin.querySelectorAll('.card')
 
 	history.length > videoAll.length

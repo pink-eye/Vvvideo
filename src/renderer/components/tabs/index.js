@@ -1,4 +1,4 @@
-import { getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
 import { resetGrid } from 'Components/grid'
 import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'
@@ -6,7 +6,7 @@ import showToast from 'Components/toast'
 import { initPages, disablePages } from 'Components/grid-btns'
 
 export const hideLastTab = () => {
-	let channel = getSelector('.channel')
+	let channel = cs.get('.channel')
 	let tabsPanelActive = channel.querySelector('.tabs__panel._active')
 
 	if (tabsPanelActive && tabsPanelActive.classList.contains('_active')) {
@@ -27,7 +27,7 @@ export const hideLastTab = () => {
 
 const showRequiredTab = async tab => {
 	const channelTab = tab.dataset.tab
-	let channel = getSelector('.channel')
+	let channel = cs.get('.channel')
 
 	if (tab && !tab.classList.contains('_active')) tab.classList.add('_active')
 
@@ -93,7 +93,7 @@ const handleClickTab = async ({ currentTarget }) => {
 }
 
 export const initTabs = primary => {
-	let tabAll = getSelector('.channel').querySelectorAll('.tabs__btn')
+	let tabAll = cs.get('.channel').querySelectorAll('.tabs__btn')
 
 	if (tabAll.length === 0) return
 
@@ -114,7 +114,7 @@ export const initTabs = primary => {
 }
 
 export const destroyTabs = () => {
-	let tabAll = getSelector('.channel').querySelectorAll('.tabs__btn')
+	let tabAll = cs.get('.channel').querySelectorAll('.tabs__btn')
 
 	if (tabAll.length === 0) return
 

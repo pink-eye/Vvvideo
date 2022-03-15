@@ -1,4 +1,4 @@
-import { getSelector, reloadApp } from 'Global/utils'
+import { reloadApp, hasFocus } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import manageWin from 'Global/WinManager'
 import checkForUpdate from 'Global/checkForUpdate'
@@ -13,6 +13,7 @@ import showToast from 'Components/toast'
 import initUpdateComponent from 'Components/update'
 import removePreloader from 'Components/preloader'
 import HideOnScroll from 'Global/HideOnScroll'
+import cs from 'Global/cacheSelectors.js'
 
 const handleClickWindow = ({ target }) => {
 	if (!target.closest('.dropdown')) {
@@ -59,14 +60,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 	removePreloader()
 
 	// MAIN SELECTORS
-	let header = getSelector('.header')
-	let sidebar = getSelector('.sidebar')
-	let mainContent = getSelector('.main__content')
+	let header = cs.get('.header')
+	let sidebar = cs.get('.sidebar')
+	let mainContent = cs.get('.main__content')
 
 	// HIDE ON SCROLL
 
 	new HideOnScroll({ selector: header })
-	new HideOnScroll({ selector: sidebar, maxWidth: 767 })
+	new HideOnScroll({ selector: sidebar, maxWidth: 767, conditionOnShow: () => hasFocus(sidebar) })
 
 	// MANAGE WINDOWS
 

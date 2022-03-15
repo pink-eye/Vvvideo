@@ -1,7 +1,7 @@
+import cs from 'Global/cacheSelectors'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
 import {
-	getSelector,
 	convertSecondsToDuration,
 	convertDurationToSeconds,
 	convertToPercentage,
@@ -82,7 +82,7 @@ export const clearHistory = async () => {
 export const disableHistory = () => {
 	clearHistory()
 
-	let history = getSelector('.history')
+	let history = cs.get('.history')
 	let sidebarBtnHistory = document.querySelector('[data-win="history"]')
 
 	history.remove()
@@ -98,8 +98,8 @@ export const rememberWatchedTime = () => {
 
 	if (isDisabledHistory && dontRememberWatchedTime) return
 
-	const { id } = getSelector('.video').dataset
-	const { currentTime, duration } = getSelector('video')
+	const { id } = cs.get('.video').dataset
+	const { currentTime, duration } = cs.get('video')
 
 	if (convertToPercentage(currentTime, duration) < 1) return
 

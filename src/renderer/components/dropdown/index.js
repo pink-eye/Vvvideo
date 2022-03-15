@@ -1,4 +1,5 @@
-import { getSelector, queryClosestByClass } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { queryClosestByClass } from 'Global/utils'
 
 const changeHeadContent = (dropdown, dropdownBtn) => {
 	let dropdownHead = dropdown.querySelector('.dropdown__head')
@@ -32,7 +33,7 @@ const focusCurrentChoice = dropdown => {
 }
 
 export function hideLastDropdown(currentDropdown = null) {
-	let winActive = getSelector('.main__content').querySelector('.win._active')
+	let winActive = cs.get('.main__content').querySelector('.win._active')
 
 	if (!winActive) return
 

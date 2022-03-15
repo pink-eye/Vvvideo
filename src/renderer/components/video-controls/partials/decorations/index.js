@@ -1,9 +1,8 @@
-import { getSelector } from 'Global/utils'
-
+import cs from 'Global/cacheSelectors'
 const decorationArray = ['play', 'pause', 'load']
 
 export const hideDecoration = action => {
-	let icon = getSelector(`#${action}`)
+	let icon = cs.get(`#${action}`)
 
 	const removeActive = () => {
 		icon.classList.remove('_active')
@@ -18,7 +17,7 @@ export const hideDecoration = action => {
 }
 
 export const showDecoration = (action, doHide) => {
-	let icon = getSelector(`#${action}`)
+	let icon = cs.get(`#${action}`)
 
 	if (!icon.classList.contains('_active')) {
 		icon.classList.add('_active')
@@ -33,7 +32,7 @@ export const resetDecorations = () => {
 	for (let index = 0, { length } = decorationArray; index < length; index += 1) {
 		const decoration = decorationArray[index]
 
-		let decorationSelector = getSelector(`#${decoration}`)
+		let decorationSelector = cs.get(`#${decoration}`)
 
 		if (decorationSelector.classList.contains('_active'))
 			decorationSelector.classList.remove('_active')

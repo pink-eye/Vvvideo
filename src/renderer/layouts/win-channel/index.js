@@ -1,4 +1,5 @@
-import { getSelector, isEmpty, handleClickLink } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { isEmpty, handleClickLink } from 'Global/utils'
 import showToast from 'Components/toast'
 import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
 import { resetGrid } from 'Components/grid'
@@ -9,7 +10,7 @@ import { normalizeAbout } from 'Layouts/win-channel/helper'
 const getChannelData = id => API.scrapeChannelInfo(id)
 
 const openWinChannel = data => {
-	let channel = getSelector('.channel')
+	let channel = cs.get('.channel')
 	let channelBannerImg = channel.querySelector('.channel__banner img')
 	let channelBanner = channel.querySelector('.channel__banner')
 	let channelAvatar = channel.querySelector('.heading-channel__avatar img')
@@ -92,7 +93,7 @@ const openWinChannel = data => {
 }
 
 export const resetWinChannel = () => {
-	let channel = getSelector('.channel')
+	let channel = cs.get('.channel')
 	let channelBanner = channel.querySelector('.channel__banner')
 	let channelBannerImg = channel.querySelector('.channel__banner img')
 	let channelTabContentVideos = channel.querySelector('.videos')
@@ -145,7 +146,7 @@ export const resetWinChannel = () => {
 }
 
 const fillSomeInfoChannel = ({ name = '', id = '' }) => {
-	let channel = getSelector('.channel')
+	let channel = cs.get('.channel')
 	let channelName = channel.querySelector('.heading-channel__author span')
 	let subscribeBtn = channel.querySelector('.subscribe')
 	let titleSkeleton = channel.querySelector('.title-skeleton')
@@ -177,7 +178,7 @@ export const prepareWinChannel = async (btnWin, id) => {
 		return
 	}
 
-	let channel = getSelector('.channel')
+	let channel = cs.get('.channel')
 
 	if (channel.classList.contains('_active')) openWinChannel(data)
 

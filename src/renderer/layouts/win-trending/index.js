@@ -1,10 +1,10 @@
-import { getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { fillVideoCard } from 'Components/card/card-video'
 import showToast from 'Components/toast'
 
 const openWinTrending = async (geoLocation = 'US', page = 'default') => {
-	let trending = getSelector('.trending')
+	let trending = cs.get('.trending')
 	let videoAll = trending.querySelectorAll('.card')
 
 	let parameters = {

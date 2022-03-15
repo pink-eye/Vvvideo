@@ -1,5 +1,5 @@
+import cs from 'Global/cacheSelectors'
 import {
-	getSelector,
 	convertDurationToSeconds,
 	convertSecondsToDuration,
 	isChild,
@@ -13,7 +13,7 @@ let isRecording = false
 let modal = null
 
 const hideInvalidUI = () => {
-	let dialogSb = getSelector('.dialog-sb')
+	let dialogSb = cs.get('.dialog-sb')
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
 	let dialogSbWarning = dialogSb.querySelector('.dialog-sb__warning')
@@ -67,15 +67,15 @@ const handleClickDialog = event => {
 const showDialogSB = () => {
 	if (document.fullscreenElement) document.exitFullscreen()
 
-	let video = getSelector('video')
-	let audio = getSelector('.video').querySelector('audio')
+	let video = cs.get('video')
+	let audio = cs.get('.video').querySelector('audio')
 
 	video.pause()
 	audio && audio.pause()
 
 	hideInvalidUI()
 
-	let dialogSb = getSelector('.dialog-sb')
+	let dialogSb = cs.get('.dialog-sb')
 
 	dialogSb.addEventListener('click', handleClickDialog)
 	dialogSb.addEventListener('input', handleInputDialog)
@@ -96,10 +96,10 @@ const recordSegmentSB = ({ onStart, onEnd }) => {
 
 	modal = new GraphModal({ isClose: handleCloseModal })
 
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	if (!video.paused || !video.ended) {
-		let dialogSb = getSelector('.dialog-sb')
+		let dialogSb = cs.get('.dialog-sb')
 
 		if (!isRecording) {
 			let dialogSbStart = dialogSb.querySelector('input#start')
@@ -127,7 +127,7 @@ const recordSegmentSB = ({ onStart, onEnd }) => {
 }
 
 const resetDialogSB = () => {
-	let dialogSb = getSelector('.dialog-sb')
+	let dialogSb = cs.get('.dialog-sb')
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
 
@@ -147,11 +147,11 @@ const resetDialogSB = () => {
 }
 
 const isValidFields = () => {
-	let dialogSb = getSelector('.dialog-sb')
+	let dialogSb = cs.get('.dialog-sb')
 
 	const { value: valueStart } = dialogSb.querySelector('input#start')
 	const { value: valueEnd } = dialogSb.querySelector('input#end')
-	const { duration } = getSelector('video')
+	const { duration } = cs.get('video')
 
 	let patternTimecodeMMSS = /\b(?<!>)([0-5]?[0-9]):([0-5][0-9])(?!<)\b/gm
 	let patternTimecodeHHMMSS = /\b(2[0-3]|[0-1]?[\d]):[0-5][\d]:[0-5][\d]\b/gm
@@ -168,7 +168,7 @@ const isValidFields = () => {
 }
 
 const showInvalidUI = () => {
-	let dialogSb = getSelector('.dialog-sb')
+	let dialogSb = cs.get('.dialog-sb')
 	let dialogSbStart = dialogSb.querySelector('input#start')
 	let dialogSbEnd = dialogSb.querySelector('input#end')
 	let dialogSbWarning = dialogSb.querySelector('.dialog-sb__warning')
@@ -188,9 +188,9 @@ const showInvalidUI = () => {
 
 const sendSegmentSB = async () => {
 	if (isValidFields()) {
-		let dialogSb = getSelector('.dialog-sb')
+		let dialogSb = cs.get('.dialog-sb')
 
-		const { id: videoId } = getSelector('.video').dataset
+		const { id: videoId } = cs.get('.video').dataset
 		const { id: category } = dialogSb.querySelector('input[name="category"]:checked')
 		const { value: valueStart } = dialogSb.querySelector('input#start')
 		const { value: valueEnd } = dialogSb.querySelector('input#end')
@@ -212,7 +212,7 @@ const sendSegmentSB = async () => {
 }
 
 const handleCloseModal = () => {
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	video.play()
 

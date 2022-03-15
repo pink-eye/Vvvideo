@@ -1,6 +1,7 @@
+import cs from 'Global/cacheSelectors'
 import { hideOverlay } from 'Components/overlay'
 import toggleMenu from 'Components/burger'
-import { getSelector, hasFocus } from 'Global/utils'
+import { hasFocus } from 'Global/utils'
 import { scrapeInfoToSwitchPage, nextPage, prevPage } from 'Components/grid-btns'
 import { hideSuggestions } from 'Components/suggestions'
 
@@ -12,7 +13,7 @@ const handleKeyDown = event => {
 		hideOverlay()
 		hideSuggestions()
 
-		let winActive = getSelector('.main__content').querySelector('.win._active')
+		let winActive = cs.get('.main__content').querySelector('.win._active')
 		let firstCard = null
 
 		if (winActive.classList.contains('subscriptions')) {
@@ -33,11 +34,11 @@ const handleKeyDown = event => {
 
 	// CTRL + F
 	if (event.ctrlKey && event.keyCode === 70) {
-		let header = getSelector('.header')
+		let header = cs.get('.header')
 
 		if (header.classList.contains('_hidden')) header.classList.remove('_hidden')
 
-		getSelector('.search__bar').focus()
+		cs.get('.search__bar').focus()
 
 		header = null
 	}
@@ -47,7 +48,7 @@ const handleKeyDown = event => {
 
 	// SHIFT
 	if (event.shiftKey && (event.keyCode === 75 || event.keyCode === 74)) {
-		let winActive = getSelector('.main__content').querySelector('.win._active')
+		let winActive = cs.get('.main__content').querySelector('.win._active')
 
 		if (
 			winActive &&
@@ -85,8 +86,8 @@ const handleKeyDown = event => {
 	}
 
 	// SPACE
-	if (event.keyCode === 32 && !hasFocus(getSelector('.search__bar'))) {
-		let winActive = getSelector('.main__content').querySelector('.win._active')
+	if (event.keyCode === 32 && !hasFocus(cs.get('.search__bar'))) {
+		let winActive = cs.get('.main__content').querySelector('.win._active')
 
 		if (winActive.classList.contains('video')) event.preventDefault()
 

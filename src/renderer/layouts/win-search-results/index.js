@@ -1,4 +1,4 @@
-import { getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
 import AppStorage from 'Global/AppStorage'
 import { filterSearchResults } from 'Layouts/win-search-results/helper'
 import { initPages, disablePages } from 'Components/grid-btns'
@@ -56,7 +56,7 @@ const getSearchResultsData = query => {
 }
 
 export const openWinSearchResults = async () => {
-	let searchBar = getSelector('.header').querySelector('.search__bar')
+	let searchBar = cs.get('.header').querySelector('.search__bar')
 	let data = null
 
 	const query = searchBar.value
@@ -75,7 +75,7 @@ export const openWinSearchResults = async () => {
 		if (data) lastSearchResult = data
 	}
 
-	let searchResults = getSelector('.search-results')
+	let searchResults = cs.get('.search-results')
 
 	if (searchResults.classList.contains('_active') || lastSearchResult?.originalQuery === query) {
 		let cardAll = searchResults.querySelectorAll('.card')

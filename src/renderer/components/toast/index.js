@@ -1,14 +1,13 @@
-import { getSelector } from 'Global/utils'
-
+import cs from 'Global/cacheSelectors'
 const createToastItemHTML = (type, text) =>
 	`<li class="toast__item _${type}"><div class="toast__icon"></div>${text}</li>`
 
-const isExistSimilarToast = text => getSelector('.toast__list').textContent.includes(text)
+const isExistSimilarToast = text => cs.get('.toast__list').textContent.includes(text)
 
 const showToast = (type, text) => {
 	if (!isExistSimilarToast(text)) {
 		let animationStep = 0
-		let toastList = getSelector('.toast__list')
+		let toastList = cs.get('.toast__list')
 
 		toastList.insertAdjacentHTML('afterBegin', createToastItemHTML(type, text))
 

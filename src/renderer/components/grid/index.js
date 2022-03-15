@@ -1,9 +1,9 @@
-import { getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
 import resetCard from 'Components/card'
 import { resetAuthorCard } from 'Components/card/card-author'
 
 const resetGridAuthorCard = () => {
-	let subscriptions = getSelector('.subscriptions')
+	let subscriptions = cs.get('.subscriptions')
 	let authorCardAll = subscriptions.querySelectorAll('.author')
 
 	if (authorCardAll.length > 0) {

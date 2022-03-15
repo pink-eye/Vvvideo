@@ -1,4 +1,4 @@
-import { getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
 import AppStorage from 'Global/AppStorage'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { fillAuthorCard } from 'Components/card/card-author'
@@ -51,7 +51,7 @@ const updateSubscriptionData = async storage => {
 const openWinSubs = async () => {
 	const appStorage = new AppStorage()
 	let storage = appStorage.get()
-	let subscriptions = getSelector('.subscriptions')
+	let subscriptions = cs.get('.subscriptions')
 	let authorCardAll = subscriptions.querySelectorAll('.author')
 
 	storage.subscriptions.length > authorCardAll.length

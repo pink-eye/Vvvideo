@@ -1,4 +1,5 @@
-import { isEmpty, hasFocus, getSelector, queryClosestByClass } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { isEmpty, hasFocus, queryClosestByClass } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
 import manageWin from 'Global/WinManager'
@@ -27,7 +28,7 @@ const createRecentQueryHTML = textContent => `<button class="suggestion">
 										</button>`
 
 const addSuggestion = (data, isRecent) => {
-	let headerSearch = getSelector('.search')
+	let headerSearch = cs.get('.search')
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
 	let searchBar = headerSearch.querySelector('.search__bar')
 
@@ -61,7 +62,7 @@ const addSuggestion = (data, isRecent) => {
 }
 
 const resetSelected = () => {
-	let headerSearch = getSelector('.search')
+	let headerSearch = cs.get('.search')
 	let selectedSuggestion = headerSearch.querySelector('._selected')
 
 	if (selectedSuggestion) selectedSuggestion.classList.remove('_selected')
@@ -73,7 +74,7 @@ const resetSelected = () => {
 const hideSuggestions = () => {
 	resetSelected()
 
-	let headerSearch = getSelector('.search')
+	let headerSearch = cs.get('.search')
 	let suggestionList = headerSearch.querySelector('.suggestion__list')
 
 	suggestionListLength = 0
@@ -85,7 +86,7 @@ const hideSuggestions = () => {
 }
 
 const insertSelectedSuggestion = suggestion => {
-	let headerSearch = getSelector('.search')
+	let headerSearch = cs.get('.search')
 	let searchBar = headerSearch.querySelector('.search__bar')
 	let suggestionText = suggestion.querySelector('.suggestion__text')
 
@@ -97,7 +98,7 @@ const insertSelectedSuggestion = suggestion => {
 }
 
 const chooseSuggestion = direction => {
-	let headerSearch = getSelector('.search')
+	let headerSearch = cs.get('.search')
 	let suggestionAll = headerSearch.querySelectorAll('.suggestion')
 
 	if (suggestionAll.length > 0) {
@@ -212,7 +213,7 @@ const handleBlur = ({ currentTarget }) => {
 const initSuggestions = () => {
 	const { settings } = appStorage.get()
 
-	let headerSearch = getSelector('.search')
+	let headerSearch = cs.get('.search')
 	let searchBar = headerSearch.querySelector('.search__bar')
 
 	if (settings.disableSearchSuggestions) {

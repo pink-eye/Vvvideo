@@ -1,5 +1,5 @@
+import cs from 'Global/cacheSelectors'
 import {
-	getSelector,
 	isEmpty,
 	convertSecondsToDuration,
 	scrollToTop,
@@ -46,7 +46,7 @@ let intervalWatchedProgress = null
 let timeout = null
 const configDialogSB = {
 	onStart: () => {
-		let controls = getSelector('.controls')
+		let controls = cs.get('.controls')
 		let sponsorblockBtn = controls.querySelector('.controls-actions__btn_sponsorblock')
 		sponsorblockBtn.dataset.tooltip = 'Stop segment (S)'
 		changeIcon('controls-actions__btn_sponsorblock', 'img/svg/controls.svg#sponsorblock-stop')
@@ -54,7 +54,7 @@ const configDialogSB = {
 		sponsorblockBtn = null
 	},
 	onEnd: () => {
-		let controls = getSelector('.controls')
+		let controls = cs.get('.controls')
 		let sponsorblockBtn = controls.querySelector('.controls-actions__btn_sponsorblock')
 		sponsorblockBtn.dataset.tooltip = 'Start segment (S)'
 		changeIcon('controls-actions__btn_sponsorblock', 'img/svg/controls.svg#sponsorblock')
@@ -69,8 +69,8 @@ const appStorage = new AppStorage()
 let storage = null
 
 const getMedia = () => {
-	let audio = getSelector('.video').querySelector('audio')
-	let video = getSelector('video')
+	let audio = cs.get('.video').querySelector('audio')
+	let video = cs.get('video')
 
 	return { video, audio }
 }
@@ -97,7 +97,7 @@ const loadCaptions = (data, captionTracks, callback) => {
 }
 
 const removeTracks = () => {
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	while (video.firstChild) video.firstChild.remove()
 
@@ -105,7 +105,7 @@ const removeTracks = () => {
 }
 
 const disableAudio = () => {
-	let audio = getSelector('.video').querySelector('audio')
+	let audio = cs.get('.video').querySelector('audio')
 
 	if (audio) {
 		resetMediaEl(audio)
@@ -135,7 +135,7 @@ const handleErrorLive = (event, { fatal, type }) => {
 }
 
 const startVideoLive = url => {
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	hls = new Hls()
 	hls.attachMedia(video)
@@ -216,7 +216,7 @@ const prepareVideoPlayer = async data => {
 }
 
 const changeVideoSrc = (url, currentTime) => {
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	if (isEmpty(hls)) {
 		video.removeAttribute('src')
@@ -266,14 +266,14 @@ const playEl = el => {
 }
 
 const startVideoFromLastPoint = () => {
-	const { id } = getSelector('.video').dataset
+	const { id } = cs.get('.video').dataset
 
 	if (isEmpty(id)) return
 
 	const videoWatchedTime = getWatchedTime(id)
 
 	if (videoWatchedTime) {
-		getSelector('video').currentTime = videoWatchedTime
+		cs.get('video').currentTime = videoWatchedTime
 	}
 }
 
@@ -306,7 +306,7 @@ const pauseVideoPlayer = () => {
 }
 
 const switchQuality = url => {
-	const { currentTime, paused } = getSelector('video')
+	const { currentTime, paused } = cs.get('video')
 
 	if (!paused) {
 		pauseVideoPlayer()
@@ -327,7 +327,7 @@ const changeSpeed = speed => {
 }
 
 const switchCaption = ({ label, srclang, src }) => {
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	removeTracks()
 
@@ -363,7 +363,7 @@ const togglePlay = () => {
 
 const changeIcon = (className, iconPath) => {
 	queueMicrotask(() => {
-		let controls = getSelector('.controls')
+		let controls = cs.get('.controls')
 		let controlsSwitchIcon = controls.querySelector(`.${className} svg > use`)
 
 		controlsSwitchIcon.setAttribute('xlink:href', iconPath)
@@ -383,10 +383,10 @@ const showIconOpenFullscreen = () =>
 const showIconCloseFullscreen = () =>
 	changeIcon('controls-actions__btn_screen', 'img/svg/controls.svg#close-fullscreen')
 
-const toggleIconPlayPause = () => (getSelector('video').paused ? showIconPlay() : showIconPause())
+const toggleIconPlayPause = () => (cs.get('video').paused ? showIconPlay() : showIconPause())
 
 const toggleIconFullscreen = () => {
-	let controls = getSelector('.controls')
+	let controls = cs.get('.controls')
 	let actionsScreen = controls.querySelector('.controls-actions__btn_screen')
 
 	if (document.fullscreenElement) {
@@ -404,14 +404,14 @@ const toggleIconFullscreen = () => {
 const updateBarChapter = () => {
 	if (!chapters || chapters.length === 0) return
 
-	const { currentTime } = getSelector('video')
+	const { currentTime } = cs.get('video')
 	const { title, start_time } = getRequiredChapter(chapters, currentTime)
 
 	if (currentChapter && title === currentChapter) return
 
 	currentChapter = title
 
-	let controls = getSelector('.controls')
+	let controls = cs.get('.controls')
 	let barChapter = controls.querySelector('.controls__current-chapter')
 
 	barChapter.textContent = title
@@ -423,7 +423,7 @@ const updateBarChapter = () => {
 }
 
 const highlightCurrentChapter = time => {
-	let videoParent = getSelector('.video')
+	let videoParent = cs.get('.video')
 	let spoilerContent = videoParent.querySelector('.spoiler__content')
 	let lastHighlightedTimecode = spoilerContent.querySelector('.timecode.btn-accent')
 	let timecodeAll = spoilerContent.querySelectorAll('.timecode')
@@ -448,7 +448,7 @@ const highlightCurrentChapter = time => {
 }
 
 const updateVolumeEl = el => {
-	let controls = getSelector('.controls')
+	let controls = cs.get('.controls')
 	let volumeBar = controls.querySelector('.volume__bar')
 	let volumeSeek = controls.querySelector('.volume__seek')
 	let givenEl = el
@@ -465,7 +465,7 @@ const updateVolumeEl = el => {
 }
 
 const hideBars = () => {
-	let progress = getSelector('.progress')
+	let progress = cs.get('.progress')
 
 	if (progress.matches(':hover')) {
 		progress = null
@@ -474,8 +474,8 @@ const hideBars = () => {
 
 	if (menu.isOpened) return
 
-	let controls = getSelector('.controls')
-	let heading = getSelector('.video').querySelector('.heading')
+	let controls = cs.get('.controls')
+	let heading = cs.get('.video').querySelector('.heading')
 
 	controls.classList.remove('_opened')
 	heading.classList.remove('_opened')
@@ -486,8 +486,8 @@ const hideBars = () => {
 }
 
 const showBars = () => {
-	let heading = getSelector('.video').querySelector('.heading')
-	let controls = getSelector('.controls')
+	let heading = cs.get('.video').querySelector('.heading')
+	let controls = cs.get('.controls')
 
 	controls.classList.add('_opened')
 	heading.classList.add('_opened')
@@ -497,7 +497,7 @@ const showBars = () => {
 }
 
 const toggleFullscreen = () => {
-	let videoWrapper = getSelector('.video').querySelector('.video__wrapper')
+	let videoWrapper = cs.get('.video').querySelector('.video__wrapper')
 
 	document.fullscreenElement ? document.exitFullscreen() : videoWrapper.requestFullscreen()
 
@@ -505,7 +505,7 @@ const toggleFullscreen = () => {
 }
 
 const toggleMuteEl = el => {
-	let volumeSeek = getSelector('.controls').querySelector('.volume__seek')
+	let volumeSeek = cs.get('.controls').querySelector('.volume__seek')
 	let givenEl = el
 
 	givenEl.muted = !givenEl.muted
@@ -532,7 +532,7 @@ const skipSegmentSB = () => {
 
 	if (disableSponsorblock || segmentsSB.length === 0) return
 
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	if (!isPlaying(video)) {
 		video = null
@@ -626,7 +626,7 @@ const handleError = ({ target }) => {
 }
 
 export const handleClickTimecode = ({ target }) => {
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	if (!video.src) {
 		video = null
@@ -664,7 +664,7 @@ const handleEnd = () => {
 }
 
 const handleMouseMoveProgressSeek = event => {
-	let video = getSelector('video')
+	let video = cs.get('video')
 
 	const duration = !hls ? video.duration : video.currentTime
 	const skipTo = (event.offsetX / event.target.offsetParent.clientWidth) * duration
@@ -687,17 +687,17 @@ const handleMouseMoveProgressSeek = event => {
 }
 
 const forwardTime = () => {
-	getSelector('video').currentTime += 10
+	cs.get('video').currentTime += 10
 }
 
 const backwardTime = () => {
-	getSelector('video').currentTime -= 10
+	cs.get('video').currentTime -= 10
 }
 
 const handleKeyDownWithinVideo = ({ keyCode }) => {
 	if (
-		getSelector('.video').classList.contains('_active') &&
-		(hasFocus(getSelector('body')) || hasFocus(null))
+		cs.get('.video').classList.contains('_active') &&
+		(hasFocus(cs.get('body')) || hasFocus(null))
 	) {
 		// ENTER || SPACE
 		if (keyCode === 13 || keyCode === 32) togglePlay()
@@ -853,8 +853,8 @@ const handleProgress = () => {
 const handleClickMore = () => (menu.isOpened ? menu.close() : menu.open())
 
 export const initVideoPlayer = async data => {
-	let controls = getSelector('.controls')
-	let videoParent = getSelector('.video')
+	let controls = cs.get('.controls')
+	let videoParent = cs.get('.video')
 	let videoWrapper = videoParent.querySelector('.video__wrapper')
 	let videoSkeleton = videoParent.querySelector('.video-skeleton')
 
@@ -921,7 +921,7 @@ export const initVideoPlayer = async data => {
 		if (chapters?.length) progress.visualizeChapters({ chapters })
 
 		intervalWatchedProgress = setInterval(() => {
-			let video = getSelector('video')
+			let video = cs.get('video')
 
 			if (!isPlaying(video)) return
 
@@ -1010,9 +1010,9 @@ export const resetVideoPlayer = () => {
 	rememberWatchedTime()
 
 	let { video, audio } = getMedia()
-	let videoParent = getSelector('.video')
+	let videoParent = cs.get('.video')
 	let videoWrapper = videoParent.querySelector('.video__wrapper')
-	let controls = getSelector('.controls')
+	let controls = cs.get('.controls')
 	let barChapter = controls.querySelector('.controls__current-chapter')
 	let actionsMore = controls.querySelector('.controls-actions__btn_more')
 

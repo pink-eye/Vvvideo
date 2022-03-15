@@ -1,9 +1,10 @@
-import { getSelector, convertSecondsToDuration, convertToPercentage } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { convertSecondsToDuration, convertToPercentage } from 'Global/utils'
 import { getPosStroryboard, progressBarChapterHTML, sponsorblockItemHTML } from './helper'
 
 export default class Progress {
 	constructor() {
-		this.progress = getSelector('.progress')
+		this.progress = cs.get('.progress')
 		this.progressBar = this.progress.querySelector('.progress__bar')
 		this.progressChapters = this.progress.querySelector('.progress__chapters')
 		this.progressSeek = this.progress.querySelector('.progress__seek')

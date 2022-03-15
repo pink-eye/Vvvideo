@@ -1,4 +1,5 @@
-import { getSelector, isEmpty, normalizeCount, convertSecondsToDuration } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { isEmpty, normalizeCount, convertSecondsToDuration } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import { resetGrid } from 'Components/grid'
 import showToast from 'Components/toast'
@@ -15,7 +16,7 @@ const getPlaylistData = id => {
 }
 
 const openWinPlaylist = data => {
-	let playlist = getSelector('.playlist')
+	let playlist = cs.get('.playlist')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let playlistViews = playlist.querySelector('.playlist__views')
 	let playlistVideoCount = playlist.querySelector('.playlist__video-count')
@@ -96,7 +97,7 @@ const openWinPlaylist = data => {
 }
 
 export const resetWinPlaylist = () => {
-	let playlist = getSelector('.playlist')
+	let playlist = cs.get('.playlist')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let playlistViews = playlist.querySelector('.playlist__views')
 	let playlistVideoCount = playlist.querySelector('.playlist__video-count')
@@ -140,7 +141,7 @@ export const resetWinPlaylist = () => {
 }
 
 const fillSomeInfoPlaylist = ({ title = '', author = '', id = '' }) => {
-	let playlist = getSelector('.playlist')
+	let playlist = cs.get('.playlist')
 	let playlistName = playlist.querySelector('.playlist__name span')
 	let titleSkeleton = playlist.querySelector('.title-skeleton')
 	let authorCard = playlist.querySelector('.author')
@@ -187,7 +188,7 @@ export const prepareWinPlaylist = async (btnWin, id) => {
 		return
 	}
 
-	let playlist = getSelector('.playlist')
+	let playlist = cs.get('.playlist')
 
 	if (playlist.classList.contains('_active')) openWinPlaylist(data)
 

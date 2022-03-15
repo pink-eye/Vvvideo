@@ -1,4 +1,5 @@
-import { getSelector, scrollToTop, getDurationTimeout } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { scrollToTop, getDurationTimeout } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import YoutubeHelper from 'Global/YoutubeHelper'
 import { resetGrid, resetGridAuthorCard } from 'Components/grid'
@@ -94,7 +95,7 @@ const startFillingWin = ({ win, btnWin, id, lastWin }) => {
 }
 
 const showWin = ({ win, winSelector, id }) => {
-	let mainContent = getSelector('.main__content')
+	let mainContent = cs.get('.main__content')
 
 	mainContent.dataset.activeWin = win
 	mainContent.dataset.activeWinId = id
@@ -142,7 +143,7 @@ const manageWin = async ({ target }) => {
 
 	if (btnWin && !btnWin.disabled) {
 		let { win, id } = btnWin.dataset
-		let mainContent = getSelector('.main__content')
+		let mainContent = cs.get('.main__content')
 		let winSelector = mainContent.querySelector(`.${win}`)
 
 		if (!winSelector) {
@@ -157,25 +158,25 @@ const manageWin = async ({ target }) => {
 		const timeout = getDurationTimeout()
 
 		if (win === 'search-results') {
-			let searchBar = getSelector('.search__bar')
+			let searchBar = cs.get('.search__bar')
 			const { value } = searchBar
 			const yh = new YoutubeHelper()
 
 			if (API.isYTVideoURL(value)) {
 				win = 'video'
 				id = API.getVideoId(value)
-				winSelector = getSelector('.video')
+				winSelector = cs.get('.video')
 			}
 
 			if (yh.isPlaylist(value)) {
 				win = 'playlist'
-				winSelector = getSelector('.playlist')
+				winSelector = cs.get('.playlist')
 				id = yh.getPlaylistId(value)
 			}
 
 			if (yh.isChannel(value)) {
 				win = 'channel'
-				winSelector = getSelector('.channel')
+				winSelector = cs.get('.channel')
 				id = yh.getChannelId(value)
 			}
 

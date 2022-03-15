@@ -1,4 +1,5 @@
-import { getDurationTimeout, getSelector } from 'Global/utils'
+import cs from 'Global/cacheSelectors'
+import { getDurationTimeout } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 
 const appStorage = new AppStorage()
@@ -10,7 +11,7 @@ const activateSidebarBtn = btn => {
 }
 
 const deactivateLastSidebarBtn = () => {
-	let lastActiveSidebarBtn = getSelector('.sidebar').querySelector('.sidebar__btn._active')
+	let lastActiveSidebarBtn = cs.get('.sidebar').querySelector('.sidebar__btn._active')
 
 	if (!lastActiveSidebarBtn) return
 
@@ -22,7 +23,7 @@ const deactivateLastSidebarBtn = () => {
 const isLargeScreen = () => (window.innerWidth - 1600) / 2 > 226
 
 const handleOpenMenu = () => {
-	let sidebar = getSelector('.sidebar')
+	let sidebar = cs.get('.sidebar')
 	let sidebarBtn = sidebar.querySelector('.sidebar__btn')
 	let sidebarBtnActive = sidebar.querySelector('.sidebar__btn._active')
 
@@ -34,8 +35,8 @@ const handleOpenMenu = () => {
 }
 
 export const openSidebar = () => {
-	let mainContent = getSelector('.main__content')
-	let sidebar = getSelector('.sidebar')
+	let mainContent = cs.get('.main__content')
+	let sidebar = cs.get('.sidebar')
 
 	const timeout = getDurationTimeout()
 
@@ -54,8 +55,8 @@ export const openSidebar = () => {
 }
 
 export const closeSidebar = () => {
-	let mainContent = getSelector('.main__content')
-	let sidebar = getSelector('.sidebar')
+	let mainContent = cs.get('.main__content')
+	let sidebar = cs.get('.sidebar')
 
 	sidebar.classList.add('_closed')
 
