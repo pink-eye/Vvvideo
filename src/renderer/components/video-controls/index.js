@@ -669,7 +669,12 @@ const handleMouseMoveProgressSeek = event => {
 	const duration = !hls ? video.duration : video.currentTime
 	const skipTo = (event.offsetX / event.target.offsetParent.clientWidth) * duration
 
-	const seekTooltipParams = { duration, skipTo, pageX: event.pageX }
+	const seekTooltipParams = {
+		duration,
+		skipTo,
+		pageX: event.pageX,
+		chapter: lastSeekTooltipChapter,
+	}
 
 	if (chapters?.length) {
 		const requiredChapter = getRequiredChapter(chapters, skipTo)
