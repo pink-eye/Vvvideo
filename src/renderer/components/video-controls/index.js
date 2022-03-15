@@ -755,11 +755,11 @@ const loadSegmentsSB = (data, callback) => {
 
 	getSegmentsSB(data.videoDetails.videoId)
 		.then(callback)
-		.catch(
-			() =>
-				notifySkipSegment &&
+		.catch(err => {
+			if (notifySkipSegment) {
 				showToast('info', `Sponsorblock doesn't have segments for this video`)
-		)
+			}
+		})
 }
 
 let timeoutMouseMove = null
@@ -896,8 +896,6 @@ export const initVideoPlayer = async data => {
 		}
 	}
 
-	loadSegmentsSB(data, handleSegmentsSB)
-
 	const initVideo = () => {
 		let volumeBar = controls.querySelector('.volume__bar')
 		let volumeSeek = controls.querySelector('.volume__seek')
@@ -917,6 +915,8 @@ export const initVideoPlayer = async data => {
 			configProgress.storyboard.url = videoDetails.storyboards.at(0).templateUrl
 
 		progress.init(configProgress)
+
+		loadSegmentsSB(data, handleSegmentsSB)
 
 		chapters = videoDetails.chapters
 		volumeBar.value = volumeSeek.value

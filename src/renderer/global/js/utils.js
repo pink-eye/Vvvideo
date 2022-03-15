@@ -1,4 +1,5 @@
 import AppStorage from 'Global/AppStorage'
+import cs from 'Global/cacheSelectors'
 
 export const queryClosestByClass = (target, className) =>
 	target.classList.contains(className) ? target : target.closest(`.${className}`)

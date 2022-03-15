@@ -141,7 +141,7 @@ export default class Progress {
 		return skipTo
 	}
 
-	visualizeSegmentsSB({ segments }) {
+	visualizeSegmentsSB(segments) {
 		for (let index = 0, { length } = segments; index < length; index += 1) {
 			const { startTime, endTime } = segments[index]
 			const segmentLength = endTime - startTime
