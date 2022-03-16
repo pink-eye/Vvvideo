@@ -1,41 +1,29 @@
-import cs from 'Global/cacheSelectors'
-const createToastItemHTML = (type, text) =>
-	`<li class="toast__item _${type}"><div class="toast__icon"></div>${text}</li>`
-
-const isExistSimilarToast = text => cs.get('.toast__list').textContent.includes(text)
+import Toastify from 'toastify-js'
 
 const showToast = (type, text) => {
-	if (!isExistSimilarToast(text)) {
-		let animationStep = 0
-		let toastList = cs.get('.toast__list')
+	let iconURL = null
 
-		toastList.insertAdjacentHTML('afterBegin', createToastItemHTML(type, text))
-
-		queueMicrotask(() => {
-			let toastItemAll = toastList.querySelectorAll('.toast__item')
-			let firstToastItem = toastItemAll[0]
-
-			const removeToast = () => {
-				firstToastItem.remove()
-
-				toastItemAll = null
-				toastList = null
-				firstToastItem = null
-			}
-
-			const hideToast = () => firstToastItem.classList.remove('_visible')
-
-			firstToastItem.classList.add('_visible')
-
-			firstToastItem.addEventListener('animationend', () => {
-				animationStep += 1
-
-				if (animationStep === 2) hideToast()
-
-				if (animationStep === 3) removeToast()
-			})
-		})
+	switch (type) {
+		case 'good':
+			iconURL = './img/success.svg'
+			break
+		case 'error':
+			iconURL = './img/error.svg'
+			break
+		case 'info':
+			iconURL = './img/info.svg'
+			break
 	}
+
+	Toastify({
+		className: type,
+		avatar: iconURL,
+		stopOnFocus: true,
+		duration: 4000,
+		close: true,
+		gravity: 'bottom',
+		text,
+	}).showToast()
 }
 
 export default showToast
