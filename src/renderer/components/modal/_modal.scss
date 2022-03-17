@@ -1,0 +1,108 @@
+.modal__overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+
+	display: grid;
+	place-items: center;
+
+	background-color: var(--color-bg-overlay);
+	cursor: pointer;
+}
+
+.modal__container {
+	max-width: 500px;
+	max-height: 100vh;
+	padding: 30px;
+	border-radius: var(--brs-s);
+	overflow-y: auto;
+	overscroll-behavior: contain;
+
+	background-color: var(--color-bg-form);
+	cursor: default;
+
+	&::-webkit-scrollbar {
+		width: 14px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border: 3px solid var(--color-bg-form);
+		border-radius: var(--brs-m);
+
+		background-color: var(--color-bg-field);
+	}
+
+	&::-webkit-scrollbar-track {
+		background-color: var(--color-bg-form);
+	}
+}
+
+@keyframes mmfadeIn {
+
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+@keyframes mmfadeOut {
+
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+@keyframes mmslideIn {
+
+	from {
+		transform: translateY(15%);
+	}
+
+	to {
+		transform: translateY(0);
+	}
+}
+@keyframes mmslideOut {
+
+	from {
+		transform: translateY(0);
+	}
+
+	to {
+		transform: translateY(-10%);
+	}
+}
+
+.micromodal-slide {
+	display: none;
+}
+
+.micromodal-slide.is-open {
+	display: block;
+}
+
+.micromodal-slide[aria-hidden='false'] .modal__overlay {
+	animation: mmfadeIn .3s cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+.micromodal-slide[aria-hidden='false'] .modal__container {
+	animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
+}
+
+.micromodal-slide[aria-hidden='true'] .modal__overlay {
+	animation: mmfadeOut .3s cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+.micromodal-slide[aria-hidden='true'] .modal__container {
+	animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
+}
+
+.micromodal-slide .modal__container,
+.micromodal-slide .modal__overlay {
+	will-change: transform;
+}
