@@ -24,6 +24,7 @@
 	"dependencies": {
 		"@freetube/yt-trending-scraper": "^2.0.1",
 		"electron-squirrel-startup": "^1.0.0",
+		"micromodal": "^0.4.10",
 		"proxy-agent": "^5.0.0",
 		"sponsorblock-api": "^0.2.2",
 		"toastify-js": "^1.11.2",

@@ -9169,6 +9169,11 @@ micromatch@^4.0.2, micromatch@^4.0.4:
     braces "^3.0.1"
     picomatch "^2.2.3"
 
+micromodal@^0.4.10:
+  version "0.4.10"
+  resolved "https://registry.yarnpkg.com/micromodal/-/micromodal-0.4.10.tgz#d6f59c21d2f4a5af480f65909eb9608a1d558c73"
+  integrity sha512-BUrEnzMPFBwK8nOE4xUDYHLrlGlLULQVjpja99tpJQPSUEWgw3kTLp1n1qv0HmKU29AiHE7Y7sMLiRziDK4ghQ==
+
 mime-db@1.51.0, mime-db@^1.28.0:
   version "1.51.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.51.0.tgz#d9ff62451859b18342d960850dc3cfb77e63fb0c"
