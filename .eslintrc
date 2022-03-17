@@ -33,8 +33,7 @@
 	"globals": {
 		"API": "readonly",
 		"Hls": "readonly",
-		"theme": "readonly",
-		"GraphModal": "readonly"
+		"theme": "readonly"
 	},
 	"settings": {
 		"import/resolver": {
