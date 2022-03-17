@@ -22,12 +22,12 @@ import { toggleSponsorblock, getSegmentsSB } from 'Components/video-controls/spo
 import { removeSkeleton } from 'Components/skeleton'
 import showToast from 'Components/toast'
 import { getWatchedTime, rememberWatchedTime } from 'Layouts/win-history/helper'
-import recordSegmentSB from 'Components/dialog-sb'
 import AppStorage from 'Global/AppStorage'
 import { showDecoration, hideDecoration, resetDecorations } from './partials/decorations'
 import { hidePoster, resetPoster } from './partials/poster'
 import Menu from './partials/menu'
 import Progress from './partials/progress'
+import DialogSB from 'Components/dialog-sb'
 
 let state = {
 	formats: null,
@@ -45,7 +45,7 @@ let lastSeekTooltipChapter = null
 let intervalWatchedProgress = null
 let timeout = null
 const configDialogSB = {
-	onStart: () => {
+	onStartRecording: () => {
 		let controls = cs.get('.controls')
 		let sponsorblockBtn = controls.querySelector('.controls-actions__btn_sponsorblock')
 		sponsorblockBtn.dataset.tooltip = 'Stop segment (S)'
@@ -53,7 +53,7 @@ const configDialogSB = {
 		controls = null
 		sponsorblockBtn = null
 	},
-	onEnd: () => {
+	onEndRecording: () => {
 		let controls = cs.get('.controls')
 		let sponsorblockBtn = controls.querySelector('.controls-actions__btn_sponsorblock')
 		sponsorblockBtn.dataset.tooltip = 'Start segment (S)'
@@ -63,6 +63,7 @@ const configDialogSB = {
 	},
 }
 
+const dialogSB = new DialogSB()
 const menu = new Menu()
 const progress = new Progress()
 const appStorage = new AppStorage()
@@ -717,7 +718,14 @@ const handleKeyDownWithinVideo = ({ keyCode }) => {
 		if (keyCode === 77) toggleMute()
 
 		// S
-		if (keyCode === 83) recordSegmentSB(configDialogSB)
+		if (keyCode === 83) {
+			let video = cs.get('video')
+
+			configDialogSB.currentTime = video.currentTime
+			dialogSB.toggleRecording(configDialogSB)
+
+			video = null
+		}
 
 		// V
 		const { disableSponsorblock } = storage.settings
@@ -755,7 +763,7 @@ const loadSegmentsSB = (data, callback) => {
 
 	getSegmentsSB(data.videoDetails.videoId)
 		.then(callback)
-		.catch(err => {
+		.catch(() => {
 			if (notifySkipSegment) {
 				showToast('info', `Sponsorblock doesn't have segments for this video`)
 			}
@@ -782,7 +790,12 @@ const handleClickVideoPlayer = event => {
 	}
 
 	if (isChild(target, '.controls-actions__btn_sponsorblock')) {
-		recordSegmentSB(configDialogSB)
+		let video = cs.get('video')
+
+		configDialogSB.currentTime = video.currentTime
+		dialogSB.toggleRecording(configDialogSB)
+
+		video = null
 	}
 
 	target = null
@@ -948,6 +961,16 @@ export const initVideoPlayer = async data => {
 			},
 		})
 
+		dialogSB.init({
+			duration: video.duration,
+			videoId: videoDetails.videoId,
+			beforeOpen: () => {
+				pauseVideoPlayer()
+
+				if (document.fullscreenElement) toggleFullscreen()
+			},
+		})
+
 		volumeSeek = null
 		volumeBar = null
 		heading = null
@@ -1026,6 +1049,7 @@ export const resetVideoPlayer = () => {
 	resetDecorations()
 	menu.reset()
 	progress.reset()
+	dialogSB.reset()
 
 	state.captions.length = 0
 	state.formats = null
