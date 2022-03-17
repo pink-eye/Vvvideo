@@ -12,8 +12,11 @@
 
 	&__warning {
 		margin-top: 5px;
+		padding-inline: 5px;
 
-		color: var(--color-error);
+		color: var(--color-title);
+
+		background-color: var(--color-error);
 	}
 
 	&__time {
@@ -32,13 +35,6 @@
 
 			&._error {
 				border: var(--width-line) solid var(--color-error);
-
-				@media (hover: hover) and (pointer: fine) {
-
-					&:hover {
-						border: inherit;
-					}
-				}
 			}
 		}
 
