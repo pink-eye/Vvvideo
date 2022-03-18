@@ -1,5 +1,5 @@
 import cs from 'Global/cacheSelectors'
-import { isEmpty, reloadApp, isChild } from 'Global/utils'
+import { isEmpty, isChild } from 'Global/utils'
 import YoutubeHelper from 'Global/YoutubeHelper'
 import { formatPort } from 'Layouts/win-settings/helper'
 import AppStorage from 'Global/AppStorage'
@@ -7,25 +7,12 @@ import showToast from 'Components/toast'
 import { clearHistory, disableHistory } from 'Layouts/win-history/helper'
 import { clearRecentQueries } from 'Layouts/win-search-results'
 import { initDropdown } from 'Components/dropdown'
+import DragNDrop from 'Components/drag-n-drop'
 
 const appStorage = new AppStorage()
+const dragNDrop = new DragNDrop()
 let storage = null
 let isFilledWin = false
-
-const makeResultImport = (classResult, tip) => {
-	let settings = cs.get('.settings')
-	let impExpBody = settings.querySelector('.imp-exp')
-	let impExpTip = settings.querySelector('.imp-exp__tip')
-
-	if (!impExpBody.classList.contains(classResult)) {
-		impExpBody.classList.add(classResult)
-		impExpTip.textContent = tip
-	}
-
-	settings = null
-	impExpBody = null
-	impExpTip = null
-}
 
 const buildStorage = data => {
 	if (data?.subscriptions) {
@@ -68,63 +55,6 @@ const buildStorage = data => {
 		storage.settings = {}
 		Object.assign(storage.settings, data.settings)
 	}
-}
-
-const readInputFile = () => {
-	const validTip = 'Successfully! Wait for refresh...'
-	const failTip = 'Fail... :('
-
-	let settings = cs.get('.settings')
-	let impExpField = settings.querySelector('.imp-exp__field')
-
-	const reader = new FileReader()
-	reader.readAsText(impExpField.files[0])
-
-	const onLoadReader = () => {
-		const data = JSON.parse(reader.result)
-
-		if (!data?.subscriptions) makeResultImport('_invalid', failTip)
-		else {
-			buildStorage(data)
-			makeResultImport('_valid', validTip)
-			appStorage.update(storage)
-			setTimeout(reloadApp, 3000)
-		}
-	}
-
-	reader.addEventListener('load', onLoadReader, { once: true })
-
-	settings = null
-	impExpField = null
-}
-
-const handleClickImport = () => {
-	const invalidTip = "I've not found a JSON file.\n Ensure you interacted this area"
-	let settings = cs.get('.settings')
-	let impExpField = settings.querySelector('.imp-exp__field')
-
-	impExpField.value === '' || /\.(json)$/i.test(impExpField.files[0].name) === false
-		? makeResultImport('_invalid', invalidTip)
-		: readInputFile()
-
-	settings = null
-	impExpField = null
-}
-
-const handleFile = event => {
-	let settings = cs.get('.settings')
-	let impExpBody = settings.querySelector('.imp-exp')
-	let impExpTip = settings.querySelector('.imp-exp__tip')
-	let impExpField = settings.querySelector('.imp-exp__field')
-
-	impExpBody.classList.remove('_valid')
-	impExpBody.classList.remove('_invalid')
-	impExpTip.textContent = `I've got a '${impExpField.files[0].name}'. You can press 'Import' now`
-
-	settings = null
-	impExpBody = null
-	impExpTip = null
-	impExpField = null
 }
 
 const handleInputField = event => {
@@ -218,19 +148,11 @@ const handleClickWin = event => {
 		clearHistory()
 	}
 
-	if (isChild(target, '.imp-exp__btn.btn-accent')) {
-		handleClickImport()
-	}
-
 	target = null
 }
 
 const handleChangeWin = event => {
 	let { target } = event
-
-	if (target.matches('input[type="file"]')) {
-		handleFile(event)
-	}
 
 	if (target.matches('input[type="checkbox"]')) {
 		handleChangeCheckbox(event)
@@ -263,6 +185,8 @@ export const openWinSettings = () => {
 
 export const resetWinSettings = () => {
 	let settings = cs.get('.settings')
+
+	dragNDrop.reset()
 
 	settings.removeEventListener('click', handleClickWin)
 	settings.removeEventListener('change', handleChangeWin)
@@ -314,13 +238,13 @@ const fillWinSettings = () => {
 
 	const settingsArray = Object.entries(ss)
 
-	for (const [key, value] of settingsArray) {
+	settingsArray.forEach(([key, value]) => {
 		let checkbox = settings.querySelector(`input#${key}`)
 
 		if (checkbox) checkbox.checked = value
 
 		checkbox = null
-	}
+	})
 
 	if (ss.defaultQuality !== '1080p') {
 		let qualityDropdown = settings.querySelector('.option__quality')
@@ -388,5 +312,14 @@ const fillWinSettings = () => {
 	initDropdown(formatDropdown, btn => {
 		storage.settings.defaultVideoFormat = btn.textContent
 		appStorage.update(storage)
+	})
+
+	// INIT DRAG N DROP
+
+	dragNDrop.init({
+		afterReadFile: data => {
+			buildStorage(data)
+			appStorage.update(storage)
+		},
 	})
 }

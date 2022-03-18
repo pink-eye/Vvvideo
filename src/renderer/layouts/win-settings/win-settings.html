@@ -339,19 +339,20 @@
 			<section class="settings__section section-settings">
 				<h3 class="section-settings__title">Import & Export</h3>
 				<div class="section-settings__body">
-					<div class="imp-exp">
+					<!-- <div class="imp-exp">
 						<div class="imp-exp__wrapper">
 							<p class="imp-exp__tip">Drag your files here or click in this area.</p>
 							<input type="file" accept=".json" class="imp-exp__field" />
 						</div>
-					</div>
+					</div> -->
+					@include('../../components/drag-n-drop/drag-n-drop.html')
 				</div>
-				<div class="imp-exp__actions">
+				<!-- <div class="imp-exp__actions">
 					<a href="storage.json" download class="imp-exp__btn btn-primary onclick-effect"
 						>Export</a
 					>
 					<button class="imp-exp__btn btn-accent onclick-effect btn-reset">Import</button>
-				</div>
+				</div> -->
 			</section>
 		</li>
 	</ul>
