@@ -1,5 +1,5 @@
 import cs from 'Global/CacheSelectors'
-import { hideOverlay } from 'Components/overlay'
+import overlay from 'Components/overlay'
 import toggleMenu from 'Components/burger'
 import { hasFocus } from 'Global/utils'
 import { scrapeInfoToSwitchPage, nextPage, prevPage } from 'Components/grid-btns'
@@ -10,7 +10,7 @@ const handleKeyDown = event => {
 	if (event.keyCode === 27) {
 		document.activeElement.blur()
 
-		hideOverlay()
+		overlay.hide()
 		hideSuggestions()
 
 		let winActive = cs.get('.main__content').querySelector('.win._active')

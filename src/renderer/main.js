@@ -6,7 +6,7 @@ import handleKeyDown from 'Global/shortcuts'
 import openWinLatest from 'Layouts/win-latest'
 import { applySettingsOnStart } from 'Layouts/win-settings'
 import { initSuggestions, hideSuggestions } from 'Components/suggestions'
-import { hideOverlay } from 'Components/overlay'
+import overlay from 'Components/overlay'
 import { hideLastDropdown, startDropdowns } from 'Components/dropdown'
 import toggleMenu from 'Components/burger'
 import showToast from 'Components/toast'
@@ -21,7 +21,7 @@ const handleClickWindow = ({ target }) => {
 	}
 	if (!target.closest('.search')) {
 		hideSuggestions()
-		hideOverlay()
+		overlay.hide()
 	}
 }
 

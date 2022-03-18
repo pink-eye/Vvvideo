@@ -3,7 +3,7 @@ import { isEmpty, hasFocus, queryClosestByClass } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
 import manageWin from 'Global/WinManager'
-import { showOverlay, hideOverlay } from 'Components/overlay'
+import overlay from 'Components/overlay'
 
 let lastSelected = null
 let suggestionListLength = 0
@@ -144,7 +144,7 @@ const showRecentQueries = () => {
 }
 
 const handleInput = async ({ currentTarget }) => {
-	showOverlay()
+	overlay.show()
 
 	const { enableProxy, proxy, dontShowRecentQueriesOnTyping } = appStorage.get().settings
 
@@ -173,7 +173,7 @@ const handleInput = async ({ currentTarget }) => {
 		if (suggestions?.length > 0) addSuggestion(suggestions, false)
 	} else {
 		hideSuggestions()
-		hideOverlay()
+		overlay.hide()
 	}
 }
 
@@ -189,7 +189,7 @@ const handleKeyDownSearch = event => {
 	// ENTER
 	if (keyCode === 13) {
 		hideSuggestions()
-		hideOverlay()
+		overlay.hide()
 
 		if (!isEmpty(event.currentTarget.value)) manageWin(event)
 		else showToast('info', 'The search field is empty')
@@ -198,7 +198,7 @@ const handleKeyDownSearch = event => {
 
 const handleFocus = ({ currentTarget }) => {
 	hideSuggestions()
-	showOverlay()
+	overlay.show()
 	showRecentQueries()
 
 	currentTarget.addEventListener('keydown', handleKeyDownSearch)
@@ -217,7 +217,7 @@ const initSuggestions = () => {
 	let searchBar = headerSearch.querySelector('.search__bar')
 
 	if (settings.disableSearchSuggestions) {
-		searchBar.addEventListener('blur', hideOverlay)
+		searchBar.addEventListener('blur', overlay.hide)
 
 		headerSearch = null
 		searchBar = null

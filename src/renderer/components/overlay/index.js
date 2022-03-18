@@ -1,35 +1,38 @@
-const showOverlay = () => {
-	queueMicrotask(() => {
-		let overlayAll = document.querySelectorAll('.overlay')
+const Overlay = () => {
+	const overlayAll = document.querySelectorAll('.overlay')
+	let isVisible = false
 
-		for (let index = 0, { length } = overlayAll; index < length; index += 1) {
-			let overlay = overlayAll[index]
+	const show = () => {
+		if (isVisible) return
 
-			if (!overlay.classList.contains('_active')) overlay.classList.add('_active')
-			else break
+		isVisible = true
 
-			overlay = null
-		}
+		queueMicrotask(() => {
+			for (let index = 0, { length } = overlayAll; index < length; index += 1) {
+				let overlay = overlayAll[index]
+				overlay.classList.add('_active')
+				overlay = null
+			}
+		})
+	}
 
-		overlayAll = null
-	})
+	const hide = () => {
+		if (!isVisible) return
+
+		isVisible = false
+
+		queueMicrotask(() => {
+			for (let index = 0, { length } = overlayAll; index < length; index += 1) {
+				let overlay = overlayAll[index]
+				overlay.classList.remove('_active')
+				overlay = null
+			}
+		})
+	}
+
+	return { show, hide }
 }
 
-const hideOverlay = () => {
-	queueMicrotask(() => {
-		let overlayAll = document.querySelectorAll('.overlay')
+const overlay = Overlay()
 
-		for (let index = 0, { length } = overlayAll; index < length; index += 1) {
-			let overlay = overlayAll[index]
-
-			if (overlay.classList.contains('_active')) overlay.classList.remove('_active')
-			else break
-
-			overlay = null
-		}
-
-		overlayAll = null
-	})
-}
-
-export { showOverlay, hideOverlay }
+export default overlay
