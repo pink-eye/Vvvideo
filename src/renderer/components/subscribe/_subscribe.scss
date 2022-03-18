@@ -16,7 +16,11 @@
 
 		border-radius: var(--brs-m);
 
-		box-shadow: 0 35px 15px -35px var(--color-box-shadow-xl);
+		background-color: var(--bg-subscribe);
+		box-shadow:
+			8px 8px 16px 0 rgba(0, 0, 0, 0.25),
+			inset -8px -8px 12px 0 rgba(0, 0, 0, 0.25),
+			inset 8px 5px 12px 0 rgba(255, 255, 255, 0.3);
 
 		transition:
 			background-color .3s ease,
@@ -26,17 +30,11 @@
 	}
 
 	&:not(._subscribed) {
-
-		&::after {
-			background-color: var(--color-accent-s);
-		}
+		--bg-subscribe: var(--color-accent-s);
 	}
 
 	&._subscribed {
-
-		&::after {
-			background-color: var(--color-bg-unsubscribe);
-		}
+		--bg-subscribe: var(--color-bg-unsubscribe);
 	}
 
 	&__text {
