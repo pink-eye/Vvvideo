@@ -4,7 +4,7 @@ import showToast from 'Components/toast'
 import { fillVideoCard } from 'Components/card/card-video'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { calculatePublishedDate } from 'Layouts/win-latest/helper'
-import { startIndicator, resetIndicator } from 'Components/indicator'
+import indicator from 'Components/indicator'
 
 let latestArray = null
 
@@ -52,7 +52,7 @@ const openWinLatest = async () => {
 		btnLatest = null
 
 		try {
-			startIndicator()
+			indicator.show()
 			latestArray = await Promise.all(promises)
 			latestArray = latestArray.flat()
 			latestArray = latestArray.sort((a, b) => b.publishedDate - a.publishedDate)
@@ -61,7 +61,7 @@ const openWinLatest = async () => {
 		} catch ({ message }) {
 			showToast('error', message)
 		} finally {
-			resetIndicator()
+			indicator.hide()
 		}
 
 		latestArray?.length > videoAll.length

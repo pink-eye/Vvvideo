@@ -3,7 +3,7 @@ import AppStorage from 'Global/AppStorage'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { fillAuthorCard } from 'Components/card/card-author'
 import showToast from 'Components/toast'
-import { startIndicator, resetIndicator } from 'Components/indicator'
+import indicator from 'Components/indicator'
 
 const updateSubscriptionData = async storage => {
 	let { subscriptions } = storage
@@ -23,7 +23,7 @@ const updateSubscriptionData = async storage => {
 	}
 
 	try {
-		startIndicator()
+		indicator.show()
 		channelInfoArray = [].concat.apply([], await Promise.all(promises))
 
 		if (channelInfoArray && channelInfoArray.length > 0) {
@@ -40,7 +40,7 @@ const updateSubscriptionData = async storage => {
 	} catch ({ message }) {
 		showToast('error', message)
 	} finally {
-		resetIndicator()
+		indicator.hide()
 	}
 
 	btnSubscriptions = null

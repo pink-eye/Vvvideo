@@ -13,6 +13,7 @@ import { prepareWinChannel, resetWinChannel } from 'Layouts/win-channel'
 import openWinTrending from 'Layouts/win-trending'
 import { openWinSearchResults } from 'Layouts/win-search-results'
 import openWinLatest from 'Layouts/win-latest'
+import indicator from 'Components/indicator'
 
 const resetWin = win => {
 	if (
@@ -126,6 +127,8 @@ const hideWin = win => {
 	if (!givenWin) return
 
 	const timeout = getDurationTimeout()
+
+	indicator.hide()
 
 	const closeWin = () => {
 		givenWin.classList.remove('_active')

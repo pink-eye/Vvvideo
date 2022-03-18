@@ -1,26 +1,30 @@
 import cs from 'Global/CacheSelectors'
-const resetIndicator = () => {
-	queueMicrotask(() => {
-		let indicator = cs.get('.indicator')
 
-		if (indicator.classList.contains('_visible')) {
-			indicator.classList.remove('_visible')
-		}
+const Indicator = () => {
+	const indicator = cs.get('.indicator')
+	let isVisible = false
 
-		indicator = null
-	})
+	const hide = () => {
+		queueMicrotask(() => {
+			if (isVisible) {
+				indicator.classList.remove('_visible')
+				isVisible = false
+			}
+		})
+	}
+
+	const show = () => {
+		queueMicrotask(() => {
+			if (!isVisible) {
+				indicator.classList.add('_visible')
+				isVisible = true
+			}
+		})
+	}
+
+	return { start, reset }
 }
 
-const startIndicator = () => {
-	queueMicrotask(() => {
-		let indicator = cs.get('.indicator')
+const indicator = Indicator()
 
-		if (!indicator.classList.contains('_visible')) {
-			indicator.classList.add('_visible')
-		}
-
-		indicator = null
-	})
-}
-
-export { startIndicator, resetIndicator }
+export default indicator
