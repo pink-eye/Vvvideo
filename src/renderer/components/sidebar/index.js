@@ -4,68 +4,63 @@ import AppStorage from 'Global/AppStorage'
 
 const appStorage = new AppStorage()
 
-const activateSidebarBtn = btn => {
-	let givenBtn = btn
-	givenBtn.classList.add('_active')
-	givenBtn = null
-}
-
-const deactivateLastSidebarBtn = () => {
-	let lastActiveSidebarBtn = cs.get('.sidebar').querySelector('.sidebar__btn._active')
-
-	if (!lastActiveSidebarBtn) return
-
-	lastActiveSidebarBtn.classList.remove('_active')
-
-	lastActiveSidebarBtn = null
-}
-
-const isLargeScreen = () => (window.innerWidth - 1600) / 2 > 226
-
-const handleOpenMenu = () => {
-	let sidebar = cs.get('.sidebar')
-	let sidebarBtn = sidebar.querySelector('.sidebar__btn')
-	let sidebarBtnActive = sidebar.querySelector('.sidebar__btn._active')
-
-	sidebarBtnActive ? sidebarBtnActive.focus() : sidebarBtn.focus()
-
-	sidebarBtn = null
-	sidebarBtnActive = null
-	sidebar = null
-}
-
-export const openSidebar = () => {
+const Sidebar = () => {
 	let mainContent = cs.get('.main__content')
 	let sidebar = cs.get('.sidebar')
 
-	const timeout = getDurationTimeout()
+	const activateBtn = btn => {
+		let givenBtn = btn
+		givenBtn.classList.add('_active')
+		givenBtn = null
+	}
 
-	timeout > 0
-		? sidebar.addEventListener('transitionend', handleOpenMenu, { once: true })
-		: handleOpenMenu()
+	const deactivateLastBtn = () => {
+		let lastActiveSidebarBtn = sidebar.querySelector('.sidebar__btn._active')
 
-	sidebar.classList.remove('_closed')
+		if (!lastActiveSidebarBtn) return
 
-	const { notAdaptContent } = appStorage.get().settings
+		lastActiveSidebarBtn.classList.remove('_active')
 
-	if (!isLargeScreen() && !notAdaptContent) mainContent.style.setProperty('--margin', '86px')
+		lastActiveSidebarBtn = null
+	}
 
-	sidebar = null
-	mainContent = null
+	const handleOpenMenu = () => {
+		let sidebarBtn = sidebar.querySelector('.sidebar__btn')
+		let sidebarBtnActive = sidebar.querySelector('.sidebar__btn._active')
+
+		sidebarBtnActive ? sidebarBtnActive.focus() : sidebarBtn.focus()
+
+		sidebarBtn = null
+		sidebarBtnActive = null
+	}
+
+	const open = () => {
+		const timeout = getDurationTimeout()
+
+		timeout > 0
+			? sidebar.addEventListener('transitionend', handleOpenMenu, { once: true })
+			: handleOpenMenu()
+
+		sidebar.classList.remove('_closed')
+
+		const { notAdaptContent } = appStorage.get().settings
+
+		if (!notAdaptContent) mainContent.style.setProperty('--margin', '86px')
+	}
+
+	const close = () => {
+		let mainContent = cs.get('.main__content')
+
+		sidebar.classList.add('_closed')
+
+		const { notAdaptContent } = appStorage.get().settings
+
+		if (!notAdaptContent) mainContent.style.setProperty('--margin', '0')
+	}
+
+	return { activateBtn, deactivateLastBtn, open, close }
 }
 
-export const closeSidebar = () => {
-	let mainContent = cs.get('.main__content')
-	let sidebar = cs.get('.sidebar')
+const sidebar = Sidebar()
 
-	sidebar.classList.add('_closed')
-
-	const { notAdaptContent } = appStorage.get().settings
-
-	if (!isLargeScreen() && !notAdaptContent) mainContent.style.setProperty('--margin', '0')
-
-	sidebar = null
-	mainContent = null
-}
-
-export { activateSidebarBtn, deactivateLastSidebarBtn }
+export default sidebar

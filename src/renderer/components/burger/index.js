@@ -1,5 +1,5 @@
 import cs from 'Global/cacheSelectors'
-import { openSidebar, closeSidebar } from 'Components/sidebar'
+import sidebar from 'Components/sidebar'
 
 const toggleMenu = () => {
 	let burger = cs.get('.header').querySelector('.burger')
@@ -7,11 +7,11 @@ const toggleMenu = () => {
 	if (!burger.classList.contains('_active')) {
 		burger.classList.add('_active')
 
-		openSidebar()
+		sidebar.open()
 	} else {
 		burger.classList.remove('_active')
 
-		closeSidebar()
+		sidebar.close()
 	}
 
 	burger = null

@@ -3,7 +3,7 @@ import { scrollToTop, getDurationTimeout } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import YoutubeHelper from 'Global/YoutubeHelper'
 import { resetGrid, resetGridAuthorCard } from 'Components/grid'
-import { activateSidebarBtn, deactivateLastSidebarBtn } from 'Components/sidebar'
+import sidebar from 'Components/sidebar'
 import { openWinSettings, resetWinSettings } from 'Layouts/win-settings'
 import openWinHistory from 'Layouts/win-history'
 import openWinSubs from 'Layouts/win-subscriptions'
@@ -202,9 +202,9 @@ const manageWin = async ({ target }) => {
 			btnWin &&= null
 		} else {
 			if (btnWin?.classList.contains('sidebar__btn')) {
-				deactivateLastSidebarBtn()
-				activateSidebarBtn(btnWin)
-			} else deactivateLastSidebarBtn()
+				sidebar.deactivateLastBtn()
+				sidebar.activateBtn(btnWin)
+			} else sidebar.deactivateLastBtn()
 
 			const openWin = () => {
 				scrollToTop()
