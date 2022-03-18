@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { isEmpty, handleClickLink } from 'Global/utils'
 import showToast from 'Components/toast'
 import { removeSkeleton, resetSkeleton } from 'Components/skeleton'

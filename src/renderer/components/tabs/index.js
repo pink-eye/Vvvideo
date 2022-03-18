@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { resetGrid } from 'Components/grid'
 import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'

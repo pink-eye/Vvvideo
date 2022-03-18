@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 const decorationArray = ['play', 'pause', 'load']
 
 export const hideDecoration = action => {

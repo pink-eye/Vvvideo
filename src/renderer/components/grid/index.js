@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import resetCard from 'Components/card'
 import { resetAuthorCard } from 'Components/card/card-author'
 

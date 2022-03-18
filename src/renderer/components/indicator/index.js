@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 const resetIndicator = () => {
 	queueMicrotask(() => {
 		let indicator = cs.get('.indicator')

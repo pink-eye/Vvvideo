@@ -1,5 +1,5 @@
 import AppStorage from 'Global/AppStorage'
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { fillVideoCard } from 'Components/card/card-video'
 import { initPages, disablePages } from 'Components/grid-btns'
 

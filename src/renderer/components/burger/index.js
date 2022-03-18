@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import sidebar from 'Components/sidebar'
 
 const toggleMenu = () => {

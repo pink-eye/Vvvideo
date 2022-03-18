@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { isEmpty, hasFocus, queryClosestByClass } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'

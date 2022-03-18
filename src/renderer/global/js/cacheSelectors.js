@@ -1,4 +1,4 @@
-const cacheSelectors = () => {
+const CacheSelectors = () => {
 	const selectors = {}
 
 	const set = (key, value) => {
@@ -15,6 +15,6 @@ const cacheSelectors = () => {
 	return { get }
 }
 
-const cs = cacheSelectors()
+const cs = CacheSelectors()
 
 export default cs

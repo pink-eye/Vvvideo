@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { isEmpty, isChild } from 'Global/utils'
 import YoutubeHelper from 'Global/YoutubeHelper'
 import { formatPort } from 'Layouts/win-settings/helper'

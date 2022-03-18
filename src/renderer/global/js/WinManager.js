@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { scrollToTop, getDurationTimeout } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import YoutubeHelper from 'Global/YoutubeHelper'

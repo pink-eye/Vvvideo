@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { convertSecondsToDuration, convertToPercentage } from 'Global/utils'
 import { getPosStroryboard, progressBarChapterHTML, sponsorblockItemHTML } from './helper'
 

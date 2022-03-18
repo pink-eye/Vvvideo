@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
 import { fillVideoCard } from 'Components/card/card-video'

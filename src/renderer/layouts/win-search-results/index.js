@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import AppStorage from 'Global/AppStorage'
 import { filterSearchResults } from 'Layouts/win-search-results/helper'
 import { initPages, disablePages } from 'Components/grid-btns'

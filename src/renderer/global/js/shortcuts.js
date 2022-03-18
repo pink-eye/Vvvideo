@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { hideOverlay } from 'Components/overlay'
 import toggleMenu from 'Components/burger'
 import { hasFocus } from 'Global/utils'

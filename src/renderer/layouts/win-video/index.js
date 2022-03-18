@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { normalizeCount, isEmpty } from 'Global/utils'
 import { formatDate } from 'Layouts/win-video/helper'
 import { fillAuthorCard, resetAuthorCard } from 'Components/card/card-author'

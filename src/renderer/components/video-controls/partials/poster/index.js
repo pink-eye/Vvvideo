@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 export const hidePoster = () => {
 	let videoPoster = cs.get('.video').querySelector('.video__poster')
 

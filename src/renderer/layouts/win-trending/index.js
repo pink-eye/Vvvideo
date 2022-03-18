@@ -1,4 +1,4 @@
-import cs from 'Global/cacheSelectors'
+import cs from 'Global/CacheSelectors'
 import { initPages, disablePages } from 'Components/grid-btns'
 import { fillVideoCard } from 'Components/card/card-video'
 import showToast from 'Components/toast'
