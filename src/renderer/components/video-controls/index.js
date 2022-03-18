@@ -426,16 +426,16 @@ const updateBarChapter = () => {
 const highlightCurrentChapter = time => {
 	let videoParent = cs.get('.video')
 	let spoilerContent = videoParent.querySelector('.spoiler__content')
-	let lastHighlightedTimecode = spoilerContent.querySelector('.timecode.btn-accent')
+	let lastHighlightedTimecode = spoilerContent.querySelector('.timecode._current')
 	let timecodeAll = spoilerContent.querySelectorAll('.timecode')
 
-	lastHighlightedTimecode?.classList.remove('btn-accent')
+	lastHighlightedTimecode?.classList.remove('_current')
 
 	for (let index = 0, { length } = timecodeAll; index < length; index += 1) {
 		let timecode = timecodeAll[index]
 
 		if (timecode.textContent.includes(convertSecondsToDuration(time))) {
-			timecode.classList.add('btn-accent')
+			timecode.classList.add('_current')
 			break
 		}
 
