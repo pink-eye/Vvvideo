@@ -97,6 +97,8 @@
 
 		span:not(:empty) {
 			margin-left: 10px;
+
+			line-height: normal;
 		}
 	}
 
@@ -137,12 +139,14 @@
 
 	color: var(--color-title);
 
-	background-color: var(--color-bg-btn);
-
 	transition:
 		background-color var(--trns),
 		border-color var(--trns),
 		color var(--trns);
+
+	&:not(._current) {
+		background-color: var(--color-bg-btn);
+	}
 
 	&:not(:first-child) {
 		margin-top: 5px;
@@ -150,6 +154,12 @@
 
 	&:not(:last-child) {
 		margin-bottom: 5px;
+	}
+
+	&._current {
+		border-color: var(--color-accent-s);
+
+		background-color: var(--color-accent-s);
 	}
 
 	@media (hover: hover) and (pointer: fine) {

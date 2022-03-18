@@ -50,6 +50,10 @@
 			text-overflow: ellipsis;
 		}
 
+		& > aside {
+			display: grid;
+		}
+
 		@media (hover: hover) and (pointer: fine) {
 
 			&:hover {

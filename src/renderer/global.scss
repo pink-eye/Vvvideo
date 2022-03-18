@@ -43,11 +43,18 @@ img {
 	border-radius: var(--brs-m);
 
 	text-align: center;
+
+	&[disabled] {
+		opacity: .3;
+	}
 }
 
 .btn-accent {
 	border: 3px solid var(--color-accent-s);
 
+	color: hsl(0, 0%, 100%);
+
+	background-color: var(--color-accent-s);
 
 	transition:
 		background-color var(--trns),
@@ -55,22 +62,18 @@ img {
 		transform var(--trns-fast),
 		color var(--trns);
 
-	@media (hover: hover) and (pointer: fine) {
+	&:not([disabled]) {
+		@media (hover: hover) and (pointer: fine) {
 
-		&:not(:focus-visible):hover {
-			border: 3px solid var(--color-accent-m);
-		}
+			&:not(:focus-visible):hover {
+				border: 3px solid var(--color-accent-m);
+			}
 
-		&:not(:hover) {
-			color: hsl(0, 0%, 100%);
+			&:hover {
+				color: var(--color-accent-s);
 
-			background-color: var(--color-accent-s);
-		}
-
-		&:hover {
-			color: var(--color-accent-s);
-
-			background-color: var(--color-accent-l);
+				background-color: var(--color-accent-l);
+			}
 		}
 	}
 }
@@ -78,6 +81,9 @@ img {
 .btn-primary {
 	border: 3px solid var(--color-bg-btn);
 
+	color: var(--color-title);
+
+	background-color: var(--color-bg-btn);
 
 	transition:
 		background-color var(--trns),
@@ -85,23 +91,20 @@ img {
 		transform var(--trns-fast),
 		border-color var(--trns);
 
-	@media (hover: hover) and (pointer: fine) {
 
-		&:not(:hover) {
-			color: var(--color-title);
+	&:not([disabled]) {
+		@media (hover: hover) and (pointer: fine) {
 
-			background-color: var(--color-bg-btn);
-		}
+			&:focus {
+				outline: 0;
+			}
 
-		&:focus {
-			outline: 0;
-		}
+			&:hover {
+				color: var(--color-text);
+				text-decoration: none;
 
-		&:hover {
-			color: var(--color-text);
-			text-decoration: none;
-
-			background-color: var(--color-bg-btn-primary-hover);
+				background-color: var(--color-bg-btn-primary-hover);
+			}
 		}
 	}
 }
