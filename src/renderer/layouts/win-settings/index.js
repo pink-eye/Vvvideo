@@ -1,7 +1,7 @@
 import cs from 'Global/CacheSelectors'
 import { isEmpty, isChild } from 'Global/utils'
 import YoutubeHelper from 'Global/YoutubeHelper'
-import { formatPort } from 'Layouts/win-settings/helper'
+import { formatPort, setTheme, toggleTransition } from 'Layouts/win-settings/helper'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
 import { clearHistory, disableHistory } from 'Layouts/win-history/helper'
@@ -92,17 +92,6 @@ const handleInputField = event => {
 	input = null
 
 	appStorage.update(storage)
-}
-
-const toggleTransition = isDisabled => {
-	if (isDisabled) {
-		document.documentElement.style.setProperty('--trns-time-default', '0s')
-		document.documentElement.style.setProperty('--trns-time-fast', '0')
-		document.documentElement.style.setProperty('--trns-time-slow', '0')
-		document.documentElement.style.setProperty('--trns-timing-func', 'unset')
-	} else {
-		document.documentElement.removeAttribute('style')
-	}
 }
 
 const handleChangeCheckbox = event => {
@@ -214,12 +203,6 @@ export const resetWinSettings = () => {
 	settings.removeEventListener('input', handleInputWin)
 
 	settings = null
-}
-
-const setTheme = themeOption => {
-	if (themeOption === 'light') theme.setMode('light')
-	if (themeOption === 'dark') theme.setMode('dark')
-	if (themeOption === 'system') theme.setMode(theme.getSystemScheme())
 }
 
 export const applySettingsOnStart = () => {
