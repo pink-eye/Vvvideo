@@ -5,24 +5,26 @@ const Indicator = () => {
 	let isVisible = false
 
 	const hide = () => {
+		if (!isVisible) return
+
+		isVisible = false
+
 		queueMicrotask(() => {
-			if (isVisible) {
-				indicator.classList.remove('_visible')
-				isVisible = false
-			}
+			indicator.classList.remove('_visible')
 		})
 	}
 
 	const show = () => {
+		if (isVisible) return
+
+		isVisible = true
+
 		queueMicrotask(() => {
-			if (!isVisible) {
-				indicator.classList.add('_visible')
-				isVisible = true
-			}
+			indicator.classList.add('_visible')
 		})
 	}
 
-	return { start, reset }
+	return { show, hide }
 }
 
 const indicator = Indicator()

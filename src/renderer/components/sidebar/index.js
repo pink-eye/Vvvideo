@@ -5,8 +5,8 @@ import AppStorage from 'Global/AppStorage'
 const appStorage = new AppStorage()
 
 const Sidebar = () => {
-	let mainContent = cs.get('.main__content')
-	let sidebar = cs.get('.sidebar')
+	const mainContent = cs.get('.main__content')
+	const sidebar = cs.get('.sidebar')
 
 	const activateBtn = btn => {
 		let givenBtn = btn
