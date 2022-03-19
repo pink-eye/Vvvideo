@@ -3,7 +3,7 @@ import { normalizeCount, isEmpty } from 'Global/utils'
 import { formatDate } from 'Layouts/win-video/helper'
 import { fillAuthorCard, resetAuthorCard } from 'Components/card/card-author'
 import { saveVideoInHistory } from 'Layouts/win-history/helper'
-import { initSpoiler, destroySpoiler } from 'Components/spoiler'
+import Spoiler from 'Components/spoiler'
 import showToast from 'Components/toast'
 import { resetSkeleton, removeSkeleton } from 'Components/skeleton'
 import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
@@ -12,6 +12,7 @@ import { initVideoPlayer, handleClickTimecode, resetVideoPlayer } from 'Componen
 import { normalizeVideoDescription, roundNum } from 'Layouts/win-video/helper'
 import { handleClickLink } from 'Global/utils'
 
+const spoiler = Spoiler()
 const appStorage = new AppStorage()
 let storage = null
 
@@ -44,9 +45,9 @@ const openWinVideo = (data, lastWin) => {
 
 	// SPOILER
 
-	let spoiler = videoInfo.querySelector('.spoiler')
-	initSpoiler(spoiler)
-	spoiler = null
+	let spoilerEl = videoInfo.querySelector('.spoiler')
+	spoiler.init({ element: spoilerEl })
+	spoilerEl = null
 
 	// FILL WIN
 
@@ -161,8 +162,7 @@ export const resetWinVideo = () => {
 		}
 	}
 
-	let spoiler = videoInfo.querySelector('.spoiler')
-	destroySpoiler(spoiler)
+	spoiler.reset()
 
 	actionsPlaylist.hidden ||= true
 
@@ -172,7 +172,6 @@ export const resetWinVideo = () => {
 	videoLikes = null
 	videoInfo = null
 	skeletonAll = null
-	spoiler = null
 	spoilerContent = null
 	videoViews = null
 	videoTitle = null

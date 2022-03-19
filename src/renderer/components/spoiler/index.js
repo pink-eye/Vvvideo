@@ -1,34 +1,78 @@
-const toggleSpoiler = ({ currentTarget }) => {
-	let spoiler = currentTarget.closest('.spoiler')
+const Spoiler = () => {
+	let spoiler = null
+	let spoilerHead = null
+	let isFirstTime = true
+	let isOpened = false
 
-	if (spoiler.classList.contains('_opened')) {
-		spoiler.removeAttribute('style')
-		spoiler.classList.remove('_opened')
-	} else {
-		const { offsetHeight } = spoiler.querySelector('.spoiler__content')
+	const toggle = () => {
+		if (isOpened) {
+			spoiler.removeAttribute('style')
+			spoiler.classList.remove('_opened')
+		} else {
+			const { offsetHeight } = spoiler.querySelector('.spoiler__content')
 
-		spoiler.style.setProperty('--height-content', `${offsetHeight}px`)
-		spoiler.classList.add('_opened')
+			spoiler.style.setProperty('--height-content', `${offsetHeight}px`)
+			spoiler.classList.add('_opened')
+		}
+
+		isOpened = !isOpened
 	}
 
-	spoiler = null
+	const init = config => {
+		if (isFirstTime) {
+			isFirstTime = false
+			spoiler = config.element
+			spoilerHead = spoiler.querySelector('.spoiler__head')
+		}
+
+		spoilerHead.addEventListener('click', toggle)
+	}
+
+	const reset = () => {
+		if (isOpened) toggle()
+
+		spoilerHead.removeEventListener('click', toggle)
+	}
+
+	return {
+		init,
+		reset,
+	}
 }
 
-export const initSpoiler = spoiler => {
-	let spoilerHead = spoiler.querySelector('.spoiler__head')
+export default Spoiler
 
-	spoilerHead.addEventListener('click', toggleSpoiler)
+// const toggleSpoiler = ({ currentTarget }) => {
+// 	let spoiler = currentTarget.closest('.spoiler')
 
-	spoilerHead = null
-}
+// 	if (spoiler.classList.contains('_opened')) {
+// 		spoiler.removeAttribute('style')
+// 		spoiler.classList.remove('_opened')
+// 	} else {
+// 		const { offsetHeight } = spoiler.querySelector('.spoiler__content')
 
-export const destroySpoiler = spoiler => {
-	let spoilerHead = spoiler.querySelector('.spoiler__head')
+// 		spoiler.style.setProperty('--height-content', `${offsetHeight}px`)
+// 		spoiler.classList.add('_opened')
+// 	}
 
-	spoiler.removeAttribute('style')
-	spoiler.classList.remove('_opened')
+// 	spoiler = null
+// }
 
-	spoilerHead.removeEventListener('click', toggleSpoiler)
+// export const initSpoiler = spoiler => {
+// 	let spoilerHead = spoiler.querySelector('.spoiler__head')
 
-	spoilerHead = null
-}
+// 	spoilerHead.addEventListener('click', toggleSpoiler)
+
+// 	spoilerHead = null
+// }
+
+// export const destroySpoiler = spoiler => {
+// 	let spoilerHead = spoiler.querySelector('.spoiler__head')
+
+// 	spoiler.removeAttribute('style')
+// 	spoiler.classList.remove('_opened')
+
+// 	spoilerHead.removeEventListener('click', toggleSpoiler)
+
+// 	spoilerHead = null
+// }
