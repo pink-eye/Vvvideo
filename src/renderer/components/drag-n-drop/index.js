@@ -113,6 +113,7 @@ export default class DragNDrop {
 		this.#resetState()
 		this.#disableImport()
 		this.file = null
+		this.dndField.value = null
 
 		this.dndField.removeEventListener('change', this.handleFile)
 	}
