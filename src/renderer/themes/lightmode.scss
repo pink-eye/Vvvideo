@@ -36,7 +36,7 @@
 	--color-bg-suggest-hover: hsl(0, 0%, 97%);
 	--color-text-suggest-selected: hsl(220, 20%, 35%);
 	--color-bg-toast: hsl(0, 0%, 100%);
-	--color-text-toast: hsl(0, 0%, 50%);
+	--color-text-toast: var(--color-title);
 	--color-bg-chapter: hsl(240, 30%, 10%);
 	--color-bg-sidebar: hsl(240, 30%, 10%);
 	--color-bg-sidebar-tooltip: hsl(0, 0%, 0%);
