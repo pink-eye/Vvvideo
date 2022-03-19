@@ -3,7 +3,7 @@ import overlay from 'Components/overlay'
 import toggleMenu from 'Components/burger'
 import { hasFocus } from 'Global/utils'
 import { scrapeInfoToSwitchPage, nextPage, prevPage } from 'Components/grid-btns'
-import { hideSuggestions } from 'Components/suggestions'
+import suggestions from 'Components/suggestions'
 
 const handleKeyDown = event => {
 	// ESC
@@ -11,7 +11,7 @@ const handleKeyDown = event => {
 		document.activeElement.blur()
 
 		overlay.hide()
-		hideSuggestions()
+		suggestions.hide()
 
 		let winActive = cs.get('.main__content').querySelector('.win._active')
 		let firstCard = null

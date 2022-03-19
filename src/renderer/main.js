@@ -5,18 +5,18 @@ import checkForUpdate from 'Global/checkForUpdate'
 import handleKeyDown from 'Global/shortcuts'
 import openWinLatest from 'Layouts/win-latest'
 import { applySettingsOnStart } from 'Layouts/win-settings'
-import { initSuggestions, hideSuggestions } from 'Components/suggestions'
+import suggestions from 'Components/suggestions'
 import overlay from 'Components/overlay'
 import toggleMenu from 'Components/burger'
 import showToast from 'Components/toast'
 import initUpdateComponent from 'Components/update'
 import removePreloader from 'Components/preloader'
 import HideOnScroll from 'Global/HideOnScroll'
-import cs from 'Global/CacheSelectors.js'
+import cs from 'Global/CacheSelectors'
 
 const handleClickWindow = ({ target }) => {
 	if (!target.closest('.search')) {
-		hideSuggestions()
+		suggestions.hide()
 		overlay.hide()
 	}
 }
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	applySettingsOnStart()
 	openWinLatest()
-	initSuggestions()
+	suggestions.init()
 	removePreloader()
 
 	// MAIN SELECTORS

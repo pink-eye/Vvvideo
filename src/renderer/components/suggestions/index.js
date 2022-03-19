@@ -6,228 +6,215 @@ import { createRecentQueryHTML, createSuggestionHTML } from './helper'
 import manageWin from 'Global/WinManager'
 import overlay from 'Components/overlay'
 
-let lastSelected = null
-let suggestionListLength = 0
 const appStorage = new AppStorage()
 
-const addSuggestion = (data, isRecent) => {
-	let headerSearch = cs.get('.search')
-	let suggestionList = headerSearch.querySelector('.suggestion__list')
-	let searchBar = headerSearch.querySelector('.search__bar')
+const Suggestions = () => {
+	let lastSelected = null
+	let suggestionListLength = 0
 
-	lastSelected = null
+	const headerSearch = cs.get('.search')
+	const suggestionList = headerSearch.querySelector('.suggestion__list')
+	const searchBar = headerSearch.querySelector('.search__bar')
 
-	for (let index = 0; index < 10; index += 1) {
-		const query = searchBar.value.trim()
+	const addSuggestion = (data, isRecent) => {
+		lastSelected = null
 
-		if (suggestionListLength > 9) return
+		for (let index = 0; index < 10; index += 1) {
+			const query = searchBar.value.trim()
 
-		if (!isEmpty(data[index]) && hasFocus(searchBar)) {
-			let newItem = null
+			if (suggestionListLength > 9) return
 
-			if (query.length === 0) {
-				if (isRecent) newItem = createRecentQueryHTML(data[index])
-				else break
+			if (!isEmpty(data[index]) && hasFocus(searchBar)) {
+				let newItem = null
+
+				if (query.length === 0) {
+					if (isRecent) newItem = createRecentQueryHTML(data[index])
+					else break
+				} else {
+					newItem = isRecent
+						? createRecentQueryHTML(data[index])
+						: createSuggestionHTML(data[index])
+				}
+
+				suggestionListLength += 1
+				suggestionList.insertAdjacentHTML('beforeEnd', newItem)
+			} else break
+		}
+	}
+
+	const resetSelected = () => {
+		let selectedSuggestion = headerSearch.querySelector('._selected')
+
+		if (selectedSuggestion) {
+			selectedSuggestion.classList.remove('_selected')
+
+			selectedSuggestion = null
+		}
+	}
+
+	const selectSuggestion = direction => {
+		let suggestionAll = headerSearch.querySelectorAll('.suggestion')
+
+		if (suggestionAll.length) {
+			if (lastSelected !== null) {
+				const isArrowDown = direction === 40
+				const index = isArrowDown ? lastSelected + 1 : lastSelected - 1
+				const sparedIndex = isArrowDown ? 0 : suggestionAll.length - 1
+				let requiredSuggestion = suggestionAll[index] ?? suggestionAll[sparedIndex]
+
+				requiredSuggestion.classList.add('_selected')
+				lastSelected = suggestionAll[index] ? index : sparedIndex
+
+				requiredSuggestion = null
 			} else {
-				newItem = isRecent
-					? createRecentQueryHTML(data[index])
-					: createSuggestionHTML(data[index])
+				let firstSuggestion = suggestionAll[0]
+
+				firstSuggestion.classList.add('_selected')
+				lastSelected = 0
+
+				firstSuggestion = null
 			}
 
-			suggestionListLength += 1
-			suggestionList.insertAdjacentHTML('beforeEnd', newItem)
-		} else break
+			let selectedSuggestion = headerSearch.querySelector('._selected')
+
+			if (selectedSuggestion) {
+				searchBar.value = selectedSuggestion.textContent.trim()
+
+				selectedSuggestion = null
+			}
+		}
+
+		suggestionAll = null
 	}
 
-	suggestionList = null
-	searchBar = null
-	headerSearch = null
-}
+	const getRelevantRecentQueries = query => {
+		const { recentQueries } = appStorage.get()
 
-const resetSelected = () => {
-	let headerSearch = cs.get('.search')
-	let selectedSuggestion = headerSearch.querySelector('._selected')
+		if (recentQueries.length === 0) return undefined
 
-	if (selectedSuggestion) selectedSuggestion.classList.remove('_selected')
+		return recentQueries.filter(item => item.includes(query))
+	}
 
-	selectedSuggestion = null
-	headerSearch = null
-}
+	const showRecentQueries = () => {
+		const { recentQueries } = appStorage.get()
 
-const hideSuggestions = () => {
-	resetSelected()
+		if (recentQueries.length === 0) return
 
-	let headerSearch = cs.get('.search')
-	let suggestionList = headerSearch.querySelector('.suggestion__list')
+		addSuggestion(recentQueries, true)
+	}
 
-	suggestionListLength = 0
+	const handleInput = async ({ currentTarget }) => {
+		overlay.show()
 
-	while (suggestionList.firstChild) suggestionList.firstChild.remove()
+		const { enableProxy, proxy, dontShowRecentQueriesOnTyping } = appStorage.get().settings
 
-	suggestionList = null
-	headerSearch = null
-}
+		suggestionListLength = 0
+		const query = currentTarget.value.trim()
 
-const insertSelectedSuggestion = suggestion => {
-	let headerSearch = cs.get('.search')
-	let searchBar = headerSearch.querySelector('.search__bar')
-	let suggestionText = suggestion.querySelector('.suggestion__text')
+		if (query.length) {
+			let suggestions = null
 
-	if (searchBar) searchBar.value = suggestionText.textContent
+			try {
+				suggestions = enableProxy
+					? await API.scrapeSuggestsProxy(query, proxy)
+					: await API.scrapeSuggests(query)
+			} catch ({ message }) {
+				showToast('error', message)
+			}
 
-	searchBar = null
-	suggestionText = null
-	headerSearch = null
-}
+			hide()
 
-const chooseSuggestion = direction => {
-	let headerSearch = cs.get('.search')
-	let suggestionAll = headerSearch.querySelectorAll('.suggestion')
+			if (!dontShowRecentQueriesOnTyping) {
+				const relevantRecentQueries = getRelevantRecentQueries(query)
 
-	if (suggestionAll.length > 0) {
-		if (lastSelected !== null) {
-			const index = direction === 40 ? lastSelected + 1 : lastSelected - 1
-			const sparedIndex = direction === 40 ? 0 : suggestionAll.length - 1
-			let nextSelect = suggestionAll[index] ?? suggestionAll[sparedIndex]
+				if (relevantRecentQueries?.length) addSuggestion(relevantRecentQueries, true)
+			}
 
-			nextSelect.classList.add('_selected')
-			lastSelected = suggestionAll[index] ? index : sparedIndex
-
-			nextSelect = null
+			if (suggestions?.length) addSuggestion(suggestions, false)
 		} else {
-			suggestionAll[0].classList.add('_selected')
-			lastSelected = 0
+			hide()
+			overlay.hide()
 		}
-
-		let selectedSuggest = headerSearch.querySelector('._selected')
-
-		if (selectedSuggest) insertSelectedSuggestion(selectedSuggest)
-
-		selectedSuggest = null
 	}
 
-	suggestionAll = null
-	headerSearch = null
-}
+	const handleKeyDown = event => {
+		const { keyCode } = event
 
-const getRelevantRecentQueries = query => {
-	const { recentQueries } = appStorage.get()
-
-	if (recentQueries.length === 0) return undefined
-
-	return recentQueries.filter(item => item.includes(query))
-}
-
-const showRecentQueries = () => {
-	const { recentQueries } = appStorage.get()
-
-	if (recentQueries.length === 0) return
-
-	addSuggestion(recentQueries, true)
-}
-
-const handleInput = async ({ currentTarget }) => {
-	overlay.show()
-
-	const { enableProxy, proxy, dontShowRecentQueriesOnTyping } = appStorage.get().settings
-
-	suggestionListLength = 0
-	let query = currentTarget.value.trim()
-
-	if (query.length > 0) {
-		let suggestions = null
-
-		try {
-			suggestions = enableProxy
-				? await API.scrapeSuggestsProxy(query, proxy)
-				: await API.scrapeSuggests(query)
-		} catch ({ message }) {
-			showToast('error', message)
+		// ARROWS
+		if (keyCode === 40 || keyCode === 38) {
+			resetSelected()
+			selectSuggestion(keyCode)
 		}
 
-		hideSuggestions()
+		// ENTER
+		if (keyCode === 13) {
+			hide()
+			overlay.hide()
 
-		if (!dontShowRecentQueriesOnTyping) {
-			const relevantRecentQueries = getRelevantRecentQueries(query)
+			const searchBarValue = event.currentTarget.value
 
-			if (relevantRecentQueries?.length > 0) addSuggestion(relevantRecentQueries, true)
+			if (!isEmpty(searchBarValue)) {
+				manageWin(event)
+			} else {
+				showToast('info', 'The search field is empty')
+			}
 		}
-
-		if (suggestions?.length > 0) addSuggestion(suggestions, false)
-	} else {
-		hideSuggestions()
-		overlay.hide()
 	}
-}
 
-const handleKeyDownSearch = event => {
-	const { keyCode } = event
+	const handleFocus = ({ currentTarget }) => {
+		hide()
+		overlay.show()
+		showRecentQueries()
 
-	// ARROWS
-	if (keyCode === 40 || keyCode === 38) {
+		currentTarget.addEventListener('keydown', handleKeyDown)
+		currentTarget.addEventListener('input', handleInput)
+	}
+
+	const handleBlur = ({ currentTarget }) => {
+		currentTarget.removeEventListener('keydown', handleKeyDown)
+		currentTarget.removeEventListener('input', handleInput)
+	}
+
+	const init = () => {
+		const { settings } = appStorage.get()
+
+		if (settings.disableSearchSuggestions) {
+			searchBar.addEventListener('blur', overlay.hide)
+			return
+		}
+
+		const handleClickSuggestion = ({ target }) => {
+			let suggestion = queryClosestByClass(target, 'suggestion')
+
+			if (!suggestion) return
+
+			resetSelected()
+			searchBar.value = suggestion.textContent.trim()
+			searchBar.focus()
+
+			suggestion = null
+		}
+
+		suggestionList.addEventListener('click', handleClickSuggestion)
+		searchBar.addEventListener('focus', handleFocus)
+		searchBar.addEventListener('blur', handleBlur)
+	}
+
+	const hide = () => {
 		resetSelected()
-		chooseSuggestion(keyCode)
+		suggestionListLength = 0
+
+		while (suggestionList.firstChild) {
+			suggestionList.firstChild.remove()
+		}
 	}
 
-	// ENTER
-	if (keyCode === 13) {
-		hideSuggestions()
-		overlay.hide()
-
-		if (!isEmpty(event.currentTarget.value)) manageWin(event)
-		else showToast('info', 'The search field is empty')
+	return {
+		init,
+		hide,
 	}
 }
 
-const handleFocus = ({ currentTarget }) => {
-	hideSuggestions()
-	overlay.show()
-	showRecentQueries()
+const suggestions = Suggestions()
 
-	currentTarget.addEventListener('keydown', handleKeyDownSearch)
-	currentTarget.addEventListener('input', handleInput)
-}
-
-const handleBlur = ({ currentTarget }) => {
-	currentTarget.removeEventListener('keydown', handleKeyDownSearch)
-	currentTarget.removeEventListener('input', handleInput)
-}
-
-const initSuggestions = () => {
-	const { settings } = appStorage.get()
-
-	let headerSearch = cs.get('.search')
-	let searchBar = headerSearch.querySelector('.search__bar')
-
-	if (settings.disableSearchSuggestions) {
-		searchBar.addEventListener('blur', overlay.hide)
-
-		headerSearch = null
-		searchBar = null
-		return
-	}
-
-	let suggestionList = headerSearch.querySelector('.suggestion__list')
-
-	const handleClickSuggestion = ({ target }) => {
-		let suggestion = queryClosestByClass(target, 'suggestion')
-
-		if (!suggestion) return
-
-		insertSelectedSuggestion(suggestion)
-		resetSelected()
-		searchBar.focus()
-
-		suggestion = null
-	}
-
-	suggestionList.addEventListener('click', handleClickSuggestion)
-	suggestionList = null
-
-	searchBar.addEventListener('focus', handleFocus)
-	searchBar.addEventListener('blur', handleBlur)
-	headerSearch = null
-	searchBar = null
-}
-
-export { initSuggestions, hideSuggestions }
+export default suggestions
