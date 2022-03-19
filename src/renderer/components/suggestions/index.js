@@ -2,30 +2,13 @@ import cs from 'Global/CacheSelectors'
 import { isEmpty, hasFocus, queryClosestByClass } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
+import { createRecentQueryHTML, createSuggestionHTML } from './helper'
 import manageWin from 'Global/WinManager'
 import overlay from 'Components/overlay'
 
 let lastSelected = null
 let suggestionListLength = 0
 const appStorage = new AppStorage()
-
-const createSuggestionHTML = textContent => `<button class="suggestion">
-											<aside class="suggestion__icon">
-												<svg width="21px" height="21px">
-													<use xlink:href='img/svg/actions.svg#search'></use>
-												</svg>
-											</aside>
-											<span class="suggestion__text">${textContent}</span>
-										</button>`
-
-const createRecentQueryHTML = textContent => `<button class="suggestion">
-											<aside class="suggestion__icon">
-												<svg width="18px" height="18px">
-													<use xlink:href='img/svg/actions.svg#date'></use>
-												</svg>
-											</aside>
-											<span class="suggestion__text">${textContent}</span>
-										</button>`
 
 const addSuggestion = (data, isRecent) => {
 	let headerSearch = cs.get('.search')
