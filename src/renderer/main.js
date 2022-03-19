@@ -7,18 +7,14 @@ import openWinLatest from 'Layouts/win-latest'
 import { applySettingsOnStart } from 'Layouts/win-settings'
 import { initSuggestions, hideSuggestions } from 'Components/suggestions'
 import overlay from 'Components/overlay'
-import { hideLastDropdown, startDropdowns } from 'Components/dropdown'
 import toggleMenu from 'Components/burger'
 import showToast from 'Components/toast'
 import initUpdateComponent from 'Components/update'
 import removePreloader from 'Components/preloader'
 import HideOnScroll from 'Global/HideOnScroll'
-import cs from 'Global/cacheSelectors.js'
+import cs from 'Global/CacheSelectors.js'
 
 const handleClickWindow = ({ target }) => {
-	if (!target.closest('.dropdown')) {
-		hideLastDropdown()
-	}
 	if (!target.closest('.search')) {
 		hideSuggestions()
 		overlay.hide()
@@ -93,8 +89,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	header = null
 	sidebar = null
-
-	startDropdowns()
 
 	if (!storage.settings.dontCheckForUpdate) {
 		checkForUpdate()

@@ -1,100 +1,91 @@
-import cs from 'Global/CacheSelectors'
 import { queryClosestByClass } from 'Global/utils'
 
-const changeHeadContent = (dropdown, dropdownBtn) => {
-	let dropdownHead = dropdown.querySelector('.dropdown__head')
+export default class Dropdown {
+	constructor(config) {
+		this.callback = config.onClick
+		this.dropdown = config.element
+		this.initialHead = config.head
+		this.isFirstTime = true
 
-	if (dropdownHead) dropdownHead.childNodes[0].data = dropdownBtn.textContent
+		this.handleClickBtn = this.handleClickBtn.bind(this)
+		this.toggle = this.toggle.bind(this)
+		this.focusCurrentChoice = this.focusCurrentChoice.bind(this)
+	}
 
-	dropdownHead = null
-}
-
-const focusCurrentChoice = dropdown => {
-	let dropdownHead = dropdown.querySelector('.dropdown__head')
-	let dropdownBtnAll = dropdown.querySelectorAll('.dropdown__btn')
-	let dropdownBtnCurrent = dropdown.querySelector('._current')
-
-	if (dropdownBtnCurrent) dropdownBtnCurrent.classList.remove('_current')
-
-	for (let index = 0, { length } = dropdownBtnAll; index < length; index += 1) {
-		let dropdownBtn = dropdownBtnAll[index]
-
-		if (dropdownHead.textContent.trim() === dropdownBtn.textContent.trim()) {
-			dropdownBtn.focus()
-			dropdownBtn.classList.add('_current')
+	toggle() {
+		if (!this.isOpened) {
+			this.dropdown.classList.add('_active')
+			this.dropdownList.addEventListener('click', this.handleClickBtn)
+			setTimeout(this.focusCurrentChoice, 100)
+		} else {
+			this.dropdown.classList.remove('_active')
+			this.dropdownList.removeEventListener('click', this.handleClickBtn)
 		}
 
-		dropdownBtn = null
+		this.isOpened = !this.isOpened
 	}
 
-	dropdownHead = null
-	dropdownBtnAll = null
-	dropdownBtnCurrent = null
-}
-
-export function hideLastDropdown(currentDropdown = null) {
-	let winActive = cs.get('.main__content').querySelector('.win._active')
-
-	if (!winActive) return
-
-	let dropdownActive = winActive.querySelector('.dropdown._active')
-
-	if (dropdownActive && dropdownActive !== currentDropdown) toggleDropdown(dropdownActive)
-
-	dropdownActive = null
-
-	winActive = null
-}
-
-function toggleDropdown(dropdown) {
-	const onOpenDropdown = () => focusCurrentChoice(dropdown)
-
-	if (dropdown.classList.contains('_active')) dropdown.classList.remove('_active')
-	else {
-		hideLastDropdown(dropdown)
-		dropdown.classList.add('_active')
-		setTimeout(onOpenDropdown, 100)
+	#updateHead(choice) {
+		const textNode = this.dropdownHead.childNodes[0]
+		textNode.data = choice
 	}
-}
 
-export const initDropdown = (dropdown, callback, options = null) => {
-	let dropdownList = dropdown.querySelector('.dropdown__list')
+	focusCurrentChoice() {
+		let dropdownBtnCurrent = this.dropdownList.querySelector('._current')
 
-	if (!dropdownList) return
+		if (dropdownBtnCurrent) {
+			dropdownBtnCurrent.classList.remove('_current')
 
-	const handleClickBtn = ({ target }) => {
+			dropdownBtnCurrent = null
+		}
+
+		for (let index = 0, { length } = this.dropdownBtnAll; index < length; index += 1) {
+			let dropdownBtn = this.dropdownBtnAll[index]
+
+			if (this.dropdownHead.textContent.trim() === dropdownBtn.textContent.trim()) {
+				dropdownBtn.focus()
+				dropdownBtn.classList.add('_current')
+			}
+
+			dropdownBtn = null
+		}
+	}
+
+	handleClickBtn({ target }) {
 		let dropdownBtn = queryClosestByClass(target, 'dropdown__btn')
 
 		if (!dropdownBtn) return
 
-		if (!options?.changeHead) changeHeadContent(dropdown, dropdownBtn)
-
-		focusCurrentChoice(dropdown)
-		callback(dropdownBtn)
+		const newChoice = dropdownBtn.textContent
+		this.#updateHead(newChoice)
+		this.focusCurrentChoice()
+		this.callback(dropdownBtn)
 
 		dropdownBtn = null
 	}
 
-	dropdownList.addEventListener('click', handleClickBtn)
+	init() {
+		this.isOpened = false
 
-	dropdownList = null
-}
+		this.dropdownHead = this.dropdown.querySelector('.dropdown__head')
+		this.dropdownList = this.dropdown.querySelector('.dropdown__list')
+		this.dropdownBtnAll = this.dropdownList.querySelectorAll('.dropdown__btn')
 
-export const startDropdowns = () => {
-	let dropdownAll = document.querySelectorAll('.dropdown')
-
-	if (dropdownAll.length === 0) return
-
-	for (let index = 0, { length } = dropdownAll; index < length; index += 1) {
-		const dropdown = dropdownAll[index]
-		const dropdownHead = dropdown.querySelector('.dropdown__head')
-
-		if (dropdownHead) {
-			const handleClickHead = () => toggleDropdown(dropdown)
-
-			dropdownHead.addEventListener('click', handleClickHead)
+		if (this.isFirstTime) {
+			this.isFirstTime = false
+			this.#updateHead(this.initialHead)
 		}
+
+		this.dropdownHead.addEventListener('click', this.toggle)
 	}
 
-	dropdownAll = null
+	reset() {
+		if (this.isOpened) this.toggle()
+
+		this.dropdownHead.removeEventListener('click', this.toggle)
+
+		this.dropdownHead = null
+		this.dropdownList = null
+		this.dropdownBtnAll = null
+	}
 }

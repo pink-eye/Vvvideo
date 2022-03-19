@@ -8,7 +8,7 @@
 					<li class="section-settings__item">
 						<div class="option">
 							<h4 class="option__title">Theme</h4>
-							<div class="option__theme dropdown">
+							<div class="dropdown" data-dropdown="theme">
 								<button class="dropdown__head btn-reset">
 									System default<span class="arrow"></span>
 								</button>
@@ -98,7 +98,7 @@
 					<li class="section-settings__item">
 						<div class="option">
 							<h4 class="option__title">Default quality</h4>
-							<div class="option__quality dropdown">
+							<div class="dropdown" data-dropdown="quality">
 								<button class="dropdown__head btn-reset">
 									1080p<span class="arrow"></span>
 								</button>
@@ -171,7 +171,7 @@
 					<li class="section-settings__item">
 						<div class="option">
 							<h4 class="option__title">Default video format</h4>
-							<div class="option__format dropdown">
+							<div class="dropdown" data-dropdown="format">
 								<button class="dropdown__head btn-reset">
 									mp4<span class="arrow"></span>
 								</button>
@@ -295,7 +295,7 @@
 					<li class="section-settings__item">
 						<div class="option">
 							<h4 class="option__title">Protocol</h4>
-							<div class="option__protocol dropdown">
+							<div class="dropdown" data-dropdown="protocol">
 								<button class="dropdown__head btn-reset">
 									SOCKS5<span class="arrow"></span>
 								</button>
@@ -339,20 +339,8 @@
 			<section class="settings__section section-settings">
 				<h3 class="section-settings__title">Import & Export</h3>
 				<div class="section-settings__body">
-					<!-- <div class="imp-exp">
-						<div class="imp-exp__wrapper">
-							<p class="imp-exp__tip">Drag your files here or click in this area.</p>
-							<input type="file" accept=".json" class="imp-exp__field" />
-						</div>
-					</div> -->
 					@include('../../components/drag-n-drop/drag-n-drop.html')
 				</div>
-				<!-- <div class="imp-exp__actions">
-					<a href="storage.json" download class="imp-exp__btn btn-primary onclick-effect"
-						>Export</a
-					>
-					<button class="imp-exp__btn btn-accent onclick-effect btn-reset">Import</button>
-				</div> -->
 			</section>
 		</li>
 	</ul>

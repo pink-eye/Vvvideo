@@ -6,11 +6,15 @@ import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
 import { clearHistory, disableHistory } from 'Layouts/win-history/helper'
 import { clearRecentQueries } from 'Layouts/win-search-results'
-import { initDropdown } from 'Components/dropdown'
+import Dropdown from 'Components/dropdown'
 import DragNDrop from 'Components/drag-n-drop'
 
 const appStorage = new AppStorage()
 const dragNDrop = new DragNDrop()
+let dropdownTheme = null
+let dropdownQuality = null
+let dropdownFormat = null
+let dropdownProtocol = null
 let storage = null
 let isFilledWin = false
 
@@ -176,6 +180,18 @@ export const openWinSettings = () => {
 
 	fillWinSettings()
 
+	dropdownTheme.init()
+	dropdownProtocol.init()
+	dropdownQuality.init()
+	dropdownFormat.init()
+
+	dragNDrop.init({
+		afterReadFile: data => {
+			buildStorage(data)
+			appStorage.update(storage)
+		},
+	})
+
 	settings.addEventListener('click', handleClickWin)
 	settings.addEventListener('change', handleChangeWin)
 	settings.addEventListener('input', handleInputWin)
@@ -185,6 +201,11 @@ export const openWinSettings = () => {
 
 export const resetWinSettings = () => {
 	let settings = cs.get('.settings')
+
+	dropdownTheme.reset()
+	dropdownQuality.reset()
+	dropdownFormat.reset()
+	dropdownProtocol.reset()
 
 	dragNDrop.reset()
 
@@ -219,22 +240,7 @@ const fillWinSettings = () => {
 
 	storage = appStorage.get()
 	const { settings: ss } = storage
-	const settings = cs.get('.settings')
-
-	let themeDropdown = settings.querySelector('.option__theme')
-	let themeDropdownHead = themeDropdown.querySelector('.dropdown__head')
-
-	themeDropdownHead.childNodes[0].data =
-		ss.theme === 'system' ? 'System default' : ss.theme === 'light' ? 'Light' : 'Dark'
-
-	initDropdown(themeDropdown, btn => {
-		setTheme(btn.dataset.choice)
-		storage.settings.theme = btn.dataset.choice
-		appStorage.update(storage)
-	})
-
-	themeDropdown = null
-	themeDropdownHead = null
+	let settings = cs.get('.settings')
 
 	const settingsArray = Object.entries(ss)
 
@@ -246,44 +252,68 @@ const fillWinSettings = () => {
 		checkbox = null
 	})
 
-	if (ss.defaultQuality !== '1080p') {
-		let qualityDropdown = settings.querySelector('.option__quality')
-		let qualityDropdownHead = qualityDropdown.querySelector('.dropdown__head')
+	// INIT DROPDOWNS
 
-		qualityDropdownHead.childNodes[0].data =
-			ss.defaultQuality === 'highest' ? 'Highest' : ss.defaultQuality
+	let dropdownThemeEl = settings.querySelector('[data-dropdown="theme"]')
+	let dropdownProtocolEl = settings.querySelector('[data-dropdown="protocol"]')
+	let dropdownQualityEl = settings.querySelector('[data-dropdown="quality"]')
+	let dropdownFormatEl = settings.querySelector('[data-dropdown="format"]')
 
-		qualityDropdown = null
-		qualityDropdownHead = null
-	}
+	const dropdownFormatInitialHead = ss.defaultVideoFormat
+	const dropdownProtocolInitialHead = ss.proxy.protocol
+	const dropdownThemeInitialHead =
+		ss.theme === 'system' ? 'System default' : ss.theme === 'light' ? 'Light' : 'Dark'
+	const dropdownQualityInitialHead =
+		ss.defaultQuality === 'highest' ? 'Highest' : ss.defaultQuality
 
-	if (ss.defaultVideoFormat !== 'mp4') {
-		let formatDropdown = settings.querySelector('.option__format')
-		let formatDropdownHead = formatDropdown.querySelector('.dropdown__head')
+	dropdownTheme = new Dropdown({
+		onClick: btn => {
+			setTheme(btn.dataset.choice)
+			storage.settings.theme = btn.dataset.choice
+			appStorage.update(storage)
+		},
+		head: dropdownThemeInitialHead,
+		element: dropdownThemeEl,
+	})
+	dropdownProtocol = new Dropdown({
+		onClick: btn => {
+			storage.settings.proxy.protocol = btn.textContent.toLowerCase()
+			appStorage.update(storage)
+		},
+		head: dropdownProtocolInitialHead,
+		element: dropdownProtocolEl,
+	})
+	dropdownQuality = new Dropdown({
+		onClick: btn => {
+			storage.settings.defaultQuality = btn.dataset.choice
+			appStorage.update(storage)
+		},
+		head: dropdownQualityInitialHead,
+		element: dropdownQualityEl,
+	})
+	dropdownFormat = new Dropdown({
+		onClick: btn => {
+			storage.settings.defaultVideoFormat = btn.textContent
+			appStorage.update(storage)
+		},
+		head: dropdownFormatInitialHead,
+		element: dropdownFormatEl,
+	})
 
-		formatDropdownHead.childNodes[0].data = ss.defaultVideoFormat
+	dropdownQualityEl = null
+	dropdownFormatEl = null
+	dropdownThemeEl = null
+	dropdownProtocolEl = null
 
-		formatDropdown = null
-		formatDropdownHead = null
-	}
+	// FILL INPUTS
+	let inputHost = settings.querySelector('input#host')
+	let inputPort = settings.querySelector('input#port')
 
-	if (ss.proxy.protocol !== 'socks5' && ss.proxy.host !== '127.0.0.1' && ss.proxy.port !== 9050) {
-		let protocolDropdown = settings.querySelector('.option__protocol')
-		let protocolDropdownHead = protocolDropdown.querySelector('.dropdown__head')
+	inputHost.value = ss.proxy.host
+	inputPort.value = ss.proxy.port
 
-		protocolDropdownHead.textContent = ss.proxy.protocol
-
-		let inputHost = settings.querySelector('input#host')
-		let inputPort = settings.querySelector('input#port')
-
-		inputHost.value = ss.proxy.host
-		inputPort.value = ss.proxy.port
-
-		protocolDropdown = null
-		protocolDropdownHead = null
-		inputHost = null
-		inputPort = null
-	}
+	inputHost = null
+	inputPort = null
 
 	if (ss.regionTrending !== 'US') {
 		let inputRegionTrending = settings.querySelector('input#regionTrending')
@@ -293,33 +323,5 @@ const fillWinSettings = () => {
 		inputRegionTrending = null
 	}
 
-	// INIT DROPDOWNS
-
-	const protocolDropdown = settings.querySelector('.option__protocol')
-	const qualityDropdown = settings.querySelector('.option__quality')
-	const formatDropdown = settings.querySelector('.option__format')
-
-	initDropdown(qualityDropdown, btn => {
-		storage.settings.defaultQuality = btn.dataset.choice
-		appStorage.update(storage)
-	})
-
-	initDropdown(protocolDropdown, btn => {
-		storage.settings.proxy.protocol = btn.textContent.toLowerCase()
-		appStorage.update(storage)
-	})
-
-	initDropdown(formatDropdown, btn => {
-		storage.settings.defaultVideoFormat = btn.textContent
-		appStorage.update(storage)
-	})
-
-	// INIT DRAG N DROP
-
-	dragNDrop.init({
-		afterReadFile: data => {
-			buildStorage(data)
-			appStorage.update(storage)
-		},
-	})
+	settings = null
 }
