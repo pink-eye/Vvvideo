@@ -146,6 +146,15 @@
 
 	&:not(._current) {
 		background-color: var(--color-bg-btn);
+
+		@media (hover: hover) and (pointer: fine) {
+
+			&:hover {
+				color: var(--color-bg-btn);
+
+				background-color: var(--color-title);
+			}
+		}
 	}
 
 	&:not(:first-child) {
@@ -159,16 +168,9 @@
 	&._current {
 		border-color: var(--color-accent-s);
 
+		color: hsl(0, 0%, 100%);
+
 		background-color: var(--color-accent-s);
-	}
-
-	@media (hover: hover) and (pointer: fine) {
-
-		&:hover {
-			color: var(--color-bg-btn);
-
-			background-color: var(--color-title);
-		}
 	}
 }
 
