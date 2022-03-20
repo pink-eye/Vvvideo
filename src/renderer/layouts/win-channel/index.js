@@ -3,11 +3,13 @@ import { isEmpty, handleClickLink } from 'Global/utils'
 import showToast from 'Components/toast'
 import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
 import { resetGrid } from 'Components/grid'
-import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
+import SubscribeBtn from 'Components/subscribe'
 import tabs from 'Components/tabs'
 import { normalizeAbout } from 'Layouts/win-channel/helper'
 
 const getChannelData = id => API.scrapeChannelInfo(id)
+
+let subscribeBtn = null
 
 const openWinChannel = data => {
 	let channel = cs.get('.channel')
@@ -21,7 +23,7 @@ const openWinChannel = data => {
 	let avatarSkeleton = channel.querySelector('.avatar-skeleton')
 	let titleSkeleton = channel.querySelector('.title-skeleton')
 	let followersSkeleton = channel.querySelector('.followers-skeleton')
-	let subscribeBtn = channel.querySelector('.subscribe')
+	let subscribe = channel.querySelector('.subscribe')
 
 	// FILL WIN
 
@@ -33,7 +35,7 @@ const openWinChannel = data => {
 
 	removeSkeleton(titleSkeleton)
 
-	prepareSubscribeBtn(subscribeBtn, authorId, author)
+	subscribeBtn ||= new SubscribeBtn({ element: subscribe, channelId: authorId, name: author })
 
 	if (authorThumbnails) {
 		channelAvatar.src = authorThumbnails.at(-1).url
@@ -85,7 +87,7 @@ const openWinChannel = data => {
 	channelBanner = null
 	channelFollowers = null
 	channelDescription = null
-	subscribeBtn = null
+	subscribe = null
 	channelAuthor = null
 	titleSkeleton = null
 	followersSkeleton = null
@@ -104,9 +106,7 @@ export const resetWinChannel = () => {
 
 	channel.dataset.id = ''
 
-	// SUBSCRIBE BTN
-	let subscribeBtn = channel.querySelector('.subscribe')
-	destroySubscribeBtn(subscribeBtn)
+	subscribeBtn.reset()
 
 	channelBanner.style.setProperty('--bg-image', 'none center')
 	channelBannerImg.removeAttribute('src')
@@ -133,7 +133,6 @@ export const resetWinChannel = () => {
 	channelDescription.removeEventListener('click', handleClickLink)
 
 	channel = null
-	subscribeBtn = null
 	channelBannerImg = null
 	channelFollowers = null
 	channelDescription = null
@@ -147,7 +146,7 @@ export const resetWinChannel = () => {
 const fillSomeInfoChannel = ({ name = '', id = '' }) => {
 	let channel = cs.get('.channel')
 	let channelName = channel.querySelector('.heading-channel__author span')
-	let subscribeBtn = channel.querySelector('.subscribe')
+	let subscribe = channel.querySelector('.subscribe')
 	let titleSkeleton = channel.querySelector('.title-skeleton')
 
 	if (!isEmpty(name)) {
@@ -155,11 +154,11 @@ const fillSomeInfoChannel = ({ name = '', id = '' }) => {
 		removeSkeleton(titleSkeleton)
 	}
 
-	prepareSubscribeBtn(subscribeBtn, id, name)
+	subscribeBtn = new SubscribeBtn({ element: subscribe, channelId: id, name })
 
 	channel = null
 	channelName = null
-	subscribeBtn = null
+	subscribe = null
 	titleSkeleton = null
 }
 

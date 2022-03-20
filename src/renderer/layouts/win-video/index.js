@@ -6,7 +6,7 @@ import { saveVideoInHistory } from 'Layouts/win-history/helper'
 import Spoiler from 'Components/spoiler'
 import showToast from 'Components/toast'
 import { resetSkeleton, removeSkeleton } from 'Components/skeleton'
-import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
+import SubscribeBtn from 'Components/subscribe'
 import AppStorage from 'Global/AppStorage'
 import { initVideoPlayer, handleClickTimecode, resetVideoPlayer } from 'Components/video-controls'
 import { normalizeVideoDescription, roundNum } from 'Layouts/win-video/helper'
@@ -15,6 +15,7 @@ import { handleClickLink } from 'Global/utils'
 const spoiler = Spoiler()
 const appStorage = new AppStorage()
 let storage = null
+let subscribeBtn = null
 
 const getVideoData = id => {
 	storage = appStorage.get()
@@ -41,7 +42,7 @@ const openWinVideo = (data, lastWin) => {
 	let partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton')
 	let videoLikes = videoInfo.querySelector('.video-info__likes')
 	let authorCard = videoInfo.querySelector('.author')
-	let subscribeBtn = videoInfo.querySelector('.subscribe')
+	let subscribeBtnEl = videoInfo.querySelector('.subscribe')
 
 	// SPOILER
 
@@ -57,7 +58,11 @@ const openWinVideo = (data, lastWin) => {
 
 	video.dataset.id = videoDetails.videoId
 
-	prepareSubscribeBtn(subscribeBtn, videoDetails.author.id, videoDetails.author.name)
+	subscribeBtn ||= new SubscribeBtn({
+		element: subscribeBtnEl,
+		channelId: videoDetails.author.id,
+		name: videoDetails.author.name,
+	})
 
 	spoilerContent.addEventListener('click', handleClickContent)
 
@@ -96,7 +101,7 @@ const openWinVideo = (data, lastWin) => {
 	let authorParams = {
 		parent: authorCard,
 		name: videoDetails.author.name,
-		subs: `${roundNum(videoDetails.author.subscriber_count)} subscribers`,
+		subs: BtnEl`${roundNum(videoDetails.author.subscriber_count)} subscribers`,
 		id: videoDetails.author.id,
 		avatarSrc: videoDetails.author.thumbnails ? videoDetails.author.thumbnails.at(-1).url : '',
 	}
@@ -109,10 +114,10 @@ const openWinVideo = (data, lastWin) => {
 
 	saveVideoInHistory(data)
 
-	subscribeBtn = null
 	videoInfo = null
 	videoViews = null
 	videoDate = null
+	subscribeBtnEl = null
 	controls = null
 	spoilerContent = null
 	videoLikes = null
@@ -140,8 +145,7 @@ export const resetWinVideo = () => {
 
 	video.dataset.id = ''
 
-	let subscribeBtn = videoInfo.querySelector('.subscribe')
-	destroySubscribeBtn(subscribeBtn)
+	subscribeBtn.reset()
 	spoilerContent.removeEventListener('click', handleClickContent)
 
 	if (video.classList.contains('_live')) video.classList.remove('_live')
@@ -176,7 +180,6 @@ export const resetWinVideo = () => {
 	videoViews = null
 	videoTitle = null
 	videoDate = null
-	subscribeBtn = null
 	authorCard = null
 }
 
@@ -189,7 +192,7 @@ const fillSomeInfoVideo = params => {
 	let videoViews = videoInfo.querySelector('.video-info__views')
 	let videoDate = videoInfo.querySelector('.video-info__date')
 	let authorCard = videoInfo.querySelector('.author')
-	let subscribeBtn = videoInfo.querySelector('.subscribe')
+	let subscribeBtnEl = videoInfo.querySelector('.subscribe')
 	let titleSkeleton = videoInfo.querySelector('.title-skeleton')
 	let partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton')
 
@@ -216,14 +219,18 @@ const fillSomeInfoVideo = params => {
 
 	fillAuthorCard(authorParams)
 
-	prepareSubscribeBtn(subscribeBtn, authorId, author)
+	subscribeBtn = new SubscribeBtn({
+		element: subscribeBtnEl,
+		channelId: authorId,
+		name: author,
+	})
 
 	video = null
 	videoInfo = null
 	videoTitle = null
 	videoViews = null
 	videoDate = null
-	subscribeBtn = null
+	subscribeBtnEl = null
 	titleSkeleton = null
 	partSkeletonAll = null
 	authorParams = null
