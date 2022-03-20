@@ -40,8 +40,8 @@ const Tabs = () => {
 				case 'Playlists':
 					return await API.scrapeChannelPlaylists(channelId)
 			}
-		} catch ({ message }) {
-			showToast('error', message)
+		} catch (error) {
+			throw Error(error)
 		}
 	}
 
@@ -79,7 +79,7 @@ const Tabs = () => {
 		cardAll = null
 	}
 
-	const show = async tab => {
+	const show = tab => {
 		const channelTab = tab.dataset.tab
 
 		if (tab && !tab.classList.contains('_active')) tab.classList.add('_active')
@@ -91,13 +91,16 @@ const Tabs = () => {
 		}
 
 		const channelId = channel.dataset.id
-		const data = await fetchData(channelTab, channelId)
 
-		if (data && channelTab !== 'About' && requiredTabPanel.classList.contains('_active')) {
-			fillTabPanel(requiredTabPanel, data)
-		}
+		fetchData(channelTab, channelId)
+			.then(data => {
+				if (channelTab !== 'About' && requiredTabPanel.classList.contains('_active')) {
+					fillTabPanel(requiredTabPanel, data)
+				}
 
-		requiredTabPanel = null
+				requiredTabPanel = null
+			})
+			.catch(({ message }) => showToast('error', message))
 	}
 
 	const handleClickList = event => {
