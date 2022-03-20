@@ -4,7 +4,7 @@ import showToast from 'Components/toast'
 import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
 import { resetGrid } from 'Components/grid'
 import { prepareSubscribeBtn, destroySubscribeBtn } from 'Components/subscribe'
-import { initTabs, destroyTabs, hideLastTab } from 'Components/tabs'
+import tabs from 'Components/tabs'
 import { normalizeAbout } from 'Layouts/win-channel/helper'
 
 const getChannelData = id => API.scrapeChannelInfo(id)
@@ -79,8 +79,7 @@ const openWinChannel = data => {
 
 	channelDescription.addEventListener('click', handleClickLink)
 
-	hideLastTab()
-	initTabs(0)
+	tabs.init()
 
 	channel = null
 	channelBanner = null
@@ -127,7 +126,7 @@ export const resetWinChannel = () => {
 	resetGrid(channelTabContentVideos)
 	resetGrid(channelTabContentPlaylists)
 
-	destroyTabs()
+	tabs.reset()
 
 	channelDescription.textContent = null
 

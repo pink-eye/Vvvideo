@@ -1,75 +1,77 @@
 import cs from 'Global/CacheSelectors'
+import { queryClosestByClass } from 'Global/utils'
 import { resetGrid } from 'Components/grid'
 import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'
 import showToast from 'Components/toast'
 import { initPages, disablePages } from 'Components/grid-btns'
 
-export const hideLastTab = () => {
-	let channel = cs.get('.channel')
-	let tabsPanelActive = channel.querySelector('.tabs__panel._active')
+const Tabs = () => {
+	const channel = cs.get('.channel')
+	const tabs = channel.querySelector('.tabs')
+	const tabsList = tabs.querySelector('.tabs__list')
+	const tabAll = tabs.querySelectorAll('.tabs__btn')
+	const initialTabIndex = 0
 
-	if (tabsPanelActive && tabsPanelActive.classList.contains('_active')) {
-		tabsPanelActive.classList.remove('_active')
-		resetGrid(tabsPanelActive)
-	}
+	const hide = () => {
+		let tabsPanelActive = tabs.querySelector('.tabs__panel._active')
 
-	let tabActive = channel.querySelector('.tabs__btn._active')
-
-	if (tabActive && tabActive.classList.contains('_active')) {
-		tabActive.classList.remove('_active')
-	}
-
-	tabsPanelActive = null
-	channel = null
-	tabActive = null
-}
-
-const showRequiredTab = async tab => {
-	const channelTab = tab.dataset.tab
-	let channel = cs.get('.channel')
-
-	if (tab && !tab.classList.contains('_active')) tab.classList.add('_active')
-
-	let reqTabContent = channel.querySelector(`.tabs__panel[data-tab=${channelTab}]`)
-
-	if (reqTabContent && !reqTabContent.classList.contains('_active'))
-		reqTabContent.classList.add('_active')
-
-	let data = null
-	const channelId = channel.dataset.id
-
-	try {
-		switch (channelTab) {
-			case 'Videos':
-				data = await API.scrapeChannelVideos(channelId)
-				break
-
-			case 'Playlists':
-				data = await API.scrapeChannelPlaylists(channelId)
-				break
+		if (tabsPanelActive?.classList.contains('_active')) {
+			tabsPanelActive.classList.remove('_active')
+			resetGrid(tabsPanelActive)
 		}
-	} catch ({ message }) {
-		showToast('error', message)
+
+		let tabActive = tabs.querySelector('.tabs__btn._active')
+
+		if (tabActive?.classList.contains('_active')) {
+			tabActive.classList.remove('_active')
+		}
+
+		tabsPanelActive = null
+		tabActive = null
 	}
 
-	if (data && channelTab !== 'About' && reqTabContent.classList.contains('_active')) {
+	const fetchData = async (tab, channelId) => {
+		try {
+			switch (tab) {
+				case 'Videos':
+					return await API.scrapeChannelVideos(channelId)
+
+				case 'Playlists':
+					return await API.scrapeChannelPlaylists(channelId)
+			}
+		} catch ({ message }) {
+			showToast('error', message)
+		}
+	}
+
+	const fillTabPanel = (tabPanel, data) => {
 		const { items, continuation } = data
-		let cardAll = reqTabContent.querySelectorAll('.card')
-		const typeCard = channelTab === 'Videos' ? 'video' : 'playlist'
+		const tab = tabPanel.dataset.tab
+		const typeCard = tab === 'Videos' ? 'video' : 'playlist'
+		let cardAll = tabPanel.querySelectorAll('.card')
 
 		items.length > cardAll.length
-			? initPages(reqTabContent, items, cardAll, typeCard, continuation)
-			: disablePages(reqTabContent)
+			? initPages(tabPanel, items, cardAll, typeCard, continuation)
+			: disablePages(tabPanel)
 
 		for (let index = 0, { length } = cardAll; index < length; index += 1) {
 			let card = cardAll[index]
 
-			items[index]
-				? typeCard === 'video'
-					? fillVideoCard(card, index, items)
-					: fillPlaylistCard(card, index, items)
-				: (card.hidden = true)
+			if (items[index]) {
+				switch (typeCard) {
+					case 'video': {
+						fillVideoCard(card, index, items)
+						break
+					}
+					case 'playlist': {
+						fillPlaylistCard(card, index, items)
+						break
+					}
+				}
+			} else {
+				card.hidden = true
+			}
 
 			card = null
 		}
@@ -77,54 +79,58 @@ const showRequiredTab = async tab => {
 		cardAll = null
 	}
 
-	reqTabContent = null
-	channel = null
-}
+	const show = async tab => {
+		const channelTab = tab.dataset.tab
 
-const handleClickTab = async ({ currentTarget }) => {
-	let tab = currentTarget
+		if (tab && !tab.classList.contains('_active')) tab.classList.add('_active')
 
-	if (!tab.classList.contains('_active')) {
-		hideLastTab()
-		await showRequiredTab(tab)
+		let requiredTabPanel = tabs.querySelector(`.tabs__panel[data-tab=${channelTab}]`)
+
+		if (requiredTabPanel && !requiredTabPanel.classList.contains('_active')) {
+			requiredTabPanel.classList.add('_active')
+		}
+
+		const channelId = channel.dataset.id
+		const data = await fetchData(channelTab, channelId)
+
+		if (data && channelTab !== 'About' && requiredTabPanel.classList.contains('_active')) {
+			fillTabPanel(requiredTabPanel, data)
+		}
+
+		requiredTabPanel = null
 	}
 
-	tab = null
-}
+	const handleClickList = event => {
+		let tabsBtn = queryClosestByClass(event.target, 'tabs__btn')
 
-export const initTabs = primary => {
-	let tabAll = cs.get('.channel').querySelectorAll('.tabs__btn')
+		if (!tabsBtn) return
 
-	if (tabAll.length === 0) return
+		if (!tabsBtn.classList.contains('_active')) {
+			hide()
+			show(tabsBtn)
+		}
 
-	let primaryTab = tabAll[primary]
-
-	showRequiredTab(primaryTab)
-
-	for (let index = 0, { length } = tabAll; index < length; index += 1) {
-		let tab = tabAll[index]
-
-		tab.addEventListener('click', handleClickTab)
-
-		tab = null
+		tabsBtn = null
 	}
 
-	primaryTab = null
-	tabAll = null
-}
+	const init = () => {
+		const initialTab = tabAll[initialTabIndex]
+		show(initialTab)
 
-export const destroyTabs = () => {
-	let tabAll = cs.get('.channel').querySelectorAll('.tabs__btn')
-
-	if (tabAll.length === 0) return
-
-	for (let index = 0, { length } = tabAll; index < length; index += 1) {
-		let tab = tabAll[index]
-
-		tab.removeEventListener('click', handleClickTab)
-
-		tab = null
+		tabsList.addEventListener('click', handleClickList)
 	}
 
-	tabAll = null
+	const reset = () => {
+		hide()
+		tabsList.removeEventListener('click', handleClickList)
+	}
+
+	return {
+		init,
+		reset,
+	}
 }
+
+const tabs = Tabs()
+
+export default tabs
