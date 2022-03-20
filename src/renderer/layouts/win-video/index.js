@@ -101,7 +101,7 @@ const openWinVideo = (data, lastWin) => {
 	let authorParams = {
 		parent: authorCard,
 		name: videoDetails.author.name,
-		subs: BtnEl`${roundNum(videoDetails.author.subscriber_count)} subscribers`,
+		subs: `${roundNum(videoDetails.author.subscriber_count)} subscribers`,
 		id: videoDetails.author.id,
 		avatarSrc: videoDetails.author.thumbnails ? videoDetails.author.thumbnails.at(-1).url : '',
 	}
