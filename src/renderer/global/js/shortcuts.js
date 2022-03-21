@@ -2,45 +2,67 @@ import cs from 'Global/CacheSelectors'
 import overlay from 'Components/overlay'
 import toggleMenu from 'Components/burger'
 import { hasFocus } from 'Global/utils'
-import { scrapeInfoToSwitchPage, nextPage, prevPage } from 'Components/grid-btns'
 import suggestions from 'Components/suggestions'
+
+const hasPages = winEl => {
+	const btnsPrev = winEl.querySelector('.btns__prev')
+	const btnsNext = winEl.querySelector('.btns__next')
+
+	return { btnsNext, btnsPrev }
+}
 
 const handleKeyDown = event => {
 	// ESC
 	if (event.keyCode === 27) {
-		document.activeElement.blur()
-
 		overlay.hide()
 		suggestions.hide()
 
-		let winActive = cs.get('.main__content').querySelector('.win._active')
-		let firstCard = null
+		const winActive = cs.get('.main__content').querySelector('.win._active')
 
-		if (winActive.classList.contains('subscriptions')) {
-			firstCard = winActive.querySelector('.author')
-		} else if (winActive.classList.contains('channel')) {
-			let tabsPanelActive = winActive.querySelector('.tabs__panel._active')
+		const hasGrid =
+			winActive &&
+			!winActive.classList.contains('settings') &&
+			!winActive.classList.contains('video')
 
-			firstCard = tabsPanelActive.querySelector('.card')
+		if (hasGrid) {
+			let firstCard = null
 
-			tabsPanelActive = null
-		} else firstCard = winActive.querySelector('.card')
+			const isWinSubscriptions = winActive.classList.contains('subscriptions')
+			const isWinChannel = winActive.classList.contains('channel')
 
-		firstCard ? firstCard.focus() : document.activeElement.blur()
+			if (!isWinChannel && !isWinSubscriptions) {
+				firstCard = winActive.querySelector('.card')
+			}
 
-		winActive = null
-		firstCard = null
+			if (isWinSubscriptions) {
+				firstCard = winActive.querySelector('.author')
+			}
+
+			if (isWinChannel) {
+				const tabsPanelActive = winActive.querySelector('.tabs__panel._active')
+
+				firstCard = tabsPanelActive.querySelector('.card')
+			}
+
+			if (firstCard) {
+				firstCard.focus()
+			} else {
+				document.activeElement.blur()
+			}
+		} else {
+			document.activeElement.blur()
+		}
 	}
 
 	// CTRL + F
 	if (event.ctrlKey && event.keyCode === 70) {
-		let header = cs.get('.header')
+		const header = cs.get('.header')
 
-		if (header.classList.contains('_hidden')) header.classList.remove('_hidden')
+		if (header.classList.contains('_hidden')) {
+			header.classList.remove('_hidden')
+		}
 
 		cs.get('.search__bar').focus()
-
-		header = null
 	}
 
 	// CTRL + B
@@ -48,50 +70,41 @@ const handleKeyDown = event => {
 
 	// SHIFT
 	if (event.shiftKey && (event.keyCode === 75 || event.keyCode === 74)) {
-		let winActive = cs.get('.main__content').querySelector('.win._active')
+		const winActive = cs.get('.main__content').querySelector('.win._active')
 
-		if (
+		const hasGrid =
 			winActive &&
 			!winActive.classList.contains('settings') &&
 			!winActive.classList.contains('video')
-		) {
-			let { cardAll, btnNextPage, btnPrevPage, typeCard, tabsPanelActive } =
-				scrapeInfoToSwitchPage(winActive)
 
-			tabsPanelActive && (winActive = tabsPanelActive)
+		if (hasGrid) {
+			const { btnsNext, btnsPrev } = hasPages(winActive)
 
-			let btns = btnNextPage.closest('.btns')
+			if (!btnsNext || !btnsPrev) return
+
+			const btns = btnsNext.closest('.btns')
 
 			if (btns && btns.hidden) return
 
 			// K
 			if (event.keyCode === 75) {
-				if (btnNextPage && !btnNextPage.disabled)
-					nextPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
+				if (btnsNext && !btnsNext.disabled) btnsNext.click()
 			}
 
 			// J
 			if (event.keyCode === 74) {
-				if (btnPrevPage && !btnPrevPage.disabled)
-					prevPage(winActive, cardAll, typeCard, btnNextPage, btnPrevPage)
+				if (btnsPrev && !btnsPrev.disabled) btnsPrev.click()
 			}
-
-			cardAll = null
-			btnNextPage = null
-			btnPrevPage = null
-			typeCard = null
 		}
-
-		winActive = null
 	}
 
 	// SPACE
 	if (event.keyCode === 32 && !hasFocus(cs.get('.search__bar'))) {
-		let winActive = cs.get('.main__content').querySelector('.win._active')
+		const winActive = cs.get('.main__content').querySelector('.win._active')
 
-		if (winActive.classList.contains('video')) event.preventDefault()
-
-		winActive = null
+		if (winActive.classList.contains('video')) {
+			event.preventDefault()
+		}
 	}
 }
 
