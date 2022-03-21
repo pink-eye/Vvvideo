@@ -6,282 +6,209 @@ import { fillAuthorCard } from 'Components/card/card-author'
 import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'
 import { fillChannelCard } from 'Components/card/card-rich'
+import { gridBtnsHTML } from './helper'
 
-const numCards = 20
-let increment = null
-let page = null
-let itemArray = []
-let hasContinuation = null
+const Pages = () => {
+	let win = null
+	let typeCard = null
+	let grid = null
+	let cardAll = null
+	let btns = null
+	let btnsCount = null
+	let btnsNext = null
+	let btnsPrev = null
 
-const enablePages = parent => {
-	let btns = parent.querySelector('.btns')
+	const numCards = 20
+	let increment = 0
+	let page = 1
+	let itemArray = []
+	let hasContinuation = null
 
-	btns && (btns.hidden &&= false)
+	const displayCount = () => {
+		btnsCount.textContent = page
+	}
 
-	btns = null
-}
+	const recycleGrid = () => {
+		typeCard !== 'author' ? resetGrid(win) : resetGridAuthorCard()
 
-const updateCount = parent => {
-	let count = parent.querySelector('.btns__count')
+		for (let index = 0, { length } = cardAll; index < length; index += 1) {
+			let card = cardAll[index]
+			const nextItemIndex = index + increment
+			const nextItem = itemArray[nextItemIndex]
 
-	count.textContent = page
+			if (nextItem) {
+				card.hidden &&= false
 
-	count = null
-}
+				let type = typeCard
 
-const recycleDOM = async (cardAll, typeCard) => {
-	for (let index = 0, { length } = cardAll; index < length; index += 1) {
-		let card = cardAll[index]
-		const nextIndex = index + increment
-		const nextItem = itemArray[nextIndex]
+				if (typeCard === 'rich') {
+					type = nextItem.type
+					card.dataset.win = type
+					card.classList.add(`_${type}`)
+				}
 
-		if (nextItem) {
-			card.hidden &&= false
+				switch (type) {
+					case 'video':
+						fillVideoCard(card, nextItemIndex, itemArray)
+						break
 
-			let type = typeCard
+					case 'playlist':
+						fillPlaylistCard(card, nextItemIndex, itemArray)
+						break
 
-			if (typeCard === 'rich') {
-				type = nextItem.type
-				card.dataset.win = type
-				card.classList.add(`_${type}`)
-			}
+					case 'channel':
+						fillChannelCard(card, nextItemIndex, itemArray)
+						break
 
-			switch (type) {
+					case 'author':
+						const { avatar, name, channelId } = nextItem
+
+						let authorParams = {
+							parent: card,
+							avatarSrc: avatar,
+							name: name,
+							id: channelId,
+						}
+
+						fillAuthorCard(authorParams)
+
+						authorParams = null
+						break
+				}
+			} else card.hidden = true
+
+			card = null
+		}
+	}
+
+	const fetchDataMore = async () => {
+		let data = null
+
+		try {
+			switch (typeCard) {
 				case 'video':
-					fillVideoCard(card, nextIndex, itemArray)
+					data = await API.scrapeVideosMore(hasContinuation)
 					break
 
 				case 'playlist':
-					fillPlaylistCard(card, nextIndex, itemArray)
+					data = await API.scrapePlaylistsMore(hasContinuation)
 					break
 
-				case 'channel':
-					fillChannelCard(card, nextIndex, itemArray)
-					break
-
-				case 'author':
-					const { avatar, name, channelId } = nextItem
-
-					let authorParams = {
-						parent: card,
-						avatarSrc: avatar,
-						name: name,
-						id: channelId,
-					}
-
-					fillAuthorCard(authorParams)
-
-					authorParams = null
+				case 'rich':
+					data = await API.scrapeSearchResultsMore(hasContinuation)
+					data.items = filterSearchResults(data.items)
 					break
 			}
-		} else card.hidden = true
 
-		card = null
+			return data
+		} catch (error) {
+			throw Error(error)
+		}
 	}
-}
 
-const createPages = () => `<div class="btns" hidden>
-							<button disabled class="btns__prev btn-secondary onclick-effect btn-reset">
-								<svg width="28px" height="28px">
-									<use xlink:href='img/svg/nav.svg#arrow'></use>
-								</svg>
-								previous page
-							</button>
-							<span class="btns__count">1</span>
-							<button class="btns__next btn-secondary onclick-effect btn-reset">
-								<svg width="28px" height="28px">
-									<use xlink:href='img/svg/nav.svg#arrow'></use>
-								</svg>
-								next page
-							</button>
-						</div>`
+	const expandItemArray = () => {
+		fetchDataMore()
+			.then(data => {
+				const { items, continuation } = data
+				itemArray.push(...items)
+				hasContinuation = continuation
+			})
+			.catch(({ message }) => showToast('error', message))
+	}
 
-const resetPages = parent => {
-	let grid = parent.querySelector('.grid')
-	let btns = grid.querySelector('.btns')
+	const openNext = () => {
+		if (increment < itemArray.length - 1) {
+			increment += numCards
+			page += 1
 
-	if (btns) {
+			recycleGrid()
+			displayCount()
+
+			let firstCard = cardAll[0]
+			firstCard.focus()
+			const firstCardCoordinateY = getCoordY(firstCard)
+			scrollToElem(firstCardCoordinateY)
+
+			btnsPrev.disabled &&= false
+
+			if (hasContinuation) expandItemArray()
+		}
+
+		if (page * numCards > itemArray.length - 1) {
+			btnsNext.disabled = true
+		}
+	}
+
+	const openPrevious = () => {
+		if (page === 2) {
+			btnsPrev.disabled = true
+		}
+
+		if (page > 1) {
+			increment -= numCards
+			page -= 1
+
+			recycleGrid()
+			displayCount()
+
+			let firstCard = cardAll[0]
+			firstCard.focus()
+			const firstCardCoordinateY = getCoordY(firstCard)
+			scrollToElem(firstCardCoordinateY)
+
+			btnsNext.disabled &&= false
+		}
+	}
+
+	const initBtns = () => {
+		btnsNext.addEventListener('click', openNext)
+		btnsPrev.addEventListener('click', openPrevious)
+
+		btnsNext.disabled &&= false
+		btnsPrev.disabled ||= true
+	}
+
+	const init = config => {
+		win ||= config.element
+		typeCard ||= config.type
+		itemArray = [...config.data]
+		hasContinuation = config.continuation
+
+		const cardClassName = typeCard === 'author' ? typeCard : 'card'
+
+		grid ||= win.querySelector('.grid')
+		grid.insertAdjacentHTML('beforeEnd', gridBtnsHTML())
+		cardAll = grid.querySelectorAll(`.${cardClassName}`)
+		btns = grid.querySelector('.btns')
+		btnsCount = btns.querySelector('.btns__count')
+		btnsNext = btns.querySelector('.btns__next')
+		btnsPrev = btns.querySelector('.btns__prev')
+
+		initBtns()
+		displayCount()
+
+		if (hasContinuation) expandItemArray()
+	}
+
+	const reset = () => {
+		if (!btns) return
+
 		btns.remove()
-		grid.insertAdjacentHTML('beforeEnd', createPages())
+
+		btns = null
+		btnsCount = null
+		btnsNext = null
+		btnsPrev = null
+
+		increment = 0
+		page = 1
+		itemArray.length = 0
 	}
 
-	itemArray.length = 0
-
-	btns = null
-	grid = null
-}
-
-const getDataMore = async typeCard => {
-	if (!hasContinuation) return
-
-	let dataMore = null
-
-	try {
-		switch (typeCard) {
-			case 'video':
-				dataMore = await API.scrapeVideosMore(hasContinuation)
-				break
-
-			case 'playlist':
-				dataMore = await API.scrapePlaylistsMore(hasContinuation)
-				break
-
-			case 'rich':
-				dataMore = await API.scrapeSearchResultsMore(hasContinuation)
-				dataMore.items = filterSearchResults(dataMore.items)
-				break
-		}
-	} catch ({ message }) {
-		showToast('error', message)
-	}
-
-	if (!dataMore) return
-
-	const { items, continuation } = dataMore
-	itemArray.push(...items)
-	hasContinuation = continuation
-}
-
-export const nextPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
-	typeCard !== 'author' ? resetGrid(parent) : resetGridAuthorCard()
-
-	if (increment < itemArray.length - 1) {
-		let firstCard = cardAll[0]
-		firstCard.focus()
-
-		increment += numCards
-		page += 1
-
-		getDataMore(typeCard)
-		recycleDOM(cardAll, typeCard)
-		scrollToElem(getCoordY(firstCard))
-		updateCount(parent)
-
-		let givenBtnPrevPage = btnPrevPage
-
-		givenBtnPrevPage.disabled &&= false
-
-		firstCard = null
-		givenBtnPrevPage = null
-	}
-
-	if (page * numCards > itemArray.length - 1) {
-		let givenBtnNextPage = btnNextPage
-		givenBtnNextPage.disabled = true
-		givenBtnNextPage = null
+	return {
+		init,
+		reset,
 	}
 }
 
-export const prevPage = (parent, cardAll, typeCard, btnNextPage, btnPrevPage) => {
-	typeCard !== 'author' ? resetGrid(parent) : resetGridAuthorCard()
-
-	if (page === 2) {
-		let givenBtnPrevPage = btnPrevPage
-		givenBtnPrevPage.disabled = true
-		givenBtnPrevPage = null
-	}
-
-	if (page > 1) {
-		let firstCard = cardAll[0]
-		firstCard.focus()
-
-		increment -= numCards
-		page -= 1
-
-		recycleDOM(cardAll, typeCard)
-		scrollToElem(getCoordY(firstCard))
-		updateCount(parent)
-
-		let givenBtnNextPage = btnNextPage
-
-		givenBtnNextPage.disabled &&= false
-
-		firstCard = null
-		givenBtnNextPage = null
-	}
-}
-
-const resetCount = parent => {
-	let count = parent.querySelector('.btns__count')
-
-	if (+count.textContent !== 1) count.textContent = 1
-
-	count = null
-}
-
-const resetBtns = (btnNextPage, btnPrevPage) => {
-	let givenBtnNextPage = btnNextPage
-	let givenBtnPrevPage = btnPrevPage
-
-	givenBtnNextPage.disabled &&= false
-	givenBtnPrevPage.disabled ||= true
-
-	givenBtnNextPage = null
-	givenBtnPrevPage = null
-}
-
-export const initPages = (parent, data, cardAll, typeCard, continuation = null) => {
-	resetPages(parent)
-
-	increment = 0
-	page = 1
-	itemArray.push(...data)
-	hasContinuation = continuation
-
-	let btnNextPage = parent.querySelector('.btns__next')
-	let btnPrevPage = parent.querySelector('.btns__prev')
-
-	const handleClickNextPage = () => nextPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
-
-	const handleClickPrevPage = () => prevPage(parent, cardAll, typeCard, btnNextPage, btnPrevPage)
-
-	btnNextPage.addEventListener('click', handleClickNextPage)
-	btnPrevPage.addEventListener('click', handleClickPrevPage)
-
-	enablePages(parent)
-	resetCount(parent)
-	resetBtns(btnNextPage, btnPrevPage)
-	getDataMore(typeCard)
-}
-
-export const disablePages = parent => {
-	resetPages(parent)
-
-	let btns = parent.querySelector('.btns')
-
-	btns && (btns.hidden ||= true)
-
-	btns = null
-}
-
-export const scrapeInfoToSwitchPage = winActive => {
-	let cardAll = null
-	let btnNextPage = null
-	let btnPrevPage = null
-	let typeCard = null
-	let tabsPanelActive = null
-
-	if (winActive.classList.contains('channel')) {
-		tabsPanelActive = winActive.querySelector('.tabs__panel._active')
-
-		if (tabsPanelActive) {
-			cardAll = tabsPanelActive.querySelectorAll('.card')
-			btnPrevPage = tabsPanelActive.querySelector('.btns__prev')
-			btnNextPage = tabsPanelActive.querySelector('.btns__next')
-			typeCard = cardAll[0].dataset.win
-		}
-	} else {
-		cardAll = winActive.classList.contains('subscriptions')
-			? winActive.querySelectorAll('.author')
-			: winActive.querySelectorAll('.card')
-
-		btnPrevPage = winActive.querySelector('.btns__prev')
-		btnNextPage = winActive.querySelector('.btns__next')
-
-		if (winActive.classList.contains('subscriptions')) typeCard = 'author'
-		else if (winActive.classList.contains('search-results')) typeCard = 'rich'
-		else typeCard = cardAll[0].dataset.win
-	}
-
-	return { cardAll, btnNextPage, btnPrevPage, typeCard, tabsPanelActive }
-}
+export default Pages
