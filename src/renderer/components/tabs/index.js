@@ -4,9 +4,10 @@ import { resetGrid } from 'Components/grid'
 import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'
 import showToast from 'Components/toast'
-import { initPages, disablePages } from 'Components/grid-btns'
+import Pages from 'Components/grid-btns'
 
 const Tabs = () => {
+	const pages = Pages()
 	const channel = cs.get('.channel')
 	const tabs = channel.querySelector('.tabs')
 	const tabsList = tabs.querySelector('.tabs__list')
@@ -19,6 +20,7 @@ const Tabs = () => {
 		if (tabsPanelActive?.classList.contains('_active')) {
 			tabsPanelActive.classList.remove('_active')
 			resetGrid(tabsPanelActive)
+			pages.reset()
 		}
 
 		let tabActive = tabs.querySelector('.tabs__btn._active')
@@ -51,9 +53,9 @@ const Tabs = () => {
 		const typeCard = tab === 'Videos' ? 'video' : 'playlist'
 		let cardAll = tabPanel.querySelectorAll('.card')
 
-		items.length > cardAll.length
-			? initPages(tabPanel, items, cardAll, typeCard, continuation)
-			: disablePages(tabPanel)
+		if (items.length > cardAll.length) {
+			pages.init({ element: tabPanel, data: items, type: typeCard, continuation })
+		}
 
 		for (let index = 0, { length } = cardAll; index < length; index += 1) {
 			let card = cardAll[index]
