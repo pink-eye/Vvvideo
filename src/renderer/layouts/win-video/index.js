@@ -12,279 +12,237 @@ import { initVideoPlayer, handleClickTimecode, resetVideoPlayer } from 'Componen
 import { normalizeVideoDescription, roundNum } from 'Layouts/win-video/helper'
 import { handleClickLink } from 'Global/utils'
 
-const spoiler = Spoiler()
-const appStorage = new AppStorage()
-let storage = null
-let subscribeBtn = null
+const WinVideo = () => {
+	const spoiler = Spoiler()
+	const appStorage = new AppStorage()
+	let subscribeBtn = null
 
-const getVideoData = id => {
-	storage = appStorage.get()
+	const videoParent = cs.get('.video')
 
-	const { enableProxy, proxy } = storage.settings
-	return enableProxy ? API.scrapeVideoProxy(id, proxy) : API.scrapeVideo(id)
-}
+	const displayPlaylistBtn = playlistId => {
+		const actionsPlaylist = videoParent.querySelector('.info-actions__playlist')
 
-const handleClickContent = event => {
-	handleClickLink(event)
-	handleClickTimecode(event)
-}
-
-const openWinVideo = (data, lastWin) => {
-	let video = cs.get('.video')
-	let videoPoster = video.querySelector('.video__poster img')
-	let controls = cs.get('.controls')
-	let videoInfo = video.querySelector('.video-info')
-	let videoTitle = videoInfo.querySelector('.video-info__title span')
-	let videoViews = videoInfo.querySelector('.video-info__views')
-	let videoDate = videoInfo.querySelector('.video-info__date')
-	let spoilerContent = videoInfo.querySelector('.spoiler__content')
-	let titleSkeleton = videoInfo.querySelector('.title-skeleton')
-	let partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton')
-	let videoLikes = videoInfo.querySelector('.video-info__likes')
-	let authorCard = videoInfo.querySelector('.author')
-	let subscribeBtnEl = videoInfo.querySelector('.subscribe')
-
-	// SPOILER
-
-	let spoilerEl = videoInfo.querySelector('.spoiler')
-	spoiler.init({ element: spoilerEl })
-	spoilerEl = null
-
-	// FILL WIN
-
-	const { videoDetails } = data
-
-	if (videoDetails.isLive) video.classList.add('_live')
-
-	video.dataset.id = videoDetails.videoId
-
-	subscribeBtn ||= new SubscribeBtn({
-		element: subscribeBtnEl,
-		channelId: videoDetails.author.id,
-		name: videoDetails.author.name,
-	})
-
-	spoilerContent.addEventListener('click', handleClickContent)
-
-	// FILL VIDEO INFO
-
-	if (videoDetails.title !== videoTitle.textContent) videoTitle.textContent = videoDetails.title
-
-	removeSkeleton(titleSkeleton)
-
-	if (videoDetails.thumbnails) videoPoster.src = videoDetails.thumbnails.at(-1).url
-
-	if (videoViews.textContent === 'Unknown')
-		videoViews.textContent = normalizeCount(videoDetails.viewCount)
-
-	if (videoDate.textContent === 'Unknown')
-		videoDate.textContent = formatDate(videoDetails.publishDate)
-
-	if (videoDate.textContent === 'Premiere') {
-		const { reason: datePremiere } = data.player_response.playabilityStatus
-		videoDate.textContent = datePremiere
-		controls.hidden = true
+		actionsPlaylist.hidden &&= false
+		actionsPlaylist.dataset.id = playlistId
 	}
 
-	videoLikes.textContent = normalizeCount(videoDetails.likes)
+	const fetchData = id => {
+		const storage = appStorage.get()
 
-	if (partSkeletonAll.length > 0) {
-		for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
-			let partSkeleton = partSkeletonAll[index]
-
-			removeSkeleton(partSkeleton)
-
-			partSkeleton = null
-		}
+		const { enableProxy, proxy } = storage.settings
+		return enableProxy ? API.scrapeVideoProxy(id, proxy) : API.scrapeVideo(id)
 	}
 
-	let authorParams = {
-		parent: authorCard,
-		name: videoDetails.author.name,
-		subs: `${roundNum(videoDetails.author.subscriber_count)} subscribers`,
-		id: videoDetails.author.id,
-		avatarSrc: videoDetails.author.thumbnails ? videoDetails.author.thumbnails.at(-1).url : '',
+	const handleClickContent = event => {
+		handleClickLink(event)
+		handleClickTimecode(event)
 	}
 
-	fillAuthorCard(authorParams)
+	const fill = (data, lastWin) => {
+		const videoPoster = videoParent.querySelector('.video__poster img')
+		const videoInfo = videoParent.querySelector('.video-info')
+		const videoTitle = videoInfo.querySelector('.video-info__title span')
+		const videoViews = videoInfo.querySelector('.video-info__views')
+		const videoDate = videoInfo.querySelector('.video-info__date')
+		const spoilerContent = videoInfo.querySelector('.spoiler__content')
+		const titleSkeleton = videoInfo.querySelector('.title-skeleton')
+		const partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton')
+		const videoLikes = videoInfo.querySelector('.video-info__likes')
+		const authorCard = videoInfo.querySelector('.author')
+		const subscribeBtnEl = videoInfo.querySelector('.subscribe')
 
-	authorParams = null
+		// SPOILER
 
-	spoilerContent.innerHTML = normalizeVideoDescription(videoDetails.description)
+		const spoilerEl = videoInfo.querySelector('.spoiler')
+		spoiler.init({ element: spoilerEl })
 
-	saveVideoInHistory(data)
+		// FILL WIN
 
-	videoInfo = null
-	videoViews = null
-	videoDate = null
-	subscribeBtnEl = null
-	controls = null
-	spoilerContent = null
-	videoLikes = null
-	partSkeletonAll = null
-	titleSkeleton = null
-	authorCard = null
-	videoTitle = null
-	videoPoster = null
-	video = null
-}
+		const { videoDetails } = data
 
-export const resetWinVideo = () => {
-	resetVideoPlayer()
+		if (videoDetails.isLive) videoParent.classList.add('_live')
 
-	let video = cs.get('.video')
-	let skeletonAll = video.querySelectorAll('.skeleton')
-	let videoInfo = video.querySelector('.video-info')
-	let videoTitle = videoInfo.querySelector('.video-info__title span')
-	let videoLikes = videoInfo.querySelector('.video-info__likes')
-	let spoilerContent = videoInfo.querySelector('.spoiler__content')
-	let videoViews = videoInfo.querySelector('.video-info__views')
-	let videoDate = videoInfo.querySelector('.video-info__date')
-	let actionsPlaylist = videoInfo.querySelector('.info-actions__playlist')
-	let authorCard = videoInfo.querySelector('.author')
+		videoParent.dataset.id = videoDetails.videoId
 
-	video.dataset.id = ''
+		subscribeBtn ||= new SubscribeBtn({
+			element: subscribeBtnEl,
+			channelId: videoDetails.author.id,
+			name: videoDetails.author.name,
+		})
 
-	subscribeBtn.reset()
-	spoilerContent.removeEventListener('click', handleClickContent)
+		spoilerContent.addEventListener('click', handleClickContent)
 
-	if (video.classList.contains('_live')) video.classList.remove('_live')
+		// FILL VIDEO INFO
 
-	videoTitle.textContent = '...'
-	videoLikes.textContent = '...'
-	videoViews.textContent = 'Unknown'
-	videoDate.textContent = 'Unknown'
-	spoilerContent.textContent = '...'
+		if (videoDetails.title !== videoTitle.textContent)
+			videoTitle.textContent = videoDetails.title
 
-	if (skeletonAll.length > 0) {
-		for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
-			let skeleton = skeletonAll[index]
-
-			resetSkeleton(skeleton)
-
-			skeleton = null
-		}
-	}
-
-	spoiler.reset()
-
-	actionsPlaylist.hidden ||= true
-
-	resetAuthorCard(authorCard)
-
-	video = null
-	videoLikes = null
-	videoInfo = null
-	skeletonAll = null
-	spoilerContent = null
-	videoViews = null
-	videoTitle = null
-	videoDate = null
-	authorCard = null
-}
-
-const fillSomeInfoVideo = params => {
-	const { title = '', views = '', date = '', author = '', authorId = '' } = params
-
-	let video = cs.get('.video')
-	let videoInfo = video.querySelector('.video-info')
-	let videoTitle = videoInfo.querySelector('.video-info__title span')
-	let videoViews = videoInfo.querySelector('.video-info__views')
-	let videoDate = videoInfo.querySelector('.video-info__date')
-	let authorCard = videoInfo.querySelector('.author')
-	let subscribeBtnEl = videoInfo.querySelector('.subscribe')
-	let titleSkeleton = videoInfo.querySelector('.title-skeleton')
-	let partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton')
-
-	if (!isEmpty(title) && title !== '...') {
-		videoTitle.textContent = title
 		removeSkeleton(titleSkeleton)
-	}
-	if (!isEmpty(views) && views !== 'Unknown') {
-		videoViews.textContent = views
-		removeSkeleton(partSkeletonAll[0])
-	}
-	if (!isEmpty(date) && date !== 'Unknown') {
-		videoDate.textContent = date
-		removeSkeleton(partSkeletonAll[1])
-	}
 
-	if ('playlistId' in params) displayPlaylistBtn(params.playlistId)
+		if (videoDetails.thumbnails) videoPoster.src = videoDetails.thumbnails.at(-1).url
 
-	let authorParams = {
-		parent: authorCard,
-		name: author,
-		id: authorId,
-	}
+		if (videoViews.textContent === 'Unknown')
+			videoViews.textContent = normalizeCount(videoDetails.viewCount)
 
-	fillAuthorCard(authorParams)
+		if (videoDate.textContent === 'Unknown')
+			videoDate.textContent = formatDate(videoDetails.publishDate)
 
-	subscribeBtn = new SubscribeBtn({
-		element: subscribeBtnEl,
-		channelId: authorId,
-		name: author,
-	})
+		if (videoDate.textContent === 'Premiere') {
+			const { reason: datePremiere } = data.player_response.playabilityStatus
+			videoDate.textContent = datePremiere
 
-	video = null
-	videoInfo = null
-	videoTitle = null
-	videoViews = null
-	videoDate = null
-	subscribeBtnEl = null
-	titleSkeleton = null
-	partSkeletonAll = null
-	authorParams = null
-	authorCard = null
-}
-
-const displayPlaylistBtn = playlistId => {
-	let videoParent = cs.get('.video')
-	let actionsPlaylist = videoParent.querySelector('.info-actions__playlist')
-
-	actionsPlaylist.hidden &&= false
-	actionsPlaylist.dataset.id = playlistId
-
-	actionsPlaylist = null
-	videoParent = null
-}
-
-export const prepareWinVideo = async (btnWin, id) => {
-	let params = {}
-
-	if (btnWin) {
-		params = {
-			title: btnWin.querySelector('.card__title span').textContent,
-			views: btnWin.querySelector('.card__views').textContent,
-			date: btnWin.querySelector('.card__date').textContent,
-			author: btnWin.querySelector('.card__channel').dataset.name,
-			authorId: btnWin.querySelector('.card__channel').dataset.id,
+			const controls = cs.get('.controls')
+			controls.hidden = true
 		}
 
-		if (btnWin?.dataset?.playlistId) params.playlistId = btnWin.dataset.playlistId
+		videoLikes.textContent = normalizeCount(videoDetails.likes)
 
-		fillSomeInfoVideo(params)
+		if (partSkeletonAll.length) {
+			for (let index = 0, { length } = partSkeletonAll; index < length; index += 1) {
+				const partSkeleton = partSkeletonAll[index]
+
+				removeSkeleton(partSkeleton)
+			}
+		}
+
+		const authorParams = {
+			parent: authorCard,
+			name: videoDetails.author.name,
+			subs: `${roundNum(videoDetails.author.subscriber_count)} subscribers`,
+			id: videoDetails.author.id,
+			avatarSrc: videoDetails.author.thumbnails
+				? videoDetails.author.thumbnails.at(-1).url
+				: '',
+		}
+
+		fillAuthorCard(authorParams)
+
+		spoilerContent.innerHTML = normalizeVideoDescription(videoDetails.description)
+
+		saveVideoInHistory(data)
 	}
 
-	if (!API.isYTVideoURL(`https://www.youtube.com/watch?v=${id}`)) return
+	const fillPart = params => {
+		const { title = '', views = '', date = '', author = '', authorId = '' } = params
 
-	let data = null
+		const videoInfo = videoParent.querySelector('.video-info')
+		const videoTitle = videoInfo.querySelector('.video-info__title span')
+		const videoViews = videoInfo.querySelector('.video-info__views')
+		const videoDate = videoInfo.querySelector('.video-info__date')
+		const authorCard = videoInfo.querySelector('.author')
+		const subscribeBtnEl = videoInfo.querySelector('.subscribe')
+		const titleSkeleton = videoInfo.querySelector('.title-skeleton')
+		const partSkeletonAll = videoInfo.querySelectorAll('.part-skeleton')
 
-	try {
-		data = await getVideoData(id)
-	} catch ({ message }) {
-		showToast('error', message)
-		return
+		if (!isEmpty(title) && title !== '...') {
+			videoTitle.textContent = title
+			removeSkeleton(titleSkeleton)
+		}
+		if (!isEmpty(views) && views !== 'Unknown') {
+			videoViews.textContent = views
+			removeSkeleton(partSkeletonAll[0])
+		}
+		if (!isEmpty(date) && date !== 'Unknown') {
+			videoDate.textContent = date
+			removeSkeleton(partSkeletonAll[1])
+		}
+
+		if ('playlistId' in params) displayPlaylistBtn(params.playlistId)
+
+		let authorParams = {
+			parent: authorCard,
+			name: author,
+			id: authorId,
+		}
+
+		fillAuthorCard(authorParams)
+
+		subscribeBtn = new SubscribeBtn({
+			element: subscribeBtnEl,
+			channelId: authorId,
+			name: author,
+		})
 	}
 
-	let videoParent = cs.get('.video')
+	const init = ({ btnWin, id }) => {
+		let params = {}
 
-	if (videoParent.classList.contains('_active')) {
-		if ('playlistId' in params) data.videoDetails.playlistId = params.playlistId
+		if (btnWin) {
+			params = {
+				title: btnWin.querySelector('.card__title span').textContent,
+				views: btnWin.querySelector('.card__views').textContent,
+				date: btnWin.querySelector('.card__date').textContent,
+				author: btnWin.querySelector('.card__channel').dataset.name,
+				authorId: btnWin.querySelector('.card__channel').dataset.id,
+			}
 
-		openWinVideo(data)
+			if (btnWin?.dataset?.playlistId) params.playlistId = btnWin.dataset.playlistId
 
-		initVideoPlayer(data)
+			fillPart(params)
+		}
+
+		fetchData(id)
+			.then(data => {
+				if (videoParent.classList.contains('_active')) {
+					if ('playlistId' in params) data.videoDetails.playlistId = params.playlistId
+
+					fill(data)
+
+					initVideoPlayer(data)
+				}
+			})
+			.catch(({ message }) => showToast('error', message))
 	}
 
-	videoParent = null
+	const reset = () => {
+		resetVideoPlayer()
+
+		const skeletonAll = videoParent.querySelectorAll('.skeleton')
+		const videoInfo = videoParent.querySelector('.video-info')
+		const videoTitle = videoInfo.querySelector('.video-info__title span')
+		const videoLikes = videoInfo.querySelector('.video-info__likes')
+		const spoilerContent = videoInfo.querySelector('.spoiler__content')
+		const videoViews = videoInfo.querySelector('.video-info__views')
+		const videoDate = videoInfo.querySelector('.video-info__date')
+		const actionsPlaylist = videoInfo.querySelector('.info-actions__playlist')
+		const authorCard = videoInfo.querySelector('.author')
+
+		if (videoParent.classList.contains('_live')) {
+			videoParent.classList.remove('_live')
+		}
+
+		videoParent.dataset.id = ''
+
+		subscribeBtn.reset()
+		spoilerContent.removeEventListener('click', handleClickContent)
+
+		videoTitle.textContent = '...'
+		videoLikes.textContent = '...'
+		videoViews.textContent = 'Unknown'
+		videoDate.textContent = 'Unknown'
+		spoilerContent.textContent = '...'
+
+		if (skeletonAll.length) {
+			for (let index = 0, { length } = skeletonAll; index < length; index += 1) {
+				const skeleton = skeletonAll[index]
+
+				resetSkeleton(skeleton)
+			}
+		}
+
+		spoiler.reset()
+
+		actionsPlaylist.hidden ||= true
+
+		resetAuthorCard(authorCard)
+	}
+
+	return {
+		init,
+		reset,
+	}
 }
+
+const winVideo = WinVideo()
+
+export default winVideo

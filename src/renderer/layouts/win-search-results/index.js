@@ -1,123 +1,98 @@
 import cs from 'Global/CacheSelectors'
 import AppStorage from 'Global/AppStorage'
 import { filterSearchResults } from 'Layouts/win-search-results/helper'
-import { initPages, disablePages } from 'Components/grid-btns'
+import Pages from 'Components/grid-btns'
 import showToast from 'Components/toast'
+import suggestions from 'Components/suggestions'
+import { resetGrid } from 'Components/grid'
 import { fillVideoCard } from 'Components/card/card-video'
 import { fillPlaylistCard } from 'Components/card/card-playlist'
 import { fillChannelCard } from 'Components/card/card-rich'
 
-let lastSearchResult = null
-const appStorage = new AppStorage()
+const WinSearchResults = () => {
+	const pages = Pages()
+	const searchResults = cs.get('.search-results')
+	const searchBar = cs.get('.header').querySelector('.search__bar')
+	let lastSearchResult = null
 
-export const clearRecentQueries = () => {
-	let storage = appStorage.get()
-
-	if (storage.recentQueries.length === 0) return
-
-	storage.recentQueries.length = 0
-	appStorage.update(storage)
-}
-
-const restrainRecentQueriesLength = () => {
-	let storage = appStorage.get()
-	const { disableRecentQueries, maxRecentQueriesLength } = storage.settings
-
-	if (disableRecentQueries) return
-
-	const { recentQueries } = storage
-
-	if (recentQueries.length > maxRecentQueriesLength)
-		storage.recentQueries.length = maxRecentQueriesLength
-
-	appStorage.update(storage)
-}
-
-const saveSearchQuery = query => {
-	let storage = appStorage.get()
-	const { disableRecentQueries } = storage.settings
-
-	if (disableRecentQueries) return
-
-	let { recentQueries } = storage
-
-	if (recentQueries.includes(query)) recentQueries = recentQueries.filter(item => item !== query)
-
-	storage.recentQueries = [query, ...recentQueries]
-
-	appStorage.update(storage)
-}
-
-const getSearchResultsData = query => {
-	const { enableProxy, proxy } = appStorage.get().settings
-	return enableProxy
-		? API.scrapeSearchResultsProxy(query, proxy)
-		: API.scrapeSearchResults(query, { pages: 2 })
-}
-
-export const openWinSearchResults = async () => {
-	let searchBar = cs.get('.header').querySelector('.search__bar')
-	let data = null
-
-	const query = searchBar.value
-
-	if (lastSearchResult?.originalQuery !== query) {
-		document.activeElement.blur()
-		saveSearchQuery(query)
-		setTimeout(restrainRecentQueriesLength, 15)
-
-		try {
-			data = await getSearchResultsData(query)
-		} catch ({ message }) {
-			showToast('error', message)
+	const fetchData = query => {
+		if (lastSearchResult?.originalQuery === query) {
+			return lastSearchResult
 		}
 
-		if (data) lastSearchResult = data
+		const appStorage = new AppStorage()
+		const storage = appStorage.get()
+		const { enableProxy, proxy } = storage.settings
+		return enableProxy
+			? API.scrapeSearchResultsProxy(query, proxy)
+			: API.scrapeSearchResults(query, { pages: 2 })
 	}
 
-	let searchResults = cs.get('.search-results')
+	const fill = data => {
+		const cardAll = searchResults.querySelectorAll('.card')
 
-	if (searchResults.classList.contains('_active') || lastSearchResult?.originalQuery === query) {
-		let cardAll = searchResults.querySelectorAll('.card')
+		const { items, continuation } = data
 
-		data ||= lastSearchResult
+		const filteredItems = filterSearchResults(items)
 
-		let { items } = data
-		const { continuation } = data
-
-		items = filterSearchResults(items)
-
-		items.length > cardAll.length
-			? initPages(searchResults, items, cardAll, 'rich', continuation)
-			: disablePages(searchResults)
+		if (filteredItems.length > cardAll.length) {
+			pages.init({ element: searchResults, data: filteredItems, type: 'rich', continuation })
+		}
 
 		for (let index = 0, { length } = cardAll; index < length; index += 1) {
-			let card = cardAll[index]
-			const { type: typeCard } = items[index]
+			const card = cardAll[index]
+			const { type: typeCard } = filteredItems[index]
 
 			card.dataset.win = `${typeCard}`
 			card.classList.add(`_${typeCard}`)
 
 			switch (typeCard) {
 				case 'video':
-					fillVideoCard(card, index, items)
+					fillVideoCard(card, index, filteredItems)
 					break
 
 				case 'playlist':
-					fillPlaylistCard(card, index, items)
+					fillPlaylistCard(card, index, filteredItems)
 					break
 
 				case 'channel':
-					fillChannelCard(card, index, items)
+					fillChannelCard(card, index, filteredItems)
 					break
 			}
-
-			card = null
 		}
-
-		cardAll = null
 	}
 
-	searchResults = null
-	searchBar = null
+	const init = () => {
+		const query = searchBar.value
+
+		if (lastSearchResult?.originalQuery !== query) {
+			document.activeElement.blur()
+			suggestions.addRecentQuery(query)
+			setTimeout(() => suggestions.limitRecentQueriesLength(), 15)
+
+			fetchData(query)
+				.then(data => {
+					if (searchResults.classList.contains('_active')) {
+						fill(data)
+
+						if (data) lastSearchResult = data
+					}
+				})
+				.catch(({ message }) => showToast('error', message))
+		} else fill(lastSearchResult)
+	}
+
+	const reset = () => {
+		resetGrid(searchResults)
+		pages.reset()
+	}
+
+	return {
+		init,
+		reset,
+	}
 }
+
+const winSearchResults = WinSearchResults()
+
+export default winSearchResults

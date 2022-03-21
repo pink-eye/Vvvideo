@@ -1,38 +1,65 @@
 import AppStorage from 'Global/AppStorage'
 import cs from 'Global/CacheSelectors'
 import { fillVideoCard } from 'Components/card/card-video'
-import { initPages, disablePages } from 'Components/grid-btns'
+import Pages from 'Components/grid-btns'
+import { resetGrid } from 'Components/grid'
 
-const openWinHistory = () => {
-	const appStorage = new AppStorage()
-	const storage = appStorage.get()
+const WinHistory = () => {
+	const history = cs.get('.history')
+	const pages = Pages()
 
-	if (storage.settings.disableHistory) return
+	const getData = () => {
+		const appStorage = new AppStorage()
+		const storage = appStorage.get()
 
-	const { history } = storage
+		if (storage.settings.disableHistory) return
 
-	const historyWin = cs.get('.history')
-	let videoAll = historyWin.querySelectorAll('.card')
-
-	history.length > videoAll.length
-		? initPages(historyWin, history, videoAll, 'video')
-		: disablePages(historyWin)
-
-	for (let index = 0, { length } = videoAll; index < length; index += 1) {
-		let video = videoAll[index]
-
-		video.classList.add('_history-video')
-
-		if (history[index]) {
-			if ('playlistId' in history[index]) video.dataset.playlistId = history[index].playlistId
-
-			fillVideoCard(video, index, history)
-		} else video.hidden = true
-
-		video = null
+		return storage.history
 	}
 
-	videoAll = null
+	const fill = data => {
+		const videoAll = history.querySelectorAll('.card')
+
+		if (data.length > videoAll.length) {
+			pages.init({ element: history, data, type: 'video' })
+		}
+
+		for (let index = 0, { length } = videoAll; index < length; index += 1) {
+			const video = videoAll[index]
+
+			if (data[index]) {
+				video.classList.add('_history-video')
+
+				if ('playlistId' in data[index]) {
+					video.dataset.playlistId = data[index].playlistId
+				}
+
+				fillVideoCard(video, index, data)
+			} else {
+				video.hidden = true
+			}
+		}
+	}
+
+	const init = () => {
+		const data = getData()
+
+		if (!data) return
+
+		fill(data)
+	}
+
+	const reset = () => {
+		resetGrid(history)
+		pages.reset()
+	}
+
+	return {
+		init,
+		reset,
+	}
 }
 
-export default openWinHistory
+const winHistory = WinHistory()
+
+export default winHistory
