@@ -3,18 +3,56 @@ import { isEmpty, hasFocus, queryClosestByClass } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
 import showToast from 'Components/toast'
 import { createRecentQueryHTML, createSuggestionHTML } from './helper'
-import manageWin from 'Global/WinManager'
+import winManager from 'Global/WinManager'
 import overlay from 'Components/overlay'
 
-const appStorage = new AppStorage()
-
 const Suggestions = () => {
+	const appStorage = new AppStorage()
 	let lastSelected = null
 	let suggestionListLength = 0
 
 	const headerSearch = cs.get('.search')
 	const suggestionList = headerSearch.querySelector('.suggestion__list')
 	const searchBar = headerSearch.querySelector('.search__bar')
+
+	const clearRecentQueries = () => {
+		const storage = appStorage.get()
+
+		if (storage.recentQueries.length === 0) return
+
+		storage.recentQueries.length = 0
+		appStorage.update(storage)
+	}
+
+	const limitRecentQueriesLength = () => {
+		const storage = appStorage.get()
+		const { disableRecentQueries, maxRecentQueriesLength } = storage.settings
+
+		if (disableRecentQueries) return
+
+		const { recentQueries } = storage
+
+		if (recentQueries.length > maxRecentQueriesLength)
+			storage.recentQueries.length = maxRecentQueriesLength
+
+		appStorage.update(storage)
+	}
+
+	const addRecentQuery = query => {
+		const storage = appStorage.get()
+		const { disableRecentQueries } = storage.settings
+
+		if (disableRecentQueries) return
+
+		let { recentQueries } = storage
+
+		if (recentQueries.includes(query))
+			recentQueries = recentQueries.filter(item => item !== query)
+
+		storage.recentQueries = [query, ...recentQueries]
+
+		appStorage.update(storage)
+	}
 
 	const addSuggestion = (data, isRecent) => {
 		lastSelected = null
@@ -154,7 +192,7 @@ const Suggestions = () => {
 			const searchBarValue = event.currentTarget.value
 
 			if (!isEmpty(searchBarValue)) {
-				manageWin(event)
+				winManager.flip(event)
 			} else {
 				showToast('info', 'The search field is empty')
 			}
@@ -212,6 +250,9 @@ const Suggestions = () => {
 	return {
 		init,
 		hide,
+		clearRecentQueries,
+		addRecentQuery,
+		limitRecentQueriesLength,
 	}
 }
 
