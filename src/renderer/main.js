@@ -1,10 +1,10 @@
 import { reloadApp, hasFocus } from 'Global/utils'
 import AppStorage from 'Global/AppStorage'
-import manageWin from 'Global/WinManager'
+import winManager from 'Global/WinManager'
 import checkForUpdate from 'Global/checkForUpdate'
 import handleKeyDown from 'Global/shortcuts'
-import openWinLatest from 'Layouts/win-latest'
-import { applySettingsOnStart } from 'Layouts/win-settings'
+import winLatest from 'Layouts/win-latest'
+import { applyUserPreferences } from 'Layouts/win-settings/helper'
 import suggestions from 'Components/suggestions'
 import overlay from 'Components/overlay'
 import toggleMenu from 'Components/burger'
@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 		}
 	}
 
-	applySettingsOnStart()
-	openWinLatest()
+	applyUserPreferences(storage.settings)
+	winLatest.init()
 	suggestions.init()
 	removePreloader()
 
@@ -67,10 +67,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 	// MANAGE WINDOWS
 
-	mainContent.addEventListener('click', manageWin)
+	mainContent.addEventListener('click', winManager.flip)
 	mainContent = null
 
-	sidebar.addEventListener('click', manageWin)
+	sidebar.addEventListener('click', winManager.flip)
 
 	window.addEventListener('click', handleClickWindow)
 
