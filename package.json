@@ -33,7 +33,7 @@
 		"yt-channel-info": "^2.2.0",
 		"ytdl-core": "^4.9.1",
 		"ytpl": "^2.2.3",
-		"ytsr": "^3.5.3"
+		"ytsr": "^3.6.0"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.16.0",
