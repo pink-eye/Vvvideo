@@ -1,5 +1,3 @@
-import showToast from 'Components/toast'
-
-export const onErrorImage = () => {
-	showToast('error', 'Could not load images :(')
+export const handleErrorImage = (event) => {
+	event.currentTarget.src = './img/image-placeholder.webp' 
 }

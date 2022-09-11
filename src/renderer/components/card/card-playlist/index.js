@@ -1,5 +1,5 @@
 import { removeSkeleton } from 'Components/skeleton'
-import { onErrorImage } from 'Components/card/helper'
+import { handleErrorImage } from 'Components/card/helper'
 
 export const fillPlaylistCard = (playlist, index, data) => {
 	let playlistCard = playlist
@@ -29,7 +29,7 @@ export const fillPlaylistCard = (playlist, index, data) => {
 	}
 
 	playlistImage.addEventListener('load', onLoadImage, { once: true })
-	playlistImage.addEventListener('error', onErrorImage, { once: true })
+	playlistImage.addEventListener('error', handleErrorImage, { once: true })
 
 	playlistTitle.textContent = info.title
 	removeSkeleton(titleSkeleton)

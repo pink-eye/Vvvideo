@@ -1,5 +1,5 @@
 import { removeSkeleton } from 'Components/skeleton'
-import { onErrorImage } from 'Components/card/helper'
+import { handleErrorImage } from 'Components/card/helper'
 
 export const fillChannelCard = (channel, index, data) => {
 	let channelCard = channel
@@ -29,7 +29,7 @@ export const fillChannelCard = (channel, index, data) => {
 	}
 
 	channelImage.addEventListener('load', onLoadImage, { once: true })
-	channelImage.addEventListener('error', onErrorImage, { once: true })
+	channelImage.addEventListener('error', handleErrorImage, { once: true })
 
 	channelTitle.textContent = info.name
 	removeSkeleton(titleSkeleton)
