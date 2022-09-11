@@ -1,5 +1,5 @@
 const { src, dest, watch, series } = require('gulp')
-const sass = require('gulp-sass')(require('node-sass'))
+const sass = require('gulp-sass')(require('sass'))
 const cleanCSS = require('gulp-clean-css')
 const del = require('del')
 const sourcemaps = require('gulp-sourcemaps')
