@@ -1,6 +1,5 @@
-import { isEmpty } from 'Global/utils'
+import { isEmpty, handleErrorImage } from 'Global/utils'
 import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
-import { onErrorImage } from 'Components/card/helper'
 
 export const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 	let givenParent = parent
@@ -24,7 +23,7 @@ export const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) 
 		}
 
 		authorAvatar.addEventListener('load', onLoadImage, { once: true })
-		authorAvatar.addEventListener('error', onErrorImage, { once: true })
+		authorAvatar.addEventListener('error', handleErrorImage, { once: true })
 	}
 
 	if (!isEmpty(name) && authorName.textContent !== name) {

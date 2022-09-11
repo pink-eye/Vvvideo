@@ -1,6 +1,5 @@
-import { normalizeCount, convertSecondsToDuration } from 'Global/utils'
+import { normalizeCount, convertSecondsToDuration, handleErrorImage } from 'Global/utils'
 import { removeSkeleton } from 'Components/skeleton'
-import { onErrorImage } from 'Components/card/helper'
 import { calculateWatchedProgress, getWatchedTime } from 'Layouts/win-history/helper'
 
 export const fillVideoCard = (video, index, data) => {
@@ -36,7 +35,7 @@ export const fillVideoCard = (video, index, data) => {
 	}
 
 	videoImage.addEventListener('load', onLoadImage, { once: true })
-	videoImage.addEventListener('error', onErrorImage, { once: true })
+	videoImage.addEventListener('error', handleErrorImage, { once: true })
 
 	videoTitle.textContent = info.title
 

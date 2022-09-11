@@ -1,5 +1,5 @@
 import cs from 'Global/CacheSelectors'
-import { isEmpty, handleClickLink } from 'Global/utils'
+import { isEmpty, handleClickLink, handleErrorImage } from 'Global/utils'
 import showToast from 'Components/toast'
 import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
 import { resetGrid } from 'Components/grid'
@@ -50,6 +50,7 @@ const WinChannel = () => {
 			}
 
 			channelAvatar.addEventListener('load', onLoadAvatar, { once: true })
+			channelAvatar.addEventListener('error', handleErrorImage, { once: true })
 		}
 
 		if (authorBanners) {
@@ -63,6 +64,7 @@ const WinChannel = () => {
 			}
 
 			channelBannerImg.addEventListener('load', onLoadBanner, { once: true })
+			channelBannerImg.addEventListener('error', handleErrorImage, { once: true })
 		} else {
 			if (authorThumbnails) {
 				channelBanner.style.setProperty('--bg-image', `url(${authorThumbnails.at(-1).url})`)
