@@ -102,3 +102,7 @@ export const handleClickLink = event => {
 
 	element = null
 }
+
+export const handleErrorImage = (event) => {
+	event.currentTarget.src = './img/image-placeholder.jpeg' 
+}

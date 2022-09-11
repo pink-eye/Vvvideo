@@ -1,6 +1,5 @@
-import { normalizeCount, convertSecondsToDuration } from 'Global/utils'
+import { normalizeCount, convertSecondsToDuration, handleErrorImage } from 'Global/utils'
 import { removeSkeleton } from 'Components/skeleton'
-import { handleErrorImage } from 'Components/card/helper'
 import { calculateWatchedProgress, getWatchedTime } from 'Layouts/win-history/helper'
 
 export const fillVideoCard = (video, index, data) => {

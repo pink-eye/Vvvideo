@@ -1,6 +1,5 @@
-import { isEmpty } from 'Global/utils'
+import { isEmpty, handleErrorImage } from 'Global/utils'
 import { removeSkeleton, resetSkeleton } from 'Components/skeleton'
-import { handleErrorImage } from 'Components/card/helper'
 
 export const fillAuthorCard = ({ parent, avatarSrc = '', name, subs = '', id }) => {
 	let givenParent = parent

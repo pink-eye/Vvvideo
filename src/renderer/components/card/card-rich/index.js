@@ -1,5 +1,5 @@
 import { removeSkeleton } from 'Components/skeleton'
-import { handleErrorImage } from 'Components/card/helper'
+import { handleErrorImage } from 'Global/utils'
 
 export const fillChannelCard = (channel, index, data) => {
 	let channelCard = channel
